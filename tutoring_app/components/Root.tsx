@@ -1,12 +1,15 @@
-// export default class Hello extends React.Component<any, any> {
-//   render() {
+import React from 'react';
+import { Text, View } from 'react-native';
 
-//     return (
-//       <View>
-//         <Text>
-//           나는 Root야
-//         </Text>
-//       </View>
-//     )
-//     }
-// }
+export default class Hello extends React.Component<any, any> {
+  render() {
+
+    return (
+      <View>
+        <Text>
+          Root
+        </Text>
+      </View>
+    )
+    }
+}
