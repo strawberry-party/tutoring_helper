@@ -24,16 +24,15 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import Hello from './components/Hello';
+import Root from './components/Root';
 
 const App: () => React.ReactElement = () => {
   return (
     <View>
       <Text>
-        Hello
+        App
       </Text>
-      <Hello name="상아" enthusiasmLevel={5}>
-        </Hello>
+      <Root></Root>
     </View>    
   );
 };
