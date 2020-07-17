@@ -32,7 +32,7 @@ const App: () => React.ReactElement = () => {
       <Text>
         App
       </Text>
-      <Root></Root>
+      <Root />
     </View>    
   );
 };
