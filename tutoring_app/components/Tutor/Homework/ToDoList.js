@@ -11,7 +11,6 @@ import {
   AsyncStorage,
 } from 'react-native';
 import ToDo from './ToDo';
-
 const { height, width } = Dimensions.get('window');
 
 export default class ToDoList extends React.Component {
