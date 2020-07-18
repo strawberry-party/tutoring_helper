@@ -8,7 +8,6 @@ import {
   Dimensions,
   Platform,
   ScrollView,
-  AsyncStorage,
 } from 'react-native';
 import ToDo from './ToDo';
 const { height, width } = Dimensions.get('window');
@@ -16,19 +15,15 @@ const { height, width } = Dimensions.get('window');
 export default class ToDoList extends React.Component {
   state = {
     newToDo: '',
-    loadedToDos: false,
     toDos: {},
   };
-  componentDidMount = () => {
-    this._loadToDos();
-  };
+
   render() {
-    const { newToDo, loadedToDos, toDos } = this.state;
-    if (!loadedToDos) {
-      return <Text> No Loaded ToDos </Text>;
-    }
+    const { newToDo, toDos } = this.state;
+
     return (
       <View style={styles.container}>
+        <Text>ToDoList</Text>
         <StatusBar barStyle="light-content" />
         <Text style={styles.title}> Kawai To Do </Text>
         <View style={styles.card}>
@@ -36,7 +31,7 @@ export default class ToDoList extends React.Component {
             style={styles.input}
             placeholder={'New To Do'}
             value={newToDo}
-            onChangeText={this._crontollNewToDo}
+            onChangeText={this._controlNewToDo}
             placeholderTextColor={'#999'}
             returnKeyType={'done'}
             autoCorrect={false}
@@ -61,22 +56,10 @@ export default class ToDoList extends React.Component {
       </View>
     );
   }
-  _crontollNewToDo = (text) => {
+  _controlNewToDo = (text) => {
     this.setState({
       newToDo: text,
     });
-  };
-  _loadToDos = async () => {
-    try {
-      const toDos = await AsyncStorage.getItem('toDos');
-      const parsedToDos = JSON.parse(toDos);
-      this.setState({
-        loadedToDos: true,
-        toDos: parsedToDos || {},
-      });
-    } catch (err) {
-      console.log(err);
-    }
   };
   _addToDo = () => {
     const { newToDo } = this.state;
@@ -99,7 +82,6 @@ export default class ToDoList extends React.Component {
             ...newToDoObject,
           },
         };
-        this._saveToDos(newState.toDos);
         return {
           ...newState,
         };
@@ -114,7 +96,6 @@ export default class ToDoList extends React.Component {
         ...prevState,
         ...toDos,
       };
-      this._saveToDos(newState.toDos);
       return {
         ...newState,
       };
@@ -132,7 +113,6 @@ export default class ToDoList extends React.Component {
           },
         },
       };
-      this._saveToDos(newState.toDos);
       return {
         ...newState,
       };
@@ -150,7 +130,6 @@ export default class ToDoList extends React.Component {
           },
         },
       };
-      this._saveToDos(newState.toDos);
       return {
         ...newState,
       };
@@ -168,14 +147,10 @@ export default class ToDoList extends React.Component {
           },
         },
       };
-      this._saveToDos(newState.toDos);
       return {
         ...newState,
       };
     });
-  };
-  _saveToDos = (newToDos) => {
-    const saveToDos = AsyncStorage.setItem('toDos', JSON.stringify(newToDos));
   };
 }
 
