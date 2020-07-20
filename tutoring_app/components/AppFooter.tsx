@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 
-class Header extends Component {
+class AppFooter extends Component {
   render() {
     return (
       <View>
         <Text>
-          Header
+          Footer
         </Text>
       </View>
     );
   }
 }
 
-export default Header;
+export default AppFooter;
