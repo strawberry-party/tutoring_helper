@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import Tutor from './Tutor/Tutor';
 
-class Content extends Component {
+class AppContent extends Component {
   render() {
     return (
       <View>
@@ -12,4 +12,4 @@ class Content extends Component {
   }
 }
 
-export default Content;
+export default AppContent;

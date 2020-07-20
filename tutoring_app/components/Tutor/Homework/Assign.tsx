@@ -17,7 +17,6 @@ interface State {
   assignValue: AssignProps;
 }
 
-
 class Assign extends Component<AssignProps, State> {
   render() {
     const {id, title, desc, due, out, isCompleted, status, subAssigns} = this.props;
