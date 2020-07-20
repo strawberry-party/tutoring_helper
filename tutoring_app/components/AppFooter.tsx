@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { Text, View } from 'react-native';
 
 class AppFooter extends Component {
   render() {
     return (
       <View>
         <Text>
-          Footer
+          footer
         </Text>
       </View>
     );
