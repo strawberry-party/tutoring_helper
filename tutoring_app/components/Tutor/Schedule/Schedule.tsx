@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import EditButton from './EditButton';
-import Calender from './Calender';
+import StudentCalendar from './StudentCalendar';
 import StudentInfo from './StudentInfo';
 
 class Schedule extends Component {
@@ -9,7 +9,7 @@ class Schedule extends Component {
     return (
       <View>
         <EditButton />
-        <Calender />
+        <StudentCalendar />
         <StudentInfo />
       </View>
     );
