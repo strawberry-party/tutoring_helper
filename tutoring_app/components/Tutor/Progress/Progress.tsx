@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import WeeklyProgress from './WeeklyProgress';
 
 class Progress extends Component {
