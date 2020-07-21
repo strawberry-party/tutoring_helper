@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
+import { ListItem } from 'react-native-elements';
 
 export interface SubAssignProps {
   text: string;
@@ -16,12 +17,12 @@ interface State {
   toDoValue: string;
 }
 
-class SubAssign extends Component<SubAssignProps,State> {
-
-
+class SubAssign extends Component<SubAssignProps, State> {
   render() {
+    const { text, isCompleted, id } = this.props;
     return (
       <View>
+        <ListItem></ListItem>
         <Text>SubAssign</Text>
       </View>
     );
