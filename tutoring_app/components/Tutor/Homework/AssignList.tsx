@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
-import { View, Text, FlatList } from 'react-native';
 import Assign, { AssignProps } from './Assign';
+import { FlatList, ScrollView, Text, View } from 'react-native';
+import React, { Component } from 'react';
+
 export interface AssignListProps {
   assigns: Array<AssignProps>;
 }
@@ -14,15 +15,12 @@ class AssignList extends Component<AssignListProps, State> {
 
   render() {
     const { assigns } = this.props;
+    const assignList = assigns.map((item) => <Assign key={item.id} {...item} />)
+
     return (
-      <View>
-        <Text>AssignList</Text>
-        <FlatList
-          data={assigns}
-          renderItem={({item}) => (
-            <Assign key={item.id} {...item}/>
-          )}
-        />
+      <View style={{backgroundColor: "red"}}>
+        <Text style={{ fontSize: 15 }}>AssignList</Text>
+        {assignList}
       </View>
     );
   }
