@@ -1,9 +1,9 @@
-import React from 'react';
-import { Text, View } from 'react-native';
-import Header from './Header';
 import Content, { ContentProps, }  from './Content';
-import Footer from './Footer';
+import { Text, View } from 'react-native';
 
+import Footer from './Footer';
+import Header from './Header';
+import React from 'react';
 import ToDoList from './Tutor/Homework/ToDoList';
 
 const mode: ContentProps = { mode: 'tutor'}
@@ -19,3 +19,4 @@ export default class Hello extends React.Component<any, any> {
     );
   }
 }
+
