@@ -1,37 +1,33 @@
 import {
   Accordion,
   Body,
+  Button,
   Card,
   CardItem,
-  Container,
-  Content,
-  Header,
-  Icon,
   Text,
   View,
 } from 'native-base';
+import {
+  AssignListType,
+  AssignType,
+  SubAssignType,
+} from '../../types/homework';
 import { Dimensions, StyleSheet } from 'react-native';
-import LoremScroll, { Lorem } from './LoremScroll';
 import React, { Component } from 'react';
-import SubAssign, { SubAssignProps } from './SubAssign';
 
 import Moment from 'moment';
-
-export interface AssignProps {
-  id: string;
-  title: string;
-  desc: string;
-  due: Date;
-  out: Date;
-  isCompleted: boolean;
-  status: number;
-  subAssigns: Array<SubAssignProps>;
-}
+import SubAssign from './SubAssign';
 
 interface State {
   isEditing: boolean;
-  assignValue: AssignProps;
+  assignValue: Assign;
   isOpened: boolean;
+}
+
+interface AssignProps extends AssignType {
+  onComplete: (id: string) => void;
+  onIncomplete: (id: string) => void;
+  // updateAssign: (id: string, newValue: string) => void;
 }
 
 const toBeImplemented = () => alert('not yet implemented!');
@@ -46,8 +42,9 @@ class Assign extends Component<AssignProps, State> {
       isCompleted,
       status,
       subAssigns,
+      incompleteAssign,
+      completeAssign,
     }: AssignProps = item.raw;
-    console.log(due);
 
     const dueDate = Moment(due).format('MM/DD');
     const outDate = Moment(out).format('MM/DD');
@@ -65,12 +62,26 @@ class Assign extends Component<AssignProps, State> {
             backgroundColor: '#A9DAD6',
           }}>
           <Text style={styles.text}> {outDate} 숙제 </Text>
+          <Text> {status * 100} % 완료 </Text>
           {expanded ? (
-            <Icon style={{ fontSize: 18 }} name="remove-circle" />
+            <Text style={{ fontSize: 18 }}>⏫</Text>
           ) : (
-            <Icon style={{ fontSize: 18 }} name="add-circle" />
+            //   <Icon style={{ fontSize: 18 }} name="remove-circle" />
+            <Text style={{ fontSize: 18 }}>🔽</Text>
+
+            // <Icon style={{ fontSize: 18 }} name="add-circle" />
+          )}
+          {isCompleted ? (
+            <Button onPressOut={()=>incompleteAssign}>
+              <Text>Un-Complete</Text>
+            </Button>
+          ) : (
+            <Button onPressOut={()=>completeAssign}>
+              <Text>Complete</Text>
+            </Button>
           )}
         </CardItem>
+
         <CardItem bordered>
           <Body>
             <Text style={{ fontWeight: '700' }}>{title}</Text>
@@ -104,12 +115,7 @@ class Assign extends Component<AssignProps, State> {
       <View>
         <Card>
           <CardItem bordered>
-            {/* <Body>{subAssignList}</Body> */}
-            <Body>
-              {Lorem}
-              {Lorem}
-              {Lorem}
-            </Body>
+            <Body>{subAssignList}</Body>
           </CardItem>
         </Card>
       </View>

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
-import Schedule from './Schedule/Schedule';
+
+import Homework from '../Homework/Homework';
 import Progress from './Progress/Progress';
-import Homework from './Homework/Homework';
+import Schedule from './Schedule/Schedule';
+import { View } from 'react-native';
 
 class Student extends Component {
   render() {

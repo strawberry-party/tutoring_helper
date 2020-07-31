@@ -2,7 +2,7 @@ import { Button, Fab, Icon } from 'native-base';
 import React, { Component } from 'react';
 import { Text, View } from 'react-native';
 
-class EditButton extends Component {
+class AddButton extends Component {
   state = {
     active: false,
   };
@@ -27,4 +27,4 @@ class EditButton extends Component {
   }
 }
 
-export default EditButton;
+export default AddButton;

@@ -12,7 +12,7 @@ export const Lorem = (
 
 export default class LoremScroll extends Component<any, any> {
   render() {
-    const lorems = [...Array(10)].map((e, i) => <Lorem key={i} />);
+    const lorems = [...Array(10)].map((e, i) => Lorem);
     return <View>{lorems}</View>;
   }
 }

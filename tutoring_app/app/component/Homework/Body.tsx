@@ -1,18 +1,20 @@
-import AssignList, { AssignListProps } from './AssignList';
-import { SafeAreaView, ScrollView, StyleSheet, Text } from 'react-native';
+import {} from 'react-native';
 
-import { AssignProps } from './Assign';
+import AssignList, { AssignListType } from './AssignList';
+import { Form, Input, Item } from 'native-base';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+
+import { Assign } from './Assign';
 import React from 'react';
-import { SubAssignProps } from './SubAssign';
-import { View } from 'react-native';
+import { SubAssign } from './SubAssign';
 
-const subAssign1: Array<SubAssignProps> = [
+const subAssign1: Array<SubAssign> = [
   { text: '10-1 단원 풀어오기', isCompleted: false, id: '1' },
   { text: '10-2 단원 풀어오기', isCompleted: false, id: '2' },
   { text: '10-3 단원 풀어오기', isCompleted: false, id: '3' },
 ];
 
-const assign1: AssignProps = {
+const assign1: Assign = {
   id: '1',
   title: '수학의 정석 10단원',
   desc: '풀어와',
@@ -23,13 +25,13 @@ const assign1: AssignProps = {
   subAssigns: subAssign1,
 };
 
-const subAssign2: Array<SubAssignProps> = [
+const subAssign2: Array<SubAssign> = [
   { text: '9-1 단원 풀어오기', isCompleted: false, id: '1' },
   { text: '9-2 단원 풀어오기', isCompleted: false, id: '2' },
   { text: '9-3 단원 풀어오기', isCompleted: false, id: '3' },
 ];
 
-const assign2: AssignProps = {
+const assign2: Assign = {
   id: '2',
   title: '수학의 정석 9단원',
   desc: '풀어와',
@@ -40,7 +42,7 @@ const assign2: AssignProps = {
   subAssigns: subAssign2,
 };
 
-const assignList: AssignListProps = {
+const assignList: AssignListType = {
   assigns: [assign1, assign2],
 };
 export default class Homework extends React.Component<any, any> {
@@ -48,7 +50,7 @@ export default class Homework extends React.Component<any, any> {
     return (
       <SafeAreaView>
         <ScrollView contentContainerStyle={styles.container}>
-          <View style={{backgroundColor: "black", padding: 10, flexGrow: 1}}>
+          <View style={{ backgroundColor: 'blue', padding: 10, flexGrow: 1 }}>
             <Text>Homework Body</Text>
             <AssignList {...assignList} />
           </View>
