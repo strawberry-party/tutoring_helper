@@ -1,4 +1,10 @@
 import {
+  AssignListType,
+  AssignType,
+  SubAssignType,
+} from '../../types/homework';
+import { CheckBox, ListItem } from 'native-base';
+import {
   Dimensions,
   StyleSheet,
   Text,
@@ -8,34 +14,27 @@ import {
 } from 'react-native';
 import React, { Component } from 'react';
 
-import { ListItem } from 'react-native-elements';
-
-export interface SubAssignProps {
-  text: string;
-  isCompleted: boolean;
-  id: string;
-}
-
 interface State {
   isEditing: boolean;
-  toDoValue: string;
+  value: string;
 }
-const deleteToDo = (id) => alert(id + 'deleted');
+const deleteSubAssign = (id) => alert(id + 'deleted');
 
-interface SubAssignFinalProps extends SubAssignProps {
-  uncompleteToDo: any;
-  completeToDo: any;
-  updateToDo: any;
+interface SubAssignProps extends SubAssignType {
+  incompleteSubAssign: (id: string) => void;
+  completeSubAssign: (id: string) => void;
+  updateSubAssign: (id: string, newValue: string) => void;
+
 }
 
-class SubAssign extends Component<SubAssignFinalProps, State> {
-  state:State = {
+class SubAssign extends Component<SubAssignProps, State> {
+  state: State = {
     isEditing: false,
-    toDoValue: this.props.text,
-  }
+    value: this.props.text,
+  };
 
   render() {
-    const { isEditing, toDoValue } = this.state;
+    const { isEditing, value } = this.state;
     const { text, isCompleted, id } = this.props;
     return (
       <View style={styles.container}>
@@ -55,7 +54,7 @@ class SubAssign extends Component<SubAssignFinalProps, State> {
                 styles.input,
                 isCompleted ? styles.completedText : styles.uncompletedText,
               ]}
-              value={toDoValue}
+              value={value}
               multiline={true}
               onChangeText={this._controllInput}
               returnKeyType={'done'}
@@ -91,7 +90,7 @@ class SubAssign extends Component<SubAssignFinalProps, State> {
             <TouchableOpacity
               onPressOut={(event) => {
                 event.stopPropagation;
-                deleteToDo(id);
+                deleteSubAssign(id);
               }}>
               <View style={styles.actionContainer}>
                 <Text style={styles.actionText}>❌</Text>
@@ -104,11 +103,11 @@ class SubAssign extends Component<SubAssignFinalProps, State> {
   }
   _toggleComplete = (event) => {
     event.stopPropagation();
-    const { isCompleted, uncompleteToDo, completeToDo, id } = this.props;
+    const { isCompleted, incompleteSubAssign, completeSubAssign, id } = this.props;
     if (isCompleted) {
-      uncompleteToDo(id);
+      incompleteSubAssign(id);
     } else {
-      completeToDo(id);
+      completeSubAssign(id);
     }
   };
   _startEditing = (event) => {
@@ -117,13 +116,13 @@ class SubAssign extends Component<SubAssignFinalProps, State> {
   };
   _finishEditing = (event) => {
     event.stopPropagation();
-    const { toDoValue } = this.state;
-    const { id, updateToDo } = this.props;
-    updateToDo(id, toDoValue);
+    const { value } = this.state;
+    const { id, updateSubAssign } = this.props;
+    updateSubAssign(id, value);
     this.setState({ isEditing: false });
   };
   _controllInput = (text) => {
-    this.setState({ toDoValue: text });
+    this.setState({ value: text });
   };
 }
 
