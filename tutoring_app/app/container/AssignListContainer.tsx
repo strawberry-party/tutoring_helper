@@ -46,19 +46,14 @@ function TutoringHelper() {
 
   const onCompleteAssign = (id: string) => {
     console.log('completed');
-    dispatch(assignActions.completeAssign(id));
   };
 
   const onIncompleteAssign = (id: string) => {
-    console.log('un-completed');
-    dispatch(assignActions.incompleteAssign(id));
+    console.log('completed');
   };
 
   const onRemoveAssign = (id: string) => {
-    // show remove modal to check confirm
-    alert('정말 삭제하시겠습니까?');
     console.log('removed');
-    dispatch(assignActions.removeAssign(id));
   };
 
   // TODO: Homework container로 분리하기
@@ -72,9 +67,7 @@ function TutoringHelper() {
           <View style={{ backgroundColor: 'blue', padding: 10, flexGrow: 1 }}>
             <AssignList
               assigns={assigns}
-              onCompleteAssign={onCompleteAssign}
-              onIncompleteAssign={onIncompleteAssign}
-              onRemoveAssign={onRemoveAssign}
+              {...bindActionCreators(assignActions, dispatch)}
             />
           </View>
         </ScrollView>

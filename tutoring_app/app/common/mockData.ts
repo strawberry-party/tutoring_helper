@@ -39,5 +39,16 @@ export const assign2: AssignType = {
          subAssigns: subAssign2,
        };
 
-// subAssignment reducer
-export const assignList: AssignListType = { assigns: [assign1, assign2] };
+
+export const assign3: AssignType = {
+  id: '3',
+  title: '수학의 정석 8단원',
+  desc: '풀어와',
+  due: new Date('2020-07-16'),
+  out: new Date('2020-07-14'),
+  isCompleted: false,
+  status: 0,
+  subAssigns: []
+};
+       
+export const assignList: AssignListType = { assigns: [assign1, assign2, assign3] };
