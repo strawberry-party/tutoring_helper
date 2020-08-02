@@ -14,7 +14,8 @@ export const INCOMPLETE = 'INCOMPLETE' as const;
 type AssignAction =
   | ReturnType<typeof addAssign>
   | ReturnType<typeof completeAssign>
-  | ReturnType<typeof incompleteAssign>;
+  | ReturnType<typeof incompleteAssign>
+  | ReturnType<typeof removeAssign>;
 
 type AssignListState = {
   assigns: Array<AssignType>;
@@ -23,36 +24,40 @@ type AssignListState = {
 const initialState: AssignListState = { assigns: [] };
 
 // action constructor
-export function addAssign(newAssign: AssignType) {
-  return {
-    type: ADD,
-    assign: {
-      ...newAssign,
-      id: _.uniqueId('assign_'),
-    },
-  };
-}
+export const addAssign = (newAssign: AssignType) => ({
+  type: ADD,
+  assign: {
+    ...newAssign,
+    id: _.uniqueId('assign_'),
+  },
+});
 
-export function completeAssign(id: string) {
-  return {
-    type: COMPLETE,
-    id: id,
-  };
-}
+export const completeAssign = (id: string) => ({
+  type: COMPLETE,
+  id: id,
+});
 
-export function incompleteAssign(id: string) {
-  return {
-    type: INCOMPLETE,
-    id: id,
-  };
-}
+export const incompleteAssign = (id: string) => ({
+  type: INCOMPLETE,
+  id: id,
+});
 
-export const actions = { addAssign, completeAssign, incompleteAssign };
+export const removeAssign = (id: string) => ({
+  type: REMOVE,
+  id: id,
+});
+
+export const actions = {
+  addAssign,
+  completeAssign,
+  incompleteAssign,
+  removeAssign,
+};
 
 // reducer
 
 // action에 따라 state를 어떻게 반환할지 설정
-// TODO: 깊은 곳까지 접근하기 편하도록 모듈 사용할것
+// TODO: 깊은 곳까지 접근하기 편하도록 immer.js 사용할것
 
 const assignsReducer = (
   state: AssignListState = initialState,
@@ -62,8 +67,8 @@ const assignsReducer = (
     case ADD:
       return { assigns: [...state.assigns, action.assign] };
     case COMPLETE:
-      let assigns = state.assigns;
-      let index = _.findIndex(
+      var assigns = state.assigns;
+      var index = _.findIndex(
         assigns,
         (assign: AssignType) => assign.id === action.id,
       );
@@ -74,12 +79,39 @@ const assignsReducer = (
           assigns: [
             ...assigns.slice(0, index),
             Object.assign({}, assigns[index], {
-              completed: true,
+              isCompleted: true,
             }),
             ...assigns.slice(index + 1),
           ],
         };
       }
+
+    case INCOMPLETE:
+      var assigns = state.assigns;
+      var index: number = _.findIndex(
+        assigns,
+        (assign: AssignType) => assign.id === action.id,
+      );
+      if (index === -1) {
+        return state;
+      } else {
+        console.log(assigns[index].title);
+        return {
+          assigns: [
+            ...assigns.slice(0, index),
+            Object.assign({}, assigns[index], {
+              isCompleted: false,
+            }),
+            ...assigns.slice(index + 1),
+          ],
+        };
+      }
+
+    case REMOVE:
+      var newAssigns = state.assigns.filter((assign: AssignType) => assign.id !== action.id)
+      return {
+        assigns: newAssigns,
+      };
 
     default:
       return state;

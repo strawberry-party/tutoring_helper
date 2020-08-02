@@ -12,7 +12,7 @@ import {
   AssignType,
   SubAssignType,
 } from '../../types/homework';
-import { Dimensions, StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
 import React, { Component } from 'react';
 
 import Moment from 'moment';
@@ -20,32 +20,37 @@ import SubAssign from './SubAssign';
 
 interface State {
   isEditing: boolean;
-  assignValue: Assign;
+  assignValue: AssignType;
   isOpened: boolean;
 }
 
 interface AssignProps extends AssignType {
-  onComplete: (id: string) => void;
-  onIncomplete: (id: string) => void;
-  // updateAssign: (id: string, newValue: string) => void;
+  onComplete: () => void;
+  onIncomplete: () => void;
+  onRemove: () => void;
+  // isEditing: boolean;
 }
 
-const toBeImplemented = () => alert('not yet implemented!');
+const toBeImplemented = (id: any) => alert(id + ': not yet implemented!');
 
-class Assign extends Component<AssignProps, State> {
-  _renderHeader(item, expanded) {
-    const {
-      title,
-      desc,
-      due,
-      out,
-      isCompleted,
-      status,
-      subAssigns,
-      incompleteAssign,
-      completeAssign,
-    }: AssignProps = item.raw;
+interface AccordionItem {
+  raw: AssignType;
+}
 
+function Assign({
+  title,
+  desc,
+  due,
+  out,
+  isCompleted,
+  status,
+  subAssigns,
+  onComplete,
+  onIncomplete,
+  onRemove,
+}: AssignProps) {
+  function _renderHeader(item: AccordionItem, expanded: boolean) {
+    const { desc, due, out, isCompleted, status, subAssigns } = item.raw;
     const dueDate = Moment(due).format('MM/DD');
     const outDate = Moment(out).format('MM/DD');
 
@@ -61,7 +66,14 @@ class Assign extends Component<AssignProps, State> {
             alignItems: 'center',
             backgroundColor: '#A9DAD6',
           }}>
-          <Text style={styles.text}> {outDate} 숙제 </Text>
+          <Text
+            style={{
+              ...styles.text,
+              textDecorationLine: isCompleted ? 'line-through' : 'none',
+            }}>
+            {' '}
+            {outDate} 숙제{' '}
+          </Text>
           <Text> {status * 100} % 완료 </Text>
           {expanded ? (
             <Text style={{ fontSize: 18 }}>⏫</Text>
@@ -72,14 +84,33 @@ class Assign extends Component<AssignProps, State> {
             // <Icon style={{ fontSize: 18 }} name="add-circle" />
           )}
           {isCompleted ? (
-            <Button onPressOut={()=>incompleteAssign}>
+            <TouchableOpacity
+              onPress={onIncomplete}
+              style={{
+                margin: 10,
+                backgroundColor: '#f9f9f9',
+              }}>
               <Text>Un-Complete</Text>
-            </Button>
+            </TouchableOpacity>
           ) : (
-            <Button onPressOut={()=>completeAssign}>
+            <TouchableOpacity
+              onPress={onComplete}
+              style={{
+                margin: 10,
+                backgroundColor: '#f9f9f9',
+              }}>
               <Text>Complete</Text>
-            </Button>
+            </TouchableOpacity>
           )}
+
+          <TouchableOpacity
+            onPress={onRemove}
+            style={{
+              margin: 10,
+              backgroundColor: '#f9f9f9',
+            }}>
+            <Text>Remove</Text>
+          </TouchableOpacity>
         </CardItem>
 
         <CardItem bordered>
@@ -98,19 +129,21 @@ class Assign extends Component<AssignProps, State> {
     );
   }
 
-  _renderContent(item) {
+  function _renderContent(item: AccordionItem) {
     const { desc, due, out, isCompleted, status, subAssigns } = item.raw;
-    const subAssignList = subAssigns.map((subAssign) => {
+    const subAssignList = subAssigns.map((subAssign: SubAssignType) => {
       return (
-        <SubAssign
-          {...subAssign}
-          uncompleteToDo={toBeImplemented}
-          completeToDo={toBeImplemented}
-          updateToDo={toBeImplemented}
-          key={subAssign.id}
-        />
+        <Text key={subAssign.id}>{subAssign.text}</Text>
+        // <SubAssign
+        //   {...subAssign}
+        //   incompleteToDo={toBeImplemented}
+        //   completeToDo={toBeImplemented}
+        //   updateToDo={toBeImplemented}
+        //   key={subAssign.id}
+        // />
       );
     });
+
     return (
       <View>
         <Card>
@@ -122,24 +155,21 @@ class Assign extends Component<AssignProps, State> {
     );
   }
 
-  render() {
-    const { title } = this.props;
-
-    const data = [{ title: title, raw: this.props }];
-    return (
-      <Accordion
-        style={{
-          backgroundColor: 'blue',
-          borderRadius: 10,
-          padding: 10,
-          margin: 5,
-        }}
-        dataArray={data}
-        renderHeader={this._renderHeader}
-        renderContent={this._renderContent}
-      />
-    );
-  }
+  return (
+    <Accordion
+      style={{
+        backgroundColor: 'blue',
+        borderRadius: 10,
+        padding: 10,
+        margin: 5,
+      }}
+      dataArray={[
+        { raw: { title, desc, due, out, isCompleted, status, subAssigns } },
+      ]}
+      renderHeader={_renderHeader}
+      renderContent={_renderContent}
+    />
+  );
 }
 
 export default Assign;
