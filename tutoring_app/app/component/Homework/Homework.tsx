@@ -11,7 +11,6 @@ class Homework extends Component {
     return (
       <SafeAreaView style={styles.container}>
         <Text style={styles.titleText}>숙제 관리</Text>
-        <FormWrapper />
         <Status />
         <Body />
       </SafeAreaView>

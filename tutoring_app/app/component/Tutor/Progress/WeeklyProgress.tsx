@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { Text, View } from 'react-native';
+
 import Week from './Week';
 
-class WeeklyProgress extends Component {
-  render() {
-    return (
-      <View>
-        <Week />
-      </View>
-    );
-  }
-}
+// TODO: 여러개의 Week 컴포넌트가 들어감
 
-export default WeeklyProgress;
+// const data = [week1, week2, ... ]
+
+export default function WeeklyProgress() {
+  return (
+    <View>
+      <Week />
+    </View>
+  );
+}
