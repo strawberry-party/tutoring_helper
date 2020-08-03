@@ -4,7 +4,6 @@ import { Text, View } from 'react-native';
 import Footer from './Footer';
 import Header from './Header';
 import React from 'react';
-import ToDoList from './Homework/ToDoList';
 
 const mode: ContentProps = { mode: 'tutor'}
 
