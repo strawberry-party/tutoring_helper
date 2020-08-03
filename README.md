@@ -4,6 +4,14 @@
 React Native, TypeScript
 
 ## 코딩 가이드라인
+
+### 앉자마자 할 일 (powershell)
+2. cd tutoring_app/android ; ./gradlew clean ; cd .. ; react-native run-android
+3. 실행되기를 기다리는 동안 
+
+### 하루 일과 끝나면 할 일
+1. 커밋
+
 ### 📢 커밋 메세지 적는 법
 
 ex) 2020-07-08 FormWrapper 컴포넌트에 TypeScript 추가 완료
