@@ -12,14 +12,14 @@ import React, { Component } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { connect, useDispatch, useSelector } from 'react-redux';
 
-import AddAssignModal from '../component/Homework/FormWrapper';
-import AddButton from '../component/Homework/AddButton';
+import AddAssignModal from '../component/Homework/AddAssignModal';
 import AssignList from '../component/Homework/AssignList';
 import { AssignType } from '../types/homework';
 import Body from '../component/Homework/Body';
 import Homework from '../component/Homework/Homework';
 import Root from '../component/Root';
 import { RootState } from '../states';
+import { actions as addModalVisibilityActions } from '../states/addAssignState';
 import { actions as assignActions } from '../states/assignState';
 import { assignList } from '../common/mockData';
 import { bindActionCreators } from 'redux';
@@ -34,9 +34,14 @@ console.log(store.getState().assignReducer.assigns);
 // TODO: 타입 정의, any 대체하기
 
 function TutoringHelper() {
-  const assigns = useSelector(
+  const assigns: Array<AssignType> = useSelector(
     (state: RootState) => state.assignReducer.assigns,
   );
+
+  const addAssignModalVisible: boolean = useSelector(
+    (state: RootState) => state.addAssignModal.visible,
+  );
+
   const dispatch = useDispatch();
 
   const onAddAssign = (assign: AssignType) => {
@@ -61,23 +66,40 @@ function TutoringHelper() {
     dispatch(assignActions.removeAssign(id));
   };
 
+  const showModal = () => {
+    console.log('show modal');
+    dispatch(addModalVisibilityActions.showModal());
+  };
+  const hideModal = () => {
+    console.log('hide modal');
+    dispatch(addModalVisibilityActions.hideModal());
+  };
+
   // TODO: Homework container로 분리하기
   return (
     <View style={styles.container}>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView>
         <Text style={styles.titleText}>숙제 관리</Text>
-        {/* <AddButton />
-          <AddAssignModal visible={addModalVisible} /> */}
-        <ScrollView contentContainerStyle={styles.container}>
-          <View style={{ backgroundColor: 'blue', padding: 10, flexGrow: 1 }}>
-            <AssignList
-              assigns={assigns}
-              onCompleteAssign={onCompleteAssign}
-              onIncompleteAssign={onIncompleteAssign}
-              onRemoveAssign={onRemoveAssign}
-            />
-          </View>
-        </ScrollView>
+
+        <Text>여기 필터</Text>
+        <View>
+          <ScrollView>
+            <View style={{ backgroundColor: 'blue', padding: 10, flexGrow: 1 }}>
+              <AssignList
+                assigns={assigns}
+                onCompleteAssign={onCompleteAssign}
+                onIncompleteAssign={onIncompleteAssign}
+                onRemoveAssign={onRemoveAssign}
+              />
+            </View>
+          </ScrollView>
+          <AddAssignModal
+            visible={addAssignModalVisible}
+            showModal={showModal}
+            hideModal={hideModal}
+            addAssign={onAddAssign}
+          />
+        </View>
       </SafeAreaView>
     </View>
   );
@@ -86,8 +108,8 @@ function TutoringHelper() {
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    paddingTop: 100,
-    paddingBottom: 80,
+    paddingTop: 50,
+    paddingBottom: 100, // 하단바 높이에 따라 조절
   },
   test: {
     alignContent: 'center',
@@ -107,7 +129,7 @@ function mapStateToProps(state) {
 
   return {
     assigns: state.assignReducer.assigns, // apply filter later
-    // addModalVisible: state.addModal.visible,
+    addModalVisible: state.addAssignModal.visible,
   };
 }
 
