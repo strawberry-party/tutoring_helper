@@ -3,15 +3,16 @@ import { View, Text } from 'react-native';
 import EditButton from './EditButton';
 import StudentCalendar from './StudentCalendar';
 import StudentInfo from './StudentInfo';
+import { ScrollView } from 'react-native-gesture-handler';
 
 class Schedule extends Component {
   render() {
     return (
-      <View>
+      <ScrollView>
         <EditButton />
         <StudentCalendar />
         <StudentInfo />
-      </View>
+      </ScrollView>
     );
   }
 }

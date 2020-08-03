@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import Week from './Week';
-import { ListItem } from 'react-native-elements';
+import { Accordion } from "native-base";
+
+const dataArray = [
+  { title: "1주차", content: <Week /> },
+  { title: "2주차", content: <Week /> },
+  { title: "3주차", content: <Week /> }
+];
 
 class WeeklyProgress extends Component {
   render() {
     return (
       <View>
-        <ListItem title='1주차' bottomDivider chevron />
-        <ListItem title='2주차' bottomDivider chevron />
-        <ListItem title='3주차' bottomDivider chevron />
-        <Week />
+        <Accordion dataArray={dataArray} />
       </View>
     );
   }
