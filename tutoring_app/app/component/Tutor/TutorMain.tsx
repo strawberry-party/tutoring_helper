@@ -1,17 +1,27 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import Student from "./Student";
+import { Button, Text } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 class TutorMain extends Component {
   render() {
     return (
       <View>
-        <Text>
-          To Student 1 Button
+        <Text h3 style={{textAlign: "center"}}>
+          관리할 학생을 선택하세요.
         </Text>
-
-      <Student/>
-
+        <Button 
+          icon={<Icon name='face-profile' size={15} color='white' />} 
+          title='김태형 학생'
+          //onpress={() => {}}
+          />
+        <Button 
+          icon={<Icon name='face-profile-woman' size={15} color='white' />} 
+          title='최상아 학생'
+          //onpress={() => {}}
+          />
+        <Student/>
       </View>
     );
   }
