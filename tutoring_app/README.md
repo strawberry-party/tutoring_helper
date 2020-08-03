@@ -1,62 +1,30 @@
-# :space_invader: React Native Template TypeScript
+# Tutoring_App 과외 관리 앱 개발
 
-<p>
-  <a href="https://travis-ci.org/react-native-community/react-native-template-typescript">
-    <img alt="Build Status" src="https://img.shields.io/travis/react-native-community/react-native-template-typescript.svg" target="_blank" />
-  </a>
-  <a href="https://github.com/react-native-community/react-native-template-typescript#readme">
-    <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" target="_blank" />
-  </a>
-  <a href="https://github.com/react-native-community/react-native-template-typescript/graphs/commit-activity">
-    <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" target="_blank" />
-  </a>
-  <a href="https://github.com/react-native-community/react-native-template-typescript/blob/master/LICENSE">
-    <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" target="_blank" />
-  </a>
-</p>
+## 스택
+React Native, TypeScript
 
-> Clean and minimalist React Native template for a quick start with TypeScript.
+## 코딩 가이드라인
 
-## :star: Features
+### 앉자마자 할 일 (powershell)
+2. cd tutoring_app/android ; ./gradlew clean ; cd .. ; react-native run-android
+3. 실행되기를 기다리는 동안 
 
-- Elegant usage directly within the [React Native CLI](https://github.com/react-native-community/cli)
-- Consistent with the default React Native template
-- Minimal additional dependencies
+### 하루 일과 끝나면 할 일
+1. 커밋
 
-## :arrow_forward: Usage
+### 📢 커밋 메세지 적는 법
+- 날짜(2020-07-08 형식) + 작업 내용 + 작업 키워드
+- 작업 키워드의 종류
+  - 완료
+  - 확인
+  - 구현
+  - 추가
+  - 삭제
+  - 리팩토링
+  - 적용
+- 프레임워크, 라이브러리, 디펜던시 이름의 영문명을 그대로 쓰기
+- 구현한 컴포넌트, 함수, 상수, 모델 등의 이름도 영문명을 그대로 쓰기
+- 즉, React, `react-navigator` 등 고유명사는 그냥 영문명을 그대로 쓰자
+- 많이 사용하는데 긴 이름 (ex: PWA(Progressive Web App), RN(React Native)) 의 경우 사전에 추가하고 약자로 쓰기
 
-```sh
-npx react-native init MyApp --template react-native-template-typescript
-```
-
-### Usage with older versions of React Native
-
-#### e.g. `react-native@0.62.x`
-
-```sh
-npx react-native init MyApp --template react-native-template-typescript@6.4.*
-```
-
-See the below table to find out which version of the template to use.
-
-#### React Native <=> Template Version
-
-| React Native  	| Template  	|
-|---	            |---	        |
-| 0.63  	        | 6.5.*       |
-| 0.62  	        | 6.4.*       |
-| 0.61  	        | 6.3.*       |
-| 0.60  	        | 6.2.*       |
-
-### Note on the legacy CLI
-There seems to be quite some confusion about the legacy CLI. This template only works with the new CLI. Make sure you have uninstalled the legacy `react-native-cli` first (`npm uninstall -g react-native-cli`), for the below command to work. If you wish to not use `npx`, you can also install the new CLI globally (`npm i -g @react-native-community/cli` or `yarn global add @react-native-community/cli`).
-
-Further information can be found here: https://github.com/react-native-community/cli#about
-
-## :computer: Contributing
-
-Contributions are very welcome. Please check out the [contributing document](CONTRIBUTING.md).
-
-## :bookmark: License
-
-This project is [MIT](LICENSE) licensed.
+ex) 2020-07-08 FormWrapper 컴포넌트에 TypeScript 추가 완료
