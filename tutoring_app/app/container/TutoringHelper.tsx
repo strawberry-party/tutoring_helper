@@ -16,6 +16,7 @@ import AddAssignModal from '../component/Homework/AddAssignModal';
 import AssignList from '../component/Homework/AssignList';
 import { AssignType } from '../types/homework';
 import Body from '../component/Homework/Body';
+import Filter from '../component/Homework/Filter';
 import Homework from '../component/Homework/Homework';
 import Root from '../component/Root';
 import { RootState } from '../states';
@@ -81,9 +82,10 @@ function TutoringHelper() {
       <SafeAreaView>
         <Text style={styles.titleText}>숙제 관리</Text>
 
-        <Text>여기 필터</Text>
-        <View>
+        <View style={{ flexGrow: 1 }}>
           <ScrollView>
+            <Filter />
+
             <View style={{ backgroundColor: 'blue', padding: 10, flexGrow: 1 }}>
               <AssignList
                 assigns={assigns}
