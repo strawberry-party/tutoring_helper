@@ -2,16 +2,16 @@ import React from 'react';
 import AppHeader from './AppHeader';
 import AppContent from './AppContent';
 import AppFooter from './AppFooter';
-import { ScrollView } from 'react-native';
+import { View } from 'react-native';
 
-export default class Hello extends React.Component {
+export default class Root extends React.Component {
   render() {
     return (
-      <ScrollView>
-        <AppHeader />
+      <View>
+        {/* <AppHeader /> */}
         <AppContent />
-        <AppFooter />
-      </ScrollView>
+        {/* <AppFooter /> */}
+      </View>
     );
   }
 }

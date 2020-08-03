@@ -7,14 +7,14 @@ class Week extends Component {
   render() {
     return (
       <View>
-        <Text h1>
+        <Text h3>
           진도 체크
         </Text>
         <CheckingProgress />
-        <Text h1>
+        <Text h3>
           필요한 파일 업로드
         </Text>
-        <Text h1>
+        <Text h3>
           Test 결과
         </Text>
       </View>
