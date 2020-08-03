@@ -12,8 +12,8 @@ import React, { Component } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { connect, useDispatch, useSelector } from 'react-redux';
 
-import AddAssignModal from '../component/Homework/FormWrapper';
-import AddButton from '../component/Homework/AddButton';
+import AddAssignModal from '../component/Homework/AddAssignModal';
+import AddButton from '../component/Homework/Button';
 import AssignList from '../component/Homework/AssignList';
 import { AssignType } from '../types/homework';
 import Body from '../component/Homework/Body';

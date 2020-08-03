@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   CardItem,
+  Container,
   Text,
   View,
 } from 'native-base';
@@ -15,6 +16,7 @@ import {
 import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
 import React, { Component } from 'react';
 
+import AddSubAssign from './AddSubAssign';
 import Moment from 'moment';
 import SubAssign from './SubAssign';
 
@@ -64,7 +66,7 @@ function Assign({
             padding: 10,
             justifyContent: 'space-between',
             alignItems: 'center',
-            backgroundColor: '#A9DAD6',
+            borderRadius: 20,
           }}>
           <Text
             style={{
@@ -74,7 +76,6 @@ function Assign({
             {' '}
             {outDate} 숙제{' '}
           </Text>
-          <Text> {status * 100} % 완료 </Text>
           {expanded ? (
             <Text style={{ fontSize: 18 }}>⏫</Text>
           ) : (
@@ -83,25 +84,15 @@ function Assign({
 
             // <Icon style={{ fontSize: 18 }} name="add-circle" />
           )}
-          {isCompleted ? (
-            <TouchableOpacity
-              onPress={onIncomplete}
-              style={{
-                margin: 10,
-                backgroundColor: '#f9f9f9',
-              }}>
-              <Text>Un-Complete</Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              onPress={onComplete}
-              style={{
-                margin: 10,
-                backgroundColor: '#f9f9f9',
-              }}>
-              <Text>Complete</Text>
-            </TouchableOpacity>
-          )}
+
+          <TouchableOpacity
+            onPress={() => console.log('수정 아직 구현안함')}
+            style={{
+              margin: 10,
+              backgroundColor: '#f9f9f9',
+            }}>
+            <Text style={{ fontSize: 20 }}>✏</Text>
+          </TouchableOpacity>
 
           <TouchableOpacity
             onPress={onRemove}
@@ -109,11 +100,11 @@ function Assign({
               margin: 10,
               backgroundColor: '#f9f9f9',
             }}>
-            <Text>Remove</Text>
+            <Text>❌</Text>
           </TouchableOpacity>
         </CardItem>
 
-        <CardItem bordered>
+        <CardItem bordered style={{ borderRadius: 20 }}>
           <Body>
             <Text style={{ fontWeight: '700' }}>{title}</Text>
             <Text style={{ fontWeight: '400' }}>{desc}</Text>
@@ -122,8 +113,33 @@ function Assign({
         <CardItem
           footer
           bordered
-          style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
-          <Text>DUE: {dueDate} </Text>
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            borderRadius: 20,
+          }}>
+          <Text style={{flex: 4}}>DUE: {dueDate} </Text>
+          <Text style={{flex: 2}}> {status * 100} % 완료 </Text>
+
+          {isCompleted ? (
+            <TouchableOpacity
+              onPress={onIncomplete}
+              style={{
+                margin: 10,
+                backgroundColor: '#f9f9f9',
+              }}>
+              <Text>■</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={onComplete}
+              style={{
+                margin: 10,
+                backgroundColor: '#f9f9f9',
+              }}>
+              <Text>□</Text>
+            </TouchableOpacity>
+          )}
         </CardItem>
       </Card>
     );
@@ -133,21 +149,24 @@ function Assign({
     const { desc, due, out, isCompleted, status, subAssigns } = item.raw;
     const subAssignList = subAssigns.map((subAssign: SubAssignType) => {
       return (
-        <Text key={subAssign.id}>{subAssign.text}</Text>
-        // <SubAssign
-        //   {...subAssign}
-        //   incompleteToDo={toBeImplemented}
-        //   completeToDo={toBeImplemented}
-        //   updateToDo={toBeImplemented}
-        //   key={subAssign.id}
-        // />
+        <SubAssign
+          {...subAssign}
+          incompleteSubAssign={toBeImplemented}
+          completeSubAssign={toBeImplemented}
+          updateSubAssign={toBeImplemented}
+          key={subAssign.id}
+        />
       );
     });
 
     return (
       <View>
         <Card>
-          <CardItem bordered>
+          <CardItem bordered header>
+            <AddSubAssign addSubAssign={() => console.log('dd')}/>
+          </CardItem>
+          <CardItem bordered style={{ borderRadius: 20 }}>
+          
             <Body>{subAssignList}</Body>
           </CardItem>
         </Card>
@@ -157,12 +176,13 @@ function Assign({
 
   return (
     <Accordion
-      style={{
-        backgroundColor: 'blue',
-        borderRadius: 10,
-        padding: 10,
-        margin: 5,
-      }}
+      style={
+        // backgroundColor: 'blue',
+        // borderRadius: 10,
+        // padding: 10,
+        // margin: 5,
+        styles.cardView
+      }
       dataArray={[
         { raw: { title, desc, due, out, isCompleted, status, subAssigns } },
       ]}
@@ -176,6 +196,20 @@ export default Assign;
 
 const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
+  cardView: {
+    margin: 5,
+    padding: 5,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    // shadowColor: '#000',
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
+    // shadowOpacity: 0.25,
+    // shadowRadius: 3.84,
+    // elevation: 5,
+  },
   container: {
     width: width - 50,
     borderBottomColor: '#bbb',
