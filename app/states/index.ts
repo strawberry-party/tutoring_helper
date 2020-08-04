@@ -3,7 +3,7 @@ import assignReducer from './assignState';
 import { combineReducers } from 'redux';
 
 const rootReducer = combineReducers({
-  addAssignReducer,
+  addAssignModal: addAssignReducer,
   assignReducer,
 });
 

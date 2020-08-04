@@ -1,22 +1,13 @@
-import Content, { ContentProps, }  from './Content';
-import { Text, View } from 'react-native';
-
-import Footer from './Footer';
-import Header from './Header';
+import AppContent from './AppContent';
 import React from 'react';
-import ToDoList from './Homework/ToDoList';
+import { View } from 'react-native';
 
-const mode: ContentProps = { mode: 'tutor'}
-
-export default class Hello extends React.Component<any, any> {
+export default class Root extends React.Component {
   render() {
     return (
       <View>
-        <Header />
-        <Content {...mode} />
-        <Footer />
+        <AppContent />
       </View>
     );
   }
 }
-
