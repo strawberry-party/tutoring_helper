@@ -3,7 +3,7 @@ import { SafeAreaView, ScrollView, StyleSheet, Text } from 'react-native';
 
 import Body from './Body';
 import { Container } from 'native-base';
-import FormWrapper from './FormWrapper';
+import FormWrapper from './AddAssignModal';
 import Status from './Status';
 
 class Homework extends Component {
@@ -11,7 +11,6 @@ class Homework extends Component {
     return (
       <SafeAreaView style={styles.container}>
         <Text style={styles.titleText}>숙제 관리</Text>
-        <FormWrapper />
         <Status />
         <Body />
       </SafeAreaView>

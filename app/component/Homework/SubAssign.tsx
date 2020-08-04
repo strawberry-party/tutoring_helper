@@ -3,7 +3,6 @@ import {
   AssignType,
   SubAssignType,
 } from '../../types/homework';
-import { CheckBox, ListItem } from 'native-base';
 import {
   Dimensions,
   StyleSheet,
@@ -131,7 +130,6 @@ export default SubAssign;
 const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
-    width: width - 50,
     borderBottomColor: '#bbb',
     borderBottomWidth: StyleSheet.hairlineWidth,
     flexDirection: 'row',
@@ -140,8 +138,8 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   circle: {
-    width: 20,
-    height: 20,
+    width: 24,
+    height: 24,
     borderRadius: 15,
     borderWidth: 3,
     marginRight: 20,
@@ -167,18 +165,19 @@ const styles = StyleSheet.create({
   column: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: width / 2,
+    flexGrow: 1,
+    // width: width / 2,
   },
   actions: {
     flexDirection: 'row',
   },
-  actionText: {},
+  actionText: { fontSize: 24 },
   actionContainer: {
     marginVertical: 10,
     marginHorizontal: 10,
   },
   input: {
-    width: width / 2,
+    // width: width / 2,
     marginVertical: 15,
     paddingBottom: 5,
   },
