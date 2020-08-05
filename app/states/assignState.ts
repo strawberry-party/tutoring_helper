@@ -1,9 +1,8 @@
 import { AssignListType, AssignType, SubAssignType } from '../types/homework';
+import produce, { Draft } from 'immer';
 
 import _ from 'lodash';
 import { handleActions } from 'redux-actions';
-import { log } from 'react-native-reanimated';
-import produce from 'immer';
 
 // action type
 const ASSIGN_ADD = 'ASSIGN_ADD' as const;
@@ -108,69 +107,117 @@ export const actions = {
 const assignsReducer = (
   state: AssignListState = initialState,
   action: AssignAction,
-) => {
-  switch (action.type) {
-    case ASSIGN_ADD:
-      return produce(state, (assigns: Array<AssignType>) => {
-        assigns.push(action.assign);
-      });
-    case ASSIGN_COMPLETE:
-      var assigns = state.assigns;
-      var index = _.findIndex(
-        assigns,
-        (assign: AssignType) => assign.id === action.id,
-      );
-      if (index === -1) {
-        return state;
-      } else {
+) =>
+  produce(state, (draft) => {
+    switch (action.type) {
+      case ASSIGN_ADD:
+        draft.assigns.push(action.assign);
+        break;
+
+      case ASSIGN_COMPLETE:
+        for (let index = 0; index < draft.assigns.length; index++) {
+          let assign = draft.assigns[index];
+          if (assign.id === action.id) {
+            assign.isCompleted = true;
+            break;
+          }
+        }
+        console.log('invalid action with no matching assign id');
+        break;
+
+      case ASSIGN_INCOMPLETE:
+        for (let index = 0; index < draft.assigns.length; index++) {
+          let assign = draft.assigns[index];
+          if (assign.id === action.id) {
+            assign.isCompleted = false;
+            break;
+          }
+        }
+        console.log('invalid action with no matching assign id');
+        break;
+
+      case ASSIGN_REMOVE:
         return {
-          assigns: [
-            ...assigns.slice(0, index),
-            Object.assign({}, assigns[index], {
-              isCompleted: true,
-            }),
-            ...assigns.slice(index + 1),
-          ],
+          assigns: draft.assigns.filter(
+            (assign: AssignType) => assign.id !== action.id,
+          ),
         };
-      }
 
-    case ASSIGN_INCOMPLETE:
-      var assigns = state.assigns;
-      var index: number = _.findIndex(
-        assigns,
-        (assign: AssignType) => assign.id === action.id,
-      );
-      if (index === -1) {
-        return state;
-      } else {
-        console.log(assigns[index].title);
-        return {
-          assigns: [
-            ...assigns.slice(0, index),
-            Object.assign({}, assigns[index], {
-              isCompleted: false,
-            }),
-            ...assigns.slice(index + 1),
-          ],
-        };
-      }
+      case SUBASSIGN_ADD:
+        // check validity of assignId
+        for (let index = 0; index < draft.assigns.length; index++) {
+          let assign = draft.assigns[index];
+          if (assign.id === action.assignId) {
+            assign.subAssigns.push(action.subAssign);
+            break;
+          }
+        }
+        console.log('invalid action with no matching assign id');
+        break;
 
-    case ASSIGN_REMOVE:
-      var newAssigns = state.assigns.filter(
-        (assign: AssignType) => assign.id !== action.id,
-      );
-      return {
-        assigns: newAssigns,
-      };
+      case SUBASSIGN_COMPLETE:
+        var assignIndex = draft.assigns.findIndex(
+          (assign: AssignType) => assign.id === action.assignId,
+        );
+        if (assignIndex === -1) {
+          console.log('invalid action with no matching assign id');
+          break;
+        }
 
-    case SUBASSIGN_ADD:
-      const selected = action.assignId;
-      const subAssign = action.subAssign;
-    // const newAssign = {assign[selected]}
+        var subAssignIndex = draft.assigns[assignIndex].subAssigns.findIndex(
+          (subAssign: SubAssignType) => subAssign.id === action.id,
+        );
 
-    default:
-      return state;
-  }
-};
+        if (subAssignIndex === -1) {
+          console.log('invalid action with no matching subAssign id');
+          break;
+        }
+        draft.assigns[assignIndex].subAssigns[
+          subAssignIndex
+        ].isCompleted = true;
+        break;
+
+      case SUBASSIGN_INCOMPLETE:
+        var assignIndex = draft.assigns.findIndex(
+          (assign: AssignType) => assign.id === action.assignId,
+        );
+        if (assignIndex === -1) {
+          console.log('invalid action with no matching assign id');
+          break;
+        }
+
+        var subAssignIndex = draft.assigns[assignIndex].subAssigns.findIndex(
+          (subAssign: SubAssignType) => subAssign.id === action.id,
+        );
+
+        if (subAssignIndex === -1) {
+          console.log('invalid action with no matching subAssign id');
+          break;
+        }
+        draft.assigns[assignIndex].subAssigns[
+          subAssignIndex
+        ].isCompleted = false;
+        break;
+
+      case SUBASSIGN_REMOVE:
+        var assignIndex = draft.assigns.findIndex(
+          (assign: AssignType) => assign.id === action.assignId,
+        );
+        if (assignIndex === -1) {
+          console.log('invalid action with no matching assign id');
+          break;
+        }
+
+        draft.assigns[assignIndex].subAssigns = draft.assigns[
+          assignIndex
+        ].subAssigns.filter(
+          (subAssign: SubAssignType) => subAssign.id !== action.id,
+        );
+        break;
+
+      default:
+        break;
+    }
+  });
 
 export default assignsReducer;

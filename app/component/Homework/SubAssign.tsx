@@ -20,10 +20,10 @@ interface State {
 const deleteSubAssign = (id) => alert(id + 'deleted');
 
 interface SubAssignProps extends SubAssignType {
-  incompleteSubAssign: (id: string) => void;
-  completeSubAssign: (id: string) => void;
+  onComplete: () => void;
+  onIncomplete: () => void;
+  onRemove: () => void;
   updateSubAssign: (id: string, newValue: string) => void;
-
 }
 
 class SubAssign extends Component<SubAssignProps, State> {
@@ -34,18 +34,27 @@ class SubAssign extends Component<SubAssignProps, State> {
 
   render() {
     const { isEditing, value } = this.state;
-    const { text, isCompleted, id } = this.props;
+    const {
+      text,
+      isCompleted,
+      id,
+      onComplete,
+      onIncomplete,
+      onRemove,
+    } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.column}>
-          <TouchableOpacity onPress={this._toggleComplete}>
-            <View
-              style={[
-                styles.circle,
-                isCompleted ? styles.completedCircle : styles.uncompletedCircle,
-              ]}
-            />
-          </TouchableOpacity>
+          {isCompleted ? (
+            <TouchableOpacity onPress={onIncomplete}>
+              <View style={[styles.circle, styles.uncompletedCircle]} />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity onPress={onComplete}>
+              <View style={[styles.circle, styles.completedCircle]} />
+            </TouchableOpacity>
+          )}
+
           {isEditing ? (
             <TextInput
               style={[
@@ -61,13 +70,15 @@ class SubAssign extends Component<SubAssignProps, State> {
               underlineColorAndroid={'transparent'}
             />
           ) : (
-            <Text
-              style={[
-                styles.text,
-                isCompleted ? styles.completedText : styles.uncompletedText,
-              ]}>
-              {text}
-            </Text>
+            <TouchableOpacity onPress={isCompleted ? onIncomplete : onComplete}>
+              <Text
+                style={[
+                  styles.text,
+                  isCompleted ? styles.completedText : styles.uncompletedText,
+                ]}>
+                {text}
+              </Text>
+            </TouchableOpacity>
           )}
         </View>
 
@@ -91,24 +102,18 @@ class SubAssign extends Component<SubAssignProps, State> {
                 event.stopPropagation;
                 deleteSubAssign(id);
               }}>
-              <View style={styles.actionContainer}>
-                <Text style={styles.actionText}>❌</Text>
-              </View>
+              <TouchableOpacity onPressOut={onRemove}>
+                <View style={styles.actionContainer}>
+                  <Text style={styles.actionText}>❌</Text>
+                </View>
+              </TouchableOpacity>
             </TouchableOpacity>
           </View>
         )}
       </View>
     );
   }
-  _toggleComplete = (event) => {
-    event.stopPropagation();
-    const { isCompleted, incompleteSubAssign, completeSubAssign, id } = this.props;
-    if (isCompleted) {
-      incompleteSubAssign(id);
-    } else {
-      completeSubAssign(id);
-    }
-  };
+
   _startEditing = (event) => {
     event.stopPropagation();
     this.setState({ isEditing: true });

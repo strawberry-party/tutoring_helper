@@ -4,55 +4,55 @@ import {
   StyleSheet,
   Text,
   TouchableHighlight,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { Button, Fab, Icon } from 'native-base';
 import React, { useState } from 'react';
 
-import { AssignType } from '../../types/homework';
-import FormExample from './FormExample';
-
-interface AddAssignModalProps {
+interface ConfirmModalProps {
   visible: boolean;
   hideModal: () => void;
   showModal: () => void;
-  addAssign: (assign: AssignType) => void;
+  cancelText: string;
+  confirmText: string;
+  title: string;
+  next: () => void;
 }
 
-export function AddAssignModal({
+export function ConfirmModal({
   visible,
   showModal,
   hideModal,
-  addAssign,
-}: AddAssignModalProps) {
+  cancelText,
+  confirmText,
+  title,
+  next,
+}: ConfirmModalProps) {
   return (
-    <View style={styles.centeredView}>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={visible}
-        onRequestClose={hideModal}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <FormExample addAssign={addAssign} hideModal={hideModal} />
-          </View>
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={visible}
+      onRequestClose={() => {
+        Alert.alert('Modal has been closed.');
+      }}>
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+          <Text>{title}</Text>
+          <Button onPress={hideModal}>
+            <Text>{cancelText}</Text>
+          </Button>
+          <TouchableOpacity onPress={next}>
+            <Text>confirmText</Text>
+          </TouchableOpacity>
         </View>
-      </Modal>
-
-      <Fab
-        active={!visible}
-        direction="up"
-        containerStyle={{ marginBottom: 60, marginRight: 30 }}
-        style={{ backgroundColor: '#bbb' }}
-        position="bottomRight"
-        onPress={showModal}>
-        <Text style={{ fontSize: 24 }}>➕</Text>
-      </Fab>
-    </View>
+      </View>
+    </Modal>
   );
 }
 
-export default AddAssignModal;
+export default ConfirmModal;
 
 const styles = StyleSheet.create({
   centeredView: {
@@ -95,3 +95,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
 });
+
+
+/*
+
+<ConfirmModal
+  visible=
+  hideModal=
+  showModal=
+  cancelText="아니요, 계속 진행합니다"
+  confirmText="네, 취소합니다"
+  title="정말 취소하시겠어요?"
+  next=onRemove(id) />
+*/

@@ -12,9 +12,10 @@ import { actions as assignActions } from '../../states/assignState';
 
 interface AssignListProps extends AssignListType {
   // addAssign: (any) => void;
-  onCompleteAssign: (string) => void;
-  onIncompleteAssign: (string) => void;
-  onRemoveAssign: (string) => void;
+  onCompleteAssign: (id: string) => void;
+  onIncompleteAssign: (id: string) => void;
+  onRemoveAssign: (id: string) => void;
+  subAssignActions: any;
 }
 
 function AssignList({
@@ -22,12 +23,13 @@ function AssignList({
   onCompleteAssign,
   onIncompleteAssign,
   onRemoveAssign,
+  subAssignActions,
 }: AssignListProps) {
   return (
     <View style={{ backgroundColor: 'red' }}>
       <Text style={{ fontSize: 15 }}>AssignList</Text>
       <List style={{ backgroundColor: 'white' }}>
-        { (assigns.length>0) ? (
+        {assigns.length > 0 ? (
           assigns.map((item: AssignType) => (
             <Assign
               key={item.id}
@@ -44,11 +46,11 @@ function AssignList({
                 onRemoveAssign(item.id);
                 console.log(`${item.id} deleted`);
               }}
-              
+              subAssignActions={subAssignActions}
             />
           ))
         ) : (
-          <Text style={{fontSize: 20}}> 새 숙제를 추가해보세요</Text>
+          <Text style={{ fontSize: 20 }}> 새 숙제를 추가해보세요</Text>
         )}
       </List>
     </View>
