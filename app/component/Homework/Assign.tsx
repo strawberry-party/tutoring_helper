@@ -30,6 +30,7 @@ interface AssignProps extends AssignType {
   onComplete: () => void;
   onIncomplete: () => void;
   onRemove: () => void;
+  subAssignActions: any;
   // isEditing: boolean;
 }
 
@@ -50,6 +51,8 @@ function Assign({
   onComplete,
   onIncomplete,
   onRemove,
+  subAssignActions,
+  id,
 }: AssignProps) {
   function _renderHeader(item: AccordionItem, expanded: boolean) {
     const { desc, due, out, isCompleted, status, subAssigns } = item.raw;
@@ -81,7 +84,6 @@ function Assign({
           ) : (
             //   <Icon style={{ fontSize: 18 }} name="remove-circle" />
             <Text style={{ fontSize: 18 }}>🔽</Text>
-
             // <Icon style={{ fontSize: 18 }} name="add-circle" />
           )}
 
@@ -118,8 +120,8 @@ function Assign({
             justifyContent: 'space-between',
             borderRadius: 20,
           }}>
-          <Text style={{flex: 4}}>DUE: {dueDate} </Text>
-          <Text style={{flex: 2}}> {status * 100} % 완료 </Text>
+          <Text style={{ flex: 4 }}>DUE: {dueDate} </Text>
+          <Text style={{ flex: 2 }}> {status * 100} % 완료 </Text>
 
           {isCompleted ? (
             <TouchableOpacity
@@ -146,13 +148,14 @@ function Assign({
   }
 
   function _renderContent(item: AccordionItem) {
-    const { desc, due, out, isCompleted, status, subAssigns } = item.raw;
+    const { desc, due, out, isCompleted, status, subAssigns, id } = item.raw;
     const subAssignList = subAssigns.map((subAssign: SubAssignType) => {
       return (
         <SubAssign
           {...subAssign}
-          incompleteSubAssign={toBeImplemented}
-          completeSubAssign={toBeImplemented}
+          onIncomplete={() => subAssignActions.incompleteSubAssign(id, subAssign.id)}
+          onComplete={() => subAssignActions.completeSubAssign(id, subAssign.id)}
+          onRemove={() => subAssignActions.removeSubAssign(id, subAssign.id)}
           updateSubAssign={toBeImplemented}
           key={subAssign.id}
         />
@@ -163,10 +166,11 @@ function Assign({
       <View>
         <Card>
           <CardItem bordered header>
-            <AddSubAssign addSubAssign={() => console.log('dd')}/>
+            <AddSubAssign onAdd={
+              (subAssign: SubAssignType) =>
+              subAssignActions.addSubAssign(id, subAssign)} />
           </CardItem>
           <CardItem bordered style={{ borderRadius: 20 }}>
-          
             <Body>{subAssignList}</Body>
           </CardItem>
         </Card>
@@ -176,15 +180,9 @@ function Assign({
 
   return (
     <Accordion
-      style={
-        // backgroundColor: 'blue',
-        // borderRadius: 10,
-        // padding: 10,
-        // margin: 5,
-        styles.cardView
-      }
+      style={styles.cardView}
       dataArray={[
-        { raw: { title, desc, due, out, isCompleted, status, subAssigns } },
+        { raw: { title, desc, due, out, isCompleted, status, subAssigns, id } },
       ]}
       renderHeader={_renderHeader}
       renderContent={_renderContent}
@@ -201,14 +199,6 @@ const styles = StyleSheet.create({
     padding: 5,
     backgroundColor: 'white',
     borderRadius: 20,
-    // shadowColor: '#000',
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 2,
-    // },
-    // shadowOpacity: 0.25,
-    // shadowRadius: 3.84,
-    // elevation: 5,
   },
   container: {
     width: width - 50,

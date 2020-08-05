@@ -13,20 +13,31 @@ import { SubAssignType } from '../../types/homework';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 interface AddSubAssignProps {
-  addSubAssign: (assign: SubAssignType) => void;
+  onAdd: (subAssign: SubAssignType) => void;
 }
 
-export function AddSubAssign({ addSubAssign }: AddSubAssignProps) {
+export function AddSubAssign({ onAdd }: AddSubAssignProps) {
   const [text, setText] = useState('');
 
   const handleSubmit = () => {
-    addSubAssign({ text, isCompleted: false, id: text }); // TODO: 새로운 id 만드는 방법 찾아보기
+    console.log('handleSubmit' + text);
+    onAdd({ text, isCompleted: false, id: text });
+    setText('');
   };
 
   return (
     <View style={styles.container}>
-      <Input style={styles.input} placeholder="새로운 숙제추가!"></Input>
-      <Button style={styles.button}>
+      <Input
+        style={styles.input}
+        placeholder="새로운 숙제추가!"
+        value={text}
+        onChange={({ nativeEvent: { text } }) => {
+          console.log(text);
+
+          setText(text);
+        }}
+      />
+      <Button style={styles.button} onPress={handleSubmit}>
         <Text style={styles.text}>추가</Text>
       </Button>
     </View>
@@ -52,14 +63,14 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     marginTop: 5,
   },
-  
+
   text: {
     fontWeight: '600',
     fontSize: 15,
     marginVertical: 10,
   },
-  
+
   input: {
-    flexGrow: 6
+    flexGrow: 6,
   },
 });

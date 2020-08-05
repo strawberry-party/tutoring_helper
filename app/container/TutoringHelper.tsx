@@ -8,13 +8,13 @@
 
 import 'react-native-gesture-handler';
 
+import { AssignType, SubAssignType } from '../types/homework';
 import React, { Component } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { connect, useDispatch, useSelector } from 'react-redux';
 
 import AddAssignModal from '../component/Homework/AddAssignModal';
 import AssignList from '../component/Homework/AssignList';
-import { AssignType } from '../types/homework';
 import Body from '../component/Homework/Body';
 import Filter from '../component/Homework/Filter';
 import Homework from '../component/Homework/Homework';
@@ -29,12 +29,22 @@ import store from '../common/store';
 
 // import { actions as assignActions } from '../states/assignState';
 
-console.log('store getState');
-
 console.log(store.getState().assignReducer.assigns);
 // TODO: 타입 정의, any 대체하기
 
-function TutoringHelper() {
+function TutoringHelper({
+  hideModal,
+  showModal,
+  addAssign,
+  completeAssign,
+  incompleteAssign,
+  removeAssign,
+
+  addSubAssign,
+  completeSubAssign,
+  incompleteSubAssign,
+  removeSubAssign,
+}: any) {
   const assigns: Array<AssignType> = useSelector(
     (state: RootState) => state.assignReducer.assigns,
   );
@@ -43,38 +53,6 @@ function TutoringHelper() {
     (state: RootState) => state.addAssignModal.visible,
   );
 
-  const dispatch = useDispatch();
-
-  const onAddAssign = (assign: AssignType) => {
-    dispatch(assignActions.addAssign(assign));
-    console.log('added');
-  };
-
-  const onCompleteAssign = (id: string) => {
-    console.log('completed');
-    dispatch(assignActions.completeAssign(id));
-  };
-
-  const onIncompleteAssign = (id: string) => {
-    console.log('un-completed');
-    dispatch(assignActions.incompleteAssign(id));
-  };
-
-  const onRemoveAssign = (id: string) => {
-    // show remove modal to check confirm
-    alert('정말 삭제하시겠습니까?');
-    console.log('removed');
-    dispatch(assignActions.removeAssign(id));
-  };
-
-  const showModal = () => {
-    console.log('show modal');
-    dispatch(addModalVisibilityActions.showModal());
-  };
-  const hideModal = () => {
-    console.log('hide modal');
-    dispatch(addModalVisibilityActions.hideModal());
-  };
 
   // TODO: Homework container로 분리하기
   return (
@@ -89,9 +67,16 @@ function TutoringHelper() {
             <View style={{ backgroundColor: 'blue', padding: 10, flexGrow: 1 }}>
               <AssignList
                 assigns={assigns}
-                onCompleteAssign={onCompleteAssign}
-                onIncompleteAssign={onIncompleteAssign}
-                onRemoveAssign={onRemoveAssign}
+                onCompleteAssign={completeAssign}
+                onIncompleteAssign={incompleteAssign}
+                onRemoveAssign={removeAssign}
+                
+                subAssignActions={{
+                  addSubAssign,
+                  completeSubAssign,
+                  incompleteSubAssign,
+                  removeSubAssign,
+                }}
               />
             </View>
           </ScrollView>
@@ -99,7 +84,7 @@ function TutoringHelper() {
             visible={addAssignModalVisible}
             showModal={showModal}
             hideModal={hideModal}
-            addAssign={onAddAssign}
+            addAssign={addAssign}
           />
         </View>
       </SafeAreaView>
@@ -135,5 +120,15 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(TutoringHelper);
+// function mapDispatchToProps(dispatch) {
+//   bindActionCreators(Object.assign({}, assignActions, addModalVisibilityActions), dispatch);
+// }
+
+const mapDispatchToProps = Object.assign(
+  {},
+  assignActions,
+  addModalVisibilityActions,
+);
+
+export default connect(mapStateToProps, mapDispatchToProps)(TutoringHelper);
 // TutoringHelper의 props로 mapStateToProps의 리턴객체를 전해준다
