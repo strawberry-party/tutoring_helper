@@ -16,9 +16,9 @@ import store from '../common/store';
 
 type RootStackParamList = {
   Tutor: undefined;
-  Root: undefined;
+  // Root: undefined;
   Student: undefined;
-  DetailInfo: undefined;
+  // DetailInfo: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -26,14 +26,13 @@ const Stack = createStackNavigator<RootStackParamList>();
 export default function App() {
   return (
     <Provider store={store}>
-
-      {/* <NavigationContainer ref={navigationRef}>
+      <NavigationContainer ref={navigationRef}>
         <Stack.Navigator initialRouteName="Tutor">
           <Stack.Screen name="Tutor" component={Tutor} />
           <Stack.Screen name="Student" component={Student} />
-          <Stack.Screen name="DetailInfo" component={DetailInfo} />
+          {/* <Stack.Screen name="DetailInfo" component={DetailInfo} /> */}
         </Stack.Navigator>
-      </NavigationContainer> */}
+      </NavigationContainer>
       
       <TutoringHelper />
     </Provider>
