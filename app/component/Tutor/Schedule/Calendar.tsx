@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import {Calendar} from 'react-native-calendars';
 
-class Calendar extends Component {
+class StudentCalendar extends Component {
   render() {
     return (
-      <View>
-        <Text>
-          Calendar
-        </Text>
-      </View>
+      <Calendar
+        current={'2020-07-20'}
+        minDate={'2020-01-01'}
+        maxDate={'2030-12-31'}
+        monthFormat={'yyyy년 MM월'}
+        onPressArrowLeft={subtractMonth => subtractMonth()}
+        onPressArrowRight={addMonth => addMonth()}
+      />
     );
   }
 }
 
-export default Calendar;
+export default StudentCalendar;
