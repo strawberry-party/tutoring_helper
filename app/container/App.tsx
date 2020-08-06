@@ -7,8 +7,7 @@ import TutoringHelper from './TutoringHelper';
 import { createStackNavigator } from '@react-navigation/stack';
 import { navigationRef } from '../component/RootNavigation';
 import store from '../common/store';
-
-// import DetailInfo from '../component/Tutor/Schedule/DetailInfo';
+import DetailInfo from '../component/Tutor/Schedule/DetailInfo';
 
 type RootStackParamList = {
   Tutor: undefined;
@@ -26,7 +25,7 @@ export default function App() {
         <Stack.Navigator initialRouteName="Tutor">
           <Stack.Screen name="Tutor" component={Tutor} />
           <Stack.Screen name="Student" component={Student} />
-          {/* <Stack.Screen name="DetailInfo" component={DetailInfo} /> */}
+          <Stack.Screen name="DetailInfo" component={DetailInfo} />
         </Stack.Navigator>
       </NavigationContainer>
 
