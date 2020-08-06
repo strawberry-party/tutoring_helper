@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
-
-import AppContent from '../component/AppContent';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
 import Student from '../component/Tutor/Student';
