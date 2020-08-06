@@ -17,6 +17,20 @@ react-navigation, native-base, immer
 ### 하루 일과 끝나면 할 일
 1. 
 
+### 브랜치 만들기
+git flow 모델에 따라 브랜치를 나눈다
+
+- dev
+- feature/ 는 기능별로 dev로부터 갈라져나온 브랜치이다
+ex) feature/navigation
+
+- master 는 실행 가능해야한다
+master에 합칠 때에는 --no-ff 설정을 통해 패스트 포워드 없이 merge를 진행한다
+
+[아직은 신경 안써도 됨]
+- release/
+- hotfixes/
+
 
 ### 📢 커밋 메세지 적는 법
 ex) 2020-07-08 FormWrapper 컴포넌트에 TypeScript 추가 완료

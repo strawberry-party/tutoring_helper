@@ -13,7 +13,6 @@ import store from '../common/store';
 
 // import DetailInfo from '../component/Tutor/Schedule/DetailInfo';
 
-
 type RootStackParamList = {
   Tutor: undefined;
   Root: undefined;
@@ -26,16 +25,15 @@ const Stack = createStackNavigator<RootStackParamList>();
 export default function App() {
   return (
     <Provider store={store}>
-
-      {/* <NavigationContainer ref={navigationRef}>
+      <NavigationContainer ref={navigationRef}>
         <Stack.Navigator initialRouteName="Tutor">
           <Stack.Screen name="Tutor" component={Tutor} />
           <Stack.Screen name="Student" component={Student} />
-          <Stack.Screen name="DetailInfo" component={DetailInfo} />
+          {/* <Stack.Screen name="DetailInfo" component={DetailInfo} /> */}
         </Stack.Navigator>
-      </NavigationContainer> */}
-      
-      <TutoringHelper />
+      </NavigationContainer>
+
+      {/* <TutoringHelper /> */}
     </Provider>
   ); // TODO: 리팩토링할 때 TutoringHelper 내용물 Tutor/Homework로 다 옮기기
 }
