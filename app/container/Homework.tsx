@@ -55,7 +55,6 @@ function TutoringHelper({
     (state: RootState) => state.addAssignModal.visible,
   );
 
-  // TODO: Homework container로 분리하기
   return (
     <SafeAreaView
       style={{

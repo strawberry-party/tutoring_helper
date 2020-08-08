@@ -179,7 +179,7 @@ function Assign({
   }
 
   return (
-    <SwipeRow onSwipe={onRemove} swipeThreshold={-200}>
+    <SwipeRow onSwipe={onRemove} swipeThreshold={-100}>
       <Accordion
         style={styles.cardView}
         dataArray={[
