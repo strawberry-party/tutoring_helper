@@ -17,6 +17,7 @@ import AddAssignButton from '../component/Homework/AddAssignButton';
 import AddAssignModal from '../component/Homework/AddAssignModal';
 import AssignList from '../component/Homework/AssignList';
 import Body from '../component/Homework/Body';
+import { Button } from 'native-base';
 import Filter from '../component/Homework/Filter';
 import Homework from '../component/Homework/Homework';
 import Root from '../component/Root';
@@ -54,35 +55,48 @@ function TutoringHelper({
     (state: RootState) => state.addAssignModal.visible,
   );
 
-
   // TODO: Homework container로 분리하기
   return (
-    <View style={styles.container}>
+    <SafeAreaView
+      style={{
+        flexGrow: 1,
+        borderColor: 'grey',
+        borderWidth: 3,
+        padding: 10,
+      }}>
+      <Text style={styles.titleText}>숙제 관리</Text>
 
-      <SafeAreaView>
-        <Text style={styles.titleText}>숙제 관리</Text>
-
-        <View style={{ flexGrow: 1 }}>
+      <View style={{ borderColor: 'green', borderWidth: 3, flex: 1 }}>
+        <View style={{ backgroundColor: 'pink' }}>
           <Filter />
+        </View>
 
-          <ScrollView>
+        <ScrollView
+          style={{
+            borderColor: 'skyblue',
+            borderWidth: 3,
+          }}>
+          <View
+            style={{
+              borderColor: 'blue',
+              borderWidth: 3,
+            }}>
+            <AssignList
+              assigns={assigns}
+              onCompleteAssign={completeAssign}
+              onIncompleteAssign={incompleteAssign}
+              onRemoveAssign={removeAssign}
+              subAssignActions={{
+                addSubAssign,
+                completeSubAssign,
+                incompleteSubAssign,
+                removeSubAssign,
+              }}
+            />
+          </View>
+        </ScrollView>
 
-            <View style={{ backgroundColor: 'blue', padding: 10, flexGrow: 1, marginBottom: 80, minHeight: 450 }}>
-              <AssignList
-                assigns={assigns}
-                onCompleteAssign={completeAssign}
-                onIncompleteAssign={incompleteAssign}
-                onRemoveAssign={removeAssign}
-                
-                subAssignActions={{
-                  addSubAssign,
-                  completeSubAssign,
-                  incompleteSubAssign,
-                  removeSubAssign,
-                }}
-              />
-            </View>
-          </ScrollView>
+        <View style={{ borderColor: 'pink', borderWidth: 3 }}>
           <AddAssignModal
             visible={addAssignModalVisible}
             showModal={showModal}
@@ -90,8 +104,10 @@ function TutoringHelper({
             addAssign={addAssign}
           />
         </View>
-      </SafeAreaView>
-    </View>
+      </View>
+
+      <AddAssignButton visible={addAssignModalVisible} showModal={showModal} />
+    </SafeAreaView>
   );
 }
 
@@ -101,15 +117,10 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingBottom: 100, // 하단바 높이에 따라 조절
   },
-  test: {
-    alignContent: 'center',
-    padding: 80,
-    flexGrow: 1,
-    justifyContent: 'center',
-  },
   titleText: {
     fontSize: 20,
     fontWeight: 'bold',
+    backgroundColor: 'white',
   },
 });
 
