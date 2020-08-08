@@ -13,6 +13,7 @@ import React, { Component } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { connect, useDispatch, useSelector } from 'react-redux';
 
+import AddAssignButton from '../component/Homework/AddAssignButton';
 import AddAssignModal from '../component/Homework/AddAssignModal';
 import AssignList from '../component/Homework/AssignList';
 import Body from '../component/Homework/Body';
@@ -57,14 +58,16 @@ function TutoringHelper({
   // TODO: Homework container로 분리하기
   return (
     <View style={styles.container}>
+
       <SafeAreaView>
         <Text style={styles.titleText}>숙제 관리</Text>
 
         <View style={{ flexGrow: 1 }}>
-          <ScrollView>
-            <Filter />
+          <Filter />
 
-            <View style={{ backgroundColor: 'blue', padding: 10, flexGrow: 1 }}>
+          <ScrollView>
+
+            <View style={{ backgroundColor: 'blue', padding: 10, flexGrow: 1, marginBottom: 80, minHeight: 450 }}>
               <AssignList
                 assigns={assigns}
                 onCompleteAssign={completeAssign}
