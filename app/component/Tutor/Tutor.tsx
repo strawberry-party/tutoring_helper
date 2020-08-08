@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import TutorMain from './TutorMain';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 import Schedule from './Schedule/Schedule';
-import TutoringHelper from '../../container/TutoringHelper';
+import TutorMain from './TutorMain';
+import TutoringHelper from '../../container/Homework';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 const Tab = createBottomTabNavigator();
 
