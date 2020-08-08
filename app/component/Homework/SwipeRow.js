@@ -26,10 +26,6 @@ const {
   Clock,
 } = Animated;
 
-// item = { item }
-// swipeThreshold = {- 150}
-// onSwipe = { this.deleteItem } 
-
 
 class SwipeRow extends React.Component {
   clock = new Clock();
@@ -82,7 +78,7 @@ class SwipeRow extends React.Component {
             cond(
               lessThan(translationX, this.props.swipeThreshold),
               call([this.animState.position], () =>
-                this.props.onSwipe(this.props.item)
+                this.props.onSwipe()
               )
             ),
           ]),
@@ -94,7 +90,7 @@ class SwipeRow extends React.Component {
     const { children } = this.props;
     return (
       <PanGestureHandler
-        minDeltaX={10}
+        minDeltaX={50}
         onGestureEvent={this.onPanEvent}
         onHandlerStateChange={this.onHandlerStateChange}>
         <Animated.View
