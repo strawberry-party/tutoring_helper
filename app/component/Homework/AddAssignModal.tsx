@@ -9,6 +9,7 @@ import {
 import { Button, Fab, Icon } from 'native-base';
 import React, { useState } from 'react';
 
+import AddAssignButton from './AddAssignButton'
 import { AssignType } from '../../types/homework';
 import FormExample from './FormExample';
 
@@ -38,16 +39,8 @@ export function AddAssignModal({
           </View>
         </View>
       </Modal>
+      <AddAssignButton visible={visible} showModal={showModal} />
 
-      <Fab
-        active={!visible}
-        direction="up"
-        containerStyle={{ marginBottom: 60, marginRight: 30 }}
-        style={{ backgroundColor: '#bbb' }}
-        position="bottomRight"
-        onPress={showModal}>
-        <Text style={{ fontSize: 24 }}>➕</Text>
-      </Fab>
     </View>
   );
 }
