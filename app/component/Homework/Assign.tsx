@@ -15,11 +15,11 @@ import {
 } from '../../types/homework';
 import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
 import React, { Component } from 'react';
-import { Swipeable, TouchableHighlight } from 'react-native-gesture-handler';
 
 import AddSubAssign from './AddSubAssign';
 import Moment from 'moment';
 import SubAssign from './SubAssign';
+import SwipeRow from './SwipeRow';
 import { log } from 'react-native-reanimated';
 
 interface State {
@@ -60,7 +60,6 @@ function Assign({
     const { desc, due, out, isCompleted, status, subAssigns } = item.raw;
     const dueDate = Moment(due).format('MM/DD');
     const outDate = Moment(out).format('MM/DD');
-    const LeftAction = () => <View style={styles.leftAction} />;
     return (
       <Card style={{ backgroundColor: 'white', borderRadius: 20 }}>
         <CardItem
@@ -78,7 +77,6 @@ function Assign({
               ...styles.text,
               textDecorationLine: isCompleted ? 'line-through' : 'none',
             }}>
-            {' '}
             {outDate} 숙제{' '}
           </Text>
 
@@ -100,15 +98,6 @@ function Assign({
             }}>
             <Text style={{ fontSize: 20 }}>✏</Text>
           </TouchableOpacity>
-          {/* 
-            <TouchableOpacity
-              onPress={onRemove}
-              style={{
-                margin: 10,
-                backgroundColor: '#f9f9f9',
-              }}>
-              <Text>❌</Text>
-            </TouchableOpacity> */}
         </CardItem>
 
         <CardItem bordered style={{ borderRadius: 20 }}>
@@ -190,9 +179,7 @@ function Assign({
   }
 
   return (
-    <Swipeable
-      renderLeftActions={() => <View style={styles.leftAction} />}
-      onSwipeableLeftOpen={onRemove}>
+    <SwipeRow onSwipe={onRemove} swipeThreshold={-200}>
       <Accordion
         style={styles.cardView}
         dataArray={[
@@ -203,7 +190,7 @@ function Assign({
         renderHeader={_renderHeader}
         renderContent={_renderContent}
       />
-    </Swipeable>
+    </SwipeRow>
   );
 }
 

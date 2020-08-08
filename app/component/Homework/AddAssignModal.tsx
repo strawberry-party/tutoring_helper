@@ -39,7 +39,7 @@ export function AddAssignModal({
           </View>
         </View>
       </Modal>
-      <AddAssignButton visible={visible} showModal={showModal} />
+      {/* <AddAssignButton visible={visible} showModal={showModal} /> */}
 
     </View>
   );
