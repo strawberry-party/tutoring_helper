@@ -1,6 +1,12 @@
 import { Container, Content, DatePicker, Form, Input, Item } from 'native-base';
 import React, { Component, useState } from 'react';
-import { StyleSheet, Text, TouchableHighlight } from 'react-native'
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableHighlight,
+  View,
+} from 'react-native';
 
 import { AssignType } from '../../types/homework';
 
@@ -34,7 +40,7 @@ export default class FormExample extends Component<
     e.preventDefault();
     const { title, desc, due } = this.state;
     console.log('handleSubmit');
-    
+
     console.log(title, desc, due);
     this.props.addAssign({
       title,
@@ -53,52 +59,64 @@ export default class FormExample extends Component<
     const { title, desc, due } = this.state;
 
     return (
-      <Container
+      <View
         style={{
-          paddingBottom: 30,
           width: 250,
-          maxHeight: 250,
+          flexGrow: 1,
+          height: 300,
+          backgroundColor: 'pink',
+          justifyContent: 'space-between',
+          alignItems: 'center',
         }}>
-        <Content
+        <ScrollView
+          style={{ backgroundColor: 'skyblue', height: 100, width: 250 }}>
+          <View>
+            <Form>
+              <Item>
+                <Input
+                  placeholder="숙제 제목"
+                  value={title}
+                  onChange={({ nativeEvent: { text } }) => {
+                    this.setState({ title: text });
+                  }}
+                />
+              </Item>
+              <Item>
+                <Input
+                  placeholder="설명"
+                  multiline={true}
+                  value={desc}
+                  onChange={({ nativeEvent: { text } }) => {
+                    this.setState({ desc: text });
+                  }}
+                />
+              </Item>
+              <Item last>
+                <DatePicker
+                  defaultDate={now}
+                  locale={'kr'}
+                  timeZoneOffsetInMinutes={undefined}
+                  modalTransparent={false}
+                  animationType={'fade'}
+                  androidMode={'default'}
+                  placeHolderText="제출 기한"
+                  textStyle={{ color: 'black' }}
+                  placeHolderTextStyle={{ color: 'black' }}
+                  onDateChange={(date) => this.setState({ due: date })}
+                  disabled={false}
+                />
+              </Item>
+            </Form>
+          </View>
+        </ScrollView>
+
+        <View
           style={{
-            backgroundColor: 'white',
+            flex: 1,
+            justifyContent: 'space-between',
+            width: 150,
+            paddingVertical: 10,
           }}>
-          <Form>
-            <Item>
-              <Input
-                placeholder="숙제 제목"
-                value={title}
-                onChange={({ nativeEvent: { text } }) => {
-                  this.setState({ title: text });
-                }}
-              />
-            </Item>
-            <Item>
-              <Input
-                placeholder="설명"
-                multiline={true}
-                value={desc}
-                onChange={({ nativeEvent: { text } }) => {
-                  this.setState({ desc: text });
-                }}
-              />
-            </Item>
-            <Item last>
-              <DatePicker
-                defaultDate={now}
-                locale={'kr'}
-                timeZoneOffsetInMinutes={undefined}
-                modalTransparent={false}
-                animationType={'fade'}
-                androidMode={'default'}
-                placeHolderText="제출 기한"
-                textStyle={{ color: 'black' }}
-                placeHolderTextStyle={{ color: 'black' }}
-                onDateChange={(date) => this.setState({ due: date })}
-                disabled={false}
-              />
-            </Item>
-          </Form>
           <TouchableHighlight
             style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
             onPress={this.handleSubmit}>
@@ -110,8 +128,8 @@ export default class FormExample extends Component<
             onPress={this.props.hideModal}>
             <Text style={styles.textStyle}>취소</Text>
           </TouchableHighlight>
-        </Content>
-      </Container>
+        </View>
+      </View>
     );
   }
 }

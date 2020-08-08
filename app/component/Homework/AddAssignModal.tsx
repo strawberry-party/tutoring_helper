@@ -39,7 +39,6 @@ export function AddAssignModal({
           </View>
         </View>
       </Modal>
-      {/* <AddAssignButton visible={visible} showModal={showModal} /> */}
 
     </View>
   );
@@ -53,12 +52,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 22,
+    
   },
   modalView: {
-    margin: 30,
+    padding: 20,
     backgroundColor: 'white',
     borderRadius: 20,
-    padding: 35,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
