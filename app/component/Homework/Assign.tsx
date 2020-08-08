@@ -15,10 +15,12 @@ import {
 } from '../../types/homework';
 import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
 import React, { Component } from 'react';
+import { Swipeable, TouchableHighlight } from 'react-native-gesture-handler';
 
 import AddSubAssign from './AddSubAssign';
 import Moment from 'moment';
 import SubAssign from './SubAssign';
+import { log } from 'react-native-reanimated';
 
 interface State {
   isEditing: boolean;
@@ -58,9 +60,9 @@ function Assign({
     const { desc, due, out, isCompleted, status, subAssigns } = item.raw;
     const dueDate = Moment(due).format('MM/DD');
     const outDate = Moment(out).format('MM/DD');
-
+    const LeftAction = () => <View style={styles.leftAction} />;
     return (
-      <Card style={{ backgroundColor: 'white', borderRadius: 10 }}>
+      <Card style={{ backgroundColor: 'white', borderRadius: 20 }}>
         <CardItem
           header
           bordered
@@ -79,13 +81,16 @@ function Assign({
             {' '}
             {outDate} 숙제{' '}
           </Text>
-          {expanded ? (
-            <Text style={{ fontSize: 18 }}>⏫</Text>
-          ) : (
-            //   <Icon style={{ fontSize: 18 }} name="remove-circle" />
-            <Text style={{ fontSize: 18 }}>🔽</Text>
-            // <Icon style={{ fontSize: 18 }} name="add-circle" />
-          )}
+
+          <TouchableOpacity>
+            {expanded ? (
+              <Text style={{ fontSize: 18 }}>⏫</Text>
+            ) : (
+              //   <Icon style={{ fontSize: 18 }} name="remove-circle" />
+              <Text style={{ fontSize: 18 }}>🔽</Text>
+              // <Icon style={{ fontSize: 18 }} name="add-circle" />
+            )}
+          </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => console.log('수정 아직 구현안함')}
@@ -95,15 +100,15 @@ function Assign({
             }}>
             <Text style={{ fontSize: 20 }}>✏</Text>
           </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={onRemove}
-            style={{
-              margin: 10,
-              backgroundColor: '#f9f9f9',
-            }}>
-            <Text>❌</Text>
-          </TouchableOpacity>
+          {/* 
+            <TouchableOpacity
+              onPress={onRemove}
+              style={{
+                margin: 10,
+                backgroundColor: '#f9f9f9',
+              }}>
+              <Text>❌</Text>
+            </TouchableOpacity> */}
         </CardItem>
 
         <CardItem bordered style={{ borderRadius: 20 }}>
@@ -153,8 +158,12 @@ function Assign({
       return (
         <SubAssign
           {...subAssign}
-          onIncomplete={() => subAssignActions.incompleteSubAssign(id, subAssign.id)}
-          onComplete={() => subAssignActions.completeSubAssign(id, subAssign.id)}
+          onIncomplete={() =>
+            subAssignActions.incompleteSubAssign(id, subAssign.id)
+          }
+          onComplete={() =>
+            subAssignActions.completeSubAssign(id, subAssign.id)
+          }
           onRemove={() => subAssignActions.removeSubAssign(id, subAssign.id)}
           updateSubAssign={toBeImplemented}
           key={subAssign.id}
@@ -166,9 +175,11 @@ function Assign({
       <View>
         <Card>
           <CardItem bordered header>
-            <AddSubAssign onAdd={
-              (subAssign: SubAssignType) =>
-              subAssignActions.addSubAssign(id, subAssign)} />
+            <AddSubAssign
+              onAdd={(subAssign: SubAssignType) =>
+                subAssignActions.addSubAssign(id, subAssign)
+              }
+            />
           </CardItem>
           <CardItem bordered style={{ borderRadius: 20 }}>
             <Body>{subAssignList}</Body>
@@ -179,14 +190,20 @@ function Assign({
   }
 
   return (
-    <Accordion
-      style={styles.cardView}
-      dataArray={[
-        { raw: { title, desc, due, out, isCompleted, status, subAssigns, id } },
-      ]}
-      renderHeader={_renderHeader}
-      renderContent={_renderContent}
-    />
+    <Swipeable
+      renderLeftActions={() => <View style={styles.leftAction} />}
+      onSwipeableLeftOpen={onRemove}>
+      <Accordion
+        style={styles.cardView}
+        dataArray={[
+          {
+            raw: { title, desc, due, out, isCompleted, status, subAssigns, id },
+          },
+        ]}
+        renderHeader={_renderHeader}
+        renderContent={_renderContent}
+      />
+    </Swipeable>
   );
 }
 
@@ -240,7 +257,6 @@ const styles = StyleSheet.create({
   actions: {
     flexDirection: 'row',
   },
-  actionText: {},
   actionContainer: {
     marginVertical: 10,
     marginHorizontal: 10,
@@ -249,5 +265,19 @@ const styles = StyleSheet.create({
     width: width / 2,
     marginVertical: 15,
     paddingBottom: 5,
+  },
+  leftAction: {
+    backgroundColor: '#FFFFFB',
+    flexGrow: 1,
+    marginVertical: 5,
+    marginHorizontal: 5,
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    borderRadius: 20,
+    paddingLeft: 40,
+  },
+  textAction: {
+    fontSize: 30,
+    color: 'white',
   },
 });

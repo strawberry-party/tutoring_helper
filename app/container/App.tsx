@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
+
+import DetailInfo from '../component/Tutor/Schedule/DetailInfo';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
 import Student from '../component/Tutor/Student';
 import Tutor from '../component/Tutor/Tutor';
-import TutoringHelper from './TutoringHelper';
+import TutoringHelper from './Homework';
 import { createStackNavigator } from '@react-navigation/stack';
 import { navigationRef } from '../component/RootNavigation';
 import store from '../common/store';
-import DetailInfo from '../component/Tutor/Schedule/DetailInfo';
 
 type RootStackParamList = {
   Tutor: undefined;
