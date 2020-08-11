@@ -6,36 +6,35 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
-import { Button, Fab, Icon } from 'native-base';
 import React, { useState } from 'react';
 
 import AddAssignButton from './AddAssignButton';
 import { AssignType } from '../../types/homework';
 import FormExample from './FormExample';
 
-interface AddAssignModalProps {
-  addModalVisible: boolean;
-  hideAddModal: () => void;
-  showAddModal: () => void;
-  addAssign: (assign: AssignType) => void;
+interface EditAssignModalProps {
+  editModalVisible: boolean;
+  selectedAssignId: string;
+  hideEditModal: () => void;
+  editAssign: (id: string, assign: AssignType) => void;
 }
 
-export function AddAssignModal({
-  addModalVisible,
-  showAddModal,
-  hideAddModal,
-  addAssign,
-}: AddAssignModalProps) {
+export function EditAssignModal({
+  editModalVisible,
+  hideEditModal,
+  editAssign,
+  selectedAssignId,
+}: EditAssignModalProps) {
   return (
     <View style={styles.centeredView}>
       <Modal
         animationType="slide"
         transparent={true}
-        visible={addModalVisible}
-        onRequestClose={hideAddModal}>
+        visible={editModalVisible}
+        onRequestClose={hideEditModal}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <FormExample onSubmit={addAssign} hideModal={hideAddModal} modalType={"AddModal"}/>
+            <FormExample onSubmit={editAssign} hideModal={hideEditModal} modalType={"EditModal"} selectedAssignId={selectedAssignId}/>
           </View>
         </View>
       </Modal>
@@ -43,7 +42,7 @@ export function AddAssignModal({
   );
 }
 
-export default AddAssignModal;
+export default EditAssignModal;
 
 const styles = StyleSheet.create({
   centeredView: {

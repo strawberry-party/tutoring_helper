@@ -11,15 +11,18 @@ import { actions as assignActions } from '../../states/assignState';
 // presentational component of AssignList
 
 interface AssignListProps extends AssignListType {
-  // addAssign: (any) => void;
   onCompleteAssign: (id: string) => void;
   onIncompleteAssign: (id: string) => void;
   onRemoveAssign: (id: string) => void;
   subAssignActions: any;
+  onStartEditAssign: any;
 }
 
 function AssignList({
   assigns,
+
+  onStartEditAssign,
+
   onCompleteAssign,
   onIncompleteAssign,
   onRemoveAssign,
@@ -34,6 +37,9 @@ function AssignList({
             <Assign
               key={item.id}
               {...item}
+              onStartEdit={() => {
+                onStartEditAssign(item.id);
+              }}
               onComplete={() => {
                 onCompleteAssign(item.id);
                 console.log(`${item.id} Completed`);

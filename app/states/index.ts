@@ -1,9 +1,9 @@
-import addAssignReducer from './assignModalState';
+import assignModalReducer from './assignModalState';
 import assignReducer from './assignState';
 import { combineReducers } from 'redux';
 
 const rootReducer = combineReducers({
-  addAssignModal: addAssignReducer,
+  assignModalReducer,
   assignReducer,
 });
 

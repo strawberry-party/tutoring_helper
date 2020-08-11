@@ -33,6 +33,7 @@ interface AssignProps extends AssignType {
   onIncomplete: () => void;
   onRemove: () => void;
   subAssignActions: any;
+  onStartEdit: any;
   // isEditing: boolean;
 }
 
@@ -53,6 +54,7 @@ function Assign({
   onComplete,
   onIncomplete,
   onRemove,
+  onStartEdit,
   subAssignActions,
   id,
 }: AssignProps) {
@@ -91,7 +93,7 @@ function Assign({
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => console.log('수정 아직 구현안함')}
+            onPress={onStartEdit}
             style={{
               margin: 10,
               backgroundColor: '#f9f9f9',
