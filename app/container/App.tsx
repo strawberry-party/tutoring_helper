@@ -5,7 +5,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
 import Student from '../component/Tutor/Student';
 import Tutor from '../component/Tutor/Tutor';
-import TutoringHelper from './Homework';
 import { createStackNavigator } from '@react-navigation/stack';
 import { navigationRef } from '../component/RootNavigation';
 import store from '../common/store';
@@ -29,8 +28,6 @@ export default function App() {
           <Stack.Screen name="DetailInfo" component={DetailInfo} />
         </Stack.Navigator>
       </NavigationContainer>
-
-      {/* <TutoringHelper /> */}
     </Provider>
   ); // TODO: 리팩토링할 때 TutoringHelper 내용물 Tutor/Homework로 다 옮기기
 }

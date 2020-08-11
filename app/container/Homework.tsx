@@ -22,7 +22,7 @@ import Filter from '../component/Homework/Filter';
 import Homework from '../component/Homework/Homework';
 import Root from '../component/Root';
 import { RootState } from '../states';
-import { actions as addModalVisibilityActions } from '../states/addAssignState';
+import { actions as addModalVisibilityActions } from '../states/assignModalState';
 import { actions as assignActions } from '../states/assignState';
 import { assignList } from '../common/mockData';
 import { bindActionCreators } from 'redux';
@@ -35,8 +35,8 @@ console.log(store.getState().assignReducer.assigns);
 // TODO: 타입 정의, any 대체하기
 
 function TutoringHelper({
-  hideModal,
-  showModal,
+  hideAddModal,
+  showAddModal,
   addAssign,
   completeAssign,
   incompleteAssign,
@@ -98,14 +98,17 @@ function TutoringHelper({
         <View style={{ borderColor: 'pink', borderWidth: 3 }}>
           <AddAssignModal
             visible={addAssignModalVisible}
-            showModal={showModal}
-            hideModal={hideModal}
+            showAddModal={showAddModal}
+            hideAddModal={hideAddModal}
             addAssign={addAssign}
           />
         </View>
       </View>
 
-      <AddAssignButton visible={addAssignModalVisible} showModal={showModal} />
+      <AddAssignButton
+        visible={addAssignModalVisible}
+        showAddModal={showAddModal}
+      />
     </SafeAreaView>
   );
 }

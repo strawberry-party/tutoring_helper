@@ -12,7 +12,7 @@ import { AssignType } from '../../types/homework';
 
 interface FormExampleProps {
   addAssign: (assign: AssignType) => void;
-  hideModal: () => void;
+  hideAddModal: () => void;
 }
 
 interface FormInputState {
@@ -52,7 +52,7 @@ export default class FormExample extends Component<
       subAssigns: [],
       id: title, // id 어떻게 추가할지 수정해야함
     });
-    this.props.hideModal();
+    this.props.hideAddModal();
   };
 
   render() {
@@ -125,7 +125,7 @@ export default class FormExample extends Component<
 
           <TouchableHighlight
             style={{ ...styles.openButton, backgroundColor: 'red' }}
-            onPress={this.props.hideModal}>
+            onPress={this.props.hideAddModal}>
             <Text style={styles.textStyle}>취소</Text>
           </TouchableHighlight>
         </View>

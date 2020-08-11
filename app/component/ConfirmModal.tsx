@@ -12,8 +12,8 @@ import React, { useState } from 'react';
 
 interface ConfirmModalProps {
   visible: boolean;
-  hideModal: () => void;
-  showModal: () => void;
+  hideAddModal: () => void;
+  showAddModal: () => void;
   cancelText: string;
   confirmText: string;
   title: string;
@@ -22,8 +22,8 @@ interface ConfirmModalProps {
 
 export function ConfirmModal({
   visible,
-  showModal,
-  hideModal,
+  showAddModal,
+  hideAddModal,
   cancelText,
   confirmText,
   title,
@@ -40,7 +40,7 @@ export function ConfirmModal({
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
           <Text>{title}</Text>
-          <Button onPress={hideModal}>
+          <Button onPress={hideAddModal}>
             <Text>{cancelText}</Text>
           </Button>
           <TouchableOpacity onPress={next}>
@@ -96,13 +96,12 @@ const styles = StyleSheet.create({
   },
 });
 
-
 /*
 
 <ConfirmModal
   visible=
-  hideModal=
-  showModal=
+  hideAddModal=
+  showAddModal=
   cancelText="아니요, 계속 진행합니다"
   confirmText="네, 취소합니다"
   title="정말 취소하시겠어요?"
