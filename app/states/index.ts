@@ -1,4 +1,4 @@
-import addAssignReducer from './addAssignState';
+import addAssignReducer from './assignModalState';
 import assignReducer from './assignState';
 import { combineReducers } from 'redux';
 

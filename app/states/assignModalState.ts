@@ -2,27 +2,27 @@
 export const SET_ADD_MODAL_VISIBILITY = 'SET_ADD_MODAL_VISIBILITY' as const;
 
 type AddAssignAction =
-  | ReturnType<typeof showModal>
-  | ReturnType<typeof hideModal>;
+  | ReturnType<typeof showAddModal>
+  | ReturnType<typeof hideAddModal>;
 
 type AddAssignState = {
   visible: boolean;
 };
 
 // action constructor
-export const showModal = () => ({
+export const showAddModal = () => ({
   type: SET_ADD_MODAL_VISIBILITY,
   visible: true,
 });
 
-export const hideModal = () => ({
+export const hideAddModal = () => ({
   type: SET_ADD_MODAL_VISIBILITY,
   visible: false,
 });
 
 export const actions = {
-  showModal,
-  hideModal,
+  showAddModal,
+  hideAddModal,
 };
 
 // reducer

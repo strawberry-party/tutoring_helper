@@ -14,18 +14,21 @@ import FormExample from './FormExample';
 
 interface AddAssignButtonProps {
   visible: boolean;
-  showModal: () => void;
+  showAddModal: () => void;
 }
 
-export function AddAssignButton({ visible, showModal }: AddAssignButtonProps) {
+export function AddAssignButton({
+  visible,
+  showAddModal,
+}: AddAssignButtonProps) {
   return (
     <Fab
       active={!visible}
       direction="up"
-      containerStyle={{backgroundColor: 'black',}}
+      containerStyle={{ backgroundColor: 'black' }}
       style={{ backgroundColor: '#bbb' }}
       position="bottomRight"
-      onPress={showModal}>
+      onPress={showAddModal}>
       <Text style={{ fontSize: 24 }}>➕</Text>
     </Fab>
   );

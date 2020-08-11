@@ -9,37 +9,51 @@ import {
 import { Button, Fab, Icon } from 'native-base';
 import React, { useState } from 'react';
 
-import AddAssignButton from './AddAssignButton';
+import AddAssignButton from './AddAssignButton'
 import { AssignType } from '../../types/homework';
 import FormExample from './FormExample';
 
-interface AddAssignModalProps {
+interface AssignModalProps {
   visible: boolean;
   hideAddModal: () => void;
   showAddModal: () => void;
-  addAssign: (assign: AssignType) => void;
+  onSubmit: any;
 }
+
+interface EditAssignModalProps extends AssignModalProps {
+  onSubmit: (newAssign: AssignType, id: string) => void;
+}
+
+interface AddAssignModalProps extends AssignModalProps {
+  onSubmit: (assign: AssignType) => void;
+}
+
+function AssignModal({visible, hideAddModal, showAddModal, onSubmit}: AssignModalProps){
+  <View style={styles.centeredView}>
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={visible}
+      onRequestClose={hideAddModal}>
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+          <FormExample onSubmit={onSubmit} hideAddModal={hideAddModal} />
+        </View>
+      </View>
+    </Modal>
+  </View>
+}
+
+
 
 export function AddAssignModal({
   visible,
   showAddModal,
   hideAddModal,
-  addAssign,
+  onSubmit,
 }: AddAssignModalProps) {
   return (
-    <View style={styles.centeredView}>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={visible}
-        onRequestClose={hideAddModal}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <FormExample addAssign={addAssign} hideAddModal={hideAddModal} />
-          </View>
-        </View>
-      </Modal>
-    </View>
+
   );
 }
 
@@ -51,6 +65,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 22,
+
   },
   modalView: {
     padding: 20,
@@ -67,21 +82,5 @@ const styles = StyleSheet.create({
     elevation: 5,
     width: 300,
     height: 350,
-  },
-  openButton: {
-    backgroundColor: '#F194FF',
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-    backgroundColor: 'white',
   },
 });
