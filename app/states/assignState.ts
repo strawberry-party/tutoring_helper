@@ -9,6 +9,7 @@ const ASSIGN_ADD = 'ASSIGN_ADD' as const;
 const ASSIGN_REMOVE = 'ASSIGN_REMOVE' as const;
 const ASSIGN_COMPLETE = 'ASSIGN_COMPLETE' as const;
 const ASSIGN_INCOMPLETE = 'ASSIGN_INCOMPLETE' as const;
+const ASSIGN_EDIT = 'ASSIGN_EDIT' as const;
 
 const SUBASSIGN_ADD = 'SUBASSIGN_ADD' as const;
 const SUBASSIGN_REMOVE = 'SUBASSIGN_REMOVE' as const;
@@ -20,6 +21,7 @@ type AssignAction =
   | ReturnType<typeof completeAssign>
   | ReturnType<typeof incompleteAssign>
   | ReturnType<typeof removeAssign>
+  | ReturnType<typeof editAssign>
   | ReturnType<typeof addSubAssign>
   | ReturnType<typeof completeSubAssign>
   | ReturnType<typeof incompleteSubAssign>
@@ -54,6 +56,12 @@ export const incompleteAssign = (id: string) => ({
 export const removeAssign = (id: string) => ({
   type: ASSIGN_REMOVE,
   id: id,
+});
+
+export const editAssign = (id: string, newAssign: AssignType) => ({
+  type: ASSIGN_EDIT,
+  id,
+  assign: newAssign,
 });
 
 // subAssign CRUD
@@ -93,6 +101,8 @@ export const actions = {
   completeAssign,
   incompleteAssign,
   removeAssign,
+  editAssign,
+
   addSubAssign,
   completeSubAssign,
   incompleteSubAssign,
@@ -142,6 +152,22 @@ const assignsReducer = (
             (assign: AssignType) => assign.id !== action.id,
           ),
         };
+
+      case ASSIGN_EDIT:
+        console.log('****ASSIGN_EDIT****');
+        let index = 0
+        for (; index < draft.assigns.length; index++) {
+          let assign = draft.assigns[index];
+          if (assign.id === action.id) {
+            console.log('matched!');
+            assign = action.assign;
+            assign.id = action.id;
+            break;
+          }
+        }
+        if (index === draft.assigns.length)
+          console.log('invalid action with no matching assign id');
+        break;
 
       case SUBASSIGN_ADD:
         // check validity of assignId

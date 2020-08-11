@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text } from 'react-native';
+import { SafeAreaView, StyleSheet, Text } from 'react-native';
 
 import Body from './Body';
-import { Container } from 'native-base';
-import FormWrapper from './AddAssignModal';
 import Status from './Status';
 
 class Homework extends Component {

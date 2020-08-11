@@ -13,17 +13,17 @@ import { AssignType } from '../../types/homework';
 import FormExample from './FormExample';
 
 interface AddAssignButtonProps {
-  visible: boolean;
+  addModalVisible: boolean;
   showAddModal: () => void;
 }
 
 export function AddAssignButton({
-  visible,
+  addModalVisible,
   showAddModal,
 }: AddAssignButtonProps) {
   return (
     <Fab
-      active={!visible}
+      active={!addModalVisible}
       direction="up"
       containerStyle={{ backgroundColor: 'black' }}
       style={{ backgroundColor: '#bbb' }}

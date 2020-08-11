@@ -11,7 +11,7 @@ import { Button, Fab, Icon } from 'native-base';
 import React, { useState } from 'react';
 
 interface ConfirmModalProps {
-  visible: boolean;
+  addModalVisible: boolean;
   hideAddModal: () => void;
   showAddModal: () => void;
   cancelText: string;
@@ -21,7 +21,7 @@ interface ConfirmModalProps {
 }
 
 export function ConfirmModal({
-  visible,
+  addModalVisible,
   showAddModal,
   hideAddModal,
   cancelText,
@@ -33,7 +33,7 @@ export function ConfirmModal({
     <Modal
       animationType="slide"
       transparent={true}
-      visible={visible}
+      addModalVisible={addModalVisible}
       onRequestClose={() => {
         Alert.alert('Modal has been closed.');
       }}>
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
 /*
 
 <ConfirmModal
-  visible=
+  addModalVisible=
   hideAddModal=
   showAddModal=
   cancelText="아니요, 계속 진행합니다"

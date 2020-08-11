@@ -10,9 +10,17 @@ import {
 
 import { AssignType } from '../../types/homework';
 
+type AddAssign = (assign: AssignType) => void;
+type EditAssign = (id: string, assign: AssignType) => void;
+
+type AddModal = 'AddModal';
+type EditModal = 'EditModal';
+
 interface FormExampleProps {
-  addAssign: (assign: AssignType) => void;
-  hideAddModal: () => void;
+  hideModal: () => void;
+  onSubmit: AddAssign | EditAssign;
+  modalType: AddModal | EditModal;
+  selectedAssignId: string;
 }
 
 interface FormInputState {
@@ -29,20 +37,34 @@ export default class FormExample extends Component<
 > {
   constructor(props) {
     super(props);
+    const { modalType } = this.props;
+    let due = now;
+    let title = '';
+    let desc = '';
+    switch (modalType) {
+      case 'AddModal':
+        break;
+      case 'EditModal':
+        due = now;
+        title = 'dummy';
+        desc = 'dummy';
+        break;
+      default:
+        console.log('something went on FormExample');
+    }
     this.state = {
-      due: now,
-      title: '',
-      desc: '',
+      due: due,
+      title: title,
+      desc: desc,
     };
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
     const { title, desc, due } = this.state;
-    console.log('handleSubmit');
+    const { onSubmit, modalType, hideModal, selectedAssignId } = this.props;
 
-    console.log(title, desc, due);
-    this.props.addAssign({
+    const newAssign: AssignType = {
       title,
       desc,
       due,
@@ -51,8 +73,22 @@ export default class FormExample extends Component<
       status: 0,
       subAssigns: [],
       id: title, // id 어떻게 추가할지 수정해야함
-    });
-    this.props.hideAddModal();
+    };
+
+    switch (modalType) {
+      case 'AddModal':
+        (onSubmit as AddAssign)(newAssign);
+        break;
+      case 'EditModal':
+        (onSubmit as EditAssign)(selectedAssignId, newAssign);
+        console.log(newAssign.title);
+        break;
+        
+      default:
+        console.log('something went wrong');
+    }
+
+    hideModal();
   };
 
   render() {
@@ -125,7 +161,7 @@ export default class FormExample extends Component<
 
           <TouchableHighlight
             style={{ ...styles.openButton, backgroundColor: 'red' }}
-            onPress={this.props.hideAddModal}>
+            onPress={this.props.hideModal}>
             <Text style={styles.textStyle}>취소</Text>
           </TouchableHighlight>
         </View>

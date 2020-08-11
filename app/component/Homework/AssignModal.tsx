@@ -14,7 +14,7 @@ import { AssignType } from '../../types/homework';
 import FormExample from './FormExample';
 
 interface AssignModalProps {
-  visible: boolean;
+  addModalVisible: boolean;
   hideAddModal: () => void;
   showAddModal: () => void;
   onSubmit: any;
@@ -28,12 +28,12 @@ interface AddAssignModalProps extends AssignModalProps {
   onSubmit: (assign: AssignType) => void;
 }
 
-function AssignModal({visible, hideAddModal, showAddModal, onSubmit}: AssignModalProps){
+function AssignModal({addModalVisible, hideAddModal, showAddModal, onSubmit}: AssignModalProps){
   <View style={styles.centeredView}>
     <Modal
       animationType="slide"
       transparent={true}
-      visible={visible}
+      visible={addModalVisible}
       onRequestClose={hideAddModal}>
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
@@ -47,7 +47,7 @@ function AssignModal({visible, hideAddModal, showAddModal, onSubmit}: AssignModa
 
 
 export function AddAssignModal({
-  visible,
+  addModalVisible,
   showAddModal,
   hideAddModal,
   onSubmit,
