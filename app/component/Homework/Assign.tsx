@@ -81,7 +81,7 @@ function Assign({
             {outDate} 숙제{' '}
           </Text>
 
-          <TouchableOpacity>
+          {/* <TouchableOpacity>
             {expanded ? (
               <Text style={{ fontSize: 18 }}>⏫</Text>
             ) : (
@@ -89,7 +89,16 @@ function Assign({
               <Text style={{ fontSize: 18 }}>🔽</Text>
               // <Icon style={{ fontSize: 18 }} name="add-circle" />
             )}
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+
+          <Button
+            onPress={() => console.log('button pressed')}>
+            {expanded ? (
+              <Text style={{ fontSize: 18 }}>접기</Text>
+            ) : (
+              <Text style={{ fontSize: 18 }}>펼치기</Text>
+            )}
+          </Button>
 
           <TouchableOpacity
             onPress={onStartEdit}
@@ -155,7 +164,9 @@ function Assign({
             subAssignActions.completeSubAssign(id, subAssign.id)
           }
           onRemove={() => subAssignActions.removeSubAssign(id, subAssign.id)}
-          onUpdate={(text: string) => subAssignActions.editSubAssign(id, subAssign.id, text)}
+          onUpdate={(text: string) =>
+            subAssignActions.editSubAssign(id, subAssign.id, text)
+          }
           key={subAssign.id}
         />
       );

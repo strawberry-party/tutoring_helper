@@ -33,7 +33,7 @@ export function ConfirmModal({
     <Modal
       animationType="slide"
       transparent={true}
-      addModalVisible={addModalVisible}
+      visible={addModalVisible}
       onRequestClose={() => {
         Alert.alert('Modal has been closed.');
       }}>

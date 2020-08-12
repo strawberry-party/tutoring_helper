@@ -64,7 +64,7 @@ class SubAssign extends Component<SubAssignProps, State> {
               ]}
               value={value}
               multiline={true}
-              onChangeText={this._controllInput}
+              onChangeText={this._controlInput}
               returnKeyType={'done'}
               onBlur={this._finishEditing}
               underlineColorAndroid={'transparent'}
@@ -125,7 +125,7 @@ class SubAssign extends Component<SubAssignProps, State> {
     onUpdate(value);
     this.setState({ isEditing: false });
   };
-  _controllInput = (text) => {
+  _controlInput = (text) => {
     this.setState({ value: text });
   };
 }

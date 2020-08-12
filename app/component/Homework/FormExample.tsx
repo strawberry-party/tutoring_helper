@@ -61,9 +61,6 @@ export default class FormExample extends Component<
       id: title, // id 어떻게 추가할지 수정해야함
     };
 
-    console.log(modalType);
-
-
     switch (modalType) {
       case 'AddModal':
         (onSubmit as AddAssign)(newAssign);
@@ -144,7 +141,7 @@ export default class FormExample extends Component<
           <TouchableHighlight
             style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
             onPress={this.handleSubmit}>
-            <Text style={styles.textStyle}>새로운 숙제 추가하기</Text>
+            <Text style={styles.textStyle}>저장</Text>
           </TouchableHighlight>
 
           <TouchableHighlight

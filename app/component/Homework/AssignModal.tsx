@@ -9,55 +9,102 @@ import {
 import { Button, Fab, Icon } from 'native-base';
 import React, { useState } from 'react';
 
-import AddAssignButton from './AddAssignButton'
 import { AssignType } from '../../types/homework';
 import FormExample from './FormExample';
 
 interface AssignModalProps {
-  addModalVisible: boolean;
-  hideAddModal: () => void;
-  showAddModal: () => void;
+  modalVisible: boolean;
+  hideModal: () => void;
   onSubmit: any;
+  selectedAssignId: string;
+  selectedAssign: AssignType;
+  modalType: 'AddModal' | 'EditModal';
 }
 
-interface EditAssignModalProps extends AssignModalProps {
-  onSubmit: (newAssign: AssignType, id: string) => void;
-}
-
-interface AddAssignModalProps extends AssignModalProps {
-  onSubmit: (assign: AssignType) => void;
-}
-
-function AssignModal({addModalVisible, hideAddModal, showAddModal, onSubmit}: AssignModalProps){
-  <View style={styles.centeredView}>
-    <Modal
-      animationType="slide"
-      transparent={true}
-      visible={addModalVisible}
-      onRequestClose={hideAddModal}>
-      <View style={styles.centeredView}>
-        <View style={styles.modalView}>
-          <FormExample onSubmit={onSubmit} hideAddModal={hideAddModal} />
-        </View>
-      </View>
-    </Modal>
-  </View>
-}
-
-
-
-export function AddAssignModal({
-  addModalVisible,
-  showAddModal,
-  hideAddModal,
+function AssignModal({
+  modalVisible,
+  hideModal,
   onSubmit,
-}: AddAssignModalProps) {
+  modalType,
+  selectedAssignId,
+  selectedAssign,
+}: AssignModalProps) {
   return (
-
+    <View style={styles.centeredView}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={onSubmit}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <FormExample
+              onSubmit={onSubmit}
+              hideModal={hideModal}
+              selectedAssignId={selectedAssignId}
+              modalType={modalType}
+              selectedAssign={selectedAssign}
+            />
+          </View>
+        </View>
+      </Modal>
+    </View>
   );
 }
 
-export default AddAssignModal;
+interface AddAssignModalProps {
+  addModalVisible: boolean;
+  hideAddModal: () => void;
+  addAssign: (assign: AssignType) => void;
+}
+const now: Date = new Date(Date.now());
+const defaultAssign: AssignType = new AssignType('', '', now);
+
+export function AddAssignModal({
+  addModalVisible,
+  hideAddModal,
+  addAssign,
+}: AddAssignModalProps) {
+  return (
+    <AssignModal
+      modalVisible={addModalVisible}
+      hideModal={hideAddModal}
+      onSubmit={addAssign}
+      modalType={'AddModal'}
+      selectedAssignId={'none'}
+      selectedAssign={defaultAssign}
+    />
+  );
+}
+
+interface EditAssignModalProps {
+  editModalVisible: boolean;
+  hideEditModal: () => void;
+  editAssign: (id: string, assign: AssignType) => void;
+  selectedAssignId: string;
+  selectedAssign: AssignType;
+}
+
+export function EditAssignModal({
+  editModalVisible,
+  hideEditModal,
+  editAssign,
+  selectedAssignId,
+  selectedAssign,
+}: EditAssignModalProps) {
+  return (
+    <AssignModal
+      modalVisible={editModalVisible}
+      hideModal={hideEditModal}
+      onSubmit={editAssign}
+      modalType={'EditModal'}
+      selectedAssignId={selectedAssignId}
+      selectedAssign={selectedAssign}
+    />
+  );
+}
+
+export default AssignModal;
 
 const styles = StyleSheet.create({
   centeredView: {
@@ -65,7 +112,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 22,
-
   },
   modalView: {
     padding: 20,
