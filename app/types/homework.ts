@@ -14,7 +14,6 @@ export class AssignType {
   isCompleted: boolean;
   status: number;
   subAssigns: Array<SubAssignType>;
-
   // print: () => string;
 
   constructor(title: string, desc: string, due: Date) {

@@ -26,6 +26,9 @@ import { actions as modalVisibilityActions } from '../states/assignModalState';
 
 type HomeworkContainerProps = any; // TODO: 타입 정의, any 대체하기
 
+
+
+// type HomeworkContainerProps = any;
 function HomeworkContainer({
   hideAddModal,
   showAddModal,
