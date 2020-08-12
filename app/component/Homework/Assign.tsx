@@ -90,7 +90,7 @@ function Assign({
               // <Icon style={{ fontSize: 18 }} name="add-circle" />
             )}
           </TouchableOpacity> */}
-
+{/* 
           <Button
             onPress={() => console.log('button pressed')}>
             {expanded ? (
@@ -98,7 +98,7 @@ function Assign({
             ) : (
               <Text style={{ fontSize: 18 }}>펼치기</Text>
             )}
-          </Button>
+          </Button> */}
 
           <TouchableOpacity
             onPress={onStartEdit}
