@@ -8,30 +8,24 @@
 
 import 'react-native-gesture-handler';
 
-import { AssignType, SubAssignType } from '../types/homework';
-import React, { Component } from 'react';
+import {
+  AddAssignModal,
+  EditAssignModal,
+} from '../component/Homework/AssignModal';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 
 import AddAssignButton from '../component/Homework/AddAssignButton';
-import AddAssignModal from '../component/Homework/AddAssignModal';
 import AssignList from '../component/Homework/AssignList';
-import Body from '../component/Homework/Body';
-import { Button } from 'native-base';
-import EditAssignModal from '../component/Homework/EditAssignModal';
+import { AssignType } from '../types/homework';
 import Filter from '../component/Homework/Filter';
+import React from 'react';
 import { RootState } from '../states';
-import { add } from 'lodash';
 import { actions as assignActions } from '../states/assignState';
-import { bindActionCreators } from 'redux';
 import { actions as modalVisibilityActions } from '../states/assignModalState';
-import store from '../common/store';
 
-// TODO: 타입 정의, any 대체하기
+type HomeworkContainerProps = any; // TODO: 타입 정의, any 대체하기
 
-
-
-// type HomeworkContainerProps = any;
 function HomeworkContainer({
   hideAddModal,
   showAddModal,
@@ -49,7 +43,7 @@ function HomeworkContainer({
   incompleteSubAssign,
   removeSubAssign,
   editSubAssign,
-}) {
+}: HomeworkContainerProps) {
   const assigns: Array<AssignType> = useSelector(
     (state: RootState) => state.assignReducer.assigns,
   );
@@ -115,7 +109,6 @@ function HomeworkContainer({
         <View style={{ borderColor: 'pink', borderWidth: 3 }}>
           <AddAssignModal
             addModalVisible={addModalVisible}
-            showAddModal={showAddModal}
             hideAddModal={hideAddModal}
             addAssign={addAssign}
           />

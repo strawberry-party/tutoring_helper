@@ -59,7 +59,7 @@ export class SubAssignType {
     this.isCompleted = false;
     this.id = '000';
     // this.print = () => {
-    //   let isCompleted = this.isCompleted ? 'completed' : 'incompleted';
+    //   let isCompleted = this.isCompleted ? 'completed' : 'not completed';
     //   return `${this.text}: ${isCompleted}\n`;
     // };
   }
