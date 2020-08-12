@@ -33,8 +33,7 @@ interface AssignProps extends AssignType {
   onIncomplete: () => void;
   onRemove: () => void;
   subAssignActions: any;
-  onStartEdit: any;
-  // isEditing: boolean;
+  onStartEdit: () => void;
 }
 
 const toBeImplemented = (id: any) => alert(id + ': not yet implemented!');
@@ -156,7 +155,7 @@ function Assign({
             subAssignActions.completeSubAssign(id, subAssign.id)
           }
           onRemove={() => subAssignActions.removeSubAssign(id, subAssign.id)}
-          updateSubAssign={toBeImplemented}
+          onUpdate={(text: string) => subAssignActions.editSubAssign(id, subAssign.id, text)}
           key={subAssign.id}
         />
       );

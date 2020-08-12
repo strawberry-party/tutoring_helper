@@ -21,6 +21,7 @@ interface FormExampleProps {
   onSubmit: AddAssign | EditAssign;
   modalType: AddModal | EditModal;
   selectedAssignId: string;
+  selectedAssign: AssignType;
 }
 
 interface FormInputState {
@@ -37,43 +38,31 @@ export default class FormExample extends Component<
 > {
   constructor(props) {
     super(props);
-    const { modalType } = this.props;
-    let due = now;
-    let title = '';
-    let desc = '';
-    switch (modalType) {
-      case 'AddModal':
-        break;
-      case 'EditModal':
-        due = now;
-        title = 'dummy';
-        desc = 'dummy';
-        break;
-      default:
-        console.log('something went on FormExample');
-    }
+    const { modalType, selectedAssign } = this.props;
+    const { title, desc, due } = selectedAssign;
+    
     this.state = {
-      due: due,
-      title: title,
-      desc: desc,
+      title,
+      desc,
+      due,
     };
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
     const { title, desc, due } = this.state;
-    const { onSubmit, modalType, hideModal, selectedAssignId } = this.props;
+    const { onSubmit, modalType, hideModal, selectedAssign, selectedAssignId} = this.props;
 
     const newAssign: AssignType = {
+      ...selectedAssign, 
       title,
       desc,
       due,
-      out: now,
-      isCompleted: false,
-      status: 0,
-      subAssigns: [],
       id: title, // id 어떻게 추가할지 수정해야함
     };
+
+    console.log(modalType);
+
 
     switch (modalType) {
       case 'AddModal':
@@ -81,9 +70,8 @@ export default class FormExample extends Component<
         break;
       case 'EditModal':
         (onSubmit as EditAssign)(selectedAssignId, newAssign);
-        console.log(newAssign.title);
         break;
-        
+
       default:
         console.log('something went wrong');
     }

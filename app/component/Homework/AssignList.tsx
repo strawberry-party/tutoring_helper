@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Assign from './Assign';
 import { RootState } from '../../states';
 import { actions as assignActions } from '../../states/assignState';
+import { log } from 'react-native-reanimated';
 
 // presentational component of AssignList
 
@@ -15,13 +16,13 @@ interface AssignListProps extends AssignListType {
   onIncompleteAssign: (id: string) => void;
   onRemoveAssign: (id: string) => void;
   subAssignActions: any;
-  onStartEditAssign: any;
+  showEditModal: (id: string, assign: AssignType) => void;
 }
 
 function AssignList({
   assigns,
 
-  onStartEditAssign,
+  showEditModal, // showEditModal
 
   onCompleteAssign,
   onIncompleteAssign,
@@ -38,7 +39,7 @@ function AssignList({
               key={item.id}
               {...item}
               onStartEdit={() => {
-                onStartEditAssign(item.id);
+                showEditModal(item.id, item);                
               }}
               onComplete={() => {
                 onCompleteAssign(item.id);

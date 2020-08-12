@@ -23,7 +23,7 @@ interface SubAssignProps extends SubAssignType {
   onComplete: () => void;
   onIncomplete: () => void;
   onRemove: () => void;
-  updateSubAssign: (id: string, newValue: string) => void;
+  onUpdate: (text: string) => void;
 }
 
 class SubAssign extends Component<SubAssignProps, State> {
@@ -121,8 +121,8 @@ class SubAssign extends Component<SubAssignProps, State> {
   _finishEditing = (event) => {
     event.stopPropagation();
     const { value } = this.state;
-    const { id, updateSubAssign } = this.props;
-    updateSubAssign(id, value);
+    const { id, onUpdate } = this.props;
+    onUpdate(value);
     this.setState({ isEditing: false });
   };
   _controllInput = (text) => {

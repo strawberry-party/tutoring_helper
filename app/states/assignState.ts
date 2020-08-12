@@ -15,6 +15,7 @@ const SUBASSIGN_ADD = 'SUBASSIGN_ADD' as const;
 const SUBASSIGN_REMOVE = 'SUBASSIGN_REMOVE' as const;
 const SUBASSIGN_COMPLETE = 'SUBASSIGN_COMPLETE' as const;
 const SUBASSIGN_INCOMPLETE = 'SUBASSIGN_INCOMPLETE' as const;
+const SUBASSIGN_EDIT = 'SUBASSIGN_EDIT' as const;
 
 type AssignAction =
   | ReturnType<typeof addAssign>
@@ -25,7 +26,8 @@ type AssignAction =
   | ReturnType<typeof addSubAssign>
   | ReturnType<typeof completeSubAssign>
   | ReturnType<typeof incompleteSubAssign>
-  | ReturnType<typeof removeSubAssign>;
+  | ReturnType<typeof removeSubAssign>
+  | ReturnType<typeof editSubAssign>;
 
 type AssignListState = {
   assigns: Array<AssignType>;
@@ -95,6 +97,13 @@ export const removeSubAssign = (assignId: string, id: string) => ({
   assignId,
 });
 
+export const editSubAssign = (assignId: string, id: string, text: string) => ({
+  type: SUBASSIGN_EDIT,
+  id,
+  assignId,
+  text,
+});
+
 // actions
 export const actions = {
   addAssign,
@@ -107,6 +116,7 @@ export const actions = {
   completeSubAssign,
   incompleteSubAssign,
   removeSubAssign,
+  editSubAssign,
 };
 
 // reducer
@@ -125,25 +135,27 @@ const assignsReducer = (
         break;
 
       case ASSIGN_COMPLETE:
-        for (let index = 0; index < draft.assigns.length; index++) {
+        for (var index = 0; index < draft.assigns.length; index++) {
           let assign = draft.assigns[index];
           if (assign.id === action.id) {
             assign.isCompleted = true;
             break;
           }
         }
-        console.log('invalid action with no matching assign id');
+        if (index === draft.assigns.length)
+          console.log('invalid action with no matching assign id');
         break;
 
       case ASSIGN_INCOMPLETE:
-        for (let index = 0; index < draft.assigns.length; index++) {
+        for (var index = 0; index < draft.assigns.length; index++) {
           let assign = draft.assigns[index];
           if (assign.id === action.id) {
             assign.isCompleted = false;
             break;
           }
         }
-        console.log('invalid action with no matching assign id');
+        if (index === draft.assigns.length)
+          console.log('invalid action with no matching assign id');
         break;
 
       case ASSIGN_REMOVE:
@@ -154,14 +166,12 @@ const assignsReducer = (
         };
 
       case ASSIGN_EDIT:
-        console.log('****ASSIGN_EDIT****');
-        let index = 0
-        for (; index < draft.assigns.length; index++) {
+        for (var index = 0; index < draft.assigns.length; index++) {
           let assign = draft.assigns[index];
           if (assign.id === action.id) {
-            console.log('matched!');
             assign = action.assign;
             assign.id = action.id;
+            draft.assigns[index] = assign;
             break;
           }
         }
@@ -178,7 +188,8 @@ const assignsReducer = (
             break;
           }
         }
-        console.log('invalid action with no matching assign id');
+        if (index === draft.assigns.length)
+          console.log('invalid action with no matching assign id');
         break;
 
       case SUBASSIGN_COMPLETE:
@@ -239,6 +250,27 @@ const assignsReducer = (
         ].subAssigns.filter(
           (subAssign: SubAssignType) => subAssign.id !== action.id,
         );
+        break;
+
+      case SUBASSIGN_EDIT:
+        var assignIndex = draft.assigns.findIndex(
+          (assign: AssignType) => assign.id === action.assignId,
+        );
+        if (assignIndex === -1) {
+          console.log('invalid action with no matching assign id');
+          break;
+        }
+
+        var subAssignIndex = draft.assigns[assignIndex].subAssigns.findIndex(
+          (subAssign: SubAssignType) => subAssign.id === action.id,
+        );
+
+        if (subAssignIndex === -1) {
+          console.log('invalid action with no matching subAssign id');
+          break;
+        }
+        draft.assigns[assignIndex].subAssigns[subAssignIndex].text =
+          action.text;
         break;
 
       default:

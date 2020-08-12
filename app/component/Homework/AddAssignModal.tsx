@@ -19,7 +19,17 @@ interface AddAssignModalProps {
   showAddModal: () => void;
   addAssign: (assign: AssignType) => void;
 }
-
+const now = new Date(Date.now());
+const defaultAssign: AssignType = {
+  id: 'none',
+  title: '',
+  desc: '',
+  isCompleted: false,
+  due: now,
+  out: now,
+  status: 0,
+  subAssigns: [],
+};
 export function AddAssignModal({
   addModalVisible,
   showAddModal,
@@ -35,7 +45,13 @@ export function AddAssignModal({
         onRequestClose={hideAddModal}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <FormExample onSubmit={addAssign} hideModal={hideAddModal} modalType={"AddModal"}/>
+            <FormExample
+              selectedAssignId={'none'}
+              onSubmit={addAssign}
+              hideModal={hideAddModal}
+              modalType={'AddModal'}
+              selectedAssign={defaultAssign}
+            />
           </View>
         </View>
       </Modal>
