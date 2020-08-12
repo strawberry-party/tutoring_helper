@@ -20,8 +20,7 @@ export function AddSubAssign({ onAdd }: AddSubAssignProps) {
   const [text, setText] = useState('');
 
   const handleSubmit = () => {
-    console.log('handleSubmit' + text);
-    onAdd({ text, isCompleted: false, id: text });
+    onAdd(new SubAssignType(text));
     setText('');
   };
 
@@ -32,8 +31,6 @@ export function AddSubAssign({ onAdd }: AddSubAssignProps) {
         placeholder="새로운 숙제추가!"
         value={text}
         onChange={({ nativeEvent: { text } }) => {
-          console.log(text);
-
           setText(text);
         }}
       />

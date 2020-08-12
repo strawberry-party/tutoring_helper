@@ -1,8 +1,7 @@
-import { AssignListType, AssignType, SubAssignType } from '../types/homework';
-import produce, { Draft } from 'immer';
+import { AssignType, SubAssignType } from '../types/homework';
 
 import _ from 'lodash';
-import { handleActions } from 'redux-actions';
+import produce from 'immer';
 
 // action type
 const ASSIGN_ADD = 'ASSIGN_ADD' as const;
@@ -37,12 +36,9 @@ const initialState: AssignListState = { assigns: [] };
 
 // action constructor
 // assign CRUD
-export const addAssign = (newAssign: AssignType) => ({
+export const addAssign = (assign: AssignType) => ({
   type: ASSIGN_ADD,
-  assign: {
-    ...newAssign,
-    id: _.uniqueId('assign_'),
-  },
+  assign,
 });
 
 export const completeAssign = (id: string) => ({
@@ -60,10 +56,10 @@ export const removeAssign = (id: string) => ({
   id: id,
 });
 
-export const editAssign = (id: string, newAssign: AssignType) => ({
+export const editAssign = (id: string, assign: AssignType) => ({
   type: ASSIGN_EDIT,
   id,
-  assign: newAssign,
+  assign,
 });
 
 // subAssign CRUD
@@ -74,7 +70,7 @@ export const addSubAssign = (
   type: SUBASSIGN_ADD,
   subAssign: {
     ...newSubAssign,
-    id: _.uniqueId('assign_'),
+    id: _.uniqueId('subAssign_'),
   },
   assignId,
 });
@@ -200,6 +196,7 @@ const assignsReducer = (
           console.log('invalid action with no matching assign id');
           break;
         }
+        
 
         var subAssignIndex = draft.assigns[assignIndex].subAssigns.findIndex(
           (subAssign: SubAssignType) => subAssign.id === action.id,

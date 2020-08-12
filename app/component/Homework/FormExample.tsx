@@ -58,7 +58,6 @@ export default class FormExample extends Component<
       title,
       desc,
       due,
-      id: title, // id 어떻게 추가할지 수정해야함
     };
 
     switch (modalType) {

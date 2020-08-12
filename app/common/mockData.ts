@@ -6,9 +6,9 @@ import { SubAssignType } from '../types/homework';
 // TODO: 나중에 DB에서 불러오는 걸로 바꾸기
 
 const subAssign1: Array<SubAssignType> = [
-  { text: '10-1 단원 풀어오기', isCompleted: false, id: '1' },
-  { text: '10-2 단원 풀어오기', isCompleted: false, id: '2' },
-  { text: '10-3 단원 풀어오기', isCompleted: false, id: '3' },
+  { text: '10-1 단원 풀어오기', isCompleted: false, id: 'subAssign_1' },
+  { text: '10-2 단원 풀어오기', isCompleted: false, id: 'subAssign_2' },
+  { text: '10-3 단원 풀어오기', isCompleted: false, id: 'subAssign_3' },
 ];
 
 const assign1: AssignType = {
