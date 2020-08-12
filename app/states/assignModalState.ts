@@ -1,3 +1,4 @@
+import { AssignListType, AssignType } from './../types/homework';
 import produce, { Draft } from 'immer';
 
 // action type
@@ -17,6 +18,7 @@ type ModalState = {
   addModalVisible: boolean;
   editModalVisible: boolean;
   selectedAssignId: string;
+  selectedAssign: AssignType;
 };
 
 // action constructor
@@ -30,16 +32,18 @@ export const hideAddModal = () => ({
   addModalVisible: false,
 });
 
-export const showEditModal = (id: string) => ({
+export const showEditModal = (id: string, assign: AssignType) => ({
   type: SET_EDIT_MODAL_VISIBILITY,
   editModalVisible: true,
   selectedAssignId: id,
+  selectedAssign: assign,
 });
 
 export const hideEditModal = () => ({
   type: SET_EDIT_MODAL_VISIBILITY,
   editModalVisible: false,
   selectedAssignId: 'none',
+  selectedAssign: defaultAssign,
 });
 
 export const actions = {
@@ -50,10 +54,14 @@ export const actions = {
 };
 
 // reducer
+const now = new Date(Date.now());
+const defaultAssign: AssignType = new AssignType('', '', now);
+
 const initialState: ModalState = {
   addModalVisible: false,
   editModalVisible: false,
   selectedAssignId: 'none',
+  selectedAssign: defaultAssign,
 };
 
 const assignModalVisibilityReducer = (
@@ -69,6 +77,7 @@ const assignModalVisibilityReducer = (
       case SET_EDIT_MODAL_VISIBILITY:
         draft.editModalVisible = action.editModalVisible;
         draft.selectedAssignId = action.selectedAssignId;
+        draft.selectedAssign = action.selectedAssign;
         break;
 
       default:

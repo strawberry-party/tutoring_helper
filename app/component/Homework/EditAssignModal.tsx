@@ -17,6 +17,7 @@ interface EditAssignModalProps {
   selectedAssignId: string;
   hideEditModal: () => void;
   editAssign: (id: string, assign: AssignType) => void;
+  selectedAssign: AssignType;
 }
 
 export function EditAssignModal({
@@ -24,7 +25,11 @@ export function EditAssignModal({
   hideEditModal,
   editAssign,
   selectedAssignId,
+  selectedAssign,
 }: EditAssignModalProps) {
+  // console.log(selectedAssign.print());
+  console.log(selectedAssign.title);
+  
   return (
     <View style={styles.centeredView}>
       <Modal
@@ -34,7 +39,7 @@ export function EditAssignModal({
         onRequestClose={hideEditModal}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <FormExample onSubmit={editAssign} hideModal={hideEditModal} modalType={"EditModal"} selectedAssignId={selectedAssignId}/>
+            <FormExample onSubmit={editAssign} hideModal={hideEditModal} modalType={"EditModal"} selectedAssignId={selectedAssignId} selectedAssign={selectedAssign}/>
           </View>
         </View>
       </Modal>

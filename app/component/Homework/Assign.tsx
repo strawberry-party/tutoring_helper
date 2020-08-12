@@ -33,8 +33,7 @@ interface AssignProps extends AssignType {
   onIncomplete: () => void;
   onRemove: () => void;
   subAssignActions: any;
-  onStartEdit: any;
-  // isEditing: boolean;
+  onStartEdit: () => void;
 }
 
 const toBeImplemented = (id: any) => alert(id + ': not yet implemented!');
