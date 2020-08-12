@@ -29,6 +29,9 @@ import store from '../common/store';
 
 // TODO: 타입 정의, any 대체하기
 
+
+
+// type HomeworkContainerProps = any;
 function HomeworkContainer({
   hideAddModal,
   showAddModal,
@@ -45,7 +48,7 @@ function HomeworkContainer({
   completeSubAssign,
   incompleteSubAssign,
   removeSubAssign,
-}: any) {
+}) {
   const assigns: Array<AssignType> = useSelector(
     (state: RootState) => state.assignReducer.assigns,
   );
@@ -60,6 +63,10 @@ function HomeworkContainer({
 
   const selectedAssignId: string = useSelector(
     (state: RootState) => state.assignModalReducer.selectedAssignId,
+  );
+
+  const selectedAssign: AssignType = useSelector(
+    (state: RootState) => state.assignModalReducer.selectedAssign,
   );
 
   return (
@@ -89,7 +96,7 @@ function HomeworkContainer({
             }}>
             <AssignList
               assigns={assigns}
-              onStartEditAssign={(id: string) => showEditModal(id)}
+              showEditModal={showEditModal}
               onCompleteAssign={completeAssign}
               onIncompleteAssign={incompleteAssign}
               onRemoveAssign={removeAssign}
@@ -118,6 +125,7 @@ function HomeworkContainer({
             selectedAssignId={selectedAssignId}
             hideEditModal={hideEditModal}
             editAssign={editAssign}
+            selectedAssign={selectedAssign}
           />
         </View>
       </View>

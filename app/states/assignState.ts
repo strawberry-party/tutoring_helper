@@ -162,6 +162,7 @@ const assignsReducer = (
             console.log('matched!');
             assign = action.assign;
             assign.id = action.id;
+            draft.assigns[index] = assign;            
             break;
           }
         }

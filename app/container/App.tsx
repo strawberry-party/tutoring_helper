@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import DetailInfo from '../component/Tutor/Schedule/DetailInfo';
+import Homework from '../container/Homework';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
 import Student from '../component/Tutor/Student';
@@ -21,13 +22,14 @@ const Stack = createStackNavigator<RootStackParamList>();
 export default function App() {
   return (
     <Provider store={store}>
-      <NavigationContainer ref={navigationRef}>
+      <Homework />
+      {/* <NavigationContainer ref={navigationRef}>
         <Stack.Navigator initialRouteName="Tutor">
           <Stack.Screen name="Tutor" component={Tutor} />
           <Stack.Screen name="Student" component={Student} />
           <Stack.Screen name="DetailInfo" component={DetailInfo} />
         </Stack.Navigator>
-      </NavigationContainer>
+      </NavigationContainer> */}
     </Provider>
   ); // TODO: 리팩토링할 때 TutoringHelper 내용물 Tutor/Homework로 다 옮기기
 }
