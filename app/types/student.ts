@@ -2,12 +2,24 @@ import _ from 'lodash';
 
 // TODO: print 내장 메소드 만들기
 
-export interface AssignListType {
-  assigns: Array<AssignType>;
-}
-export class AssignType {
+export class Info { // drawer에 나타나는 StudentInfo
+  name: string;
   id: string;
-  title: string;
+  address: string;
+
+}
+
+export class Schedule {
+  
+}
+
+export class Progress{
+  
+}
+
+export class StudentType {
+  id: string;
+  name: string;
   desc: string;
   due: Date;
   out: Date;
@@ -16,27 +28,9 @@ export class AssignType {
   subAssigns: Array<SubAssignType>;
   // print: () => string;
 
-  // private print() {
-  //   {
-  //     let info = `제목: ${this.title}\n설명: ${this.desc}\nDUE: ${
-  //       this.due
-  //     }\nOUT: ${this.out}\nisCompleted?: ${this.isCompleted}\nstatus: ${
-  //       this.status * 100
-  //     }% 완료\n`;
-  //     let callBack: (
-  //       pv: string,
-  //       cur: SubAssignType,
-  //       index: number,
-  //       arr: Array<SubAssignType>,
-  //     ) => string = function (pv, cur, index, arr) {
-  //       if (index == 0) return pv + cur.print();
-  //       else return callBack(pv + cur.print(), arr[index + 1], index + 1, arr);
-  //     };
-  //     let subAssigns: string =
-  //       'subAssigns: \n' + this.subAssigns.reduce(callBack, '') + '\n';
-  //     return info + subAssigns;
-  //   };  
-  // }
+  private print() {
+    console.log('hello world');
+  }
 
   constructor(
     title: string,
@@ -73,3 +67,12 @@ export class SubAssignType {
     // };
   }
 }
+
+
+// types 구조
+// homework.ts
+// progress.ts
+// schedule.ts
+
+// index.ts
+// 

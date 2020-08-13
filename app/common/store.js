@@ -14,4 +14,6 @@ assignList.assigns.map((assign) => {
   console.log(assign);
 });
 
+// TODO: firebase 도입한 다음에는 전체 data를 import 하고 dispatch 
+
 export default store;
