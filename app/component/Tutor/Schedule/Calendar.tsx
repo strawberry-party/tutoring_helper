@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 
 import {Calendar} from 'react-native-calendars';
-import {Schedule} from '../../../types/schedule'
 
-interface CalendarProps extends Schedule {
+interface CalendarProps {
   onAddSchedule: () => void;
     
 }

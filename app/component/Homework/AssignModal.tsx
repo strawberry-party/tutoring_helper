@@ -11,6 +11,7 @@ import React, { useState } from 'react';
 
 import { AssignType } from '../../types/homework';
 import FormExample from './FormExample';
+import dayjs from 'dayjs';
 
 interface AssignModalProps {
   modalVisible: boolean;
@@ -57,7 +58,7 @@ interface AddAssignModalProps {
   hideAddModal: () => void;
   addAssign: (assign: AssignType) => void;
 }
-const now: Date = new Date(Date.now());
+const now: dayjs.Dayjs = dayjs();
 const defaultAssign: AssignType = new AssignType('', '', now);
 
 export function AddAssignModal({

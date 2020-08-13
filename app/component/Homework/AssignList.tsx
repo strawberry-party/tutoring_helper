@@ -5,9 +5,7 @@ import React, { Component } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Assign from './Assign';
-import { RootState } from '../../states';
-import { actions as assignActions } from '../../states/assignState';
-import { log } from 'react-native-reanimated';
+import { FilterState } from '../../states/assignFilterSorterState';
 
 // presentational component of AssignList
 
@@ -17,6 +15,7 @@ interface AssignListProps extends AssignListType {
   onRemoveAssign: (id: string) => void;
   subAssignActions: any;
   showEditModal: (id: string, assign: AssignType) => void;
+  activeFilter: FilterState; // 나중에 types 에 filter type 정의해서 import
 }
 
 function AssignList({
@@ -28,6 +27,8 @@ function AssignList({
   onIncompleteAssign,
   onRemoveAssign,
   subAssignActions,
+
+  activeFilter
 }: AssignListProps) {
   return (
     <View style={{ backgroundColor: 'red' }}>
@@ -39,7 +40,7 @@ function AssignList({
               key={item.id}
               {...item}
               onStartEdit={() => {
-                showEditModal(item.id, item);                
+                showEditModal(item.id, item);
               }}
               onComplete={() => {
                 onCompleteAssign(item.id);

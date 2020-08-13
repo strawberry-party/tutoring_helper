@@ -1,6 +1,7 @@
 import { AssignType, SubAssignType } from '../types/homework';
 
 import _ from 'lodash';
+import dayjs from 'dayjs';
 import produce from 'immer';
 
 // action type
@@ -132,9 +133,8 @@ const assignsReducer = (
 
       case ASSIGN_COMPLETE:
         for (var index = 0; index < draft.assigns.length; index++) {
-          let assign = draft.assigns[index];
-          if (assign.id === action.id) {
-            assign.isCompleted = true;
+          if (draft.assigns[index].id === action.id) {
+            draft.assigns[index].isCompleted = true;
             break;
           }
         }
@@ -144,9 +144,8 @@ const assignsReducer = (
 
       case ASSIGN_INCOMPLETE:
         for (var index = 0; index < draft.assigns.length; index++) {
-          let assign = draft.assigns[index];
-          if (assign.id === action.id) {
-            assign.isCompleted = false;
+          if (draft.assigns[index].id === action.id) {
+            draft.assigns[index].isCompleted = false;
             break;
           }
         }
@@ -196,7 +195,6 @@ const assignsReducer = (
           console.log('invalid action with no matching assign id');
           break;
         }
-        
 
         var subAssignIndex = draft.assigns[assignIndex].subAssigns.findIndex(
           (subAssign: SubAssignType) => subAssign.id === action.id,

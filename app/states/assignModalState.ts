@@ -1,5 +1,7 @@
 import { AssignListType, AssignType } from './../types/homework';
-import produce, { Draft } from 'immer';
+
+import dayjs from 'dayjs';
+import produce from 'immer';
 
 // action type
 export const SET_ADD_MODAL_VISIBILITY = 'SET_ADD_MODAL_VISIBILITY' as const;
@@ -54,7 +56,7 @@ export const actions = {
 };
 
 // reducer
-const now = new Date(Date.now());
+const now = dayjs();
 const defaultAssign: AssignType = new AssignType('', '', now);
 
 const initialState: ModalState = {

@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 import { AssignType } from '../../types/homework';
+import dayjs from 'dayjs';
 
 type AddAssign = (assign: AssignType) => void;
 type EditAssign = (id: string, assign: AssignType) => void;
@@ -25,12 +26,12 @@ interface FormExampleProps {
 }
 
 interface FormInputState {
-  due: Date;
+  due: dayjs.Dayjs;
   title: string;
   desc: string;
 }
 
-const now = new Date(Date.now());
+const now = dayjs();
 
 export default class FormExample extends Component<
   FormExampleProps,
@@ -40,7 +41,7 @@ export default class FormExample extends Component<
     super(props);
     const { modalType, selectedAssign } = this.props;
     const { title, desc, due } = selectedAssign;
-    
+
     this.state = {
       title,
       desc,
@@ -51,10 +52,16 @@ export default class FormExample extends Component<
   handleSubmit = (e) => {
     e.preventDefault();
     const { title, desc, due } = this.state;
-    const { onSubmit, modalType, hideModal, selectedAssign, selectedAssignId} = this.props;
+    const {
+      onSubmit,
+      modalType,
+      hideModal,
+      selectedAssign,
+      selectedAssignId,
+    } = this.props;
 
     const newAssign: AssignType = {
-      ...selectedAssign, 
+      ...selectedAssign,
       title,
       desc,
       due,
@@ -113,7 +120,7 @@ export default class FormExample extends Component<
               </Item>
               <Item last>
                 <DatePicker
-                  defaultDate={now}
+                  defaultDate={now.toDate()}
                   locale={'kr'}
                   timeZoneOffsetInMinutes={undefined}
                   modalTransparent={false}
@@ -122,7 +129,7 @@ export default class FormExample extends Component<
                   placeHolderText="제출 기한"
                   textStyle={{ color: 'black' }}
                   placeHolderTextStyle={{ color: 'black' }}
-                  onDateChange={(date) => this.setState({ due: date })}
+                  onDateChange={(date: Date) => this.setState({ due: dayjs(date) })}
                   disabled={false}
                 />
               </Item>

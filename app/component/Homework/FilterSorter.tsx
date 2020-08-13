@@ -1,6 +1,12 @@
 import { Form, Header, Icon, Item, Picker, Text, View } from 'native-base';
 import React, { Component } from 'react';
 
+// function Filter() {
+//   return 
+// }
+
+
+
 export default class Filter extends Component<any, any> {
   constructor(props) {
     super(props);
