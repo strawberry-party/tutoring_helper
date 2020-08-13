@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import TutorMain from './TutorMain';
+import TutorMain from './(NU)TutorMain';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Schedule from './Schedule/Schedule';
 import TutoringHelper from '../../container/TutoringHelper';

@@ -12,10 +12,10 @@ class StudentInfo extends Component {
       tableHead: ['학생', '날짜', '상세보기'],
       tableData: [
         ['김태형', '월, 수 18:00~19:30', <Button title='상세보기' onPress={() => {
-          RootNavigation.navigate('DetailInfo');
+          RootNavigation.navigate('상세정보');
         }} />],
         ['최상아', '수, 금 16:00~17:30', <Button title='상세보기' onPress={() => {
-          RootNavigation.navigate('DetailInfo');
+          RootNavigation.navigate('상세정보');
         }} />],
       ]
     }

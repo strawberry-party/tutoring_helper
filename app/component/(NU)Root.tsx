@@ -1,4 +1,4 @@
-import AppContent from './AppContent';
+import AppContent from './(NU)AppContent';
 import React from 'react';
 import { View } from 'react-native';
 
