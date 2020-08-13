@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Text, View } from 'react-native';
 
 import Tutee from './Tutee/Tutee';
-import Tutor from './Tutor/Tutor';
+import Tutor from './Tutor/(NU)Tutor';
 
 export interface ContentProps {
   mode: 'tutor' | 'tutee';

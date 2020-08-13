@@ -18,7 +18,7 @@ import AssignList from '../component/Homework/AssignList';
 import Body from '../component/Homework/Body';
 import Filter from '../component/Homework/Filter';
 import Homework from '../component/Homework/Homework';
-import Root from '../component/Root';
+import Root from '../component/(NU)Root';
 import { RootState } from '../states';
 import { actions as addModalVisibilityActions } from '../states/addAssignState';
 import { actions as assignActions } from '../states/assignState';
