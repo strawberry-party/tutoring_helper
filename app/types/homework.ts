@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import dayjs from 'dayjs';
 
 // TODO: print 내장 메소드 만들기
 
@@ -9,12 +10,11 @@ export class AssignType {
   id: string;
   title: string;
   desc: string;
-  due: Date;
-  out: Date;
+  due: dayjs.Dayjs;
+  out: dayjs.Dayjs;
   isCompleted: boolean;
   status: number;
   subAssigns: Array<SubAssignType>;
-  // print: () => string;
 
   // private print() {
   //   {
@@ -35,14 +35,14 @@ export class AssignType {
   //     let subAssigns: string =
   //       'subAssigns: \n' + this.subAssigns.reduce(callBack, '') + '\n';
   //     return info + subAssigns;
-  //   };  
+  //   };
   // }
 
   constructor(
     title: string,
     desc: string,
-    due: Date,
-    out: Date = new Date(Date.now()),
+    due: dayjs.Dayjs,
+    out: dayjs.Dayjs = dayjs(),
     isCompleted: boolean = false,
     subAssigns: Array<SubAssignType> = [],
   ) {

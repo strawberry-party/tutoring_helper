@@ -59,8 +59,8 @@ function Assign({
 }: AssignProps) {
   function _renderHeader(item: AccordionItem, expanded: boolean) {
     const { desc, due, out, isCompleted, status, subAssigns } = item.raw;
-    const dueDate = Moment(due).format('MM/DD');
-    const outDate = Moment(out).format('MM/DD');
+    const dueDate = due.format('MM/DD');
+    const outDate = out.format('MM/DD');
     return (
       <Card style={{ backgroundColor: 'white', borderRadius: 20 }}>
         <CardItem
@@ -90,7 +90,7 @@ function Assign({
               // <Icon style={{ fontSize: 18 }} name="add-circle" />
             )}
           </TouchableOpacity> */}
-{/* 
+          {/* 
           <Button
             onPress={() => console.log('button pressed')}>
             {expanded ? (
@@ -134,7 +134,7 @@ function Assign({
                 margin: 10,
                 backgroundColor: '#f9f9f9',
               }}>
-              <Text>■</Text>
+              <Text style={{ fontSize: 30 }}>■</Text>
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
@@ -143,7 +143,7 @@ function Assign({
                 margin: 10,
                 backgroundColor: '#f9f9f9',
               }}>
-              <Text>□</Text>
+              <Text style={{ fontSize: 30 }}>□</Text>
             </TouchableOpacity>
           )}
         </CardItem>

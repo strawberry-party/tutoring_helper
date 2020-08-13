@@ -18,15 +18,14 @@ import { connect, useSelector } from 'react-redux';
 import AddAssignButton from '../component/Homework/AddAssignButton';
 import AssignList from '../component/Homework/AssignList';
 import { AssignType } from '../types/homework';
-import Filter from '../component/Homework/Filter';
+import Filter from '../component/Homework/FilterSorter';
 import React from 'react';
 import { RootState } from '../states';
 import { actions as assignActions } from '../states/assignState';
+import { actions as filterSorterActions } from '../states/assignFilterSorterState';
 import { actions as modalVisibilityActions } from '../states/assignModalState';
 
 type HomeworkContainerProps = any; // TODO: 타입 정의, any 대체하기
-
-
 
 // type HomeworkContainerProps = any;
 function HomeworkContainer({
@@ -46,6 +45,10 @@ function HomeworkContainer({
   incompleteSubAssign,
   removeSubAssign,
   editSubAssign,
+
+  showAll,
+  showCompleted,
+  showIncomplete,
 }: HomeworkContainerProps) {
   const assigns: Array<AssignType> = useSelector(
     (state: RootState) => state.assignReducer.assigns,
@@ -67,6 +70,14 @@ function HomeworkContainer({
     (state: RootState) => state.assignModalReducer.selectedAssign,
   );
 
+  const filter = useSelector(
+    (state: RootState) => state.assignFilterSorterReducer.filter,
+  );
+
+  const sorter = useSelector(
+    (state: RootState) => state.assignFilterSorterReducer.sorter,
+  );
+
   return (
     <SafeAreaView
       style={{
@@ -79,7 +90,12 @@ function HomeworkContainer({
 
       <View style={{ borderColor: 'green', borderWidth: 3, flex: 1 }}>
         <View style={{ backgroundColor: 'pink' }}>
-          <Filter />
+          <Filter
+            activeFilter={filter}
+            showAll={showAll}
+            showCompleted={showCompleted}
+            showIncomplete={showIncomplete}
+          />
         </View>
 
         <ScrollView
@@ -105,6 +121,7 @@ function HomeworkContainer({
                 removeSubAssign,
                 editSubAssign,
               }}
+              activeFilter={filter}
             />
           </View>
         </ScrollView>
@@ -150,12 +167,24 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(state) {
-  console.log('mapStateToProps');
-  console.log(state);
-
   return {
-    assigns: state.assignReducer.assigns, // apply filter later
+    assigns: state.assignReducer.assigns,
+    // assigns: state.assignReducer.assigns.filter((assign: AssignType) => {
+    //   switch (state.filter) {
+    //     case typeof 'ALL':
+    //       return true;
+    //     case typeof 'COMPLETED':
+    //       return assign.isCompleted;
+    //     case typeof 'INCOMPLETED':
+    //       return !assign.isCompleted;
+    //     default:
+    //       console.log('something went wrong on Homework.tsx mapStateToProps');
+    //       return true;
+    //   }
+    // }), // apply filter later
     addModalVisible: state.assignModalReducer.addModalVisible,
+    filter: state.assignFilterSorterReducer.filter,
+    sorter: state.assignFilterSorterReducer.sorter,
   };
 }
 
