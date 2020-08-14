@@ -58,8 +58,8 @@ function Assign({
 }: AssignProps) {
   function _renderHeader(item: AccordionItem, expanded: boolean) {
     const { desc, due, out, isCompleted, status, subAssigns } = item.raw;
-    const dueDate = Moment(due).format('MM/DD');
-    const outDate = Moment(out).format('MM/DD');
+    const dueDate = due.format('MM/DD');
+    const outDate = out.format('MM/DD');
     return (
       <Card style={{ backgroundColor: 'white', borderRadius: 20 }}>
         <CardItem
@@ -154,7 +154,7 @@ function Assign({
             subAssignActions.completeSubAssign(id, subAssign.id)
           }
           onRemove={() => subAssignActions.removeSubAssign(id, subAssign.id)}
-          updateSubAssign={toBeImplemented}
+          onStartEdit={toBeImplemented}
           key={subAssign.id}
         />
       );

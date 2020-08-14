@@ -8,7 +8,7 @@ class Schedule extends Component {
   render() {
     return (
       <ScrollView>
-        <EditButton />
+        {/* <EditButton /> */}
         <Calendar />
         <StudentInfo />
       </ScrollView>
