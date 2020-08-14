@@ -2,10 +2,6 @@ import React, { Component } from 'react';
 
 import {Calendar} from 'react-native-calendars';
 
-interface CalendarProps {
-  onAddSchedule: () => void;
-    
-}
 class StudentCalendar extends Component {
   render() {
     return (
