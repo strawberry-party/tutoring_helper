@@ -8,9 +8,6 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import DrawerContent from '../component/DrawerContent';
 
 const Drawer = createDrawerNavigator();
-const drawerOptions = {
-  activeTintColor: '#e91e63'
-}
 
 export default function App() {
   return (
@@ -22,5 +19,5 @@ export default function App() {
         </Drawer.Navigator>
       </NavigationContainer>
     </Provider>
-  ); // TODO: 리팩토링할 때 TutoringHelper 내용물 Tutor/Homework로 다 옮기기
+  );
 }
