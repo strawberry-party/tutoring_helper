@@ -6,7 +6,7 @@ class StudentCalendar extends Component {
   render() {
     return (
       <Calendar
-        current={'2020-07-20'}
+        current={'2020-08-11'}
         minDate={'2020-01-01'}
         maxDate={'2030-12-31'}
         monthFormat={'yyyy년 MM월'}
