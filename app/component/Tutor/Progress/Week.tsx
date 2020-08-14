@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import CheckingProgress from './CheckingProgress';
 import { View, Text, StyleSheet } from 'react-native';
