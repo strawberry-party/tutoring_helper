@@ -7,11 +7,14 @@ import reducers from '../states/index';
 
 const logger = createLogger();
 const store = createStore(reducers, applyMiddleware(logger));
+
 // dispatch store to mock data
 assignList.assigns.map((assign) => {
   store.dispatch(addAssign(assign));
   console.log('store dispatched');
   console.log(assign);
 });
+
+//
 
 export default store;
