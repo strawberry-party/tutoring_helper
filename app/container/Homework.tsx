@@ -20,7 +20,6 @@ import Body from '../component/Homework/Body';
 import { Button } from 'native-base';
 import Filter from '../component/Homework/Filter';
 import Homework from '../component/Homework/Homework';
-import Root from '../component/Root';
 import { RootState } from '../states';
 import { actions as addModalVisibilityActions } from '../states/addAssignState';
 import { actions as assignActions } from '../states/assignState';
@@ -34,7 +33,7 @@ import store from '../common/store';
 console.log(store.getState().assignReducer.assigns);
 // TODO: 타입 정의, any 대체하기
 
-function TutoringHelper({
+function HomeworkContainer({
   hideModal,
   showModal,
   addAssign,
@@ -52,61 +51,62 @@ function TutoringHelper({
   );
 
   const addAssignModalVisible: boolean = useSelector(
-    (state: RootState) => state.addAssignModal.visible,
+    (state: RootState) => state.assignModalReducer.addModalVisible,
   );
 
   return (
-    <SafeAreaView
-      style={{
-        flexGrow: 1,
-        borderColor: 'grey',
-        borderWidth: 3,
-        padding: 10,
-      }}>
-      <Text style={styles.titleText}>숙제 관리</Text>
+    <Text> 숙제^^ </Text>
+    // <SafeAreaView
+    //   style={{
+    //     flexGrow: 1,
+    //     borderColor: 'grey',
+    //     borderWidth: 3,
+    //     padding: 10,
+    //   }}>
+    //   <Text style={styles.titleText}>숙제 관리</Text>
 
-      <View style={{ borderColor: 'green', borderWidth: 3, flex: 1 }}>
-        <View style={{ backgroundColor: 'pink' }}>
-          <Filter />
-        </View>
+    //   <View style={{ borderColor: 'green', borderWidth: 3, flex: 1 }}>
+    //     <View style={{ backgroundColor: 'pink' }}>
+    //       <Filter />
+    //     </View>
 
-        <ScrollView
-          style={{
-            borderColor: 'skyblue',
-            borderWidth: 3,
-          }}>
-          <View
-            style={{
-              borderColor: 'blue',
-              borderWidth: 3,
-            }}>
-            <AssignList
-              assigns={assigns}
-              onCompleteAssign={completeAssign}
-              onIncompleteAssign={incompleteAssign}
-              onRemoveAssign={removeAssign}
-              subAssignActions={{
-                addSubAssign,
-                completeSubAssign,
-                incompleteSubAssign,
-                removeSubAssign,
-              }}
-            />
-          </View>
-        </ScrollView>
+    //     <ScrollView
+    //       style={{
+    //         borderColor: 'skyblue',
+    //         borderWidth: 3,
+    //       }}>
+    //       <View
+    //         style={{
+    //           borderColor: 'blue',
+    //           borderWidth: 3,
+    //         }}>
+    //         <AssignList
+    //           assigns={assigns}
+    //           onCompleteAssign={completeAssign}
+    //           onIncompleteAssign={incompleteAssign}
+    //           onRemoveAssign={removeAssign}
+    //           subAssignActions={{
+    //             addSubAssign,
+    //             completeSubAssign,
+    //             incompleteSubAssign,
+    //             removeSubAssign,
+    //           }}
+    //         />
+    //       </View>
+    //     </ScrollView>
 
-        <View style={{ borderColor: 'pink', borderWidth: 3 }}>
-          <AddAssignModal
-            visible={addAssignModalVisible}
-            showModal={showModal}
-            hideModal={hideModal}
-            addAssign={addAssign}
-          />
-        </View>
-      </View>
+    //     <View style={{ borderColor: 'pink', borderWidth: 3 }}>
+    //       <AddAssignModal
+    //         visible={addAssignModalVisible}
+    //         showModal={showModal}
+    //         hideModal={hideModal}
+    //         addAssign={addAssign}
+    //       />
+    //     </View>
+    //   </View>
 
-      <AddAssignButton visible={addAssignModalVisible} showModal={showModal} />
-    </SafeAreaView>
+    //   <AddAssignButton visible={addAssignModalVisible} showModal={showModal} />
+    // </SafeAreaView>
   );
 }
 
@@ -143,5 +143,5 @@ const mapDispatchToProps = Object.assign(
   addModalVisibilityActions,
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(TutoringHelper);
+export default connect(mapStateToProps, mapDispatchToProps)(HomeworkContainer);
 // TutoringHelper의 props로 mapStateToProps의 리턴객체를 전해준다
