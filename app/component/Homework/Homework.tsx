@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { SafeAreaView, StyleSheet, Text } from 'react-native';
 
-import Body from './Body';
 import Status from './Status';
 
 class Homework extends Component {
@@ -10,7 +9,6 @@ class Homework extends Component {
       <SafeAreaView style={styles.container}>
         <Text style={styles.titleText}>숙제 관리</Text>
         <Status />
-        <Body />
       </SafeAreaView>
     );
   }

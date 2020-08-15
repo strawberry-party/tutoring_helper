@@ -160,7 +160,8 @@ function mapStateToProps(state) {
     //       console.log('something went wrong on Homework.tsx mapStateToProps');
     //       return true;
     //   }
-    // }), // apply filter later
+    // }), 
+    // TODO: apply filter later
     addModalVisible: state.assignModalReducer.addModalVisible,
     filter: state.assignFilterSorterReducer.filter,
     sorter: state.assignFilterSorterReducer.sorter,
