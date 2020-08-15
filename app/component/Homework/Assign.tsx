@@ -11,14 +11,11 @@ import {
 import {
   AssignListType,
   AssignType,
-  SubAssignType,
 } from '../../types/homework';
 import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
 import React, { Component } from 'react';
 
-import AddSubAssign from './AddSubAssign';
 import Moment from 'moment';
-import SubAssign from './SubAssign';
 import SwipeRow from './SwipeRow';
 import { log } from 'react-native-reanimated';
 
@@ -32,7 +29,6 @@ interface AssignProps extends AssignType {
   onComplete: () => void;
   onIncomplete: () => void;
   onRemove: () => void;
-  subAssignActions: any;
   onStartEdit: () => void;
 }
 
@@ -49,16 +45,15 @@ function Assign({
   out,
   isCompleted,
   status,
-  subAssigns,
+  
   onComplete,
   onIncomplete,
   onRemove,
   onStartEdit,
-  subAssignActions,
   id,
 }: AssignProps) {
   function _renderHeader(item: AccordionItem, expanded: boolean) {
-    const { desc, due, out, isCompleted, status, subAssigns } = item.raw;
+    const { desc, due, out, isCompleted, status } = item.raw;
     const dueDate = due.format('MM/DD');
     const outDate = out.format('MM/DD');
     return (
@@ -152,38 +147,16 @@ function Assign({
   }
 
   function _renderContent(item: AccordionItem) {
-    const { desc, due, out, isCompleted, status, subAssigns, id } = item.raw;
-    const subAssignList = subAssigns.map((subAssign: SubAssignType) => {
-      return (
-        <SubAssign
-          {...subAssign}
-          onIncomplete={() =>
-            subAssignActions.incompleteSubAssign(id, subAssign.id)
-          }
-          onComplete={() =>
-            subAssignActions.completeSubAssign(id, subAssign.id)
-          }
-          onRemove={() => subAssignActions.removeSubAssign(id, subAssign.id)}
-          onUpdate={(text: string) =>
-            subAssignActions.editSubAssign(id, subAssign.id, text)
-          }
-          key={subAssign.id}
-        />
-      );
-    });
+    const { desc, due, out, isCompleted, status, id } = item.raw;
 
     return (
       <View>
         <Card>
           <CardItem bordered header>
-            <AddSubAssign
-              onAdd={(subAssign: SubAssignType) =>
-                subAssignActions.addSubAssign(id, subAssign)
-              }
-            />
+            <Text> Content Header </Text>
           </CardItem>
           <CardItem bordered style={{ borderRadius: 20 }}>
-            <Body>{subAssignList}</Body>
+            <Text> Content Body </Text>
           </CardItem>
         </Card>
       </View>
@@ -196,7 +169,7 @@ function Assign({
         style={styles.cardView}
         dataArray={[
           {
-            raw: { title, desc, due, out, isCompleted, status, subAssigns, id },
+            raw: { title, desc, due, out, isCompleted, status, id },
           },
         ]}
         renderHeader={_renderHeader}
