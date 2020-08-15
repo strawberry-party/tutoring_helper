@@ -106,11 +106,8 @@ const assignsReducer = (
 
       case ASSIGN_EDIT:
         for (var index = 0; index < draft.assigns.length; index++) {
-          let assign = draft.assigns[index];
-          if (assign.id === action.id) {
-            assign = action.assign;
-            assign.id = action.id;
-            draft.assigns[index] = assign;
+          if (draft.assigns[index].id === action.id) {
+            draft.assigns[index] = action.assign;
             break;
           }
         }
