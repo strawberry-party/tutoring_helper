@@ -13,7 +13,6 @@ interface AssignListProps extends AssignListType {
   onCompleteAssign: (id: string) => void;
   onIncompleteAssign: (id: string) => void;
   onRemoveAssign: (id: string) => void;
-  subAssignActions: any;
   showEditModal: (id: string, assign: AssignType) => void;
   activeFilter: FilterState; // 나중에 types 에 filter type 정의해서 import
 }
@@ -26,7 +25,6 @@ function AssignList({
   onCompleteAssign,
   onIncompleteAssign,
   onRemoveAssign,
-  subAssignActions,
 
   activeFilter
 }: AssignListProps) {
@@ -54,7 +52,6 @@ function AssignList({
                 onRemoveAssign(item.id);
                 console.log(`${item.id} deleted`);
               }}
-              subAssignActions={subAssignActions}
             />
           ))
         ) : (

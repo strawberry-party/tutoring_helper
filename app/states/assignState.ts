@@ -1,5 +1,4 @@
-import { AssignType, SubAssignType } from '../types/homework';
-
+import { AssignType } from '../types/homework';
 import _ from 'lodash';
 import dayjs from 'dayjs';
 import produce from 'immer';
@@ -11,23 +10,12 @@ const ASSIGN_COMPLETE = 'ASSIGN_COMPLETE' as const;
 const ASSIGN_INCOMPLETE = 'ASSIGN_INCOMPLETE' as const;
 const ASSIGN_EDIT = 'ASSIGN_EDIT' as const;
 
-const SUBASSIGN_ADD = 'SUBASSIGN_ADD' as const;
-const SUBASSIGN_REMOVE = 'SUBASSIGN_REMOVE' as const;
-const SUBASSIGN_COMPLETE = 'SUBASSIGN_COMPLETE' as const;
-const SUBASSIGN_INCOMPLETE = 'SUBASSIGN_INCOMPLETE' as const;
-const SUBASSIGN_EDIT = 'SUBASSIGN_EDIT' as const;
-
 type AssignAction =
   | ReturnType<typeof addAssign>
   | ReturnType<typeof completeAssign>
   | ReturnType<typeof incompleteAssign>
   | ReturnType<typeof removeAssign>
-  | ReturnType<typeof editAssign>
-  | ReturnType<typeof addSubAssign>
-  | ReturnType<typeof completeSubAssign>
-  | ReturnType<typeof incompleteSubAssign>
-  | ReturnType<typeof removeSubAssign>
-  | ReturnType<typeof editSubAssign>;
+  | ReturnType<typeof editAssign>;
 
 type AssignListState = {
   assigns: Array<AssignType>;
@@ -63,44 +51,6 @@ export const editAssign = (id: string, assign: AssignType) => ({
   assign,
 });
 
-// subAssign CRUD
-export const addSubAssign = (
-  assignId: string,
-  newSubAssign: SubAssignType,
-) => ({
-  type: SUBASSIGN_ADD,
-  subAssign: {
-    ...newSubAssign,
-    id: _.uniqueId('subAssign_'),
-  },
-  assignId,
-});
-
-export const completeSubAssign = (assignId: string, id: string) => ({
-  type: SUBASSIGN_COMPLETE,
-  id,
-  assignId,
-});
-
-export const incompleteSubAssign = (assignId: string, id: string) => ({
-  type: SUBASSIGN_INCOMPLETE,
-  id,
-  assignId,
-});
-
-export const removeSubAssign = (assignId: string, id: string) => ({
-  type: SUBASSIGN_REMOVE,
-  id,
-  assignId,
-});
-
-export const editSubAssign = (assignId: string, id: string, text: string) => ({
-  type: SUBASSIGN_EDIT,
-  id,
-  assignId,
-  text,
-});
-
 // actions
 export const actions = {
   addAssign,
@@ -108,12 +58,6 @@ export const actions = {
   incompleteAssign,
   removeAssign,
   editAssign,
-
-  addSubAssign,
-  completeSubAssign,
-  incompleteSubAssign,
-  removeSubAssign,
-  editSubAssign,
 };
 
 // reducer
@@ -172,100 +116,6 @@ const assignsReducer = (
         }
         if (index === draft.assigns.length)
           console.log('invalid action with no matching assign id');
-        break;
-
-      case SUBASSIGN_ADD:
-        // check validity of assignId
-        for (let index = 0; index < draft.assigns.length; index++) {
-          let assign = draft.assigns[index];
-          if (assign.id === action.assignId) {
-            assign.subAssigns.push(action.subAssign);
-            break;
-          }
-        }
-        if (index === draft.assigns.length)
-          console.log('invalid action with no matching assign id');
-        break;
-
-      case SUBASSIGN_COMPLETE:
-        var assignIndex = draft.assigns.findIndex(
-          (assign: AssignType) => assign.id === action.assignId,
-        );
-        if (assignIndex === -1) {
-          console.log('invalid action with no matching assign id');
-          break;
-        }
-
-        var subAssignIndex = draft.assigns[assignIndex].subAssigns.findIndex(
-          (subAssign: SubAssignType) => subAssign.id === action.id,
-        );
-
-        if (subAssignIndex === -1) {
-          console.log('invalid action with no matching subAssign id');
-          break;
-        }
-        draft.assigns[assignIndex].subAssigns[
-          subAssignIndex
-        ].isCompleted = true;
-        break;
-
-      case SUBASSIGN_INCOMPLETE:
-        var assignIndex = draft.assigns.findIndex(
-          (assign: AssignType) => assign.id === action.assignId,
-        );
-        if (assignIndex === -1) {
-          console.log('invalid action with no matching assign id');
-          break;
-        }
-
-        var subAssignIndex = draft.assigns[assignIndex].subAssigns.findIndex(
-          (subAssign: SubAssignType) => subAssign.id === action.id,
-        );
-
-        if (subAssignIndex === -1) {
-          console.log('invalid action with no matching subAssign id');
-          break;
-        }
-        draft.assigns[assignIndex].subAssigns[
-          subAssignIndex
-        ].isCompleted = false;
-        break;
-
-      case SUBASSIGN_REMOVE:
-        var assignIndex = draft.assigns.findIndex(
-          (assign: AssignType) => assign.id === action.assignId,
-        );
-        if (assignIndex === -1) {
-          console.log('invalid action with no matching assign id');
-          break;
-        }
-
-        draft.assigns[assignIndex].subAssigns = draft.assigns[
-          assignIndex
-        ].subAssigns.filter(
-          (subAssign: SubAssignType) => subAssign.id !== action.id,
-        );
-        break;
-
-      case SUBASSIGN_EDIT:
-        var assignIndex = draft.assigns.findIndex(
-          (assign: AssignType) => assign.id === action.assignId,
-        );
-        if (assignIndex === -1) {
-          console.log('invalid action with no matching assign id');
-          break;
-        }
-
-        var subAssignIndex = draft.assigns[assignIndex].subAssigns.findIndex(
-          (subAssign: SubAssignType) => subAssign.id === action.id,
-        );
-
-        if (subAssignIndex === -1) {
-          console.log('invalid action with no matching subAssign id');
-          break;
-        }
-        draft.assigns[assignIndex].subAssigns[subAssignIndex].text =
-          action.text;
         break;
 
       default:

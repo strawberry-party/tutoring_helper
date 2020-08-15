@@ -32,12 +32,6 @@ function HomeworkContainer({
   removeAssign,
   editAssign,
 
-  addSubAssign,
-  completeSubAssign,
-  incompleteSubAssign,
-  removeSubAssign,
-  editSubAssign,
-
   showAll,
   showCompleted,
   showIncomplete,
@@ -106,13 +100,6 @@ function HomeworkContainer({
               onCompleteAssign={completeAssign}
               onIncompleteAssign={incompleteAssign}
               onRemoveAssign={removeAssign}
-              subAssignActions={{
-                addSubAssign,
-                completeSubAssign,
-                incompleteSubAssign,
-                removeSubAssign,
-                editSubAssign,
-              }}
               activeFilter={filter}
             />
           </View>
