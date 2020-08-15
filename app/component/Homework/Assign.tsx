@@ -4,20 +4,16 @@ import {
   Button,
   Card,
   CardItem,
-  Container,
+  Icon,
   Text,
   View,
 } from 'native-base';
-import {
-  AssignListType,
-  AssignType,
-} from '../../types/homework';
+import { AssignListType, AssignType } from '../../types/homework';
 import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
 import React, { Component } from 'react';
 
-import Moment from 'moment';
+import { CheckBox } from 'react-native-elements';
 import SwipeRow from './SwipeRow';
-import { log } from 'react-native-reanimated';
 
 interface State {
   isEditing: boolean;
@@ -32,12 +28,6 @@ interface AssignProps extends AssignType {
   onStartEdit: () => void;
 }
 
-const toBeImplemented = (id: any) => alert(id + ': not yet implemented!');
-
-interface AccordionItem {
-  raw: AssignType;
-}
-
 function Assign({
   title,
   desc,
@@ -45,136 +35,90 @@ function Assign({
   out,
   isCompleted,
   status,
-  
+
   onComplete,
   onIncomplete,
   onRemove,
   onStartEdit,
   id,
 }: AssignProps) {
-  function _renderHeader(item: AccordionItem, expanded: boolean) {
-    const { desc, due, out, isCompleted, status } = item.raw;
-    const dueDate = due.format('MM/DD');
-    const outDate = out.format('MM/DD');
-    return (
-      <Card style={{ backgroundColor: 'white', borderRadius: 20 }}>
-        <CardItem
-          header
-          bordered
-          style={{
-            flexDirection: 'row',
-            padding: 10,
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            borderRadius: 20,
-          }}>
-          <Text
-            style={{
-              ...styles.text,
-              textDecorationLine: isCompleted ? 'line-through' : 'none',
-            }}>
-            {outDate} 숙제{' '}
-          </Text>
-
-          {/* <TouchableOpacity>
-            {expanded ? (
-              <Text style={{ fontSize: 18 }}>⏫</Text>
-            ) : (
-              //   <Icon style={{ fontSize: 18 }} name="remove-circle" />
-              <Text style={{ fontSize: 18 }}>🔽</Text>
-              // <Icon style={{ fontSize: 18 }} name="add-circle" />
-            )}
-          </TouchableOpacity> */}
-          {/* 
-          <Button
-            onPress={() => console.log('button pressed')}>
-            {expanded ? (
-              <Text style={{ fontSize: 18 }}>접기</Text>
-            ) : (
-              <Text style={{ fontSize: 18 }}>펼치기</Text>
-            )}
-          </Button> */}
-
-          <TouchableOpacity
-            onPress={onStartEdit}
-            style={{
-              margin: 10,
-              backgroundColor: '#f9f9f9',
-            }}>
-            <Text style={{ fontSize: 20 }}>✏</Text>
-          </TouchableOpacity>
-        </CardItem>
-
-        <CardItem bordered style={{ borderRadius: 20 }}>
-          <Body>
-            <Text style={{ fontWeight: '700' }}>{title}</Text>
-            <Text style={{ fontWeight: '400' }}>{desc}</Text>
-          </Body>
-        </CardItem>
-        <CardItem
-          footer
-          bordered
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            borderRadius: 20,
-          }}>
-          <Text style={{ flex: 4 }}>DUE: {dueDate} </Text>
-          <Text style={{ flex: 2 }}> {status * 100} % 완료 </Text>
-
-          {isCompleted ? (
-            <TouchableOpacity
-              onPress={onIncomplete}
-              style={{
-                margin: 10,
-                backgroundColor: '#f9f9f9',
-              }}>
-              <Text style={{ fontSize: 30 }}>■</Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              onPress={onComplete}
-              style={{
-                margin: 10,
-                backgroundColor: '#f9f9f9',
-              }}>
-              <Text style={{ fontSize: 30 }}>□</Text>
-            </TouchableOpacity>
-          )}
-        </CardItem>
-      </Card>
-    );
-  }
-
-  function _renderContent(item: AccordionItem) {
-    const { desc, due, out, isCompleted, status, id } = item.raw;
-
-    return (
-      <View>
-        <Card>
-          <CardItem bordered header>
-            <Text> Content Header </Text>
-          </CardItem>
-          <CardItem bordered style={{ borderRadius: 20 }}>
-            <Text> Content Body </Text>
-          </CardItem>
-        </Card>
-      </View>
-    );
-  }
+  const dueDate = due.format('MM/DD');
+  const outDate = out.format('MM/DD');
 
   return (
     <SwipeRow onSwipe={onRemove} swipeThreshold={-100}>
-      <Accordion
-        style={styles.cardView}
-        dataArray={[
-          {
-            raw: { title, desc, due, out, isCompleted, status, id },
-          },
-        ]}
-        renderHeader={_renderHeader}
-        renderContent={_renderContent}
-      />
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          borderColor: '#eee',
+          borderBottomWidth: 0.5,
+          padding: 5,
+        }}>
+        <Card style={{ backgroundColor: 'white', borderRadius: 20, flex: 5 }}>
+          <CardItem
+            header
+            bordered
+            style={{
+              flex:1,
+              flexDirection: 'row',
+              padding: 5,
+              justifyContent: 'space-evenly',
+              alignItems: 'center',
+              borderRadius: 20,
+            }}>
+            <Text
+              style={{
+                fontWeight: '700',
+                flex: 1,
+                borderRightColor: '#bbb',
+                borderRightWidth: 1,
+
+              }}>
+              {title}
+            </Text>
+            <Text>  </Text>
+            <Text style={{ fontWeight: '400', flex: 2 }}>{desc}</Text>
+          </CardItem>
+
+          <CardItem
+            footer
+            bordered
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              borderRadius: 20,
+            }}>
+            <Text style={{ flex: 4 }}> </Text>
+            <Text> {dueDate} 까지 </Text>
+          </CardItem>
+        </Card>
+
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: 'white',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderColor: '#eee',
+            padding: 5,
+          }}>
+          <CheckBox
+            size={36}
+            checked={isCompleted}
+            onPress={isCompleted ? onIncomplete : onComplete}
+          />
+
+          <Button
+            icon={true}
+            onPress={onStartEdit}
+            style={{ borderRadius: 20, backgroundColor: '#bbb' }}>
+            <Icon name="pencil" />
+          </Button>
+        </View>
+      </View>
     </SwipeRow>
   );
 }
