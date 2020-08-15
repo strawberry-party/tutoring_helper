@@ -31,8 +31,10 @@ export class AssignType {
     this.due = due;
     this.out = out;
     this.isCompleted = isCompleted;
-    this.status = 0;
-    this.id = _.uniqueId('assign_');
+    this.status = 0;    
+    this.id = title;
+
+    // this.id = _.uniqueId('assign_');
     // this.print = AssignType.prototype.print;
   }
 }

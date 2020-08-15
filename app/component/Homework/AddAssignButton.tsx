@@ -28,8 +28,9 @@ export function AddAssignButton({
       containerStyle={{ backgroundColor: 'black' }}
       style={{ backgroundColor: '#bbb' }}
       position="bottomRight"
-      onPress={showAddModal}>
-      <Text style={{ fontSize: 24 }}>➕</Text>
+      onPress={showAddModal}
+      >
+      <Icon name="add" />
     </Fab>
   );
 }
