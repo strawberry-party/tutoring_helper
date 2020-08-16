@@ -78,8 +78,17 @@ const assignsReducer = (
       case ASSIGN_COMPLETE:
         for (var index = 0; index < draft.assigns.length; index++) {
           if (draft.assigns[index].id === action.id) {
-            draft.assigns[index].isCompleted = true;
-            break;
+            var newAssign = Object.assign({}, state.assigns[index], {
+              isCompleted: true,
+            });
+
+            return {
+              assigns: {
+                ...state.assigns.slice(0, index),
+                newAssign,
+                ...state.assigns.slice(index + 1),
+              },
+            };
           }
         }
         if (index === draft.assigns.length)

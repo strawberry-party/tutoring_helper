@@ -34,7 +34,7 @@ export class AssignType {
     this.status = 0;    
     this.id = title;
 
-    // this.id = _.uniqueId('assign_');
+    // this.id = _.uniqueId('assign_'); TODO: 오류
     // this.print = AssignType.prototype.print;
   }
 }
