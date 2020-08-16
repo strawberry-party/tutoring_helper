@@ -1,4 +1,4 @@
-import { Container, Content, DatePicker, Form, Input, Item } from 'native-base';
+import { DatePicker, Form, Icon, Input, Item, Label } from 'native-base';
 import React, { Component, useState } from 'react';
 import {
   ScrollView,
@@ -84,59 +84,91 @@ export default class FormExample extends Component<
 
   render() {
     const { title, desc, due } = this.state;
-
     return (
       <View
         style={{
-          width: 250,
           flexGrow: 1,
-          height: 300,
-          backgroundColor: 'pink',
+          borderColor: 'pink',
+          borderWidth: 2,
           justifyContent: 'space-between',
           alignItems: 'center',
         }}>
         <ScrollView
-          style={{ backgroundColor: 'skyblue', height: 100, width: 250 }}>
-          <View>
-            <Form>
+          style={{
+            borderColor: 'skyblue',
+            borderWidth: 2,
+            width: 270,
+          }}>
+          <View
+            style={{
+              // flexGrow: 1,
+              // backgroundColor: '#bbb',
+              // justifyContent: 'space-between',
+              // alignItems: 'center',
+              padding: 15,
+            }}>
+            <View style={styles.inputContainer}>
+              <Text style={styles.headline}> 제목 </Text>
               <Item>
                 <Input
-                  placeholder="숙제 제목"
                   value={title}
                   onChange={({ nativeEvent: { text } }) => {
                     this.setState({ title: text });
                   }}
+                  style={{ fontSize: 30 }}
                 />
               </Item>
-              <Item>
-                <Input
-                  placeholder="설명"
-                  multiline={true}
-                  value={desc}
-                  onChange={({ nativeEvent: { text } }) => {
-                    this.setState({ desc: text });
-                  }}
-                />
-              </Item>
-              <Item last>
-                <DatePicker
-                  defaultDate={now.toDate()}
-                  locale={'kr'}
-                  timeZoneOffsetInMinutes={undefined}
-                  modalTransparent={false}
-                  animationType={'fade'}
-                  androidMode={'default'}
-                  placeHolderText="제출 기한"
-                  textStyle={{ color: 'black' }}
-                  placeHolderTextStyle={{ color: 'black' }}
-                  onDateChange={(date: Date) => this.setState({ due: dayjs(date) })}
-                  disabled={false}
-                />
-              </Item>
-            </Form>
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.headline}> 기한 </Text>
+              <View style={{ padding: 10 }}>
+                <View style={styles.dateContainer}>
+                  <Text style={styles.dateHeadline}>
+                    시작
+                  </Text>
+                  <DatePicker
+                    defaultDate={now.toDate()}
+                    locale={'kr'}
+                    timeZoneOffsetInMinutes={undefined}
+                    modalTransparent={false}
+                    animationType={'fade'}
+                    androidMode={'default'}
+                    placeHolderText={due.format('MM/DD').toString()}
+                    textStyle={{ color: 'black' }}
+                    placeHolderTextStyle={{ color: 'black' }}
+                    onDateChange={(date: Date) =>
+                      this.setState({ due: dayjs(date) })
+                    }
+                    disabled={false}
+                  />
+                </View>
+
+                <View style={styles.dateContainer}>
+                  <Text style={styles.dateHeadline}>
+                    마감
+                  </Text>
+                  <DatePicker
+                    defaultDate={now.toDate()}
+                    locale={'kr'}
+                    timeZoneOffsetInMinutes={undefined}
+                    modalTransparent={false}
+                    animationType={'fade'}
+                    androidMode={'default'}
+                    placeHolderText={due.format('MM/DD').toString()}
+                    textStyle={{ color: 'black' }}
+                    placeHolderTextStyle={{ color: 'black' }}
+                    onDateChange={(date: Date) =>
+                      this.setState({ due: dayjs(date) })
+                    }
+                    disabled={false}
+                  />
+                </View>
+              </View>
+            </View>
           </View>
         </ScrollView>
-
+        
         <View
           style={{
             flex: 1,
@@ -145,9 +177,9 @@ export default class FormExample extends Component<
             paddingVertical: 10,
           }}>
           <TouchableHighlight
-            style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
+            style={{ ...styles.openButton, backgroundColor: '#bbb' }}
             onPress={this.handleSubmit}>
-            <Text style={styles.textStyle}>저장</Text>
+              <Icon name='save-outline'/>
           </TouchableHighlight>
 
           <TouchableHighlight
@@ -161,34 +193,42 @@ export default class FormExample extends Component<
   }
 }
 const styles = StyleSheet.create({
+  inputContainer: {
+    padding: 10,
+    justifyContent: 'flex-start',
+  },
+  dateHeadline: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: 'black',
+    minWidth: 30,
+    alignSelf: 'center',
+  },
+  headline: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#bbb',
+  },
+  dateContainer: {
+    minWidth: 150,
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+  },
+
   centeredView: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 22,
   },
-  modalView: {
-    margin: 30,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    width: 300,
-    height: 350,
-  },
   openButton: {
     backgroundColor: '#F194FF',
     borderRadius: 20,
     padding: 10,
     elevation: 2,
+    flex:1,
+    width: 100,
+    justifyContent: 'center',
   },
   textStyle: {
     color: 'white',

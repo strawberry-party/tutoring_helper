@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     marginTop: 22,
   },
   modalView: {
-    padding: 20,
+    paddingVertical: 15,
     backgroundColor: 'white',
     borderRadius: 20,
     alignItems: 'center',
@@ -128,6 +128,6 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
     width: 300,
-    height: 350,
+    height: 500,
   },
 });
