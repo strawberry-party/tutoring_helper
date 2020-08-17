@@ -7,7 +7,7 @@ import {
   Item,
   Label,
 } from 'native-base';
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -17,6 +17,7 @@ import {
 } from 'react-native';
 
 import { AssignType } from '../../types/homework';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import dayjs from 'dayjs';
 
@@ -38,6 +39,8 @@ interface FormInputState {
   due: dayjs.Dayjs;
   out: dayjs.Dayjs;
   title: string;
+  dueDateTimeModalVisible: boolean;
+  outDateTimeModalVisible: boolean;
 }
 
 const now = dayjs();
@@ -55,6 +58,8 @@ export default class FormExample extends Component<
       title,
       due,
       out,
+      dueDateTimeModalVisible: false,
+      outDateTimeModalVisible: false,
     };
   }
 
@@ -92,7 +97,13 @@ export default class FormExample extends Component<
   };
 
   render() {
-    const { title, out, due } = this.state;
+    const {
+      title,
+      out,
+      due,
+      dueDateTimeModalVisible,
+      outDateTimeModalVisible,
+    } = this.state;
     return (
       <View
         style={{
@@ -119,6 +130,7 @@ export default class FormExample extends Component<
                   value={title}
                   onChange={({ nativeEvent: { text } }) => {
                     this.setState({ title: text });
+                    console.log(outDateTimeModalVisible);
                   }}
                   style={{ fontSize: 18 }}
                 />
@@ -128,43 +140,60 @@ export default class FormExample extends Component<
             <View style={styles.inputContainer}>
               <Text style={styles.headline}> 기한 </Text>
               <View style={{ padding: 10 }}>
-                <View style={styles.dateContainer}>
+                <Button
+                  style={styles.dateContainer}
+                  onPress={() => {
+                    console.log('outDateTimeModalVisible');
+                    this.setState({ dueDateTimeModalVisible: true });
+                  }}>
                   <Text style={styles.dateHeadline}>시작</Text>
-                  <DatePicker
-                    defaultDate={now.toDate()}
-                    locale={'kr'}
-                    timeZoneOffsetInMinutes={undefined}
-                    modalTransparent={false}
-                    animationType={'fade'}
-                    androidMode={'default'}
-                    placeHolderText={out.format('MM/DD').toString()}
-                    textStyle={{ color: 'black' }}
-                    placeHolderTextStyle={{ color: 'black' }}
-                    onDateChange={(date: Date) =>
-                      this.setState({ out: dayjs(date) })
-                    }
-                    disabled={false}
-                  />
-                </View>
+                  {!outDateTimeModalVisible ? (
+                    <Text style={styles.dateHeadline}>
+                      {out.format('MM월 DD일').toString()}
+                    </Text>
+                  ) : (
+                    <DateTimePicker
+                      value={now.toDate()}
+                      mode={'date'}
+                      display={'calendar'}
+                      onChange={(e, date: Date) =>
+                        this.setState({ out: dayjs(date) })
+                      }
+                      onResponderTerminate={() => {
+                        console.log('outDateTimeModalVisible false');
+                        this.setState({ outDateTimeModalVisible: false });
+                      }}
+                    />
+                  )}
+                </Button>
 
-                <View style={styles.dateContainer}>
+                <Button
+                  style={styles.dateContainer}
+                  onPress={() => {
+                    console.log('dueDateTimeModalVisible');
+                    this.setState({ dueDateTimeModalVisible: true });
+                  }}>
                   <Text style={styles.dateHeadline}>마감</Text>
-                  <DatePicker
-                    defaultDate={now.toDate()}
-                    locale={'kr'}
-                    timeZoneOffsetInMinutes={undefined}
-                    modalTransparent={false}
-                    animationType={'fade'}
-                    androidMode={'default'}
-                    placeHolderText={due.format('MM/DD').toString()}
-                    textStyle={{ color: 'black' }}
-                    placeHolderTextStyle={{ color: 'black' }}
-                    onDateChange={(date: Date) =>
-                      this.setState({ due: dayjs(date) })
-                    }
-                    disabled={false}
-                  />
-                </View>
+
+                  {!dueDateTimeModalVisible ? (
+                    <Text style={styles.dateHeadline}>
+                      {due.format('MM월 DD일').toString()}
+                    </Text>
+                  ) : (
+                    <DateTimePicker
+                      value={now.toDate()}
+                      mode={'date'}
+                      display={'calendar'}
+                      onChange={(e, date: Date) =>
+                        this.setState({ due: dayjs(date) })
+                      }
+                      onResponderTerminate={() => {
+                        console.log('dueDateTimeModalVisible false');
+                        this.setState({ dueDateTimeModalVisible: false });
+                      }}
+                    />
+                  )}
+                </Button>
               </View>
             </View>
           </View>
@@ -180,7 +209,6 @@ export default class FormExample extends Component<
           <Button
             style={{ ...styles.openButton, backgroundColor: '#bbb' }}
             onPressIn={this.handleSubmit}>
-          
             <Icon name="save-outline" />
           </Button>
 
@@ -200,11 +228,12 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   dateHeadline: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: '700',
     color: 'black',
     minWidth: 30,
     alignSelf: 'center',
+    marginRight: 15,
   },
   headline: {
     fontSize: 15,
@@ -215,6 +244,8 @@ const styles = StyleSheet.create({
     minWidth: 150,
     justifyContent: 'flex-start',
     flexDirection: 'row',
+    backgroundColor: '#bbb',
+    margin: 5,
   },
 
   centeredView: {
