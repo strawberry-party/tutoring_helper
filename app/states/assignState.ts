@@ -19,15 +19,16 @@ type AssignAction =
 
 type AssignListState = {
   assigns: Array<AssignType>;
+  completed: number;
 };
 
-const initialState: AssignListState = { assigns: [] };
+const initialState: AssignListState = { assigns: [], completed: 0 };
 
 // action constructor
 // assign CRUD
 export const addAssign = (assign: AssignType) => ({
   type: ASSIGN_ADD,
-  assign: {...assign, id: _.uniqueId('assign_')},
+  assign: { ...assign, id: _.uniqueId('assign_') },
 });
 
 export const completeAssign = (id: string) => ({
@@ -86,7 +87,7 @@ const assignsReducer = (
               newAssign,
               ...state.assigns.slice(index + 1),
             ];
-            return { assigns: newAssigns };
+            return { assigns: newAssigns, completed: state.completed + 1 };
           }
         }
         if (index === draft.assigns.length)
@@ -104,7 +105,7 @@ const assignsReducer = (
               newAssign,
               ...state.assigns.slice(index + 1),
             ];
-            return { assigns: newAssigns };
+            return { assigns: newAssigns, completed: state.completed + 1 };
           }
         }
         if (index === draft.assigns.length)
@@ -112,10 +113,18 @@ const assignsReducer = (
         break;
 
       case ASSIGN_REMOVE:
+        var index = state.assigns.findIndex(
+          (assign: AssignType) => assign.id === action.id,
+        );
+        var newCompleted = state.completed;
+        if (state.assigns[index].isCompleted) newCompleted = newCompleted - 1;
+
         return {
-          assigns: draft.assigns.filter(
-            (assign: AssignType) => assign.id !== action.id,
-          ),
+          assigns: {
+            ...state.assigns.slice(0, index),
+            ...state.assigns.slice(index + 1),
+          },
+          completed: newCompleted,
         };
 
       case ASSIGN_EDIT:
