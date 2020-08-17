@@ -1,4 +1,12 @@
-import { DatePicker, Form, Icon, Input, Item, Label } from 'native-base';
+import {
+  Button,
+  DatePicker,
+  Form,
+  Icon,
+  Input,
+  Item,
+  Label,
+} from 'native-base';
 import React, { Component, useState } from 'react';
 import {
   ScrollView,
@@ -9,6 +17,7 @@ import {
 } from 'react-native';
 
 import { AssignType } from '../../types/homework';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import dayjs from 'dayjs';
 
 type AddAssign = (assign: AssignType) => void;
@@ -27,8 +36,8 @@ interface FormExampleProps {
 
 interface FormInputState {
   due: dayjs.Dayjs;
+  out: dayjs.Dayjs;
   title: string;
-  desc: string;
 }
 
 const now = dayjs();
@@ -40,18 +49,18 @@ export default class FormExample extends Component<
   constructor(props) {
     super(props);
     const { modalType, selectedAssign } = this.props;
-    const { title, desc, due } = selectedAssign;
+    const { title, due, out } = selectedAssign;
 
     this.state = {
       title,
-      desc,
       due,
+      out,
     };
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const { title, desc, due } = this.state;
+    const { title, due, out } = this.state;
     const {
       onSubmit,
       modalType,
@@ -63,7 +72,7 @@ export default class FormExample extends Component<
     const newAssign: AssignType = {
       ...selectedAssign,
       title,
-      desc,
+      out,
       due,
     };
 
@@ -83,7 +92,7 @@ export default class FormExample extends Component<
   };
 
   render() {
-    const { title, desc, due } = this.state;
+    const { title, out, due } = this.state;
     return (
       <View
         style={{
@@ -101,10 +110,6 @@ export default class FormExample extends Component<
           }}>
           <View
             style={{
-              // flexGrow: 1,
-              // backgroundColor: '#bbb',
-              // justifyContent: 'space-between',
-              // alignItems: 'center',
               padding: 15,
             }}>
             <View style={styles.inputContainer}>
@@ -115,18 +120,16 @@ export default class FormExample extends Component<
                   onChange={({ nativeEvent: { text } }) => {
                     this.setState({ title: text });
                   }}
-                  style={{ fontSize: 30 }}
+                  style={{ fontSize: 18 }}
                 />
               </Item>
             </View>
-
+            {/* README: out */}
             <View style={styles.inputContainer}>
               <Text style={styles.headline}> 기한 </Text>
               <View style={{ padding: 10 }}>
                 <View style={styles.dateContainer}>
-                  <Text style={styles.dateHeadline}>
-                    시작
-                  </Text>
+                  <Text style={styles.dateHeadline}>시작</Text>
                   <DatePicker
                     defaultDate={now.toDate()}
                     locale={'kr'}
@@ -134,20 +137,18 @@ export default class FormExample extends Component<
                     modalTransparent={false}
                     animationType={'fade'}
                     androidMode={'default'}
-                    placeHolderText={due.format('MM/DD').toString()}
+                    placeHolderText={out.format('MM/DD').toString()}
                     textStyle={{ color: 'black' }}
                     placeHolderTextStyle={{ color: 'black' }}
                     onDateChange={(date: Date) =>
-                      this.setState({ due: dayjs(date) })
+                      this.setState({ out: dayjs(date) })
                     }
                     disabled={false}
                   />
                 </View>
 
                 <View style={styles.dateContainer}>
-                  <Text style={styles.dateHeadline}>
-                    마감
-                  </Text>
+                  <Text style={styles.dateHeadline}>마감</Text>
                   <DatePicker
                     defaultDate={now.toDate()}
                     locale={'kr'}
@@ -168,7 +169,7 @@ export default class FormExample extends Component<
             </View>
           </View>
         </ScrollView>
-        
+
         <View
           style={{
             flex: 1,
@@ -176,11 +177,12 @@ export default class FormExample extends Component<
             width: 150,
             paddingVertical: 10,
           }}>
-          <TouchableHighlight
+          <Button
             style={{ ...styles.openButton, backgroundColor: '#bbb' }}
-            onPress={this.handleSubmit}>
-              <Icon name='save-outline'/>
-          </TouchableHighlight>
+            onPressIn={this.handleSubmit}>
+          
+            <Icon name="save-outline" />
+          </Button>
 
           <TouchableHighlight
             style={{ ...styles.openButton, backgroundColor: 'red' }}
@@ -205,7 +207,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   headline: {
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: '700',
     color: '#bbb',
   },
@@ -226,7 +228,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     elevation: 2,
-    flex:1,
+    flex: 1,
     width: 100,
     justifyContent: 'center',
   },

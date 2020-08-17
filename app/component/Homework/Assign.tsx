@@ -30,7 +30,6 @@ interface AssignProps extends AssignType {
 
 function Assign({
   title,
-  desc,
   due,
   out,
   isCompleted,
@@ -45,6 +44,7 @@ function Assign({
   const dueDate = due.format('MM/DD');
   const outDate = out.format('MM/DD');
 
+  const cardStyle = isCompleted ? styles.completedCard : styles.incompletedCard;
   return (
     <SwipeRow onSwipe={onRemove} swipeThreshold={-100}>
       <View
@@ -56,12 +56,12 @@ function Assign({
           borderBottomWidth: 0.5,
           padding: 5,
         }}>
-        <Card style={{ backgroundColor: 'white', borderRadius: 20, flex: 5 }}>
+        <Card style={cardStyle}>
           <CardItem
             header
             bordered
             style={{
-              flex:1,
+              flex: 1,
               flexDirection: 'row',
               padding: 5,
               justifyContent: 'space-evenly',
@@ -74,12 +74,11 @@ function Assign({
                 flex: 1,
                 borderRightColor: '#bbb',
                 borderRightWidth: 1,
-
               }}>
               {title}
             </Text>
-            <Text>  </Text>
-            <Text style={{ fontWeight: '400', flex: 2 }}>{desc}</Text>
+            <Text> </Text>
+            <Text style={{ fontWeight: '400', flex: 2 }}>태그</Text>
           </CardItem>
 
           <CardItem
@@ -91,6 +90,8 @@ function Assign({
               borderRadius: 20,
             }}>
             <Text style={{ flex: 4 }}> </Text>
+            <Text> {outDate} 부터 </Text>
+
             <Text> {dueDate} 까지 </Text>
           </CardItem>
         </Card>
@@ -127,6 +128,13 @@ export default Assign;
 
 const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
+  incompletedCard: { backgroundColor: 'white', borderRadius: 20, flex: 5 },
+  completedCard: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    flex: 5,
+    opacity: 0.3,
+  },
   cardView: {
     margin: 5,
     padding: 5,
@@ -140,60 +148,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-  },
-  circle: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    borderWidth: 3,
-    marginRight: 20,
-  },
-  completedCircle: {
-    borderColor: '#bbb',
-  },
-  uncompletedCircle: {
-    borderColor: '#F23657',
-  },
-  text: {
-    fontWeight: '600',
-    fontSize: 20,
-  },
-  completedText: {
-    color: '#bbb',
-    textDecorationLine: 'line-through',
-  },
-  uncompletedText: {
-    color: '#353839',
-  },
-  column: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: width / 2,
-  },
-  actions: {
-    flexDirection: 'row',
-  },
-  actionContainer: {
-    marginVertical: 10,
-    marginHorizontal: 10,
-  },
-  input: {
-    width: width / 2,
-    marginVertical: 15,
-    paddingBottom: 5,
-  },
-  leftAction: {
-    backgroundColor: '#FFFFFB',
-    flexGrow: 1,
-    marginVertical: 5,
-    marginHorizontal: 5,
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    borderRadius: 20,
-    paddingLeft: 40,
-  },
-  textAction: {
-    fontSize: 30,
-    color: 'white',
   },
 });
