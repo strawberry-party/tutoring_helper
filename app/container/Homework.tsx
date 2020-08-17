@@ -14,7 +14,7 @@ import FilterSorter from '../component/Homework/FilterSorter';
 import React from 'react';
 import { RootState } from '../states';
 import { actions as assignActions } from '../states/assignState';
-import { actions as filterActions } from '../states/assignFilterSorterState';
+import { actions as filterSorterActions } from '../states/assignFilterSorterState';
 import { actions as modalVisibilityActions } from '../states/assignModalState';
 
 type HomeworkContainerProps = any; // TODO: 타입 정의, any 대체하기
@@ -35,6 +35,13 @@ function HomeworkContainer({
   showAll,
   showCompleted,
   showIncomplete,
+  
+  sortDsc,
+  sortAsc,
+  sortDue,
+  sortOut,
+  sortTitle,
+  
 }: HomeworkContainerProps) {
   const assigns: Array<AssignType> = useSelector(
     (state: RootState) => state.assignReducer.assigns,
@@ -64,6 +71,10 @@ function HomeworkContainer({
     (state: RootState) => state.assignFilterSorterReducer.sorter,
   );
 
+  const sorterDir = useSelector(
+    (state: RootState) => state.assignFilterSorterReducer.sorterDir,
+  )
+
   return (
     <SafeAreaView
       style={{
@@ -78,6 +89,10 @@ function HomeworkContainer({
           <FilterSorter
             activeFilter={filter}
             filterActions={{showAll, showCompleted, showIncomplete}}
+            activeSorter={sorter}
+            activeSorterDir={sorterDir}
+            sorterDirActions={{ sortDsc, sortAsc}}
+            sorterActions={{ sortDue, sortOut, sortTitle}}
           />
         </View>
 
@@ -98,6 +113,9 @@ function HomeworkContainer({
               onIncompleteAssign={incompleteAssign}
               onRemoveAssign={removeAssign}
               activeFilter={filter}
+              activeSorter={sorter}
+              activeSorterDir={sorterDir}
+
             />
           </View>
         </ScrollView>
@@ -159,7 +177,7 @@ const mapDispatchToProps = Object.assign(
   {},
   assignActions,
   modalVisibilityActions,
-  filterActions,
+  filterSorterActions,
 );
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeworkContainer);
