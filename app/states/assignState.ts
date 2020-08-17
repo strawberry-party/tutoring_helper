@@ -27,7 +27,7 @@ const initialState: AssignListState = { assigns: [] };
 // assign CRUD
 export const addAssign = (assign: AssignType) => ({
   type: ASSIGN_ADD,
-  assign,
+  assign: {...assign, id: _.uniqueId('assign_')},
 });
 
 export const completeAssign = (id: string) => ({

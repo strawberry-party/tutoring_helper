@@ -1,11 +1,16 @@
 import { AssignListType, AssignType } from '../../types/homework';
+import {
+  FilterState,
+  filterOptions,
+} from '../../states/assignFilterSorterState';
 import { FlatList, ScrollView, Text, View } from 'react-native';
-import { List, ListItem } from 'native-base';
+import { List, Separator } from 'native-base';
 import React, { Component } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Assign from './Assign';
-import { FilterState } from '../../states/assignFilterSorterState';
+import _ from 'lodash';
+import dayjs from 'dayjs';
 import { log } from 'react-native-reanimated';
 
 // presentational component of AssignList
@@ -29,30 +34,59 @@ function AssignList({
 
   activeFilter,
 }: AssignListProps) {
-  const outDates = new Map();
+  const outDates: Set<string> = new Set();
 
-  assigns.map((assign: AssignType) => outDates.set(assign.out, assign));
+  const filtered = () => {
+    switch (activeFilter) {
+      case filterOptions.ALL:
+        return assigns;
+      case filterOptions.COMPLETED:
+        return assigns.filter((assign: AssignType) => assign.isCompleted);
+      case filterOptions.INCOMPLETED:
+        return assigns.filter((assign: AssignType) => !assign.isCompleted);
+      default:
+        console.log('====================================');
+        console.log('SOMETHING WENT WRONG');
+        console.log('====================================');
+    }
+  };
+
+  const sorted = _.orderBy(filtered(), ['out'], ['asc']);
 
   var items = [];
-  for (let [key, item] of outDates) {
+  for (let index = 0; index < sorted.length; index++) {
+    let assign = sorted[index];
+
+    if (!outDates.has(assign.out.toString())) {
+      items.push(
+        <Separator bordered key={assign.out.toString()}>
+          <Text>{assign.out.format('MM월 DD일').toString()}</Text>
+        </Separator>,
+      );
+      outDates.add(assign.out.toString());
+      console.log('====================================');
+      console.log(outDates);
+      console.log('====================================');
+    }
+
     let comp = (
       <Assign
-        key={item.id}
-        {...item}
+        key={assign.id}
+        {...assign}
         onStartEdit={() => {
-          showEditModal(item.id, item);
+          showEditModal(assign.id, assign);
         }}
         onComplete={() => {
-          onCompleteAssign(item.id);
-          console.log(`${item.id} Completed`);
+          onCompleteAssign(assign.id);
+          console.log(`${assign.id} Completed`);
         }}
         onIncomplete={() => {
-          onIncompleteAssign(item.id);
-          console.log(`${item.id} canceled Complete`);
+          onIncompleteAssign(assign.id);
+          console.log(`${assign.id} canceled Complete`);
         }}
         onRemove={() => {
-          onRemoveAssign(item.id);
-          console.log(`${item.id} deleted`);
+          onRemoveAssign(assign.id);
+          console.log(`${assign.id} deleted`);
         }}
       />
     );
@@ -67,31 +101,7 @@ function AssignList({
     <View style={{ backgroundColor: 'red' }}>
       <Text style={{ fontSize: 15 }}>AssignList</Text>
       <List style={{ backgroundColor: 'white' }}>
-        {assigns.length !== 0
-          ? assigns.map((item: AssignType) =>
-              assigns.map((item: AssignType) => (
-                <Assign
-                  key={item.id}
-                  {...item}
-                  onStartEdit={() => {
-                    showEditModal(item.id, item);
-                  }}
-                  onComplete={() => {
-                    onCompleteAssign(item.id);
-                    console.log(`${item.id} Completed`);
-                  }}
-                  onIncomplete={() => {
-                    onIncompleteAssign(item.id);
-                    console.log(`${item.id} canceled Complete`);
-                  }}
-                  onRemove={() => {
-                    onRemoveAssign(item.id);
-                    console.log(`${item.id} deleted`);
-                  }}
-                />
-              )),
-            )
-          : noAssign}
+        {assigns.length !== 0 ? items : noAssign}
       </List>
     </View>
   );

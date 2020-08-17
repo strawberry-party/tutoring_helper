@@ -32,9 +32,9 @@ export class AssignType {
     this.out = out;
     this.isCompleted = isCompleted;
     this.status = 0;    
-    this.id = title;
+    // this.id = title;
 
-    // this.id = _.uniqueId('assign_'); TODO: 오류
+    this.id = 'none'; //TODO: 오류
     // this.print = AssignType.prototype.print;
   }
 }
