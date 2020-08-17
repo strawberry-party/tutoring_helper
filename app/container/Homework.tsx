@@ -10,11 +10,11 @@ import { connect, useSelector } from 'react-redux';
 import AddAssignButton from '../component/Homework/AddAssignButton';
 import AssignList from '../component/Homework/AssignList';
 import { AssignType } from '../types/homework';
-import Filter from '../component/Homework/FilterSorter';
+import FilterSorter from '../component/Homework/FilterSorter';
 import React from 'react';
 import { RootState } from '../states';
 import { actions as assignActions } from '../states/assignState';
-import { actions as filterSorterActions } from '../states/assignFilterSorterState';
+import { actions as filterActions } from '../states/assignFilterSorterState';
 import { actions as modalVisibilityActions } from '../states/assignModalState';
 
 type HomeworkContainerProps = any; // TODO: 타입 정의, any 대체하기
@@ -73,14 +73,11 @@ function HomeworkContainer({
         padding: 10,
       }}>
       <Text style={styles.titleText}>숙제 관리</Text>
-
       <View style={{ borderColor: 'green', borderWidth: 3, flex: 1 }}>
         <View style={{ backgroundColor: 'pink' }}>
-          <Filter
+          <FilterSorter
             activeFilter={filter}
-            showAll={showAll}
-            showCompleted={showCompleted}
-            showIncomplete={showIncomplete}
+            filterActions={{showAll, showCompleted, showIncomplete}}
           />
         </View>
 
@@ -148,20 +145,6 @@ const styles = StyleSheet.create({
 function mapStateToProps(state) {
   return {
     assigns: state.assignReducer.assigns,
-    // assigns: state.assignReducer.assigns.filter((assign: AssignType) => {
-    //   switch (state.filter) {
-    //     case typeof 'ALL':
-    //       return true;
-    //     case typeof 'COMPLETED':
-    //       return assign.isCompleted;
-    //     case typeof 'INCOMPLETED':
-    //       return !assign.isCompleted;
-    //     default:
-    //       console.log('something went wrong on Homework.tsx mapStateToProps');
-    //       return true;
-    //   }
-    // }), 
-    // TODO: apply filter later
     addModalVisible: state.assignModalReducer.addModalVisible,
     filter: state.assignFilterSorterReducer.filter,
     sorter: state.assignFilterSorterReducer.sorter,
@@ -176,6 +159,7 @@ const mapDispatchToProps = Object.assign(
   {},
   assignActions,
   modalVisibilityActions,
+  filterActions,
 );
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeworkContainer);

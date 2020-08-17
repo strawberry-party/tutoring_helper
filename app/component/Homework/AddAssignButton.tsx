@@ -10,7 +10,6 @@ import { Button, Fab, Icon } from 'native-base';
 import React, { useState } from 'react';
 
 import { AssignType } from '../../types/homework';
-import FormExample from './FormExample';
 
 interface AddAssignButtonProps {
   addModalVisible: boolean;
@@ -28,8 +27,7 @@ export function AddAssignButton({
       containerStyle={{ backgroundColor: 'black' }}
       style={{ backgroundColor: '#bbb' }}
       position="bottomRight"
-      onPress={showAddModal}
-      >
+      onPress={showAddModal}>
       <Icon name="add" />
     </Fab>
   );

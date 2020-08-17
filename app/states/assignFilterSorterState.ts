@@ -1,3 +1,5 @@
+import { Component } from 'react';
+import { log } from 'react-native-reanimated';
 import produce from 'immer';
 
 // action type
@@ -6,7 +8,13 @@ const SET_SORTER = 'SET_SORTER' as const;
 
 const ALL = 'ALL' as const;
 const COMPLETED = 'COMPLETED' as const;
-const INCOMPLETE = 'INCOMPLETE' as const;
+const INCOMPLETED = 'INCOMPLETED' as const;
+
+
+const ASC = 'ASC' as const;
+
+
+export const filterOptions = { ALL, COMPLETED, INCOMPLETED };
 
 const DUE_FIRST = 'DUE_FIRST' as const;
 
@@ -16,7 +24,7 @@ type FilterAction =
   | ReturnType<typeof showCompleted>
   | ReturnType<typeof dueFirst>;
 
-export type FilterState = typeof ALL | typeof COMPLETED | typeof INCOMPLETE;
+export type FilterState = typeof ALL | typeof COMPLETED | typeof INCOMPLETED;
 type SorterState = typeof DUE_FIRST;
 
 type FilterSorterState = { filter: FilterState; sorter: SorterState };
@@ -30,6 +38,9 @@ function showAll() {
 }
 
 function showCompleted() {
+  console.log('====================================');
+  console.log('showCompleted action constructor invoked');
+  console.log('====================================');
   return {
     type: SET_FILTER,
     filter: COMPLETED,
@@ -39,7 +50,7 @@ function showCompleted() {
 function showIncomplete() {
   return {
     type: SET_FILTER,
-    filter: INCOMPLETE,
+    filter: INCOMPLETED,
   };
 }
 
@@ -69,12 +80,14 @@ const assignFilterSorterReducer = (
   produce(state, (draft) => {
     switch (action.type) {
       case SET_FILTER:
+        console.log('filter: '+ action.filter)
         draft.filter = action.filter;
         break;
       case SET_SORTER:
         draft.sorter = action.sorter;
         break;
       default:
+        console.log("Something went wrong in assignFilterSorterReducer")
         return state;
     }
   });

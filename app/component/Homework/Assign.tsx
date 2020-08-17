@@ -41,7 +41,7 @@ function Assign({
   onStartEdit,
   id,
 }: AssignProps) {
-  const dueDate = due.format('MM/DD');
+  const dueDate = due.format('MM월 DD일까지');
   const outDate = out.format('MM/DD');
 
   const cardStyle = isCompleted ? styles.completedCard : styles.incompletedCard;
@@ -75,10 +75,9 @@ function Assign({
                 borderRightColor: '#bbb',
                 borderRightWidth: 1,
               }}>
-              {title}
+              태그
             </Text>
-            <Text> </Text>
-            <Text style={{ fontWeight: '400', flex: 2 }}>태그</Text>
+            <Text style={{ fontWeight: '400', flex: 2 }}>{'   '+ title}</Text>
           </CardItem>
 
           <CardItem
@@ -90,9 +89,8 @@ function Assign({
               borderRadius: 20,
             }}>
             <Text style={{ flex: 4 }}> </Text>
-            <Text> {outDate} 부터 </Text>
 
-            <Text> {dueDate} 까지 </Text>
+            <Text> {dueDate}  </Text>
           </CardItem>
         </Card>
 
