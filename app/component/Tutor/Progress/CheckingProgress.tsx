@@ -1,28 +1,20 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 
-class CheckingProgress extends Component {
-  state = {
-    checked1: false,
-    checked2: false,
-  }
-  render() {
-    return (
-      <View>
-        <CheckBox
-          title='내용 1'
-          checked={this.state.checked1}
-          onPress={() => this.setState({ checked1: !this.state.checked1 })}
-        />
-        <CheckBox
-          title='내용 2'
-          checked={this.state.checked2}
-          onPress={() => this.setState({ checked2: !this.state.checked2 })}
-        />
-      </View>
-    );
-  }
+function CheckingProgress(props) {
+  const data = props.content;
+  const [state, setState] = useState({data})
+  const checkboxItem = state.data.map(item => <CheckBox key={item.id} title={item.title} checked={item.isDone} onPress={() => {
+    const newState = state.data.map(newItem => newItem.id === item.id ? {...newItem, isDone: !newItem.isDone} : newItem)
+    setState({data: newState}) 
+  }}/>)
+  
+  return (
+    <View>
+      {checkboxItem}
+    </View>
+  );
 }
 
 export default CheckingProgress;
