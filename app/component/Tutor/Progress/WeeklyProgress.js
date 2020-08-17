@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
-import { Text, View, SectionList, StyleSheet, ScrollView } from 'react-native';
-
+import React from 'react';
+import { Text, View, SectionList, StyleSheet } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Week from './Week';
+import { Button } from 'react-native-elements';
 
 const styles = StyleSheet.create({
   container: {
@@ -24,16 +25,20 @@ const styles = StyleSheet.create({
 
 export default function WeeklyProgress(props) {
   const progressData = props.route.params.progress;
-  const sectionItems = progressData.map((progress) => {
+  const sectionItems = progressData.map(progress => {
     return {title: progress.lessonNum + '회차', data: [<Week content={progress}/>]} 
   })
   return (
-    <SectionList
-      sections={sectionItems} 
-      renderItem={({item}) => <Text style={styles.item}>{item}</Text>}
-      renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
-      keyExtractor={(item, index) => index.toString()}
-    />
+    <View>
+      <SectionList
+        sections={sectionItems} 
+        renderItem={({item}) => <Text style={styles.item}>{item}</Text>}
+        renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
+        keyExtractor={(item, index) => index.toString()}
+      />
+      <Button icon={<Ionicons name='add' size={20} />} onPress={props.navigation.navigate('진도추가')} />
+    </View>
+    
   );
 }
 

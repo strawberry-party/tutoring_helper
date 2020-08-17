@@ -3,6 +3,7 @@ import WeeklyProgress from './WeeklyProgress';
 import { createStackNavigator } from '@react-navigation/stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Text, StyleSheet } from 'react-native';
+import CreateProgress from './CreateProgress';
 
 const ProgressStack = createStackNavigator();
 
@@ -28,8 +29,9 @@ export default function ProgressStackScreen (props) {
       headerRight: () => (
         <Text style={styles.studentNameText}>{student.name+' 학생'}</Text>
       )
-    }}>
+    }} initialRouteName='진도관리'>
       <ProgressStack.Screen name='진도관리' component={WeeklyProgress} initialParams={student}/>
+      <ProgressStack.Screen name='진도추가' component={CreateProgress} />
     </ProgressStack.Navigator>
   );
 }
