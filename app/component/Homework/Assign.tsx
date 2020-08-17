@@ -74,10 +74,11 @@ function Assign({
                 flex: 1,
                 borderRightColor: '#bbb',
                 borderRightWidth: 1,
+                marginRight: 10,
               }}>
               태그
             </Text>
-            <Text style={{ fontWeight: '400', flex: 2 }}>{'   '+ title}</Text>
+            <Text style={{ fontWeight: '400', flex: 2 }}>{title}</Text>
           </CardItem>
 
           <CardItem

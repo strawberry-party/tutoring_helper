@@ -2,6 +2,8 @@ import { AssignListType, AssignType } from '../../types/homework';
 import {
   FilterState,
   filterOptions,
+  sorterDirOptions,
+  sorterOptions,
 } from '../../states/assignFilterSorterState';
 import { FlatList, ScrollView, Text, View } from 'react-native';
 import { List, Separator } from 'native-base';
@@ -21,6 +23,8 @@ interface AssignListProps extends AssignListType {
   onRemoveAssign: (id: string) => void;
   showEditModal: (id: string, assign: AssignType) => void;
   activeFilter: FilterState; // 나중에 types 에 filter type 정의해서 import
+  activeSorter;
+  activeSorterDir;
 }
 
 function AssignList({
@@ -33,6 +37,8 @@ function AssignList({
   onRemoveAssign,
 
   activeFilter,
+  activeSorter,
+  activeSorterDir,
 }: AssignListProps) {
   const outDates: Set<string> = new Set();
 
@@ -51,7 +57,37 @@ function AssignList({
     }
   };
 
-  const sorted = _.orderBy(filtered(), ['out'], ['asc']);
+  const getSorter = () => {
+    switch (activeSorter) {
+      case sorterOptions.OUT:
+        console.log('out');
+        return 'out';
+      case sorterOptions.DUE:
+        return 'due';
+      case sorterOptions.TITLE:
+        return 'title';
+      default:
+        console.log('====================================');
+        console.log('SOMETHING WENT WRONG');
+        console.log('====================================');
+    }
+  };
+
+  const getSortDir = () => {
+    switch (activeSorterDir) {
+      case sorterDirOptions.ASC:
+        return 'asc';
+      case sorterDirOptions.DSC:
+        return 'desc';
+      default:
+        console.log('====================================');
+        console.log('SOMETHING WENT WRONG');
+        console.log('====================================');
+    }
+  };
+
+  const sortDir = 'desc';
+  const sorted = _.orderBy(filtered(), [getSorter()], [getSortDir()]);
 
   var items = [];
   for (let index = 0; index < sorted.length; index++) {
@@ -64,9 +100,6 @@ function AssignList({
         </Separator>,
       );
       outDates.add(assign.out.toString());
-      console.log('====================================');
-      console.log(outDates);
-      console.log('====================================');
     }
 
     let comp = (

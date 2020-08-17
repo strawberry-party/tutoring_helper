@@ -5,29 +5,37 @@ import produce from 'immer';
 // action type
 const SET_FILTER = 'SET_FILTER' as const;
 const SET_SORTER = 'SET_SORTER' as const;
+const SET_SORTER_DIR = 'SET_SORTER_DIR' as const; // 정렬 방향
 
+// action constructor
+
+/* -------------------------*/
+// filter
 const ALL = 'ALL' as const;
 const COMPLETED = 'COMPLETED' as const;
 const INCOMPLETED = 'INCOMPLETED' as const;
 
-
-const ASC = 'ASC' as const;
-
-
 export const filterOptions = { ALL, COMPLETED, INCOMPLETED };
 
-const DUE_FIRST = 'DUE_FIRST' as const;
-
-type FilterAction =
+type FilterSorterAction =
   | ReturnType<typeof showAll>
   | ReturnType<typeof showIncomplete>
   | ReturnType<typeof showCompleted>
-  | ReturnType<typeof dueFirst>;
+  | ReturnType<typeof sortDsc>
+  | ReturnType<typeof sortAsc>
+  | ReturnType<typeof sortDue>
+  | ReturnType<typeof sortOut>
+  | ReturnType<typeof sortTitle>;
 
 export type FilterState = typeof ALL | typeof COMPLETED | typeof INCOMPLETED;
-type SorterState = typeof DUE_FIRST;
+type SorterState = typeof DUE | typeof OUT | typeof TITLE;
+type SorterDirState = typeof ASC | typeof DSC;
 
-type FilterSorterState = { filter: FilterState; sorter: SorterState };
+type FilterSorterState = {
+  filter: FilterState;
+  sorter: SorterState;
+  sorterDir: SorterDirState;
+};
 
 // action constructor
 function showAll() {
@@ -38,9 +46,6 @@ function showAll() {
 }
 
 function showCompleted() {
-  console.log('====================================');
-  console.log('showCompleted action constructor invoked');
-  console.log('====================================');
   return {
     type: SET_FILTER,
     filter: COMPLETED,
@@ -54,10 +59,53 @@ function showIncomplete() {
   };
 }
 
-function dueFirst() {
+/* -------------------------*/
+// sorterDir 정렬 방향
+
+const ASC = 'ASC' as const; // 내림차순  (▲)
+const DSC = 'DSC' as const; //  오름차순 (▽)
+
+export const sorterDirOptions = {ASC, DSC};
+
+function sortAsc() {
+  return {
+    type: SET_SORTER_DIR,
+    sorterDir: ASC,
+  };
+}
+
+function sortDsc() {
+  return {
+    type: SET_SORTER_DIR,
+    sorterDir: DSC,
+  };
+}
+
+/* -------------------------*/
+// sorter 정렬자
+const DUE = 'DUE' as const;
+const OUT = 'OUT' as const;
+const TITLE = 'TITLE' as const;
+
+export const sorterOptions = { DUE, OUT, TITLE };
+
+
+function sortDue() {
   return {
     type: SET_SORTER,
-    sorter: DUE_FIRST,
+    sorter: DUE,
+  };
+}
+function sortOut() {
+  return {
+    type: SET_SORTER,
+    sorter: OUT,
+  };
+}
+function sortTitle() {
+  return {
+    type: SET_SORTER,
+    sorter: TITLE,
   };
 }
 
@@ -65,29 +113,38 @@ export const actions = {
   showAll,
   showCompleted,
   showIncomplete,
+
+  sortDsc,
+  sortAsc,
+  sortDue,
+  sortOut,
+  sortTitle,
 };
 
 // reducer
 const initialState: FilterSorterState = {
   filter: ALL,
-  sorter: DUE_FIRST,
+  sorter: OUT,
+  sorterDir: ASC,
 };
 
 const assignFilterSorterReducer = (
   state: FilterSorterState = initialState,
-  action: FilterAction,
+  action: FilterSorterAction,
 ) =>
   produce(state, (draft) => {
     switch (action.type) {
       case SET_FILTER:
-        console.log('filter: '+ action.filter)
         draft.filter = action.filter;
         break;
       case SET_SORTER:
         draft.sorter = action.sorter;
         break;
+      case SET_SORTER_DIR:
+        draft.sorterDir = action.sorterDir;
+        break;
       default:
-        console.log("Something went wrong in assignFilterSorterReducer")
+        console.log('Something went wrong in assignFilterSorterReducer');
         return state;
     }
   });

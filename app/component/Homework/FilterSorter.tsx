@@ -14,46 +14,89 @@ import { StyleSheet } from 'react-native';
 import { filterOptions } from '../../states/assignFilterSorterState';
 import { log } from 'react-native-reanimated';
 
-class Sorter extends Component<any, any> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      sorter: 'default',
-    };
-  }
-  selectSorter(value: string) {
-    this.setState({
-      sorter: value,
-    });
-  }
+interface SorterProps {
+  sorterActions: {
+    sortDue: () => void;
+    sortOut: () => void;
+    sortTitle: () => void;
+  };
+  activeSorter;
 
-  render() {
-    return (
-      <View style={styles.selector}>
-        <Icon name="albums" />
-        <View style={styles.picker}>
-          <Picker
-            mode="dropdown"
-            iosIcon={<Icon style={{ fontSize: 20 }} name="arrow-down" />}
-            style={{ fontSize: 15, color: 'black' }}
-            placeholderIconColor="#007aff"
-            selectedValue={this.state.sorter}
-            onValueChange={this.selectSorter.bind(this)}>
-            <Picker.Item label="마감일" value="key0" />
-            <Picker.Item label="달성률" value="key1" />
-            <Picker.Item label="시작일" value="default" />
-          </Picker>
-        </View>
-        <Button
-          small
-          icon
-          style={{ borderRadius: 10, alignSelf: 'center', backgroundColor: '#bbb', marginRight: 15, width: 45 }}
-          onPress={() => console.log('hello')}>
-          <Icon style={{fontSize: 15}} name="arrow-down" />
-        </Button>
+  sorterDirActions: {
+    sortDsc: () => void;
+    sortAsc: () => void;
+  };
+
+  activeSorterDir;
+}
+function Sorter({
+  sorterActions,
+  activeSorter,
+  sorterDirActions,
+  activeSorterDir,
+}: SorterProps) {
+  const selectSorter = (value: string) => {
+    switch (value) {
+      case 'DUE':
+        sorterActions.sortDue();
+        break;
+      case 'OUT':
+        sorterActions.sortOut();
+      case 'TITLE':
+        sorterActions.sortTitle();
+      default:
+        console.log('something went wrong');
+    }
+  };
+
+  const onChangeSortDir = () => {
+    switch (activeSorterDir) {
+      case 'ASC':
+        sorterDirActions.sortDsc();
+        break;
+      case 'DSC':
+        sorterDirActions.sortAsc();
+        break;
+      default:
+        console.log('something went wrong');
+    }
+  };
+
+  return (
+    <View style={styles.selector}>
+      <Icon name="albums" />
+      <View style={styles.picker}>
+        <Picker
+          mode="dropdown"
+          iosIcon={<Icon style={{ fontSize: 20 }} name="arrow-down" />}
+          style={{ fontSize: 15, color: 'black' }}
+          placeholderIconColor="#007aff"
+          selectedValue={activeSorter}
+          onValueChange={selectSorter}>
+          <Picker.Item label="마감일" value="DUE" />
+          <Picker.Item label="시작일" value="OUT" />
+          <Picker.Item label="제목" value="TITLE" />
+        </Picker>
       </View>
-    );
-  }
+      <Button
+        small
+        icon
+        style={{
+          borderRadius: 10,
+          alignSelf: 'center',
+          backgroundColor: '#bbb',
+          marginRight: 15,
+          width: 45,
+        }}
+        onPress={onChangeSortDir}>
+        {activeSorterDir === 'ASC' ? (
+          <Icon style={{ fontSize: 15 }} name="arrow-down" />
+        ) : (
+          <Icon style={{ fontSize: 15 }} name="arrow-up" />
+        )}
+      </Button>
+    </View>
+  );
 }
 
 interface FilterProps {
@@ -101,11 +144,23 @@ function Filter({ filterActions, activeFilter }: FilterProps) {
   );
 }
 
-export default function FilterSorter({ activeFilter, filterActions }) {
+export default function FilterSorter({
+  activeFilter,
+  filterActions,
+  activeSorterDir,
+  activeSorter,
+  sorterDirActions,
+  sorterActions,
+}) {
   return (
     <View style={styles.container}>
       <Filter activeFilter={activeFilter} filterActions={filterActions} />
-      <Sorter />
+      <Sorter
+        activeSorter={activeSorter}
+        activeSorterDir={activeSorterDir}
+        sorterActions={sorterActions}
+        sorterDirActions={sorterDirActions}
+      />
     </View>
   );
 }
