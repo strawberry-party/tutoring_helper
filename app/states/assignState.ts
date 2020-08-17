@@ -81,14 +81,12 @@ const assignsReducer = (
             var newAssign = Object.assign({}, state.assigns[index], {
               isCompleted: true,
             });
-
-            return {
-              assigns: {
-                ...state.assigns.slice(0, index),
-                newAssign,
-                ...state.assigns.slice(index + 1),
-              },
-            };
+            var newAssigns = [
+              ...state.assigns.slice(0, index),
+              newAssign,
+              ...state.assigns.slice(index + 1),
+            ];
+            return { assigns: newAssigns };
           }
         }
         if (index === draft.assigns.length)
@@ -98,8 +96,15 @@ const assignsReducer = (
       case ASSIGN_INCOMPLETE:
         for (var index = 0; index < draft.assigns.length; index++) {
           if (draft.assigns[index].id === action.id) {
-            draft.assigns[index].isCompleted = false;
-            break;
+            var newAssign = Object.assign({}, state.assigns[index], {
+              isCompleted: false,
+            });
+            var newAssigns = [
+              ...state.assigns.slice(0, index),
+              newAssign,
+              ...state.assigns.slice(index + 1),
+            ];
+            return { assigns: newAssigns };
           }
         }
         if (index === draft.assigns.length)
