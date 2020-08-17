@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Assign from './Assign';
 import { FilterState } from '../../states/assignFilterSorterState';
+import { log } from 'react-native-reanimated';
 
 // presentational component of AssignList
 
@@ -26,37 +27,71 @@ function AssignList({
   onIncompleteAssign,
   onRemoveAssign,
 
-  activeFilter
+  activeFilter,
 }: AssignListProps) {
+  const outDates = new Map();
+
+  assigns.map((assign: AssignType) => outDates.set(assign.out, assign));
+
+  var items = [];
+  for (let [key, item] of outDates) {
+    let comp = (
+      <Assign
+        key={item.id}
+        {...item}
+        onStartEdit={() => {
+          showEditModal(item.id, item);
+        }}
+        onComplete={() => {
+          onCompleteAssign(item.id);
+          console.log(`${item.id} Completed`);
+        }}
+        onIncomplete={() => {
+          onIncompleteAssign(item.id);
+          console.log(`${item.id} canceled Complete`);
+        }}
+        onRemove={() => {
+          onRemoveAssign(item.id);
+          console.log(`${item.id} deleted`);
+        }}
+      />
+    );
+    items.push(comp);
+  }
+
+  const noAssign = (
+    <Text style={{ fontSize: 20 }}> 새 숙제를 추가해보세요</Text>
+  );
+
   return (
     <View style={{ backgroundColor: 'red' }}>
       <Text style={{ fontSize: 15 }}>AssignList</Text>
       <List style={{ backgroundColor: 'white' }}>
-        {assigns.length > 0 ? (
-          assigns.map((item: AssignType) => (
-            <Assign
-              key={item.id}
-              {...item}
-              onStartEdit={() => {
-                showEditModal(item.id, item);
-              }}
-              onComplete={() => {
-                onCompleteAssign(item.id);
-                console.log(`${item.id} Completed`);
-              }}
-              onIncomplete={() => {
-                onIncompleteAssign(item.id);
-                console.log(`${item.id} canceled Complete`);
-              }}
-              onRemove={() => {
-                onRemoveAssign(item.id);
-                console.log(`${item.id} deleted`);
-              }}
-            />
-          ))
-        ) : (
-          <Text style={{ fontSize: 20 }}> 새 숙제를 추가해보세요</Text>
-        )}
+        {assigns.length !== 0
+          ? assigns.map((item: AssignType) =>
+              assigns.map((item: AssignType) => (
+                <Assign
+                  key={item.id}
+                  {...item}
+                  onStartEdit={() => {
+                    showEditModal(item.id, item);
+                  }}
+                  onComplete={() => {
+                    onCompleteAssign(item.id);
+                    console.log(`${item.id} Completed`);
+                  }}
+                  onIncomplete={() => {
+                    onIncompleteAssign(item.id);
+                    console.log(`${item.id} canceled Complete`);
+                  }}
+                  onRemove={() => {
+                    onRemoveAssign(item.id);
+                    console.log(`${item.id} deleted`);
+                  }}
+                />
+              )),
+            )
+          : noAssign}
       </List>
     </View>
   );
