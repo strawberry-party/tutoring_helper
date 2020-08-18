@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import EditButton from './EditButton';
-import Calendar from './Calendar';
+import StudentCalendar from './StudentCalendar';
 import StudentInfo from './StudentInfo';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -9,7 +9,7 @@ class Schedule extends Component {
     return (
       <ScrollView>
         {/* <EditButton /> */}
-        <Calendar />
+        <StudentCalendar />
         <StudentInfo />
       </ScrollView>
     );
