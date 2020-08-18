@@ -1,12 +1,13 @@
 import { Button, Icon, Input, Item } from 'native-base';
-import React, { useState } from 'react';
 import {
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   TouchableHighlight,
   View,
 } from 'react-native';
+import React, { useState } from 'react';
 
 import { AssignType } from '../../types/homework';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -48,14 +49,11 @@ function MyDatePicker({ onConfirm, day, msg }: MyDatePickerProps) {
     hideDatePicker();
   };
   return (
-    <View style={styles.dateContainer}>
+    <Pressable style={styles.dateContainer} onPress={showDatePicker}>
       <Text style={styles.dateHeadline}> {msg} </Text>
       <Text style={styles.dateHeadline}>
-        {day.format('MM월 DD일').toString()}
+        {day.format('MM월 DD일 HH시 mm분').toString()}
       </Text>
-      <Button onPress={showDatePicker}>
-        <Text>Show datePicker</Text>
-      </Button>
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
         mode="datetime"
@@ -63,7 +61,7 @@ function MyDatePicker({ onConfirm, day, msg }: MyDatePickerProps) {
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
       />
-    </View>
+    </Pressable>
   );
 }
 
@@ -125,7 +123,7 @@ export default function FormExample({
             <Text style={styles.headline}> 제목 </Text>
             <Item>
               <Input
-                value={title}
+                value={newTitle}
                 onChange={({ nativeEvent: { text } }) => {
                   setTitle(text);
                 }}
@@ -210,7 +208,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     flexDirection: 'row',
     backgroundColor: '#bbb',
-    margin: 5,
+    marginBottom: 10,
+    height: 40,
   },
 
   buttonContainer: {
