@@ -51,25 +51,20 @@ function AssignList({
       case filterOptions.INCOMPLETED:
         return assigns.filter((assign: AssignType) => !assign.isCompleted);
       default:
-        console.log('====================================');
-        console.log('SOMETHING WENT WRONG');
-        console.log('====================================');
+        console.error('SOMETHING WENT WRONG in AssignList/filtered');
     }
   };
 
   const getSorter = () => {
     switch (activeSorter) {
       case sorterOptions.OUT:
-        console.log('out');
         return 'out';
       case sorterOptions.DUE:
         return 'due';
       case sorterOptions.TITLE:
         return 'title';
       default:
-        console.log('====================================');
-        console.log('SOMETHING WENT WRONG');
-        console.log('====================================');
+        console.error('SOMETHING WENT WRONG in AssignList/getSorter');
     }
   };
 
@@ -80,9 +75,7 @@ function AssignList({
       case sorterDirOptions.DSC:
         return 'desc';
       default:
-        console.log('====================================');
-        console.log('SOMETHING WENT WRONG');
-        console.log('====================================');
+        console.error('SOMETHING WENT WRONG in AssignList/getSortDir');
     }
   };
 

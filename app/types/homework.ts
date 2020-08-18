@@ -16,7 +16,6 @@ export class AssignType {
   status: number;
 
   // print() {
-  // console.log('hello world');
   // }
 
   constructor(

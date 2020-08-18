@@ -9,8 +9,8 @@ import {
 import { Button, Fab, Icon } from 'native-base';
 import React, { useState } from 'react';
 
+import AssignForm from './AssignForm';
 import { AssignType } from '../../types/homework';
-import FormExample from './FormExample';
 import dayjs from 'dayjs';
 
 interface AssignModalProps {
@@ -39,7 +39,7 @@ function AssignModal({
         onRequestClose={onSubmit}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <FormExample
+            <AssignForm
               onSubmit={onSubmit}
               hideModal={hideModal}
               selectedAssignId={selectedAssignId}
