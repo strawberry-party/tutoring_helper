@@ -34,7 +34,7 @@ function Assign({
   onStartEdit,
   id,
 }: AssignProps) {
-  const dueDate = due.format('MM월 DD일까지');
+  const dueDate = due.format('MM월 DD일 HH시 mm분까지');
 
   const cardStyle = isCompleted ? styles.completedCard : styles.incompletedCard;
 
