@@ -1,14 +1,14 @@
-import assignFilterSorterReducer from './assignFilterSorterState'
+import assignFilterSorterReducer from './assignFilterSorterState';
 import assignModalReducer from './assignModalState';
 import assignReducer from './assignState';
-import studentReducer from './studentState'
 import { combineReducers } from 'redux';
+import lessonReducer from './lessonState';
 
 const rootReducer = combineReducers({
   assignModalReducer,
   assignReducer,
   assignFilterSorterReducer,
-  studentReducer,
+  lessonReducer,
 });
 
 export default rootReducer;
