@@ -1,20 +1,25 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
-import { CheckBox } from 'react-native-elements';
 
-function CheckingProgress(props) {
-  const data = props.content;
-  const [state, setState] = useState({data})
-  const checkboxItem = state.data.map(item => <CheckBox key={item.id} title={item.title} checked={item.isDone} onPress={() => {
-    const newState = state.data.map(newItem => newItem.id === item.id ? {...newItem, isDone: !newItem.isDone} : newItem)
-    setState({data: newState}) 
-  }}/>)
-  
-  return (
-    <View>
-      {checkboxItem}
-    </View>
-  );
+import { CheckBox } from 'react-native-elements';
+import { View } from 'react-native';
+
+function CheckingProgress({ contents }) {
+  // TODO: 리덕스 사용하도록 수정
+
+  var checkboxItems: Array<JSX.Element> = [];
+
+  for (let [key, item] of contents) {
+    checkboxItems.push(
+      <CheckBox
+        key={key}
+        title={item.title}
+        checked={item.isDone}
+        onPress={() => console.warn('Not yet implemented')}
+      />,
+    );
+  }
+
+  return <View>{checkboxItems}</View>;
 }
 
 export default CheckingProgress;

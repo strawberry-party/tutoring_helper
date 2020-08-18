@@ -1,12 +1,16 @@
-import React from 'react';
-import { View, Text } from 'react-native';
+import { Text, View } from 'react-native';
 
-function Main(props) {
-  const student = props.route.params;
+import React from 'react';
+import { StudentType } from '../../types/root';
+
+interface MainProps {
+  student: StudentType;
+}
+function Main({student}: MainProps) {
   return (
     <View>
       <Text>과목 : {student.subject}</Text>
-      <Text>시간 : {student.time}</Text>
+      <Text>다음 시간 : {student.nextTime}</Text>
       <Text>장소 : {student.address}</Text>
     </View>
   );

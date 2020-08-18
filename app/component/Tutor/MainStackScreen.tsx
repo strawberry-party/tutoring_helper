@@ -1,33 +1,42 @@
-import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import Main from './Main';
-import headerOptions from '../headerOptions'
+import { StyleSheet, Text } from 'react-native';
+
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { Text, StyleSheet } from 'react-native';
+import Main from './Main';
+import React from 'react';
+import { StudentType } from '../../types/root';
+import { createStackNavigator } from '@react-navigation/stack';
+import headerOptions from '../headerOptions';
 
 const MainStack = createStackNavigator();
+interface MainStackProps {
+  student: StudentType;
+  navigation: any;
+}
 
-function MainStackScreen(props) {
-  const student = props.route.params;
-  
+function MainStackScreen({ student, navigation }: MainStackProps) {
   return (
-    <MainStack.Navigator initialRouteName='메인'>
-      <MainStack.Screen 
-        name='메인'
-        component={Main}
-        initialParams={student}
-        options={{...headerOptions, 
+    <MainStack.Navigator initialRouteName="메인">
+      <MainStack.Screen
+        name="메인"
+        options={{
+          ...headerOptions,
           title: '메인',
           headerLeft: () => (
-            <Ionicons.Button name='menu' size={35} backgroundColor='#e91e63' onPress={() => { 
-              props.navigation.openDrawer() 
-            }} />
+            <Ionicons.Button
+              name="menu"
+              size={35}
+              backgroundColor="#e91e63"
+              onPress={() => {
+                navigation.openDrawer();
+              }}
+            />
           ),
           headerRight: () => (
-            <Text style={styles.studentNameText}>{student.name+' 학생'}</Text>
-          )
-        }}
-      />
+            <Text style={styles.studentNameText}>{student.name + ' 학생'}</Text>
+          ),
+        }}>
+        {props => <Main student={student} />}
+      </MainStack.Screen>
     </MainStack.Navigator>
   );
 }
@@ -37,8 +46,7 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     color: 'white',
     fontSize: 20,
-    // fontWeight: 'bold',
-  }
-}) 
+  },
+});
 
 export default MainStackScreen;

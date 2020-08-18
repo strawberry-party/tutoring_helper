@@ -2,6 +2,7 @@ import { LessonType } from '../types/lesson';
 import { TutorType } from '../types/root';
 import _ from 'lodash';
 import produce from 'immer';
+import { tutor } from '../common/mockData'
 
 // action type
 const LESSON_ADD = 'LESSON_ADD' as const;
@@ -39,16 +40,18 @@ export const editLesson = (
 
 type TutorState = TutorType;
 
-const initialState: TutorState = {
-  studentMap: new Map(),
-  name: '김태형',
-};
+// const initialState: TutorState = {
+//   studentMap: new Map(),
+//   name: '김태형',
+// };
+
+const initialState = tutor;
 
 // reducer
 const lessonReducer = (
   state: TutorState = initialState,
   action: LessonAction,
-) => {
+) =>
   produce(state, (draft) => {
     switch (action.type) {
       case LESSON_ADD:
@@ -69,6 +72,5 @@ const lessonReducer = (
         return state;
     }
   });
-};
 
 export default lessonReducer;
