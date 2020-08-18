@@ -58,7 +58,7 @@ function MyDatePicker({ onConfirm, day, msg }: MyDatePickerProps) {
       </Button>
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
-        mode="date"
+        mode="datetime"
         date={new Date()}
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
