@@ -2,11 +2,7 @@ import * as Animatable from 'react-native-animatable';
 
 import { AssignListType, AssignType } from '../../types/homework';
 import { Button, Card, CardItem, Icon, Text, View } from 'native-base';
-import {
-  Dimensions,
-  Pressable,
-  StyleSheet,
-} from 'react-native';
+import { Dimensions, Pressable, StyleSheet } from 'react-native';
 import React, { useState } from 'react';
 
 import { CheckBox } from 'react-native-elements';
@@ -49,7 +45,6 @@ function Assign({
 
     setTimeout(() => setVisibility(false), 1500);
   };
-
 
   return (
     <SwipeRow onSwipe={onRemove} swipeThreshold={-100}>

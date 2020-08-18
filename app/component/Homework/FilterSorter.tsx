@@ -45,7 +45,7 @@ function Sorter({
       case 'TITLE':
         sorterActions.sortTitle();
       default:
-        console.log('something went wrong');
+        console.error('SOMETHING WENT WRONG in FilterSorter/getSorter');
     }
   };
 
@@ -58,7 +58,7 @@ function Sorter({
         sorterDirActions.sortAsc();
         break;
       default:
-        console.log('something went wrong');
+        console.error('SOMETHING WENT WRONG in FilterSorter/onChangeSortDir');
     }
   };
 
@@ -120,7 +120,7 @@ function Filter({ filterActions, activeFilter }: FilterProps) {
         filterActions.showIncomplete();
         break;
       default:
-        console.log('something went wrong in FilterSorter');
+        console.error('SOMETHING WENT WRONG in FilterSorter/selectFilter');
     }
   };
 

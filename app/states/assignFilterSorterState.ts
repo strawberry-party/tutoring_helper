@@ -1,3 +1,4 @@
+import { AssignListType } from './../types/homework';
 import { Component } from 'react';
 import { log } from 'react-native-reanimated';
 import produce from 'immer';
@@ -65,7 +66,7 @@ function showIncomplete() {
 const ASC = 'ASC' as const; // 내림차순  (▲)
 const DSC = 'DSC' as const; //  오름차순 (▽)
 
-export const sorterDirOptions = {ASC, DSC};
+export const sorterDirOptions = { ASC, DSC };
 
 function sortAsc() {
   return {
@@ -88,7 +89,6 @@ const OUT = 'OUT' as const;
 const TITLE = 'TITLE' as const;
 
 export const sorterOptions = { DUE, OUT, TITLE };
-
 
 function sortDue() {
   return {
@@ -144,8 +144,7 @@ const assignFilterSorterReducer = (
         draft.sorterDir = action.sorterDir;
         break;
       default:
-        console.log('Something went wrong in assignFilterSorterReducer');
-        return state;
+        break;
     }
   });
 
