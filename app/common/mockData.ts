@@ -1,5 +1,7 @@
-import { AssignListType } from '../types/homework';
-import { AssignType } from '../types/homework';
+import { AssignListType, AssignType } from '../types/homework';
+
+import { LessonType } from '../types/lesson';
+import { TutorType } from '../types/root'
 import dayjs from 'dayjs';
 
 // 더미 데이터
@@ -48,4 +50,87 @@ const assign3: AssignType = new AssignType(
 
 export const assignList: AssignListType = {
   assigns: [assign1, assign2, assign3],
+};
+
+const lesson_1: LessonType = {
+  lessonNum: 1,
+  contents: new Map([
+    ['lessonContent_1', { text: '2단원', isCompleted: true }],
+    ['lessonContent_2', { text: '3단원', isCompleted: false }],
+  ]),
+  file: '',
+  test: [{ desc: '1단원', score: 90 }],
+};
+const lesson_2: LessonType = {
+  lessonNum: 2,
+  contents: new Map([
+    ['lessonContent_1', { text: '2단원', isCompleted: true }],
+    ['lessonContent_2', { text: '3단원', isCompleted: false }],
+  ]),
+  file: '',
+  test: [{ desc: '1단원', score: 90 }],
+};
+const lesson_3: LessonType = {
+  lessonNum: 3,
+  contents: new Map([
+    ['lessonContent_1', { text: '2단원', isCompleted: true }],
+    ['lessonContent_2', { text: '3단원', isCompleted: false }],
+  ]),
+  file: '',
+  test: [{ desc: '1단원', score: 90 }],
+};
+
+const lessonMap: Map<string, LessonType> = new Map([
+  ['lesson_1', lesson_1],
+  ['lesson_2', lesson_2],
+  ['lesson_3', lesson_3],
+]);
+
+const tutor: TutorType = {
+  name: '김태형',
+  studentMap: new Map([
+    [
+      'student_1',
+      {
+        name: '김태형',
+        subject: ['수학'],
+        address: '한국',
+        nextTime: '11:00~13:00',
+        lessonMap: lessonMap,
+      },
+    ],
+
+    [
+      'student_2',
+      {
+        name: '최상아',
+        subject: ['과학'],
+        address: '대한민국',
+        nextTime: '10:00~13:00',
+        lessonMap: new Map(),
+      },
+    ],
+
+    [
+      'student_3',
+      {
+        name: '이규빈',
+        subject: ['화학'],
+        address: '한반도',
+        nextTime: '9:00~13:00',
+        lessonMap: new Map(),
+      },
+    ],
+
+    [
+      'student_4',
+      {
+        name: '전승규',
+        subject: ['지구과학'],
+        address: '남한',
+        nextTime: '8:00~13:00',
+        lessonMap: new Map(),
+      },
+    ],
+  ]),
 };
