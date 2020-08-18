@@ -12,8 +12,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Assign from './Assign';
 import _ from 'lodash';
-import dayjs from 'dayjs';
-import { log } from 'react-native-reanimated';
 
 // presentational component of AssignList
 
@@ -51,7 +49,9 @@ function AssignList({
       case filterOptions.INCOMPLETED:
         return assigns.filter((assign: AssignType) => !assign.isCompleted);
       default:
-        console.error('SOMETHING WENT WRONG in AssignList/filtered');
+        console.error(
+          `SOMETHING WENT WRONG in AssignList/filtered ${activeFilter}`,
+        );
     }
   };
 
@@ -64,7 +64,9 @@ function AssignList({
       case sorterOptions.TITLE:
         return 'title';
       default:
-        console.error('SOMETHING WENT WRONG in AssignList/getSorter');
+        console.error(
+          `SOMETHING WENT WRONG in AssignList/getSorter ${activeSorter}`,
+        );
     }
   };
 
