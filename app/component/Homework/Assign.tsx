@@ -1,15 +1,15 @@
+import * as Animatable from 'react-native-animatable';
+
 import { AssignListType, AssignType } from '../../types/homework';
 import { Button, Card, CardItem, Icon, Text, View } from 'native-base';
 import {
   Dimensions,
   Pressable,
   StyleSheet,
-  TouchableNativeFeedback,
 } from 'react-native';
 import React, { useState } from 'react';
 
 import { CheckBox } from 'react-native-elements';
-import Modal from 'react-native-modal';
 import SwipeRow from './SwipeRow';
 
 interface State {
@@ -50,10 +50,6 @@ function Assign({
     setTimeout(() => setVisibility(false), 1500);
   };
 
-  const hideButton = (e) => {
-    // setVisibility(false);
-    setTimeout(() => setVisibility(false), 1500);
-  };
 
   return (
     <SwipeRow onSwipe={onRemove} swipeThreshold={-100}>
@@ -65,8 +61,7 @@ function Assign({
           borderColor: '#eee',
           borderBottomWidth: 0.5,
           padding: 5,
-        }}
-        onTouchEnd={hideButton}>
+        }}>
         <Card style={cardStyle}>
           <Pressable onLongPress={showButton}>
             <View>

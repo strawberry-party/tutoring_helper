@@ -113,17 +113,24 @@ const assignsReducer = (
         break;
 
       case ASSIGN_REMOVE:
-        var index = state.assigns.findIndex(
-          (assign: AssignType) => assign.id === action.id,
-        );
+        for (var index = 0; index < state.assigns.length; index++) {
+          if (state.assigns[index].id === action.id) {
+            break;
+          }
+        }
+
+        if (index === state.assigns.length) {
+          console.log('invalid action with no matching assign id');
+          return state;
+        }
+        
         var newCompleted = state.completed;
         if (state.assigns[index].isCompleted) newCompleted = newCompleted - 1;
-
         return {
-          assigns: {
+          assigns: [
             ...state.assigns.slice(0, index),
             ...state.assigns.slice(index + 1),
-          },
+          ],
           completed: newCompleted,
         };
 
@@ -139,7 +146,7 @@ const assignsReducer = (
         break;
 
       default:
-        break;
+        return state;
     }
   });
 
