@@ -1,7 +1,6 @@
 import { AssignType, SubAssignType } from '../types/homework';
 
 import _ from 'lodash';
-import dayjs from 'dayjs';
 import produce from 'immer';
 
 // action type
