@@ -86,7 +86,7 @@ const lessonMap: Map<string, LessonType> = new Map([
   ['lesson_3', lesson_3],
 ]);
 
-const tutor: TutorType = {
+export const tutor: TutorType = {
   name: '김태형',
   studentMap: new Map([
     [

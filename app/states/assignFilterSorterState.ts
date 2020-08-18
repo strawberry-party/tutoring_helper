@@ -1,6 +1,3 @@
-import { AssignListType } from './../types/homework';
-import { Component } from 'react';
-import { log } from 'react-native-reanimated';
 import produce from 'immer';
 
 // action type

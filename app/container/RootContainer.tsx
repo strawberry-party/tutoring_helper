@@ -1,37 +1,50 @@
+import { connect, useSelector } from 'react-redux';
+
 import DrawerContent from '../component/DrawerContent';
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
+import { RootState } from '../states';
+import { StudentType } from '../types/root';
 import Tabs from '../component/Tutor/Tabs';
-import { connect } from 'react-redux';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { navigationRef } from '../component/RootNavigation';
 
 const Drawer = createDrawerNavigator();
 
 function RootContainer(props) {
-  const students = props.students;
-  const drawerItem = students.map((student) => (
-    <Drawer.Screen
-      key={student.name}
-      name={student.name + ' 학생'}
-      component={Tabs}
-      initialParams={student}
-    />
-  ));
+  const selectedStudent: StudentType = useSelector((state: RootState) => {
+    // console.warn(
+    //   state.lessonReducer.studentMap.get(state.tutorReducer.selectedStudentId)
+    //     .name,
+    // );
+
+    return state.lessonReducer.studentMap.get(
+      state.tutorReducer.selectedStudentId,
+    );
+  });
+
   return (
     <NavigationContainer ref={navigationRef}>
       <Drawer.Navigator
         initialRouteName="김태형 학생"
         drawerContent={(props) => <DrawerContent {...props} />}>
-        {drawerItem}
+        <Drawer.Screen
+          key={selectedStudent.name}
+          name={selectedStudent.name + ' 학생'}>
+          {(props) => <Tabs student={selectedStudent} />}
+        </Drawer.Screen>
       </Drawer.Navigator>
     </NavigationContainer>
   );
 }
 
-
-export default connect(function (state) {
+const mapStateToProps = (state) => {
   return {
-    students: state.studentReducer.studentArray,
+    studentMap: state.lessonReducer.studentMap,
+    selectedStudentId: state.tutorReducer.selectedStudentId,
   };
-}, null)(RootContainer);
+};
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RootContainer);
