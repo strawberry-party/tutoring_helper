@@ -7,3 +7,5 @@ INFO: Unsupported notification method: $/setTraceNotification
 INFO: Unsupported notification method: $/setTraceNotification
 8월 17, 2020 11:29:17 오후 org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
 INFO: Unsupported notification method: $/setTraceNotification
+8월 18, 2020 12:36:26 오전 org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+INFO: Unsupported notification method: $/setTraceNotification
