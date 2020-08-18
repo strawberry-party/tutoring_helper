@@ -29,9 +29,10 @@ interface AssignForm {
 interface MyDatePickerProps {
   day: dayjs.Dayjs;
   onConfirm: (date: Date) => void;
+  msg: string;
 }
 
-function MyDatePicker({ onConfirm, day }: MyDatePickerProps) {
+function MyDatePicker({ onConfirm, day, msg }: MyDatePickerProps) {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   const showDatePicker = () => {
@@ -43,13 +44,12 @@ function MyDatePicker({ onConfirm, day }: MyDatePickerProps) {
   };
 
   const handleConfirm = (date: Date) => {
-    console.warn('날짜 선택: ', dayjs(date).format('MM/DD').toString());
     onConfirm(date);
     hideDatePicker();
   };
   return (
     <View style={styles.dateContainer}>
-      <Text style={styles.dateHeadline}>시작</Text>
+      <Text style={styles.dateHeadline}> {msg} </Text>
       <Text style={styles.dateHeadline}>
         {day.format('MM월 DD일').toString()}
       </Text>
@@ -105,8 +105,14 @@ export default function FormExample({
     hideModal();
   };
 
-  const onConfirmOut = (date: Date) => setOut(dayjs(date));
-  const onConfirmDue = (date: Date) => setDue(dayjs(date));
+  const onConfirmOut = (date: Date) => {
+    console.warn('날짜 선택(시작): ', dayjs(date).format('MM/DD').toString());
+    setOut(dayjs(date));
+  };
+  const onConfirmDue = (date: Date) => {
+    console.warn('날짜 선택(마감): ', dayjs(date).format('MM/DD').toString());
+    setDue(dayjs(date));
+  };
 
   return (
     <View style={styles.container}>
@@ -130,8 +136,16 @@ export default function FormExample({
           <View style={styles.inputContainer}>
             <Text style={styles.headline}> 기한 </Text>
             <View style={{ padding: 10 }}>
-              <MyDatePicker onConfirm={onConfirmOut} day={out} />
-              <MyDatePicker onConfirm={onConfirmDue} day={due} />
+              <MyDatePicker
+                onConfirm={onConfirmOut}
+                day={newOut}
+                msg={'시작'}
+              />
+              <MyDatePicker
+                onConfirm={onConfirmDue}
+                day={newDue}
+                msg={'마감'}
+              />
             </View>
           </View>
         </View>
@@ -176,7 +190,7 @@ const styles = StyleSheet.create({
     padding: 10,
     justifyContent: 'flex-start',
   },
-  
+
   dateHeadline: {
     fontSize: 16,
     fontWeight: '700',
@@ -190,7 +204,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#bbb',
   },
-  
+
   dateContainer: {
     minWidth: 150,
     justifyContent: 'flex-start',
@@ -198,7 +212,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#bbb',
     margin: 5,
   },
-  
+
   buttonContainer: {
     flex: 1,
     justifyContent: 'space-between',
