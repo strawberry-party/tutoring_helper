@@ -2,6 +2,7 @@ import _ from 'lodash';
 import dayjs from 'dayjs';
 
 // TODO: print 내장 메소드 만들기
+// TODO: assigns 자료구조 Map으로 바꾸기
 
 export interface AssignListType {
   assigns: Array<AssignType>;
@@ -30,10 +31,17 @@ export class AssignType {
     this.due = due;
     this.out = out;
     this.isCompleted = isCompleted;
-    this.status = 0;    
+    this.status = 0;
     // this.id = title;
 
     this.id = 'none'; //TODO: 오류
     // this.print = AssignType.prototype.print;
   }
 }
+
+export interface Tag {
+  id: string;
+  color: string;
+  name: string;
+}
+

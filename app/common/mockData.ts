@@ -1,7 +1,8 @@
 import { AssignListType, AssignType } from '../types/homework';
 
 import { LessonType } from '../types/lesson';
-import { TutorType } from '../types/root'
+import { Tag } from './../types/homework';
+import { TutorType } from '../types/root';
 import dayjs from 'dayjs';
 
 // 더미 데이터
@@ -78,6 +79,12 @@ const lesson_3: LessonType = {
   ]),
   file: '',
   test: [{ desc: '1단원', score: 90 }],
+};
+
+const tag1: Tag = {
+  id: 'tag_1',
+  color: '#bbb',
+  name: '수학의 정석',
 };
 
 const lessonMap: Map<string, LessonType> = new Map([

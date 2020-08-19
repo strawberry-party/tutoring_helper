@@ -52,11 +52,11 @@ function MyDatePicker({ onConfirm, day, msg }: MyDatePickerProps) {
     <Pressable style={styles.dateContainer} onPress={showDatePicker}>
       <Text style={styles.dateHeadline}> {msg} </Text>
       <Text style={styles.dateHeadline}>
-        {day.format('MM월 DD일 HH시 mm분').toString()}
+        {day.format('MM월 DD일').toString()}
       </Text>
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
-        mode="datetime"
+        mode="date"
         date={new Date()}
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}

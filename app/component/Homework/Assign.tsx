@@ -6,7 +6,9 @@ import { Dimensions, Pressable, StyleSheet } from 'react-native';
 import React, { useState } from 'react';
 
 import { CheckBox } from 'react-native-elements';
+import { Chip } from 'react-native-paper';
 import SwipeRow from './SwipeRow';
+import { log } from 'react-native-reanimated';
 
 interface State {
   isEditing: boolean;
@@ -34,7 +36,7 @@ function Assign({
   onStartEdit,
   id,
 }: AssignProps) {
-  const dueDate = due.format('MM월 DD일 HH시 mm분까지');
+  const dueDate = due.format('MM월 DD일까지');
 
   const cardStyle = isCompleted ? styles.completedCard : styles.incompletedCard;
 
@@ -71,16 +73,17 @@ function Assign({
                   alignItems: 'center',
                   borderRadius: 20,
                 }}>
-                <Text
+                <Chip
                   style={{
-                    fontWeight: '700',
-                    flex: 1,
                     borderRightColor: '#bbb',
                     borderRightWidth: 1,
                     marginRight: 10,
-                  }}>
-                  태그
-                </Text>
+                    backgroundColor: 'pink',
+                  }}
+                  onPress={() => console.log('뭔가 바꾸시겠습니까')}>
+                  수학
+                </Chip>
+
                 <Text style={{ fontWeight: '400', flex: 2 }}>{title}</Text>
               </CardItem>
 
@@ -92,8 +95,16 @@ function Assign({
                   justifyContent: 'space-between',
                   borderRadius: 20,
                 }}>
-                <Text style={{ flex: 4 }}> </Text>
-
+                <Chip
+                  style={{
+                    borderRightColor: '#bbb',
+                    borderRightWidth: 1,
+                    marginRight: 10,
+                    backgroundColor: '#bbb',
+                  }}
+                  onPress={() => console.log('뭔가 바꾸시겠습니까')}>
+                  수학의 정석
+                </Chip>
                 <Text> {dueDate} </Text>
               </CardItem>
               {buttonVisible && (
