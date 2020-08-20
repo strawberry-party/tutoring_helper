@@ -1,5 +1,6 @@
 import { enableMapSet, immerable } from 'immer';
 
+import { TagType } from './root';
 import _ from 'lodash';
 import dayjs from 'dayjs';
 
@@ -29,7 +30,6 @@ export class AssignListType implements Assigns {
 export class AssignStateType implements Assigns {
   assignMap: Map<string, AssignType>;
   completed: number;
-  toggle: boolean;
 
   [immerable] = true;
   constructor(
@@ -38,7 +38,6 @@ export class AssignStateType implements Assigns {
   ) {
     this.assignMap = assignMap;
     this.completed = completed;
-    this.toggle = false;
   }
 }
 
@@ -48,7 +47,7 @@ export class AssignType {
   due: dayjs.Dayjs;
   out: dayjs.Dayjs;
   isCompleted: boolean;
-  status: number;
+  tag: TagType;
 
   // print() {
   // }
@@ -58,19 +57,13 @@ export class AssignType {
     due: dayjs.Dayjs = dayjs(),
     out: dayjs.Dayjs = dayjs(),
     isCompleted: boolean = false,
+    tag: TagType = new TagType(),
   ) {
     this.text = text;
     this.due = due;
     this.out = out;
     this.isCompleted = isCompleted;
-    this.status = 0;
-
+    this.tag = tag;
     // this.print = AssignType.prototype.print;
   }
-}
-
-export interface Tag {
-  id: string;
-  color: string;
-  name: string;
 }

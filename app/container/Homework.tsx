@@ -13,6 +13,7 @@ import { AssignType } from '../types/homework';
 import FilterSorter from '../component/Homework/FilterSorter';
 import React from 'react';
 import { RootState } from '../states';
+import { TagType } from '../types/root';
 import { actions as assignActions } from '../states/assignState';
 import { actions as filterSorterActions } from '../states/assignFilterSorterState';
 import { log } from 'react-native-reanimated';
@@ -43,6 +44,11 @@ function HomeworkContainer({
   sortOut,
   sortTitle,
 }: HomeworkContainerProps) {
+
+  // const tagMap: Map<string, TagType> = useSelector(
+  //   (state: RootState) => state.tagReducer.tagMap,
+  // );
+  
   const assignMap: Map<string, AssignType> = useSelector(
     (state: RootState) => state.assignReducer.assignMap,
   );

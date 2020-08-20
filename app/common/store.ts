@@ -12,9 +12,7 @@ const store = createStore(reducers, applyMiddleware(logger));
 
 for (let [key, assign] of assignList.assignMap) {
   store.dispatch(addAssign(assign));
-  
-  console.log(`Added Assign ${assign}`);
-  
+  console.warn(assign.tag.name);
 }
 // TODO: firebase 도입한 다음에는 전체 data를 import 하고 dispatch
 

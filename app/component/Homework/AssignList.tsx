@@ -100,6 +100,7 @@ function AssignList({
   var items: Array<JSX.Element> = [];
 
   for (const [key, assign] of sorted) {
+
     var out: string = assign.out.format('YYYY/MM/DD').toString();
     if (!outDates.has(out)) {
       items.push(

@@ -1,7 +1,7 @@
 import { AssignListType, AssignType } from '../types/homework';
 
 import { LessonType } from '../types/lesson';
-import { Tag } from './../types/homework';
+import { TagType } from './../types/root';
 import { TutorType } from '../types/root';
 import dayjs from 'dayjs';
 
@@ -15,14 +15,19 @@ const DEFAULT_DATE = dayjs('2020-08-13');
 const assignMap = new Map<string, AssignType>();
 
 [0, 1, 2, 3].map((i: number) => assignMap.set(i.toString(), getAssign(i)));
+const tag1: TagType = new TagType('수학', { backgroundColor: '#bbb' });
 
 function getAssign(i: number) {
-  return new AssignType(
+  var newAssign: AssignType = new AssignType(
     `Assign ${i + 1}`,
     dayjs('2020-01-01'), // TODO: 에러: 다 지금 날짜로 됨
     dayjs('2020-01-01'),
     false,
+    // tag1 // README: 이렇게 하면 왠지 안됨
+    new TagType('수학', { backgroundColor: '#bbb' }),
   );
+  console.warn(`${newAssign.tag.name} in getAssign`);
+  return newAssign;
 }
 
 export const assignList: AssignListType = new AssignListType(assignMap);
@@ -83,12 +88,6 @@ const lesson_3: LessonType = {
   test: [{ desc: '1단원', score: 90 }],
 };
 
-const tag1: Tag = {
-  id: 'tag_1',
-  color: '#bbb',
-  name: '수학의 정석',
-};
-
 const lessonMap: Map<string, LessonType> = new Map([
   ['lesson_1', lesson_1],
   ['lesson_2', lesson_2],
@@ -96,6 +95,7 @@ const lessonMap: Map<string, LessonType> = new Map([
 ]);
 
 export const tutor: TutorType = {
+  tagMap: new Map([['tag_1', tag1]]),
   name: '김태형',
   studentMap: new Map([
     [

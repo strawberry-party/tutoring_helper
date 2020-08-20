@@ -56,8 +56,7 @@ export const actions = {
 };
 
 // reducer
-const now = dayjs();
-const defaultAssign: AssignType = new AssignType('', '', now);
+const defaultAssign: AssignType = new AssignType();
 
 const initialState: ModalState = {
   addModalVisible: false,

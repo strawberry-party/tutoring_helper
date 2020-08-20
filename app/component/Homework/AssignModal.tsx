@@ -58,7 +58,6 @@ interface AddAssignModalProps {
   hideAddModal: () => void;
   addAssign: (assign: AssignType) => void;
 }
-const now: dayjs.Dayjs = dayjs();
 const defaultAssign: AssignType = new AssignType();
 
 export function AddAssignModal({

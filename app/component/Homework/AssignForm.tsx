@@ -77,10 +77,7 @@ export default function FormExample({
   const [newDue, setDue] = useState(due);
   const [newOut, setOut] = useState(out);
 
-  const handleSubmit = (e) => {
-    console.log(typeof e);
-    e.preventDefault();
-
+  const handleSubmit = () => {
     const newAssign: AssignType = {
       ...selectedAssign,
       text: newText,
@@ -104,11 +101,9 @@ export default function FormExample({
   };
 
   const onConfirmOut = (date: Date) => {
-    console.warn('날짜 선택(시작): ', dayjs(date).format('MM/DD').toString());
     setOut(dayjs(date));
   };
   const onConfirmDue = (date: Date) => {
-    console.warn('날짜 선택(마감): ', dayjs(date).format('MM/DD').toString());
     setDue(dayjs(date));
   };
 
@@ -151,11 +146,12 @@ export default function FormExample({
 
       <View style={styles.buttonContainer}>
         <Button
+          icon
           style={{
             ...styles.button,
             backgroundColor: '#bbb',
           }}
-          onPressIn={handleSubmit}>
+          onPress={handleSubmit}>
           <Icon name="save-outline" />
         </Button>
 

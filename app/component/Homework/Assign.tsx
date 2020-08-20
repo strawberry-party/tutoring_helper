@@ -2,19 +2,17 @@ import * as Animatable from 'react-native-animatable';
 
 import { AssignListType, AssignType } from '../../types/homework';
 import { Button, Card, CardItem, Icon, Text, View } from 'native-base';
-import { Dimensions, Pressable, StyleSheet } from 'react-native';
+import {
+  Dimensions,
+  Pressable,
+  StyleSheet,
+  TouchableHighlight,
+} from 'react-native';
 import React, { useState } from 'react';
 
 import { CheckBox } from 'react-native-elements';
 import { Chip } from 'react-native-paper';
 import SwipeRow from './SwipeRow';
-import { log } from 'react-native-reanimated';
-
-interface State {
-  isEditing: boolean;
-  assignValue: AssignType;
-  isOpened: boolean;
-}
 
 interface AssignProps extends AssignType {
   onComplete: () => void;
@@ -29,15 +27,13 @@ function Assign({
   due,
   out,
   isCompleted,
-  status,
-
+  tag,
   onComplete,
   onIncomplete,
   onRemove,
   onStartEdit,
   id,
 }: AssignProps) {
-
   const dueDate = due.format('MM월 DD일까지');
 
   const cardStyle = isCompleted ? styles.completedCard : styles.incompletedCard;
@@ -52,6 +48,7 @@ function Assign({
 
   return (
     <SwipeRow onSwipe={onRemove} swipeThreshold={-100}>
+      {/* <TouchableHighlight> */}
       <View
         style={{
           flexDirection: 'row',
@@ -76,14 +73,11 @@ function Assign({
                   borderRadius: 20,
                 }}>
                 <Chip
-                  style={{
-                    borderRightColor: '#bbb',
-                    borderRightWidth: 1,
-                    marginRight: 10,
-                    backgroundColor: 'pink',
-                  }}
+                  style={[tag.style, {
+                      marginRight: 10,
+                    }]}
                   onPress={() => console.log('뭔가 바꾸시겠습니까')}>
-                  수학
+                  {tag.name}
                 </Chip>
 
                 <Text style={{ fontWeight: '400', flex: 2 }}>{text}</Text>
@@ -97,7 +91,8 @@ function Assign({
                   justifyContent: 'space-between',
                   borderRadius: 20,
                 }}>
-                <Chip
+                <Text></Text>
+                {/* <Chip
                   style={{
                     borderRightColor: '#bbb',
                     borderRightWidth: 1,
@@ -106,7 +101,7 @@ function Assign({
                   }}
                   onPress={() => console.log('뭔가 바꾸시겠습니까')}>
                   수학의 정석
-                </Chip>
+                </Chip> */}
                 <Text> {dueDate} </Text>
               </CardItem>
               {buttonVisible && (
@@ -148,6 +143,7 @@ function Assign({
           </Button>
         </View>
       </View>
+      {/* </TouchableHighlight> */}
     </SwipeRow>
   );
 }
