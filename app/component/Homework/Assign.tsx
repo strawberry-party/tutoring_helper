@@ -21,10 +21,11 @@ interface AssignProps extends AssignType {
   onIncomplete: () => void;
   onRemove: () => void;
   onStartEdit: () => void;
+  id: string;
 }
 
 function Assign({
-  title,
+  text,
   due,
   out,
   isCompleted,
@@ -36,6 +37,7 @@ function Assign({
   onStartEdit,
   id,
 }: AssignProps) {
+
   const dueDate = due.format('MM월 DD일까지');
 
   const cardStyle = isCompleted ? styles.completedCard : styles.incompletedCard;
@@ -84,7 +86,7 @@ function Assign({
                   수학
                 </Chip>
 
-                <Text style={{ fontWeight: '400', flex: 2 }}>{title}</Text>
+                <Text style={{ fontWeight: '400', flex: 2 }}>{text}</Text>
               </CardItem>
 
               <CardItem

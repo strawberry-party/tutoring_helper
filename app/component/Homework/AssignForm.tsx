@@ -72,8 +72,8 @@ export default function FormExample({
   hideModal,
   selectedAssignId,
 }: AssignForm) {
-  const { title, due, out } = selectedAssign;
-  const [newTitle, setTitle] = useState(title);
+  const { text, due, out } = selectedAssign;
+  const [newText, setText] = useState(text);
   const [newDue, setDue] = useState(due);
   const [newOut, setOut] = useState(out);
 
@@ -83,7 +83,7 @@ export default function FormExample({
 
     const newAssign: AssignType = {
       ...selectedAssign,
-      title: newTitle,
+      text: newText,
       out: newOut,
       due: newDue,
     };
@@ -123,9 +123,9 @@ export default function FormExample({
             <Text style={styles.headline}> 제목 </Text>
             <Item>
               <Input
-                value={newTitle}
+                value={newText}
                 onChange={({ nativeEvent: { text } }) => {
-                  setTitle(text);
+                  setText(text);
                 }}
                 style={{ fontSize: 18 }}
               />

@@ -2,6 +2,7 @@ import HomeworkContainer from './Homework';
 import { Provider } from 'react-redux';
 import React from 'react';
 import RootContainer from './RootContainer';
+import { enableMapSet } from 'immer';
 import store from '../common/store';
 
 function App() {

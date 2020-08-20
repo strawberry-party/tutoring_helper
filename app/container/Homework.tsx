@@ -15,6 +15,7 @@ import React from 'react';
 import { RootState } from '../states';
 import { actions as assignActions } from '../states/assignState';
 import { actions as filterSorterActions } from '../states/assignFilterSorterState';
+import { log } from 'react-native-reanimated';
 import { actions as modalVisibilityActions } from '../states/assignModalState';
 
 type HomeworkContainerProps = any; // TODO: 타입 정의, any 대체하기
@@ -35,17 +36,17 @@ function HomeworkContainer({
   showAll,
   showCompleted,
   showIncomplete,
-  
+
   sortDsc,
   sortAsc,
   sortDue,
   sortOut,
   sortTitle,
-  
 }: HomeworkContainerProps) {
-  const assigns: Array<AssignType> = useSelector(
-    (state: RootState) => state.assignReducer.assigns,
+  const assignMap: Map<string, AssignType> = useSelector(
+    (state: RootState) => state.assignReducer.assignMap,
   );
+
 
   const addModalVisible: boolean = useSelector(
     (state: RootState) => state.assignModalReducer.addModalVisible,
@@ -73,7 +74,7 @@ function HomeworkContainer({
 
   const sorterDir = useSelector(
     (state: RootState) => state.assignFilterSorterReducer.sorterDir,
-  )
+  );
 
   return (
     <SafeAreaView
@@ -88,11 +89,11 @@ function HomeworkContainer({
         <View style={{ backgroundColor: 'pink' }}>
           <FilterSorter
             activeFilter={filter}
-            filterActions={{showAll, showCompleted, showIncomplete}}
+            filterActions={{ showAll, showCompleted, showIncomplete }}
             activeSorter={sorter}
             activeSorterDir={sorterDir}
-            sorterDirActions={{ sortDsc, sortAsc}}
-            sorterActions={{ sortDue, sortOut, sortTitle}}
+            sorterDirActions={{ sortDsc, sortAsc }}
+            sorterActions={{ sortDue, sortOut, sortTitle }}
           />
         </View>
 
@@ -107,7 +108,7 @@ function HomeworkContainer({
               borderWidth: 3,
             }}>
             <AssignList
-              assigns={assigns}
+              assignMap={assignMap}
               showEditModal={showEditModal}
               onCompleteAssign={completeAssign}
               onIncompleteAssign={incompleteAssign}
@@ -115,7 +116,7 @@ function HomeworkContainer({
               activeFilter={filter}
               activeSorter={sorter}
               activeSorterDir={sorterDir}
-
+              completed={0}
             />
           </View>
         </ScrollView>

@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Assign from './Assign';
 import _ from 'lodash';
+import dayjs from 'dayjs';
 
 // presentational component of AssignList
 
@@ -23,10 +24,13 @@ interface AssignListProps extends AssignListType {
   activeFilter: FilterState; // 나중에 types 에 filter type 정의해서 import
   activeSorter;
   activeSorterDir;
+  assignMap: Map<string, AssignType>;
 }
 
+const noAssign = <Text style={{ fontSize: 20 }}> 새 숙제를 추가해보세요</Text>;
+
 function AssignList({
-  assigns,
+  assignMap,
 
   showEditModal, // showEditModal
 
@@ -38,16 +42,23 @@ function AssignList({
   activeSorter,
   activeSorterDir,
 }: AssignListProps) {
-  const outDates: Set<string> = new Set();
-
-  const filtered = () => {
+  const getFiltered = () => {
     switch (activeFilter) {
       case filterOptions.ALL:
-        return assigns;
+        return assignMap;
       case filterOptions.COMPLETED:
-        return assigns.filter((assign: AssignType) => assign.isCompleted);
+        var newAssignMap = new Map<string, AssignType>();
+        for (let [key, assign] of assignMap) {
+          if (assign.isCompleted) newAssignMap.set(key, assign);
+        }
+        return newAssignMap;
+
       case filterOptions.INCOMPLETED:
-        return assigns.filter((assign: AssignType) => !assign.isCompleted);
+        var newAssignMap = new Map<string, AssignType>();
+        for (let [key, assign] of assignMap) {
+          if (!assign.isCompleted) newAssignMap.set(key, assign);
+        }
+        return newAssignMap;
       default:
         console.error(
           `SOMETHING WENT WRONG in AssignList/filtered ${activeFilter}`,
@@ -81,55 +92,53 @@ function AssignList({
     }
   };
 
-  const sortDir = 'desc';
-  const sorted = _.orderBy(filtered(), [getSorter()], [getSortDir()]);
+  // TODO: assignMap에서 sort 구현
+  // const getSorted = _.orderBy(filtered(), [getSorter()], [getSortDir()]);
+  const sorted: Map<string, AssignType> = getFiltered();
 
-  var items = [];
-  for (let index = 0; index < sorted.length; index++) {
-    let assign = sorted[index];
+  const outDates: Set<string> = new Set();
+  var items: Array<JSX.Element> = [];
 
-    if (!outDates.has(assign.out.toString())) {
+  for (const [key, assign] of sorted) {
+    var out: string = assign.out.format('YYYY/MM/DD').toString();
+    if (!outDates.has(out)) {
       items.push(
-        <Separator bordered key={assign.out.toString()}>
-          <Text>{assign.out.format('MM월 DD일').toString()}</Text>
+        <Separator bordered key={out}>
+          <Text>{assign.out.format('MM월 DD일')}</Text>
         </Separator>,
       );
-      outDates.add(assign.out.toString());
+      outDates.add(out);
     }
 
     let comp = (
       <Assign
-        key={assign.id}
+        key={key}
+        id={key}
         {...assign}
         onStartEdit={() => {
-          showEditModal(assign.id, assign);
+          showEditModal(key, assign);
         }}
         onComplete={() => {
-          onCompleteAssign(assign.id);
-          console.log(`${assign.id} Completed`);
+          onCompleteAssign(key);
+          console.log(`${key} Completed`);
         }}
         onIncomplete={() => {
-          onIncompleteAssign(assign.id);
-          console.log(`${assign.id} canceled Complete`);
+          onIncompleteAssign(key);
+          console.log(`${key} canceled Complete`);
         }}
         onRemove={() => {
-          onRemoveAssign(assign.id);
-          console.log(`${assign.id} deleted`);
+          onRemoveAssign(key);
+          console.log(`${key} deleted`);
         }}
       />
     );
     items.push(comp);
   }
-
-  const noAssign = (
-    <Text style={{ fontSize: 20 }}> 새 숙제를 추가해보세요</Text>
-  );
-
   return (
     <View style={{ backgroundColor: 'red' }}>
       <Text style={{ fontSize: 15 }}>AssignList</Text>
       <List style={{ backgroundColor: 'white' }}>
-        {assigns.length !== 0 ? items : noAssign}
+        {Array.from(assignMap.keys()).length === 0 ? noAssign : items}
       </List>
     </View>
   );

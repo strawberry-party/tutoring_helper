@@ -1,3 +1,4 @@
+import { AssignStateType } from './../types/homework';
 import { AssignType } from '../types/homework';
 import _ from 'lodash';
 import produce from 'immer';
@@ -16,18 +17,14 @@ type AssignAction =
   | ReturnType<typeof removeAssign>
   | ReturnType<typeof editAssign>;
 
-type AssignListState = {
-  assigns: Array<AssignType>;
-  completed: number;
-};
-
-const initialState: AssignListState = { assigns: [], completed: 0 };
+const initialState: AssignStateType = new AssignStateType();
 
 // action constructor
 // assign CRUD
 export const addAssign = (assign: AssignType) => ({
   type: ASSIGN_ADD,
-  assign: { ...assign, id: _.uniqueId('assign_') },
+  assign,
+  id: _.uniqueId('assign_'),
 });
 
 export const completeAssign = (id: string) => ({
@@ -66,82 +63,34 @@ export const actions = {
 // TODO: 깊은 곳까지 접근하기 편하도록 immer.js 사용할것
 
 const assignsReducer = (
-  state: AssignListState = initialState,
+  state: AssignStateType = initialState,
   action: AssignAction,
 ) =>
   produce(state, (draft) => {
     switch (action.type) {
       case ASSIGN_ADD:
-        draft.assigns.push(action.assign);
+        draft.assignMap.set(action.id, action.assign);
         break;
 
       case ASSIGN_COMPLETE:
-        for (var index = 0; index < draft.assigns.length; index++) {
-          if (draft.assigns[index].id === action.id) {
-            var newAssign = Object.assign({}, state.assigns[index], {
-              isCompleted: true,
-            });
-            var newAssigns = [
-              ...state.assigns.slice(0, index),
-              newAssign,
-              ...state.assigns.slice(index + 1),
-            ];
-            return { assigns: newAssigns, completed: state.completed + 1 };
-          }
-        }
-        if (index === draft.assigns.length)
-          console.log('invalid action with no matching assign id');
-        break;
+        var newAssignMap = new Map<string, AssignType>(draft.assignMap);
+        newAssignMap.get(action.id).isCompleted = true;
+        return { ...draft, assignMap: newAssignMap };
 
       case ASSIGN_INCOMPLETE:
-        for (var index = 0; index < draft.assigns.length; index++) {
-          if (draft.assigns[index].id === action.id) {
-            var newAssign = Object.assign({}, state.assigns[index], {
-              isCompleted: false,
-            });
-            var newAssigns = [
-              ...state.assigns.slice(0, index),
-              newAssign,
-              ...state.assigns.slice(index + 1),
-            ];
-            return { assigns: newAssigns, completed: state.completed + 1 };
-          }
-        }
-        if (index === draft.assigns.length)
-          console.log('invalid action with no matching assign id');
-        break;
+        var newAssignMap = new Map<string, AssignType>(draft.assignMap);
+        newAssignMap.get(action.id).isCompleted = false;
+        return { ...draft, assignMap: newAssignMap };
 
       case ASSIGN_REMOVE:
-        for (var index = 0; index < state.assigns.length; index++) {
-          if (state.assigns[index].id === action.id) {
-            break;
-          }
-        }
+        if (draft.assignMap.get(action.id).isCompleted) draft.completed -= 1;
 
-        if (index === state.assigns.length) {
-          console.log('invalid action with no matching assign id');
-          return state;
-        }
-        
-        var newCompleted = state.completed;
-        if (state.assigns[index].isCompleted) newCompleted = newCompleted - 1;
-        return {
-          assigns: [
-            ...state.assigns.slice(0, index),
-            ...state.assigns.slice(index + 1),
-          ],
-          completed: newCompleted,
-        };
+        if (!draft.assignMap.delete(action.id))
+          console.error('invalid action with no matching assign id');
+        break;
 
       case ASSIGN_EDIT:
-        for (var index = 0; index < draft.assigns.length; index++) {
-          if (draft.assigns[index].id === action.id) {
-            draft.assigns[index] = action.assign;
-            break;
-          }
-        }
-        if (index === draft.assigns.length)
-          console.log('invalid action with no matching assign id');
+        draft.assignMap.set(action.id, action.assign);
         break;
 
       default:
