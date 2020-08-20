@@ -46,6 +46,10 @@ function Assign({
     setTimeout(() => setVisibility(false), 1500);
   };
 
+  console.log('====================================');
+  console.log(`${id} ${isCompleted}`);
+  console.log('====================================');
+
   return (
     <SwipeRow onSwipe={onRemove} swipeThreshold={-100}>
       {/* <TouchableHighlight> */}

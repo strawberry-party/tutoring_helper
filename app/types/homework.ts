@@ -49,9 +49,6 @@ export class AssignType {
   isCompleted: boolean;
   tag: TagType;
 
-  // print() {
-  // }
-
   constructor(
     text: string = '기본 텍스트',
     due: dayjs.Dayjs = dayjs(),

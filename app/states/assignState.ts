@@ -73,14 +73,22 @@ const assignsReducer = (
         break;
 
       case ASSIGN_COMPLETE:
-        var newAssignMap = new Map<string, AssignType>(draft.assignMap);
-        newAssignMap.get(action.id).isCompleted = true;
-        return { ...draft, assignMap: newAssignMap };
+        // var newAssignMap = new Map(draft.assignMap);
+        // newAssignMap.get(action.id).isCompleted = true;
+
+        // return { ...draft, assignMap: newAssignMap };
+        draft.assignMap.get(action.id).isCompleted = true;
+        draft.assignMap = new Map(draft.assignMap);
+        break;
 
       case ASSIGN_INCOMPLETE:
-        var newAssignMap = new Map<string, AssignType>(draft.assignMap);
-        newAssignMap.get(action.id).isCompleted = false;
-        return { ...draft, assignMap: newAssignMap };
+        // var newAssignMap = new Map(draft.assignMap);
+        // newAssignMap.get(action.id).isCompleted = false;
+        // return { ...draft, assignMap: newAssignMap };
+        draft.assignMap.get(action.id).isCompleted = false;
+        draft.assignMap = new Map(draft.assignMap);
+
+        break;
 
       case ASSIGN_REMOVE:
         if (draft.assignMap.get(action.id).isCompleted) draft.completed -= 1;
