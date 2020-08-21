@@ -1,4 +1,4 @@
-import { Button, Icon, Input, Item } from 'native-base';
+import { Button, Fab, Icon, Input, Item } from 'native-base';
 import {
   Pressable,
   ScrollView,
@@ -12,7 +12,7 @@ import React, { useState } from 'react';
 import { AssignType } from '../../types/homework';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Tag from '../Tag';
-import {TagType} from '../../types/root'
+import { TagType } from '../../types/root';
 import dayjs from 'dayjs';
 
 type AddAssign = (assign: AssignType) => void;
@@ -80,7 +80,7 @@ export default function AssignForm({
   const [newText, setText] = useState(text);
   const [newDue, setDue] = useState(due);
   const [newOut, setOut] = useState(out);
-
+  const tagKeyList = Array.from(tags.keys());
   const handleSubmit = () => {
     const newAssign: AssignType = {
       ...selectedAssign,
@@ -112,15 +112,41 @@ export default function AssignForm({
   };
 
   function getTagComponents(style = {}) {
+    // return <Text> Hello world </Text>
+
     var tagComponents: JSX.Element[] = [];
-    for (let [id, tag] of tags) {
-      tagComponents.push(<Tag tag={tag} style={style} id={id} />);
+    var tagFrags: JSX.Element[] = [];
+    var sumOfNameLen: number = 0;
+    for (var index = 0; index < tags.size; index++) {
+      var id = tagKeyList[index];
+      var tag = tags.get(id);
+      sumOfNameLen += tag.name.length;
+      tagFrags.push(<Tag tag={tag} style={style} id={id} key={id} />);
+
+      if (sumOfNameLen > 9) {
+        tagComponents.push(
+          <View style={styles.tagFragContainer} key={index.toString()}>
+            {tagFrags}
+          </View>,
+        );
+        tagFrags = [];
+        sumOfNameLen = 0;
+      }
     }
+    tagComponents.push(
+      <View style={styles.tagFragContainer} key={index.toString()}>
+        {tagFrags}
+      </View>
+    );
     return tagComponents;
   }
 
   return (
     <View style={styles.container}>
+      <Fab style={styles.button} onPress={handleSubmit}>
+        <Icon name="save-outline" />
+      </Fab>
+
       <ScrollView style={styles.formContainer}>
         <View
           style={{
@@ -156,37 +182,24 @@ export default function AssignForm({
 
           <View style={styles.inputContainer}>
             <Text style={styles.headline}> 태그 </Text>
-            <View style={{ padding: 10, flexDirection: 'row' }}>
+            <View style={styles.tagContainer}>
               {getTagComponents({ margin: 3 })}
             </View>
           </View>
         </View>
       </ScrollView>
-
-      <View style={styles.buttonContainer}>
-        <Button
-          icon
-          style={{
-            ...styles.button,
-            backgroundColor: '#bbb',
-          }}
-          onPress={handleSubmit}>
-          <Icon name="save-outline" />
-        </Button>
-
-        <TouchableHighlight
-          style={{
-            ...styles.button,
-            backgroundColor: 'red',
-          }}
-          onPress={hideModal}>
-          <Text style={styles.buttonText}>취소</Text>
-        </TouchableHighlight>
-      </View>
     </View>
   );
 }
 const styles = StyleSheet.create({
+  tagFragContainer: {
+    padding: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  tagContainer: {
+    padding: 5,
+  },
   container: {
     flexGrow: 1,
     borderColor: 'pink',
@@ -235,12 +248,11 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    borderRadius: 20,
-    padding: 10,
+    position: 'absolute',
+    bottom: 340,
     elevation: 2,
-    flex: 1,
-    width: 100,
     justifyContent: 'center',
+    backgroundColor: '#aec6df',
   },
 
   buttonText: {

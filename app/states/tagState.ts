@@ -12,7 +12,7 @@ const initialState = {
   tags: new Map<string, TagType>([
     ['none', new TagType()],
     ['java', new TagType('JAVA', {backgroundColor: 'pink'})],
-    ['EE209', new TagType('전프구', {backgroundColor: 'yellow'})],
+    // ['EE209', new TagType('전자공학을 위한 프로그래밍 구조론', {backgroundColor: 'yellow'})],
   ]), // TODO: defaultTag, tag1 넣기
 };
 
