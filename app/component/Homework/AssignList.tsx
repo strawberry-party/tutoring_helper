@@ -69,31 +69,31 @@ function AssignList({
     }
   };
 
-  const getSorter = () => {
-    switch (activeSorter) {
-      case sorterOptions.OUT:
-        return 'out';
-      case sorterOptions.DUE:
-        return 'due';
-      case sorterOptions.TITLE:
-        return 'title';
-      default:
-        console.error(
-          `SOMETHING WENT WRONG in AssignList/getSorter ${activeSorter}`,
-        );
-    }
-  };
+  // const getSorter = () => {
+  //   switch (activeSorter) {
+  //     case sorterOptions.OUT:
+  //       return 'out';
+  //     case sorterOptions.DUE:
+  //       return 'due';
+  //     case sorterOptions.TITLE:
+  //       return 'title';
+  //     default:
+  //       console.error(
+  //         `SOMETHING WENT WRONG in AssignList/getSorter ${activeSorter}`,
+  //       );
+  //   }
+  // };
 
-  const getSortDir = () => {
-    switch (activeSorterDir) {
-      case sorterDirOptions.ASC:
-        return 'asc';
-      case sorterDirOptions.DSC:
-        return 'desc';
-      default:
-        console.error('SOMETHING WENT WRONG in AssignList/getSortDir');
-    }
-  };
+  // const getSortDir = () => {
+  //   switch (activeSorterDir) {
+  //     case sorterDirOptions.ASC:
+  //       return 'asc';
+  //     case sorterDirOptions.DSC:
+  //       return 'desc';
+  //     default:
+  //       console.error('SOMETHING WENT WRONG in AssignList/getSortDir');
+  //   }
+  // };
 
   // TODO: assignMap에서 sort 구현
   // const getSorted = _.orderBy(filtered(), [getSorter()], [getSortDir()]);
@@ -101,8 +101,10 @@ function AssignList({
 
   const outDates: Set<string> = new Set();
   var items: Array<JSX.Element> = [];
+  console.warn(Array.from(sorted.values()).map((item) => item.text));
 
   for (const [key, assign] of sorted) {
+    if (!assign.out) continue;
     var out: string = assign.out.format('YYYY/MM/DD').toString();
     if (!outDates.has(out)) {
       items.push(
@@ -142,7 +144,7 @@ function AssignList({
     <View style={{ backgroundColor: 'red' }}>
       <Text style={{ fontSize: 15 }}>AssignList</Text>
       <List style={{ backgroundColor: 'white' }}>
-        {Array.from(assignMap.keys()).length === 0 ? noAssign : items}
+        {items.length === 0 ? noAssign : items}
       </List>
     </View>
   );

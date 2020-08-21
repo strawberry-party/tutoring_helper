@@ -8,10 +8,10 @@ import {
   View,
 } from 'react-native';
 import React, { useState } from 'react';
+import Tag, { TagForm } from '../Tag';
 
 import { AssignType } from '../../types/homework';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import Tag from '../Tag';
 import { TagType } from '../../types/root';
 import dayjs from 'dayjs';
 
@@ -117,11 +117,16 @@ export default function AssignForm({
     var tagComponents: JSX.Element[] = [];
     var tagFrags: JSX.Element[] = [];
     var sumOfNameLen: number = 0;
-    for (var index = 0; index < tags.size; index++) {
-      var id = tagKeyList[index];
-      var tag = tags.get(id);
-      sumOfNameLen += tag.name.length;
-      tagFrags.push(<Tag tag={tag} style={style} id={id} key={id} />);
+    for (var index = 0; index < tags.size + 1; index++) {
+      if (index === tags.size) {
+        tagFrags.push(<TagForm style={style} />);
+        sumOfNameLen += 8
+      } else {
+        var id = tagKeyList[index];
+        var tag = tags.get(id);
+        sumOfNameLen += tag.name.length;
+        tagFrags.push(<Tag tag={tag} style={style} id={id} key={id} />);
+      }
 
       if (sumOfNameLen > 9) {
         tagComponents.push(
@@ -134,9 +139,9 @@ export default function AssignForm({
       }
     }
     tagComponents.push(
-      <View style={styles.tagFragContainer} key={index.toString()}>
+      <View style={styles.tagFragContainer} key={'tagForm'}>
         {tagFrags}
-      </View>
+      </View>,
     );
     return tagComponents;
   }
@@ -253,6 +258,7 @@ const styles = StyleSheet.create({
     elevation: 2,
     justifyContent: 'center',
     backgroundColor: '#aec6df',
+    zIndex: 1,
   },
 
   buttonText: {

@@ -39,7 +39,7 @@ function AssignModal({
         animationType="slide"
         transparent={true}
         visible={modalVisible}
-        onRequestClose={onSubmit}>
+        onRequestClose={hideModal}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <AssignForm
