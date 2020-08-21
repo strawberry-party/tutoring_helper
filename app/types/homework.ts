@@ -48,19 +48,20 @@ export class AssignType {
   out: dayjs.Dayjs;
   isCompleted: boolean;
   tag: TagType;
+  tagId: string;
 
   constructor(
     text: string = '기본 텍스트',
     due: dayjs.Dayjs = dayjs(),
     out: dayjs.Dayjs = dayjs(),
     isCompleted: boolean = false,
-    tag: TagType = new TagType(),
+    tagId: string = 'none',
   ) {
     this.text = text;
     this.due = due;
     this.out = out;
     this.isCompleted = isCompleted;
-    this.tag = tag;
+    this.tagId = tagId;
     // this.print = AssignType.prototype.print;
   }
 }

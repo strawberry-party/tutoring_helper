@@ -13,7 +13,9 @@ const DEFAULT_DATE = dayjs('2020-08-13');
 
 // test 코드 만들기
 const tag1: TagType = new TagType('수학', { backgroundColor: '#bbb' });
-export const tagList = [tag1];
+const tag2: TagType = new TagType('과학', { backgroundColor: '#bbf' });
+const tag3: TagType = new TagType('화학', { backgroundColor: '#bfb' });
+export const tagList = [tag1, tag2, tag3];
 
 const assignMap = new Map<string, AssignType>();
 
@@ -25,8 +27,8 @@ function getAssign(i: number) {
     dayjs('2020-01-01'), // TODO: 에러: 다 지금 날짜로 됨
     dayjs('2020-01-01'),
     false,
+    'java'
     // tag1 // README: 이렇게 하면 왠지 안됨
-    new TagType('수학', { backgroundColor: '#bbb' }),
   );
   return newAssign;
 }

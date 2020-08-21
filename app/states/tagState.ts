@@ -9,7 +9,11 @@ interface TagState {
 
 const initialState = {
   selectedTagId: 'none',
-  tags: new Map<string, TagType>(), // TODO: defaultTag, tag1 넣기
+  tags: new Map<string, TagType>([
+    ['none', new TagType()],
+    ['java', new TagType('JAVA', {backgroundColor: 'pink'})],
+    ['EE209', new TagType('전프구', {backgroundColor: 'yellow'})],
+  ]), // TODO: defaultTag, tag1 넣기
 };
 
 // action type

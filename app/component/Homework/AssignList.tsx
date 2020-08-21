@@ -11,6 +11,7 @@ import React, { Component } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Assign from './Assign';
+import { TagType } from '../../types/root';
 import _ from 'lodash';
 import dayjs from 'dayjs';
 
@@ -25,12 +26,14 @@ interface AssignListProps extends AssignListType {
   activeSorter;
   activeSorterDir;
   assignMap: Map<string, AssignType>;
+  tags: Map<string, TagType>;
 }
 
 const noAssign = <Text style={{ fontSize: 20 }}> 새 숙제를 추가해보세요</Text>;
 
 function AssignList({
   assignMap,
+  tags,
 
   showEditModal, // showEditModal
 
@@ -100,7 +103,6 @@ function AssignList({
   var items: Array<JSX.Element> = [];
 
   for (const [key, assign] of sorted) {
-
     var out: string = assign.out.format('YYYY/MM/DD').toString();
     if (!outDates.has(out)) {
       items.push(
@@ -131,6 +133,7 @@ function AssignList({
           onRemoveAssign(key);
           console.log(`${key} deleted`);
         }}
+        tags={tags}
       />
     );
     items.push(comp);

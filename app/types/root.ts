@@ -20,7 +20,7 @@ export class TagType {
   name: string;
 
   constructor(
-    name: string = '      ',
+    name: string = 'none',
     style: Object = {
       backgroundColor: 'white',
       borderStyle: 'dashed',

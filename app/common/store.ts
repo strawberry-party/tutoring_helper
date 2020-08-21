@@ -11,6 +11,12 @@ import reducers from '../states/index';
 const logger = createLogger();
 const store = createStore(reducers, applyMiddleware(logger));
 // dispatch store to mock data
+
+tagList.forEach((tag: TagType) => {
+  store.dispatch(addTag(tag));
+  console.warn(`store dispatching ${tag.name}`);
+});
+
 for (let [key, assign] of assignList.assignMap) {
   store.dispatch(addAssign(assign));
   // console.warn(assign.tag.name);
@@ -18,9 +24,6 @@ for (let [key, assign] of assignList.assignMap) {
 
 // TODO: firebase 도입한 다음에는 전체 data를 import 하고 dispatch
 
-tagList.forEach((tag: TagType) => {
-  store.dispatch(addTag(tag));
-  console.warn(`store dispatching ${tag.name}`);
-});
+
 
 export default store;

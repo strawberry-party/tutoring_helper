@@ -11,6 +11,8 @@ import React, { useState } from 'react';
 
 import { AssignType } from '../../types/homework';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import Tag from '../Tag';
+import {TagType} from '../../types/root'
 import dayjs from 'dayjs';
 
 type AddAssign = (assign: AssignType) => void;
@@ -25,6 +27,7 @@ interface AssignForm {
   modalType: AddModal | EditModal;
   selectedAssignId: string;
   selectedAssign: AssignType;
+  tags: Map<string, TagType>;
 }
 
 interface MyDatePickerProps {
@@ -65,12 +68,13 @@ function MyDatePicker({ onConfirm, day, msg }: MyDatePickerProps) {
   );
 }
 
-export default function FormExample({
+export default function AssignForm({
   modalType,
   selectedAssign,
   onSubmit,
   hideModal,
   selectedAssignId,
+  tags,
 }: AssignForm) {
   const { text, due, out } = selectedAssign;
   const [newText, setText] = useState(text);
@@ -94,7 +98,7 @@ export default function FormExample({
         break;
 
       default:
-        console.error('SOMETHING WENT WRONG in FormExample/handleSubmit');
+        console.error('SOMETHING WENT WRONG in AssignForm/handleSubmit');
     }
 
     hideModal();
@@ -106,6 +110,14 @@ export default function FormExample({
   const onConfirmDue = (date: Date) => {
     setDue(dayjs(date));
   };
+
+  function getTagComponents(style = {}) {
+    var tagComponents: JSX.Element[] = [];
+    for (let [id, tag] of tags) {
+      tagComponents.push(<Tag tag={tag} style={style} id={id} />);
+    }
+    return tagComponents;
+  }
 
   return (
     <View style={styles.container}>
@@ -139,6 +151,13 @@ export default function FormExample({
                 day={newDue}
                 msg={'마감'}
               />
+            </View>
+          </View>
+
+          <View style={styles.inputContainer}>
+            <Text style={styles.headline}> 태그 </Text>
+            <View style={{ padding: 10, flexDirection: 'row' }}>
+              {getTagComponents({ margin: 3 })}
             </View>
           </View>
         </View>

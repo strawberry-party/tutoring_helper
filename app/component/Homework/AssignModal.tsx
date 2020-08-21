@@ -11,6 +11,7 @@ import React, { useState } from 'react';
 
 import AssignForm from './AssignForm';
 import { AssignType } from '../../types/homework';
+import { TagType } from '../../types/root';
 import dayjs from 'dayjs';
 
 interface AssignModalProps {
@@ -20,6 +21,7 @@ interface AssignModalProps {
   selectedAssignId: string;
   selectedAssign: AssignType;
   modalType: 'AddModal' | 'EditModal';
+  tags: Map<string, TagType>;
 }
 
 function AssignModal({
@@ -29,6 +31,7 @@ function AssignModal({
   modalType,
   selectedAssignId,
   selectedAssign,
+  tags,
 }: AssignModalProps) {
   return (
     <View style={styles.centeredView}>
@@ -45,6 +48,7 @@ function AssignModal({
               selectedAssignId={selectedAssignId}
               modalType={modalType}
               selectedAssign={selectedAssign}
+              tags={tags}
             />
           </View>
         </View>
@@ -57,6 +61,7 @@ interface AddAssignModalProps {
   addModalVisible: boolean;
   hideAddModal: () => void;
   addAssign: (assign: AssignType) => void;
+  tags: Map<string, TagType>;
 }
 const defaultAssign: AssignType = new AssignType();
 
@@ -64,6 +69,7 @@ export function AddAssignModal({
   addModalVisible,
   hideAddModal,
   addAssign,
+  tags,
 }: AddAssignModalProps) {
   return (
     <AssignModal
@@ -73,6 +79,7 @@ export function AddAssignModal({
       modalType={'AddModal'}
       selectedAssignId={'none'}
       selectedAssign={defaultAssign}
+      tags={tags}
     />
   );
 }
@@ -83,6 +90,7 @@ interface EditAssignModalProps {
   editAssign: (id: string, assign: AssignType) => void;
   selectedAssignId: string;
   selectedAssign: AssignType;
+  tags: Map<string, TagType>;
 }
 
 export function EditAssignModal({
@@ -91,6 +99,7 @@ export function EditAssignModal({
   editAssign,
   selectedAssignId,
   selectedAssign,
+  tags,
 }: EditAssignModalProps) {
   return (
     <AssignModal
@@ -100,6 +109,7 @@ export function EditAssignModal({
       modalType={'EditModal'}
       selectedAssignId={selectedAssignId}
       selectedAssign={selectedAssign}
+      tags={tags}
     />
   );
 }

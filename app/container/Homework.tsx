@@ -16,8 +16,8 @@ import { RootState } from '../states';
 import { TagType } from '../types/root';
 import { actions as assignActions } from '../states/assignState';
 import { actions as filterSorterActions } from '../states/assignFilterSorterState';
-import { log } from 'react-native-reanimated';
 import { actions as modalVisibilityActions } from '../states/assignModalState';
+import { actions as tagActions } from '../states/tagState';
 
 type HomeworkContainerProps = any; // TODO: 타입 정의, any 대체하기
 
@@ -44,15 +44,13 @@ function HomeworkContainer({
   sortOut,
   sortTitle,
 }: HomeworkContainerProps) {
-
   // const tagMap: Map<string, TagType> = useSelector(
   //   (state: RootState) => state.tagReducer.tagMap,
   // );
-  
+
   const assignMap: Map<string, AssignType> = useSelector(
     (state: RootState) => state.assignReducer.assignMap,
   );
-
 
   const addModalVisible: boolean = useSelector(
     (state: RootState) => state.assignModalReducer.addModalVisible,
@@ -81,6 +79,8 @@ function HomeworkContainer({
   const sorterDir = useSelector(
     (state: RootState) => state.assignFilterSorterReducer.sorterDir,
   );
+
+  const tags = useSelector((state: RootState) => state.tagReducer.tags);
 
   return (
     <SafeAreaView
@@ -123,6 +123,7 @@ function HomeworkContainer({
               activeSorter={sorter}
               activeSorterDir={sorterDir}
               completed={0}
+              tags={tags}
             />
           </View>
         </ScrollView>
@@ -132,6 +133,7 @@ function HomeworkContainer({
             addModalVisible={addModalVisible}
             hideAddModal={hideAddModal}
             addAssign={addAssign}
+            tags={tags}
           />
         </View>
 
@@ -142,6 +144,7 @@ function HomeworkContainer({
             hideEditModal={hideEditModal}
             editAssign={editAssign}
             selectedAssign={selectedAssign}
+            tags={tags}
           />
         </View>
       </View>

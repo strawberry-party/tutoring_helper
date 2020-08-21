@@ -11,8 +11,9 @@ import {
 import React, { useState } from 'react';
 
 import { CheckBox } from 'react-native-elements';
-import { Chip } from 'react-native-paper';
 import SwipeRow from './SwipeRow';
+import Tag from '../Tag';
+import { TagType } from '../../types/root';
 
 interface AssignProps extends AssignType {
   onComplete: () => void;
@@ -20,6 +21,7 @@ interface AssignProps extends AssignType {
   onRemove: () => void;
   onStartEdit: () => void;
   id: string;
+  tags: Map<string, TagType>;
 }
 
 function Assign({
@@ -27,12 +29,13 @@ function Assign({
   due,
   out,
   isCompleted,
-  tag,
   onComplete,
   onIncomplete,
   onRemove,
   onStartEdit,
   id,
+  tagId,
+  tags,
 }: AssignProps) {
   const dueDate = due.format('MM월 DD일까지');
 
@@ -46,9 +49,10 @@ function Assign({
     setTimeout(() => setVisibility(false), 1500);
   };
 
+  const tag = tags.get(tagId);
+
   return (
     <SwipeRow onSwipe={onRemove} swipeThreshold={-100}>
-      {/* <TouchableHighlight> */}
       <View
         style={{
           flexDirection: 'row',
@@ -72,13 +76,7 @@ function Assign({
                   alignItems: 'center',
                   borderRadius: 20,
                 }}>
-                <Chip
-                  style={[tag.style, {
-                      marginRight: 10,
-                    }]}
-                  onPress={() => console.log('뭔가 바꾸시겠습니까')}>
-                  {tag.name}
-                </Chip>
+                <Tag tag={tag} style={{ marginRight: 10 }} id={tagId} />
 
                 <Text style={{ fontWeight: '400', flex: 2 }}>{text}</Text>
               </CardItem>
@@ -92,16 +90,6 @@ function Assign({
                   borderRadius: 20,
                 }}>
                 <Text></Text>
-                {/* <Chip
-                  style={{
-                    borderRightColor: '#bbb',
-                    borderRightWidth: 1,
-                    marginRight: 10,
-                    backgroundColor: '#bbb',
-                  }}
-                  onPress={() => console.log('뭔가 바꾸시겠습니까')}>
-                  수학의 정석
-                </Chip> */}
                 <Text> {dueDate} </Text>
               </CardItem>
               {buttonVisible && (
