@@ -13,10 +13,6 @@ const Drawer = createDrawerNavigator();
 
 function RootContainer(props) {
   const selectedStudent: StudentType = useSelector((state: RootState) => {
-    // console.warn(
-    //   state.lessonReducer.studentMap.get(state.tutorReducer.selectedStudentId)
-    //     .name,
-    // );
 
     return state.lessonReducer.studentMap.get(
       state.tutorReducer.selectedStudentId,

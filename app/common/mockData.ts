@@ -12,10 +12,12 @@ const NUM_ASSIGN = 3;
 const DEFAULT_DATE = dayjs('2020-08-13');
 
 // test 코드 만들기
+const tag1: TagType = new TagType('수학', { backgroundColor: '#bbb' });
+export const tagList = [tag1];
+
 const assignMap = new Map<string, AssignType>();
 
 [0, 1, 2, 3].map((i: number) => assignMap.set(i.toString(), getAssign(i)));
-const tag1: TagType = new TagType('수학', { backgroundColor: '#bbb' });
 
 function getAssign(i: number) {
   var newAssign: AssignType = new AssignType(
@@ -26,7 +28,6 @@ function getAssign(i: number) {
     // tag1 // README: 이렇게 하면 왠지 안됨
     new TagType('수학', { backgroundColor: '#bbb' }),
   );
-  console.warn(`${newAssign.tag.name} in getAssign`);
   return newAssign;
 }
 
