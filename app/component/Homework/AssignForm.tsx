@@ -119,8 +119,10 @@ export default function AssignForm({
     var sumOfNameLen: number = 0;
     for (var index = 0; index < tags.size + 1; index++) {
       if (index === tags.size) {
-        tagFrags.push(<TagForm style={style} />);
-        sumOfNameLen += 8
+        tagFrags.push(
+          <TagForm style={style} onAddTag={(tag) => console.warn(tag.name)} />,
+        );
+        sumOfNameLen += 8;
       } else {
         var id = tagKeyList[index];
         var tag = tags.get(id);

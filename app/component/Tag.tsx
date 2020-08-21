@@ -21,19 +21,31 @@ export default function Tag({ tag, style, id }: TagProps) {
   );
 }
 
-export function TagForm({ style }) {
+export function TagForm({ style, onAddTag }) {
+  const [text, setText] = useState('');
+
+  const onSubmit = () => {
+    const newTag: TagType = new TagType(text);
+    onAddTag(newTag);
+    console.log(`제출 구현해야함: ${text}`);
+  };
+
   return (
     <Chip
       style={[style, { flexDirection: 'row' }]}
       onPress={() => console.log('뭔가 바꾸시겠습니까')}>
       <TextInput
+        value={text}
+        onChange={({ nativeEvent: { text } }) => {
+          setText(text);
+        }}
         style={{
           fontSize: 14,
           height: 17,
         }}
         underlineColor="transparent"
         placeholder="만들기"
-        onSubmitEditing={() => console.log('제출 구현해야함')}
+        onSubmitEditing={onSubmit}
       />
     </Chip>
   );

@@ -43,6 +43,8 @@ function HomeworkContainer({
   sortDue,
   sortOut,
   sortTitle,
+
+  addTag,
 }: HomeworkContainerProps) {
   // const tagMap: Map<string, TagType> = useSelector(
   //   (state: RootState) => state.tagReducer.tagMap,
@@ -134,6 +136,7 @@ function HomeworkContainer({
             hideAddModal={hideAddModal}
             addAssign={addAssign}
             tags={tags}
+            onAddTag={addTag}
           />
         </View>
 
@@ -145,6 +148,7 @@ function HomeworkContainer({
             editAssign={editAssign}
             selectedAssign={selectedAssign}
             tags={tags}
+            onAddTag={addTag}
           />
         </View>
       </View>
@@ -173,6 +177,7 @@ const styles = StyleSheet.create({
 function mapStateToProps(state) {
   return {
     assigns: state.assignReducer.assigns,
+    tags: state.tagReducer.tags,
     addModalVisible: state.assignModalReducer.addModalVisible,
     filter: state.assignFilterSorterReducer.filter,
     sorter: state.assignFilterSorterReducer.sorter,
@@ -188,6 +193,7 @@ const mapDispatchToProps = Object.assign(
   assignActions,
   modalVisibilityActions,
   filterSorterActions,
+  tagActions,
 );
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeworkContainer);

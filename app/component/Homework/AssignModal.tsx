@@ -22,6 +22,7 @@ interface AssignModalProps {
   selectedAssign: AssignType;
   modalType: 'AddModal' | 'EditModal';
   tags: Map<string, TagType>;
+  onAddTag: (tag: TagType) => void;
 }
 
 function AssignModal({
@@ -32,6 +33,7 @@ function AssignModal({
   selectedAssignId,
   selectedAssign,
   tags,
+  onAddTag,
 }: AssignModalProps) {
   return (
     <View style={styles.centeredView}>
@@ -49,6 +51,7 @@ function AssignModal({
               modalType={modalType}
               selectedAssign={selectedAssign}
               tags={tags}
+              onAddTag={onAddTag}
             />
           </View>
         </View>
@@ -57,11 +60,10 @@ function AssignModal({
   );
 }
 
-interface AddAssignModalProps {
+interface AddAssignModalProps extends AssignModalProps {
   addModalVisible: boolean;
   hideAddModal: () => void;
   addAssign: (assign: AssignType) => void;
-  tags: Map<string, TagType>;
 }
 const defaultAssign: AssignType = new AssignType();
 
@@ -70,6 +72,7 @@ export function AddAssignModal({
   hideAddModal,
   addAssign,
   tags,
+  onAddTag,
 }: AddAssignModalProps) {
   return (
     <AssignModal
@@ -80,17 +83,17 @@ export function AddAssignModal({
       selectedAssignId={'none'}
       selectedAssign={defaultAssign}
       tags={tags}
+      onAddTag={onAddTag}
     />
   );
 }
 
-interface EditAssignModalProps {
+interface EditAssignModalProps extends AssignModalProps {
   editModalVisible: boolean;
   hideEditModal: () => void;
   editAssign: (id: string, assign: AssignType) => void;
   selectedAssignId: string;
   selectedAssign: AssignType;
-  tags: Map<string, TagType>;
 }
 
 export function EditAssignModal({
@@ -100,6 +103,7 @@ export function EditAssignModal({
   selectedAssignId,
   selectedAssign,
   tags,
+  onAddTag,
 }: EditAssignModalProps) {
   return (
     <AssignModal
@@ -110,6 +114,7 @@ export function EditAssignModal({
       selectedAssignId={selectedAssignId}
       selectedAssign={selectedAssign}
       tags={tags}
+      onAddTag={onAddTag}
     />
   );
 }
