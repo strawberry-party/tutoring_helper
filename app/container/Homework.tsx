@@ -133,7 +133,7 @@ function HomeworkContainer({
           </View>
         </ScrollView>
 
-        <View style={{ borderColor: 'pink', borderWidth: 3 }}>
+        <View style={styles.mock}>
           <AssignModal
             modalVisible={addModalVisible}
             hideModal={hideAddModal}
@@ -146,7 +146,7 @@ function HomeworkContainer({
           />
         </View>
 
-        <View style={{ borderColor: 'pink', borderWidth: 3 }}>
+        <View style={styles.mock}>
           <AssignModal
             modalVisible={editModalVisible}
             selectedAssignId={selectedAssignId}
@@ -159,7 +159,7 @@ function HomeworkContainer({
           />
         </View>
 
-        <View style={{ borderColor: 'pink', borderWidth: 3 }}>
+        <View style={styles.mock}>
           <FilterModal
             modalVisible={filterModalVisible}
             hideModal={hideFilterModal}
@@ -190,6 +190,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     backgroundColor: 'white',
+  },
+
+  mock: {
+    borderColor: 'pink',
+    borderWidth: 3,
+    height: 2,
   },
 });
 

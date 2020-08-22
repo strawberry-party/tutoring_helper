@@ -70,6 +70,11 @@ export default function FilterModal({
     return tagComponents;
   }
 
+  const handleSubmit = () => {
+    onSubmit();
+    hideModal();
+  };
+
   return (
     <View style={styles.centeredView}>
       <Modal
@@ -91,17 +96,30 @@ export default function FilterModal({
               </Chip>
             </View>
 
+            <Text> 태그 필터 </Text>
+
             <ScrollView>
-              <View style={styles.tagContainer}>
-                {getTagComponents({ margin: 5 })}
+              <View>
+                <View style={styles.tagPickerContainer}>
+                  <Chip style={styles.chip}>
+                    <Text> 모두 선택 </Text>
+                  </Chip>
+                  <Chip style={styles.chip}>
+                    <Text> 모두 해제 </Text>
+                  </Chip>
+                </View>
+
+                <View style={styles.tagContainer}>
+                  {getTagComponents({ margin: 5 })}
+                </View>
               </View>
             </ScrollView>
 
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.button} onPress={onSubmit}>
+            {/* <View style={styles.buttonContainer}> */}
+              <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                 <Icon name="save-outline" />
               </TouchableOpacity>
-            </View>
+            {/* </View> */}
           </View>
         </View>
       </Modal>
@@ -150,9 +168,12 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    elevation: 2,
+    elevation: 4,
     backgroundColor: '#aec6df',
     zIndex: 1,
+    position: 'absolute',
+    bottom: 10,
+    right: 20,
   },
 
   tagContainer: {
@@ -161,7 +182,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
-
+  tagPickerContainer: {
+    marginTop: 10,
+    marginHorizontal: 15,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  },
   buttonContainer: {
     flexDirection: 'row',
     marginLeft: 200,
