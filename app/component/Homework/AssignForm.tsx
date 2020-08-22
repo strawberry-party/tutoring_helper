@@ -118,52 +118,30 @@ export default function AssignForm({
   };
 
   function getTagComponents(style = {}) {
-    // return <Text> Hello world </Text>
     var tagComponents: JSX.Element[] = [];
-    var tagFrags: JSX.Element[] = [];
-    var sumOfNameLen: number = 0;
-    for (var index = 1; index < tags.size + 1; index++) {
-      if (index === tags.size) {
-        tagFrags.push(<TagForm style={style} onAddTag={onAddTag} />);
-        sumOfNameLen += 8;
-      } else {
-        var id = tagKeyList[index];
-        var tag = tags.get(id);
-        sumOfNameLen += tag.name.length;
 
-        tagFrags.push(
-          <Tag
-            tag={tag}
-            style={style}
-            id={id}
-            key={id}
-            isSelected={selectedTagId === id}
-            onSelect={(id: string) => {
-              console.log(id + ' select');
+    for (var index = 1; index < tags.size; index++) {
+      var id = tagKeyList[index];
+      var tag = tags.get(id);
 
-              if (selectedTagId === id) selectTag('none');
-              else selectTag(id);
-              // console.warn(tag.name + id);
-            }}
-          />,
-        );
-      }
+      tagComponents.push(
+        <Tag
+          tag={tag}
+          style={style}
+          id={id}
+          key={id}
+          isSelected={selectedTagId === id}
+          onSelect={(id: string) => {
+            console.log(id + ' select');
 
-      if (sumOfNameLen > 9) {
-        tagComponents.push(
-          <View style={styles.tagFragContainer} key={index.toString()}>
-            {tagFrags}
-          </View>,
-        );
-        tagFrags = [];
-        sumOfNameLen = 0;
-      }
+            if (selectedTagId === id) selectTag('none');
+            else selectTag(id);
+          }}
+        />,
+      );
     }
-    tagComponents.push(
-      <View style={styles.tagFragContainer} key={'tagForm'}>
-        {tagFrags}
-      </View>,
-    );
+    tagComponents.push(<TagForm style={style} onAddTag={onAddTag} />);
+
     return tagComponents;
   }
 
@@ -218,13 +196,12 @@ export default function AssignForm({
   );
 }
 const styles = StyleSheet.create({
-  tagFragContainer: {
-    padding: 5,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
+
   tagContainer: {
     padding: 5,
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    
   },
   container: {
     flexGrow: 1,
@@ -232,6 +209,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 30,
   },
   formContainer: {
     borderColor: 'skyblue',

@@ -12,7 +12,6 @@ import React, { useState } from 'react';
 import AssignForm from './AssignForm';
 import { AssignType } from '../../types/homework';
 import { TagType } from '../../types/root';
-import dayjs from 'dayjs';
 
 interface AssignModalProps {
   modalVisible: boolean;

@@ -70,14 +70,10 @@ const tagReducer = (state: TagState = initialState, action: TagAction) =>
         draft.selectedTagId = action.id;
         break;
       case TAG_ADD:
-        console.warn('draft tag set' + action.tag.name);
-
         draft.tags.set(action.id, action.tag);
         break;
       case TAG_EDIT:
         draft.tags.set(action.id, action.tag);
-        // TODO: 렌더링 안되면 주석 해제
-        // draft.tags = new Map(draft.tags);
         break;
       case TAG_REMOVE:
         draft.tags.delete(action.id);

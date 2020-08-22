@@ -7,7 +7,8 @@ import AddAssignButton from '../component/Homework/AddAssignButton';
 import AssignList from '../component/Homework/AssignList';
 import AssignModal from '../component/Homework/AssignModal';
 import { AssignType } from '../types/homework';
-import FilterSorter from '../component/Homework/FilterSorter';
+import { FilterButton } from '../component/Homework/FilterSorter';
+import FilterModal from '../component/Homework/FilterModal';
 import React from 'react';
 import { RootState } from '../states';
 import { TagType } from '../types/root';
@@ -24,6 +25,8 @@ function HomeworkContainer({
   showAddModal,
   hideEditModal,
   showEditModal,
+  showFilterModal,
+  hideFilterModal,
 
   addAssign,
   completeAssign,
@@ -59,6 +62,10 @@ function HomeworkContainer({
     (state: RootState) => state.assignModalReducer.editModalVisible,
   );
 
+  const filterModalVisible: boolean = useSelector(
+    (state: RootState) => state.assignModalReducer.filterModalVisible,
+  );
+
   const selectedAssignId: string = useSelector(
     (state: RootState) => state.assignModalReducer.selectedAssignId,
   );
@@ -92,13 +99,12 @@ function HomeworkContainer({
       <Text style={styles.titleText}>숙제 관리</Text>
       <View style={{ borderColor: 'green', borderWidth: 3, flex: 1 }}>
         <View style={{ backgroundColor: 'pink' }}>
-          <FilterSorter
-            activeFilter={filter}
-            filterActions={{ showAll, showCompleted, showIncomplete }}
-            activeSorter={sorter}
-            activeSorterDir={sorterDir}
-            sorterDirActions={{ sortDsc, sortAsc }}
-            sorterActions={{ sortDue, sortOut, sortTitle }}
+          <FilterButton
+            showFilterModal={showFilterModal}
+            // activeSorter={sorter}
+            // activeSorterDir={sorterDir}
+            // sorterDirActions={{ sortDsc, sortAsc }}
+            // sorterActions={{ sortDue, sortOut, sortTitle }}
           />
         </View>
 
@@ -152,6 +158,18 @@ function HomeworkContainer({
             onAddTag={addTag}
           />
         </View>
+
+        <View style={{ borderColor: 'pink', borderWidth: 3 }}>
+          <FilterModal
+            modalVisible={filterModalVisible}
+            hideModal={hideFilterModal}
+            onSubmit={() => console.warn('submit 구현 해야지')}
+            tags={tags}
+            onAddTag={addTag}
+            activeFilter={filter}
+            filterActions={{ showAll, showCompleted, showIncomplete }}
+          />
+        </View>
       </View>
 
       <AddAssignButton
@@ -180,6 +198,7 @@ function mapStateToProps(state) {
     assigns: state.assignReducer.assigns,
     tags: state.tagReducer.tags,
     addModalVisible: state.assignModalReducer.addModalVisible,
+    filterModalVisible: state.assignModalReducer.filterModalVisible,
     filter: state.assignFilterSorterReducer.filter,
     sorter: state.assignFilterSorterReducer.sorter,
   };

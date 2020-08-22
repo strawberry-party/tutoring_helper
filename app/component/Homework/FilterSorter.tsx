@@ -10,9 +10,9 @@ import {
 } from 'native-base';
 import React, { Component } from 'react';
 
+import { IconButton } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
 import { filterOptions } from '../../states/assignFilterSorterState';
-import { log } from 'react-native-reanimated';
 
 interface SorterProps {
   sorterActions: {
@@ -99,70 +99,11 @@ function Sorter({
   );
 }
 
-interface FilterProps {
-  filterActions: {
-    showAll: () => void;
-    showCompleted: () => void;
-    showIncomplete: () => void;
-  };
-  activeFilter;
-}
-function Filter({ filterActions, activeFilter }: FilterProps) {
-  const selectFilter = (value: string) => {
-    switch (value) {
-      case 'ALL':
-        filterActions.showAll();
-        break;
-      case 'COMPLETED':
-        filterActions.showCompleted();
-        break;
-      case 'INCOMPLETED':
-        filterActions.showIncomplete();
-        break;
-      default:
-        console.error('SOMETHING WENT WRONG in FilterSorter/selectFilter');
-    }
-  };
-
+export function FilterButton({ showFilterModal }) {
   return (
-    <View style={styles.selector}>
-      <Icon name="funnel"> </Icon>
-      <View style={styles.picker}>
-        <Picker
-          mode="dropdown"
-          iosIcon={<Icon style={{ fontSize: 20 }} name="arrow-down" />}
-          style={{ fontSize: 15, color: 'black' }}
-          placeholderIconColor="#007aff"
-          selectedValue={activeFilter}
-          onValueChange={selectFilter}>
-          <Picker.Item label="완료" value="COMPLETED" />
-          <Picker.Item label="미완료" value="INCOMPLETED" />
-          <Picker.Item label="모두" value="ALL" />
-        </Picker>
-      </View>
-    </View>
-  );
-}
-
-export default function FilterSorter({
-  activeFilter,
-  filterActions,
-  activeSorterDir,
-  activeSorter,
-  sorterDirActions,
-  sorterActions,
-}) {
-  return (
-    <View style={styles.container}>
-      <Filter activeFilter={activeFilter} filterActions={filterActions} />
-
-      {/* <Sorter // #TODO: 나중에 Sorter 다시 만들기 
-        activeSorter={activeSorter}
-        activeSorterDir={activeSorterDir}
-        sorterActions={sorterActions}
-        sorterDirActions={sorterDirActions}
-      /> */}
-    </View>
+    <Button style={styles.button} onPress={() => showFilterModal()}>
+      <Icon name="funnel" />
+    </Button>
   );
 }
 
@@ -184,8 +125,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
+  button: {
+    margin: 5,
+    backgroundColor: '#aec6df',
+    borderRadius: 20,
+    borderColor: 'transparent',
+    elevation: 0,
+  },
+
   picker: {
-    // width: 50,
     flex: 2,
   },
 });

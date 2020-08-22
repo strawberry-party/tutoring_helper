@@ -1,18 +1,20 @@
 import { AssignListType, AssignType } from './../types/homework';
 
-import dayjs from 'dayjs';
 import produce from 'immer';
 
 // action type
 export const SET_ADD_MODAL_VISIBILITY = 'SET_ADD_MODAL_VISIBILITY' as const;
 export const SET_EDIT_MODAL_VISIBILITY = 'SET_EDIT_MODAL_VISIBILITY' as const;
 export const SET_CONFIRM_MODAL_VISIBILITY = 'SET_CONFIRM_MODAL_VISIBILITY' as const;
+export const SET_FILTER_MODAL_VISIBILITY = 'SET_FILTER_MODAL_VISIBILITY' as const;
 
 type AssignModalAction =
   | ReturnType<typeof showAddModal>
   | ReturnType<typeof hideAddModal>
   | ReturnType<typeof showEditModal>
-  | ReturnType<typeof hideEditModal>;
+  | ReturnType<typeof hideEditModal>
+  | ReturnType<typeof showFilterModal>
+  | ReturnType<typeof hideFilterModal>;
 // | ReturnType<typeof showConfirmModal>
 // | ReturnType<typeof hideConfirmModal>;
 
@@ -21,6 +23,8 @@ type ModalState = {
   editModalVisible: boolean;
   selectedAssignId: string;
   selectedAssign: AssignType;
+
+  filterModalVisible: boolean;
 };
 
 // action constructor
@@ -48,11 +52,23 @@ export const hideEditModal = () => ({
   selectedAssign: defaultAssign,
 });
 
+export const showFilterModal = () => ({
+  type: SET_FILTER_MODAL_VISIBILITY,
+  filterModalVisible: true,
+});
+
+export const hideFilterModal = () => ({
+  type: SET_FILTER_MODAL_VISIBILITY,
+  filterModalVisible: false,
+});
+
 export const actions = {
   showAddModal,
   hideAddModal,
   showEditModal,
   hideEditModal,
+  showFilterModal,
+  hideFilterModal,
 };
 
 // reducer
@@ -63,6 +79,8 @@ const initialState: ModalState = {
   editModalVisible: false,
   selectedAssignId: 'none',
   selectedAssign: defaultAssign,
+
+  filterModalVisible: false,
 };
 
 const assignModalVisibilityReducer = (
@@ -79,6 +97,10 @@ const assignModalVisibilityReducer = (
         draft.editModalVisible = action.editModalVisible;
         draft.selectedAssignId = action.selectedAssignId;
         draft.selectedAssign = action.selectedAssign;
+        break;
+
+      case SET_FILTER_MODAL_VISIBILITY:
+        draft.filterModalVisible = action.filterModalVisible;
         break;
 
       default:
