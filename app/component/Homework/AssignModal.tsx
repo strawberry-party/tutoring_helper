@@ -60,28 +60,26 @@ function AssignModal({
   );
 }
 
-interface AddAssignModalProps extends AssignModalProps {
-  addModalVisible: boolean;
-  hideAddModal: () => void;
-  addAssign: (assign: AssignType) => void;
-}
-const defaultAssign: AssignType = new AssignType();
+interface AddAssignModalProps extends AssignModalProps {}
 
 export function AddAssignModal({
-  addModalVisible,
-  hideAddModal,
-  addAssign,
+  modalVisible,
+  hideModal,
+  onSubmit,
   tags,
+  modalType,
   onAddTag,
+  selectedAssignId,
+  selectedAssign,
 }: AddAssignModalProps) {
   return (
     <AssignModal
-      modalVisible={addModalVisible}
-      hideModal={hideAddModal}
-      onSubmit={addAssign}
-      modalType={'AddModal'}
-      selectedAssignId={'none'}
-      selectedAssign={defaultAssign}
+      modalVisible={modalVisible}
+      hideModal={hideModal}
+      onSubmit={onSubmit}
+      modalType={modalType}
+      selectedAssignId={selectedAssignId}
+      selectedAssign={selectedAssign}
       tags={tags}
       onAddTag={onAddTag}
     />
@@ -89,28 +87,24 @@ export function AddAssignModal({
 }
 
 interface EditAssignModalProps extends AssignModalProps {
-  editModalVisible: boolean;
-  hideEditModal: () => void;
-  editAssign: (id: string, assign: AssignType) => void;
-  selectedAssignId: string;
-  selectedAssign: AssignType;
 }
 
 export function EditAssignModal({
-  editModalVisible,
-  hideEditModal,
-  editAssign,
+  modalVisible,
+  hideModal,
   selectedAssignId,
   selectedAssign,
   tags,
   onAddTag,
+  onSubmit,
+  modalType,
 }: EditAssignModalProps) {
   return (
     <AssignModal
-      modalVisible={editModalVisible}
-      hideModal={hideEditModal}
-      onSubmit={editAssign}
-      modalType={'EditModal'}
+      modalVisible={modalVisible}
+      hideModal={hideModal}
+      onSubmit={onSubmit}
+      modalType={modalType}
       selectedAssignId={selectedAssignId}
       selectedAssign={selectedAssign}
       tags={tags}

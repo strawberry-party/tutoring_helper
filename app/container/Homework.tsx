@@ -1,14 +1,11 @@
 import 'react-native-gesture-handler';
 
-import {
-  AddAssignModal,
-  EditAssignModal,
-} from '../component/Homework/AssignModal';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { connect, useSelector } from 'react-redux';
 
 import AddAssignButton from '../component/Homework/AddAssignButton';
 import AssignList from '../component/Homework/AssignList';
+import AssignModal from '../component/Homework/AssignModal';
 import { AssignType } from '../types/homework';
 import FilterSorter from '../component/Homework/FilterSorter';
 import React from 'react';
@@ -131,22 +128,26 @@ function HomeworkContainer({
         </ScrollView>
 
         <View style={{ borderColor: 'pink', borderWidth: 3 }}>
-          <AddAssignModal
-            addModalVisible={addModalVisible}
-            hideAddModal={hideAddModal}
-            addAssign={addAssign}
+          <AssignModal
+            modalVisible={addModalVisible}
+            hideModal={hideAddModal}
+            onSubmit={addAssign}
             tags={tags}
             onAddTag={addTag}
+            modalType={'AddModal'}
+            selectedAssignId={'none'}
+            selectedAssign={new AssignType()}
           />
         </View>
 
         <View style={{ borderColor: 'pink', borderWidth: 3 }}>
-          <EditAssignModal
-            editModalVisible={editModalVisible}
+          <AssignModal
+            modalVisible={editModalVisible}
             selectedAssignId={selectedAssignId}
-            hideEditModal={hideEditModal}
-            editAssign={editAssign}
+            hideModal={hideEditModal}
+            onSubmit={editAssign}
             selectedAssign={selectedAssign}
+            modalType={'EditModal'}
             tags={tags}
             onAddTag={addTag}
           />
