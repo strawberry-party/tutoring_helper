@@ -106,15 +106,15 @@ function AssignList({
         }}
         onComplete={() => {
           onCompleteAssign(assign.id);
-          console.log(`${assign.id} Completed`);
+          // console.log(`${assign.id} Completed`);
         }}
         onIncomplete={() => {
           onIncompleteAssign(assign.id);
-          console.log(`${assign.id} canceled Complete`);
+          // console.log(`${assign.id} canceled Complete`);
         }}
         onRemove={() => {
           onRemoveAssign(assign.id);
-          console.log(`${assign.id} deleted`);
+          // console.log(`${assign.id} deleted`);
         }}
       />
     );

@@ -6,18 +6,17 @@ import React from 'react';
 import { StudentType } from '../../../types/root';
 import WeeklyProgress from './WeeklyProgress';
 import { createStackNavigator } from '@react-navigation/stack';
+import { connect } from 'react-redux';
 
 const ProgressStack = createStackNavigator();
 
-interface ProgressStackScreenProps {
-  student: StudentType;
-  navigation: any;
-}
+// interface ProgressStackScreenProps {
+//   student: StudentType;
+//   navigation: any;
+// }
 
-export default function ProgressStackScreen({
-  student,
-  navigation,
-}: ProgressStackScreenProps) {
+function ProgressStackScreen(props) {
+  const student = props.currentStudent;
   return (
     <ProgressStack.Navigator
       screenOptions={{
@@ -34,7 +33,7 @@ export default function ProgressStackScreen({
             size={35}
             backgroundColor="#e91e63"
             onPress={() => {
-              navigation.openDrawer();
+              props.navigation.openDrawer();
             }}
           />
         ),
@@ -43,12 +42,8 @@ export default function ProgressStackScreen({
         ),
       }}
       initialRouteName="진도관리">
-      <ProgressStack.Screen name="진도관리">
-        {(props) => <WeeklyProgress student={student} {...props} />}
-      </ProgressStack.Screen>
-      <ProgressStack.Screen name="진도추가">
-        {(props) => <CreateProgress student={student} {...props} />}
-      </ProgressStack.Screen>
+      <ProgressStack.Screen name="진도관리" component={WeeklyProgress} />
+      <ProgressStack.Screen name="진도추가" component={CreateProgress} />
     </ProgressStack.Navigator>
   );
 }
@@ -60,3 +55,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
 });
+
+export default connect((state) => {
+  const currentStudentId = state.tutorReducer.selectedStudentId;
+  const studentMap = state.lessonReducer.studentMap;
+  return {
+    currentStudent: studentMap.get(currentStudentId)
+  } 
+}, null)(ProgressStackScreen);

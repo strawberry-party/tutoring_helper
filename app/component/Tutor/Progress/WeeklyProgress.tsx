@@ -41,18 +41,19 @@ interface WeeklyProgressProps {
   navigation: any;
 }
 
-function WeeklyProgress({ student, navigation }: WeeklyProgressProps) {
-  const lessons = student.lessonMap;
-  const sectionItems: Array<SectionItem> = Array.from(
-    lessons.values(),
-  ).map((lesson: LessonType) => getSectionItem(lesson));
-
-  function getSectionItem(lesson: LessonType): SectionItem {
-    return {
-      title: `${lesson.lessonNum.toString()} 회차`,
-      data: [<Week contents={lesson.contents} test={lesson.test}/>]
-    };
-  }
+function WeeklyProgress(props) {
+  const lessons = props.currentStudent.lessonMap;
+  // console.log(Array.from(lessons.values()));
+  // console.log(lessons.values());
+  // console.log(lessons);
+  const sectionItems = [];
+  lessons.forEach((value, key) => {
+    // console.log(key);
+    sectionItems.push(
+      {title: value.lessonNum + ' 회차', data: [<Week contents={value.contents} test={value.test} id={key}/>]}
+    )
+  });
+  
   return (
     <SectionList
       sections={sectionItems}
@@ -66,7 +67,7 @@ function WeeklyProgress({ student, navigation }: WeeklyProgressProps) {
           style={styles.createButton}
           icon={<Ionicons name="add" size={20} />}
           onPress={() => {
-            navigation.navigate('진도추가');
+            props.navigation.navigate('진도추가');
           }}
         />
       }
@@ -74,9 +75,10 @@ function WeeklyProgress({ student, navigation }: WeeklyProgressProps) {
   );
 }
 
-export default connect(function (state) {
-  // console.log(state.lessonReducer.studentMap);
+export default connect((state) => {
+  const currentStudentId = state.tutorReducer.selectedStudentId;
+  const studentMap = state.lessonReducer.studentMap;
   return {
-    students: state.lessonReducer.studentMap,
-  };
+    currentStudent: studentMap.get(currentStudentId)
+  } 
 }, null)(WeeklyProgress);

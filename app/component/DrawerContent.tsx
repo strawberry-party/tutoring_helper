@@ -14,7 +14,7 @@ function DrawerContent(props) {
         <Text style={styles.text}>김태형 선생님</Text>
       </View>
       <DrawerContentScrollView>
-        <DrawerItemList {...props}/>
+        <DrawerItemList {...props} />
       </DrawerContentScrollView>
     </View>
   );

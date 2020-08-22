@@ -2,7 +2,10 @@ import { LessonType } from '../types/lesson';
 import { TutorType } from '../types/root';
 import _ from 'lodash';
 import produce from 'immer';
+import {enableMapSet} from "immer";
 import { tutor } from '../common/mockData'
+
+enableMapSet()
 
 // action type
 const LESSON_ADD = 'LESSON_ADD' as const;
@@ -50,24 +53,31 @@ const initialState = tutor;
 // reducer
 const lessonReducer = (
   state: TutorState = initialState,
-  action: LessonAction,
+  action,
 ) =>
   produce(state, (draft) => {
     switch (action.type) {
       case LESSON_ADD:
-        return state;
-      // draft.studentMap
-      //   .get(action.studentId)
-      //   .lessonMap.set(_.uniqueId('lesson_'), action.lesson);
+        draft.studentMap.get(action.studentId).lessonMap.set(_.uniqueId('lesson_'), {
+          lessonNum: 4,
+          contents: new Map([
+            [_.uniqueId('lessonContent_'), {text: action.title, isCompleted: false}]
+          ]),
+          file: '',
+          test: [],
+        });
 
-      // draft = Object.assign({}, draft);
-      // break;
+        // draft = Object.assign({}, draft);
+        break;
       case LESSON_EDIT:
         return state;
 
       case LESSON_REMOVE:
         return state;
 
+      case 'CHECKED':
+        draft.studentMap.get(action.studentId).lessonMap.get(action.lessonId).contents.get(action.contentId).isCompleted = !draft.studentMap.get(action.studentId).lessonMap.get(action.lessonId).contents.get(action.contentId).isCompleted 
+        break;
       default:
         return state;
     }

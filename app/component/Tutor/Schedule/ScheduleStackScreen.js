@@ -1,16 +1,16 @@
 import { HeaderBackButton, createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, Text } from 'react-native';
-
 import DetailInfo from './DetailInfo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import React from 'react';
 import Schedule from './Schedule';
 import headerOptions from '../../headerOptions'
+import { connect } from 'react-redux';
 
 const ScheduleStack = createStackNavigator();
 
-const ScheduleStackScreen = ({ student }) => {
-
+const ScheduleStackScreen = (props) => {
+  const student = props.currentStudent;
   return (
     <ScheduleStack.Navigator initialRouteName='일정관리'>
       <ScheduleStack.Screen
@@ -20,7 +20,7 @@ const ScheduleStackScreen = ({ student }) => {
           ...headerOptions, title: '일정관리',
           headerLeft: () => (
             <Ionicons.Button name='menu' size={35} backgroundColor='#e91e63' onPress={() => {
-              navigation.openDrawer()
+              props.navigation.openDrawer()
             }} />
           ),
           headerRight: () => (
@@ -35,12 +35,12 @@ const ScheduleStackScreen = ({ student }) => {
           ...headerOptions, title: '상세정보',
           headerLeft: () => (
             <Ionicons.Button name='menu' size={35} backgroundColor='#e91e63' onPress={() => {
-              navigation.openDrawer()
+              props.navigation.openDrawer()
             }} />
           ),
           headerRight: () => (
             <HeaderBackButton tintColor='white' backgroundColor='#e91e63' onPress={() => {
-              navigation.navigate('일정관리')
+              props.navigation.navigate('일정관리')
             }} />
           )
         }}
@@ -57,4 +57,10 @@ const styles = StyleSheet.create({
   }
 })
 
-export default ScheduleStackScreen;
+export default connect((state) => {
+  const currentStudentId = state.tutorReducer.selectedStudentId;
+  const studentMap = state.lessonReducer.studentMap;
+  return {
+    currentStudent: studentMap.get(currentStudentId)
+  } 
+}, null)(ScheduleStackScreen);

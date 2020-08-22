@@ -5,40 +5,51 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MainStackScreen from './MainStackScreen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProgressStackScreen from './Progress/ProgressStackScreen';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 import ScheduleStackScreen from './Schedule/ScheduleStackScreen';
 import { StudentType } from '../../types/root';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 const Tab = createBottomTabNavigator();
 
-interface TabProps {
-  student: StudentType;
-}
-function Tabs({ student }: TabProps) {
+// interface TabProps {
+//   student: StudentType;
+// }
+// { student }: TabProps)
+function Tabs(props) {
+
   return (
     <Tab.Navigator
       initialRouteName="메인"
       tabBarOptions={{ activeTintColor: '#e91e63' }}>
-      <Tab.Screen key={'메인'} name={'메인'} options={mainOptions}>
-        {(props) => <MainStackScreen student={student} {...props} />}
-      </Tab.Screen>
-
-      <Tab.Screen key={'일정'} name={'일정'} options={calendarOptions}>
-        {(props) => <ScheduleStackScreen student={student} {...props} />}
-      </Tab.Screen>
-
-      <Tab.Screen key={'진도'} name={'진도'} options={progressOptions}>
-        {(props) => <ProgressStackScreen student={student} {...props} />}
-      </Tab.Screen>
-
-      <Tab.Screen key={'과제'} name={'과제'} options={assignOptions}>
-        {(props) => <HomeworkContainer student={student} {...props} />}
-      </Tab.Screen>
+      <Tab.Screen
+        key={'메인'}
+        name={'메인'}
+        options={mainOptions}
+        component={MainStackScreen}
+      />
+      <Tab.Screen
+        key={'일정'}
+        name={'일정'}
+        options={calendarOptions}
+        component={ScheduleStackScreen}
+      />
+      <Tab.Screen
+        key={'진도'}
+        name={'진도'}
+        options={progressOptions}
+        component={ProgressStackScreen}
+      />
+      <Tab.Screen
+        key={'과제'}
+        name={'과제'}
+        options={assignOptions}
+        component={HomeworkContainer}
+      />
     </Tab.Navigator>
   );
 }
-export default Tabs;
 
 const mainOptions = {
   tabBarLabel: '메인',
@@ -67,3 +78,20 @@ const assignOptions = {
     <FontAwesome name="book" color={color} size={size} />
   ),
 };
+
+const mapStateToProps = (state) => {
+  return {
+    
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return{
+    isFocus: function(type, studentId) {
+      dispatch({type, studentId});
+    }
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Tabs)
+

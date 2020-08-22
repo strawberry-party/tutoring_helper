@@ -2,11 +2,13 @@ import { Text, View } from 'react-native';
 
 import React from 'react';
 import { StudentType } from '../../types/root';
+import { connect } from 'react-redux';
 
 interface MainProps {
   student: StudentType;
 }
-function Main({student}: MainProps) {
+function Main(props) {
+  const student = props.currentStudent;
   return (
     <View>
       <Text>과목 : {student.subject}</Text>
@@ -16,4 +18,10 @@ function Main({student}: MainProps) {
   );
 }
 
-export default Main;
+export default connect((state) => {
+  const currentStudentId = state.tutorReducer.selectedStudentId;
+  const studentMap = state.lessonReducer.studentMap;
+  return {
+    currentStudent: studentMap.get(currentStudentId)
+  } 
+}, null)(Main);

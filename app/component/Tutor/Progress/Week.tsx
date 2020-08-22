@@ -3,7 +3,6 @@ import { StyleSheet, Text, View } from 'react-native';
 import CheckingProgress from './CheckingProgress';
 import React from 'react';
 import TestResult from './TestResult';
-import { createExpressionWithTypeArguments } from 'typescript';
 
 const styles = StyleSheet.create({
   content: {
@@ -18,12 +17,16 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function Week({ contents, test }) {
+export default function Week({contents, test, id }) {
+  // console.log(contents);
+  // console.log(test);
+  // console.log(id);
+  
   return (
     <View>
       <View style={styles.content}>
         <Text style={styles.title}>진도 체크</Text>
-        <CheckingProgress contents={contents} />
+        <CheckingProgress id={id} contents={contents} />
       </View>
       <View style={styles.content}>
         <Text style={{ ...styles.title, paddingBottom: 20 }}>
@@ -32,7 +35,7 @@ export default function Week({ contents, test }) {
       </View>
       <View style={styles.content}>
         <Text style={{ ...styles.title, paddingBottom: 20 }}>Test 결과</Text>
-        {test && <TestResult result={test} />}
+        <TestResult result={test} />
       </View>
     </View>
   );

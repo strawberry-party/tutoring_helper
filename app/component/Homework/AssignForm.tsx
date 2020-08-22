@@ -78,7 +78,7 @@ export default function FormExample({
   const [newOut, setOut] = useState(out);
 
   const handleSubmit = (e) => {
-    console.log(typeof e);
+    // console.log(typeof e);
     e.preventDefault();
 
     const newAssign: AssignType = {

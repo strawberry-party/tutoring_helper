@@ -90,7 +90,7 @@ const assignsReducer = (
           }
         }
         if (index === draft.assigns.length)
-          console.log('invalid action with no matching assign id');
+          // console.log('invalid action with no matching assign id');
         break;
 
       case ASSIGN_INCOMPLETE:
@@ -108,7 +108,7 @@ const assignsReducer = (
           }
         }
         if (index === draft.assigns.length)
-          console.log('invalid action with no matching assign id');
+          // console.log('invalid action with no matching assign id');
         break;
 
       case ASSIGN_REMOVE:
@@ -119,7 +119,7 @@ const assignsReducer = (
         }
 
         if (index === state.assigns.length) {
-          console.log('invalid action with no matching assign id');
+          // console.log('invalid action with no matching assign id');
           return state;
         }
         
@@ -141,7 +141,7 @@ const assignsReducer = (
           }
         }
         if (index === draft.assigns.length)
-          console.log('invalid action with no matching assign id');
+          // console.log('invalid action with no matching assign id');
         break;
 
       default:

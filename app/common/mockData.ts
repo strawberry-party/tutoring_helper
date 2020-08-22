@@ -64,20 +64,19 @@ const lesson_1: LessonType = {
 const lesson_2: LessonType = {
   lessonNum: 2,
   contents: new Map([
-    ['lessonContent_1', { text: '2단원', isCompleted: true }],
-    ['lessonContent_2', { text: '3단원', isCompleted: false }],
+    ['lessonContent_1', { text: '4단원', isCompleted: false }],
   ]),
   file: '',
-  test: [{ desc: '1단원', score: 90 }],
+  test: [{ desc: '2단원', score: 90 }, {desc: '3단원', score: 100}],
 };
 const lesson_3: LessonType = {
   lessonNum: 3,
   contents: new Map([
-    ['lessonContent_1', { text: '2단원', isCompleted: true }],
-    ['lessonContent_2', { text: '3단원', isCompleted: false }],
+    ['lessonContent_1', { text: '5단원', isCompleted: false }],
+    ['lessonContent_2', { text: '6단원', isCompleted: false }],
   ]),
   file: '',
-  test: [{ desc: '1단원', score: 90 }],
+  test: [],
 };
 
 const lessonMap: Map<string, LessonType> = new Map([
@@ -93,7 +92,7 @@ export const tutor: TutorType = {
       'student_1',
       {
         name: '김태형',
-        subject: ['수학'],
+        subject: ['수학', '물리'],
         address: '한국',
         nextTime: '11:00~13:00',
         lessonMap: lessonMap,
