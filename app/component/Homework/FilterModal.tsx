@@ -1,10 +1,10 @@
 import { Icon, Text, View } from 'native-base';
 import { Modal, StyleSheet, TouchableOpacity } from 'react-native';
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 
 import { Chip } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
-import { TagMock } from '../Tag';
+import Tag from '../Tag';
 import { filterOptions } from '../../states/assignFilterSorterState';
 
 interface FilterProps {
@@ -43,6 +43,9 @@ export default function FilterModal({
 
   const tagKeyList: string[] = Array.from(tags.keys());
 
+  const selectedTagIds: Set<string> = new Set<string>();
+  const [selectedTagIdSet, setTagIdList] = useState(selectedTagIds);
+
   function getTagComponents(style = {}) {
     var tagComponents: JSX.Element[] = [];
 
@@ -51,18 +54,21 @@ export default function FilterModal({
       var tag = tags.get(id);
 
       tagComponents.push(
-        <TagMock
+        <Tag
           tag={tag}
           style={style}
           id={id}
           key={id}
-          // isSelected={selectedTagId === id}
-          // onSelect={(id: string) => {
-          //   console.log(id + ' select');
-
-          //   if (selectedTagId === id) selectTag('none');
-          //   else selectTag(id);
-          // }}
+          isSelected={selectedTagIdSet.has(id)}
+          onSelect={(id: string) => {
+            console.log(selectedTagIdSet);
+            if (selectedTagIdSet.has(id)) {
+              selectedTagIdSet.delete(id);
+            } else {
+              selectedTagIdSet.add(id);
+            }
+            setTagIdList(new Set(selectedTagIdSet));
+          }}
         />,
       );
     }
@@ -116,9 +122,9 @@ export default function FilterModal({
             </ScrollView>
 
             {/* <View style={styles.buttonContainer}> */}
-              <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-                <Icon name="save-outline" />
-              </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+              <Icon name="save-outline" />
+            </TouchableOpacity>
             {/* </View> */}
           </View>
         </View>
