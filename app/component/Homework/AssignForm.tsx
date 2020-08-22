@@ -14,6 +14,7 @@ import { AssignType } from '../../types/homework';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { TagType } from '../../types/root';
 import dayjs from 'dayjs';
+import { name } from 'dayjs/locale/*';
 
 type AddAssign = (assign: AssignType) => void;
 type EditAssign = (id: string, assign: AssignType) => void;
@@ -28,6 +29,7 @@ interface AssignForm {
   selectedAssignId: string;
   selectedAssign: AssignType;
   tags: Map<string, TagType>;
+  onAddTag: (tag: TagType) => void;
 }
 
 interface MyDatePickerProps {
@@ -75,11 +77,14 @@ export default function AssignForm({
   hideModal,
   selectedAssignId,
   tags,
+  onAddTag,
 }: AssignForm) {
-  const { text, due, out } = selectedAssign;
+  const { text, due, out, tagId } = selectedAssign;
   const [newText, setText] = useState(text);
   const [newDue, setDue] = useState(due);
   const [newOut, setOut] = useState(out);
+  const [selectedTagId, selectTag] = useState(tagId);
+
   const tagKeyList = Array.from(tags.keys());
   const handleSubmit = () => {
     const newAssign: AssignType = {
@@ -87,6 +92,7 @@ export default function AssignForm({
       text: newText,
       out: newOut,
       due: newDue,
+      tagId: selectedTagId,
     };
 
     switch (modalType) {
@@ -113,21 +119,34 @@ export default function AssignForm({
 
   function getTagComponents(style = {}) {
     // return <Text> Hello world </Text>
-
     var tagComponents: JSX.Element[] = [];
     var tagFrags: JSX.Element[] = [];
     var sumOfNameLen: number = 0;
-    for (var index = 0; index < tags.size + 1; index++) {
+    for (var index = 1; index < tags.size + 1; index++) {
       if (index === tags.size) {
-        tagFrags.push(
-          <TagForm style={style} onAddTag={(tag) => console.warn(tag.name)} />,
-        );
+        tagFrags.push(<TagForm style={style} onAddTag={onAddTag} />);
         sumOfNameLen += 8;
       } else {
         var id = tagKeyList[index];
         var tag = tags.get(id);
         sumOfNameLen += tag.name.length;
-        tagFrags.push(<Tag tag={tag} style={style} id={id} key={id} />);
+
+        tagFrags.push(
+          <Tag
+            tag={tag}
+            style={style}
+            id={id}
+            key={id}
+            isSelected={selectedTagId === id}
+            onSelect={(id: string) => {
+              console.log(id + ' select');
+
+              if (selectedTagId === id) selectTag('none');
+              else selectTag(id);
+              // console.warn(tag.name + id);
+            }}
+          />,
+        );
       }
 
       if (sumOfNameLen > 9) {

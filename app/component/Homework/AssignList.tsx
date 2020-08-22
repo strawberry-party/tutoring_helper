@@ -101,7 +101,6 @@ function AssignList({
 
   const outDates: Set<string> = new Set();
   var items: Array<JSX.Element> = [];
-  console.warn(Array.from(sorted.values()).map((item) => item.text));
 
   for (const [key, assign] of sorted) {
     if (!assign.out) continue;

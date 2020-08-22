@@ -155,12 +155,13 @@ export default function FilterSorter({
   return (
     <View style={styles.container}>
       <Filter activeFilter={activeFilter} filterActions={filterActions} />
-      <Sorter
+
+      {/* <Sorter // #TODO: 나중에 Sorter 다시 만들기 
         activeSorter={activeSorter}
         activeSorterDir={activeSorterDir}
         sorterActions={sorterActions}
         sorterDirActions={sorterDirActions}
-      />
+      /> */}
     </View>
   );
 }

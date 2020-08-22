@@ -4,18 +4,39 @@ import React, { useState } from 'react';
 
 import { TagType } from '../types/root';
 import { Text } from 'react-native';
+import { selectTag } from '../states/tagState';
 
 interface TagProps {
   tag: TagType;
   style: any;
   id: string;
+  onSelect: any;
+  isSelected;
 }
 
-export default function Tag({ tag, style, id }: TagProps) {
+export function TagMock({ tag, style, id }) {
   return (
     <Chip
       style={[tag.style, style]}
-      onPress={() => console.log(`${id} 가 눌림`)}>
+      onPress={() => console.log('그래도 뭔가 일어나야 하지 않을까')}>
+      {tag.name}
+    </Chip>
+  );
+}
+
+export default function Tag({
+  tag,
+  style,
+  id,
+  onSelect,
+  isSelected,
+}: TagProps) {
+  return (
+    <Chip
+      style={
+        isSelected ? [tag.style, style, { elevation: 15 }] : [tag.style, style]
+      }
+      onPress={() => onSelect(id)}>
       {tag.name}
     </Chip>
   );
@@ -27,13 +48,10 @@ export function TagForm({ style, onAddTag }) {
   const onSubmit = () => {
     const newTag: TagType = new TagType(text);
     onAddTag(newTag);
-    console.log(`제출 구현해야함: ${text}`);
   };
 
   return (
-    <Chip
-      style={[style, { flexDirection: 'row' }]}
-      onPress={() => console.log('뭔가 바꾸시겠습니까')}>
+    <Chip style={[style, { flexDirection: 'row' }]}>
       <TextInput
         value={text}
         onChange={({ nativeEvent: { text } }) => {

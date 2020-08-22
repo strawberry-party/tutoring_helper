@@ -11,7 +11,7 @@ const initialState = {
   selectedTagId: 'none',
   tags: new Map<string, TagType>([
     ['none', new TagType()],
-    ['java', new TagType('JAVA', {backgroundColor: 'pink'})],
+    ['java', new TagType('JAVA', { backgroundColor: 'pink' })],
     // ['EE209', new TagType('전자공학을 위한 프로그래밍 구조론', {backgroundColor: 'yellow'})],
   ]), // TODO: defaultTag, tag1 넣기
 };
@@ -70,6 +70,8 @@ const tagReducer = (state: TagState = initialState, action: TagAction) =>
         draft.selectedTagId = action.id;
         break;
       case TAG_ADD:
+        console.warn('draft tag set' + action.tag.name);
+
         draft.tags.set(action.id, action.tag);
         break;
       case TAG_EDIT:

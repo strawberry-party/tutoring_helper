@@ -12,7 +12,7 @@ import React, { useState } from 'react';
 
 import { CheckBox } from 'react-native-elements';
 import SwipeRow from './SwipeRow';
-import Tag from '../Tag';
+import { TagMock } from '../Tag';
 import { TagType } from '../../types/root';
 
 interface AssignProps extends AssignType {
@@ -76,7 +76,7 @@ function Assign({
                   alignItems: 'center',
                   borderRadius: 20,
                 }}>
-                <Tag tag={tag} style={{ marginRight: 10 }} id={tagId} />
+                <TagMock tag={tag} style={{ marginRight: 10 }} id={tagId} />
 
                 <Text style={{ fontWeight: '400', flex: 2 }}>{text}</Text>
               </CardItem>
