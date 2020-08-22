@@ -38,11 +38,11 @@ function RootContainer({studentState, studentMap, isFocus, lessonMap}) {
   
   
   useEffect(() => {
-      var dbData;
-      db.ref('tutor_1/studentMap').once('value', snapshot => {
-        dbData = snapshot.val()
-        console.log(dbData)
-      })
+      // var dbData;
+      // db.ref('tutor_1/studentMap').once('value', snapshot => {
+      //   dbData = snapshot.val()
+      //   console.log(dbData)
+      // })
     })
   return (
     <NavigationContainer ref={navigationRef}>
