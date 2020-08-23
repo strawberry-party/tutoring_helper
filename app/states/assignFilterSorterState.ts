@@ -4,6 +4,7 @@ import produce from 'immer';
 const SET_FILTER = 'SET_FILTER' as const;
 const SET_SORTER = 'SET_SORTER' as const;
 const SET_SORTER_DIR = 'SET_SORTER_DIR' as const; // 정렬 방향
+const SET_TAG_FILTER = 'SET_TAG_FILTER' as const;
 
 // action constructor
 
@@ -13,12 +14,11 @@ const ALL = 'ALL' as const;
 const COMPLETED = 'COMPLETED' as const;
 const INCOMPLETED = 'INCOMPLETED' as const;
 
-export const filterOptions = { ALL, COMPLETED, INCOMPLETED };
-
 type FilterSorterAction =
   | ReturnType<typeof showAll>
   | ReturnType<typeof showIncomplete>
   | ReturnType<typeof showCompleted>
+  | ReturnType<typeof showSelectedTags>
   | ReturnType<typeof sortDsc>
   | ReturnType<typeof sortAsc>
   | ReturnType<typeof sortDue>
@@ -33,6 +33,7 @@ type FilterSorterState = {
   filter: FilterState;
   sorter: SorterState;
   sorterDir: SorterDirState;
+  tagFilter: Set<string>;
 };
 
 // action constructor
@@ -54,6 +55,13 @@ function showIncomplete() {
   return {
     type: SET_FILTER,
     filter: INCOMPLETED,
+  };
+}
+
+function showSelectedTags(selectedTagIdSet: Set<string>) {  
+  return {
+    type: SET_TAG_FILTER,
+    tagFilter: selectedTagIdSet,
   };
 }
 
@@ -116,6 +124,8 @@ export const actions = {
   sortDue,
   sortOut,
   sortTitle,
+
+  showSelectedTags,
 };
 
 // reducer
@@ -123,6 +133,7 @@ const initialState: FilterSorterState = {
   filter: ALL,
   sorter: OUT,
   sorterDir: ASC,
+  tagFilter: new Set<string>(['java']),
 };
 
 const assignFilterSorterReducer = (
@@ -140,6 +151,8 @@ const assignFilterSorterReducer = (
       case SET_SORTER_DIR:
         draft.sorterDir = action.sorterDir;
         break;
+      case SET_TAG_FILTER:
+        draft.tagFilter = action.tagFilter;
       default:
         break;
     }

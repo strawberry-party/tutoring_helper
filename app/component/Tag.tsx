@@ -34,7 +34,7 @@ export default function Tag({
   return (
     <Chip
       style={
-        isSelected ? [tag.style, style, { elevation: 15 }] : [tag.style, style]
+        isSelected ? [tag.style, style, { borderColor: 'black', elevation: 3,}] : [tag.style, style]
       }
       onPress={() => onSelect(id)}>
       {tag.name}

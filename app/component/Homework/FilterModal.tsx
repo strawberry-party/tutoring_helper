@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { Chip } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
 import Tag from '../Tag';
-import { filterOptions } from '../../states/assignFilterSorterState';
+import produce from 'immer';
 
 interface FilterProps {
   filterActions: {
@@ -21,10 +21,16 @@ export default function FilterModal({
   activeFilter,
   modalVisible,
   hideModal,
-  onSubmit,
   tags,
   onAddTag,
+  tagFilter,
 }) {
+  const handleSubmit = () => {
+    selectFilter(selectedFilterButton);
+    filterActions.showSelectedTags(selectedTagIdSet);
+    hideModal();
+  };
+
   const selectFilter = (value: string) => {
     switch (value) {
       case 'ALL':
@@ -37,14 +43,14 @@ export default function FilterModal({
         filterActions.showIncomplete();
         break;
       default:
-        console.error('SOMETHING WENT WRONG in FilterSorter/selectFilter');
+        console.error('SOMETHING WENT WRONG in FilterModal/selectFilter');
     }
   };
 
   const tagKeyList: string[] = Array.from(tags.keys());
 
-  const selectedTagIds: Set<string> = new Set<string>();
-  const [selectedTagIdSet, setTagIdList] = useState(selectedTagIds);
+  const [selectedTagIdSet, setTagIdSet] = useState(new Set(tagFilter));
+  const [selectedFilterButton, toggleFilterButton] = useState(activeFilter);
 
   function getTagComponents(style = {}) {
     var tagComponents: JSX.Element[] = [];
@@ -62,12 +68,12 @@ export default function FilterModal({
           isSelected={selectedTagIdSet.has(id)}
           onSelect={(id: string) => {
             console.log(selectedTagIdSet);
-            if (selectedTagIdSet.has(id)) {
-              selectedTagIdSet.delete(id);
-            } else {
-              selectedTagIdSet.add(id);
-            }
-            setTagIdList(new Set(selectedTagIdSet));
+            setTagIdSet(
+              produce((draft) => {
+                if (draft.has(id)) draft.delete(id);
+                else draft.add(id);
+              }),
+            );
           }}
         />,
       );
@@ -76,9 +82,21 @@ export default function FilterModal({
     return tagComponents;
   }
 
-  const handleSubmit = () => {
-    onSubmit();
-    hideModal();
+  const selectAllTag = () => {
+    setTagIdSet(
+      produce((draft) => {
+        tagKeyList.map((id: string) => draft.add(id));
+      }),
+    );
+  };
+
+  const unselectAllTag = () => {
+    setTagIdSet(new Set());
+  };
+
+  const onSelectFilterOption = (value: string) => {
+    toggleFilterButton(value);
+    console.warn('filterOption selected!' + value);
   };
 
   return (
@@ -91,13 +109,31 @@ export default function FilterModal({
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <View style={styles.pickerContainer}>
-              <Chip style={styles.chip}>
+              <Chip
+                style={
+                  selectedFilterButton === 'ALL'
+                    ? styles.selectedChip
+                    : styles.chip
+                }
+                onPress={() => onSelectFilterOption('ALL')}>
                 <Text> 모두 </Text>
               </Chip>
-              <Chip style={styles.chip}>
+              <Chip
+                style={
+                  selectedFilterButton === 'COMPLETED'
+                    ? styles.selectedChip
+                    : styles.chip
+                }
+                onPress={() => onSelectFilterOption('COMPLETED')}>
                 <Text> 끝냄 </Text>
               </Chip>
-              <Chip style={styles.chip}>
+              <Chip
+                style={
+                  selectedFilterButton === 'INCOMPLETED'
+                    ? styles.selectedChip
+                    : styles.chip
+                }
+                onPress={() => onSelectFilterOption('INCOMPLETED')}>
                 <Text> 못 끝냄 </Text>
               </Chip>
             </View>
@@ -107,10 +143,10 @@ export default function FilterModal({
             <ScrollView>
               <View>
                 <View style={styles.tagPickerContainer}>
-                  <Chip style={styles.chip}>
+                  <Chip style={styles.chip} onPress={selectAllTag}>
                     <Text> 모두 선택 </Text>
                   </Chip>
-                  <Chip style={styles.chip}>
+                  <Chip style={styles.chip} onPress={unselectAllTag}>
                     <Text> 모두 해제 </Text>
                   </Chip>
                 </View>
@@ -168,6 +204,14 @@ const styles = StyleSheet.create({
     margin: 5,
     marginBottom: 10,
   },
+
+  selectedChip: {
+    margin: 5,
+    marginBottom: 10,
+    elevation: 3,
+    borderColor: 'black',
+  },
+
   button: {
     alignItems: 'center',
     justifyContent: 'center',

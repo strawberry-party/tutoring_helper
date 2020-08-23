@@ -1,7 +1,6 @@
 import { AssignListType, AssignType } from '../../types/homework';
 import {
   FilterState,
-  filterOptions,
   sorterDirOptions,
   sorterOptions,
 } from '../../states/assignFilterSorterState';
@@ -27,6 +26,7 @@ interface AssignListProps extends AssignListType {
   activeSorterDir;
   assignMap: Map<string, AssignType>;
   tags: Map<string, TagType>;
+  activeTagFilter: Set<string>;
 }
 
 const noAssign = <Text style={{ fontSize: 20 }}> 새 숙제를 추가해보세요</Text>;
@@ -44,22 +44,30 @@ function AssignList({
   activeFilter,
   activeSorter,
   activeSorterDir,
+  activeTagFilter,
 }: AssignListProps) {
   const getFiltered = () => {
     switch (activeFilter) {
-      case filterOptions.ALL:
-        return assignMap;
-      case filterOptions.COMPLETED:
+      case 'ALL':
         var newAssignMap = new Map<string, AssignType>();
         for (let [key, assign] of assignMap) {
-          if (assign.isCompleted) newAssignMap.set(key, assign);
+          if (activeTagFilter.has(assign.tagId))
+            newAssignMap.set(key, assign);
+        }
+        return newAssignMap;
+      case 'COMPLETED':
+        var newAssignMap = new Map<string, AssignType>();
+        for (let [key, assign] of assignMap) {
+          if (assign.isCompleted && activeTagFilter.has(assign.tagId))
+            newAssignMap.set(key, assign);
         }
         return newAssignMap;
 
-      case filterOptions.INCOMPLETED:
+      case 'INCOMPLETED':
         var newAssignMap = new Map<string, AssignType>();
         for (let [key, assign] of assignMap) {
-          if (!assign.isCompleted) newAssignMap.set(key, assign);
+          if ((!assign.isCompleted) && activeTagFilter.has(assign.tagId))
+            newAssignMap.set(key, assign);
         }
         return newAssignMap;
       default:

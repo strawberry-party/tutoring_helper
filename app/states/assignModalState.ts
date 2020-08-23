@@ -80,7 +80,7 @@ const initialState: ModalState = {
   selectedAssignId: 'none',
   selectedAssign: defaultAssign,
 
-  filterModalVisible: false,
+  filterModalVisible: true,
 };
 
 const assignModalVisibilityReducer = (

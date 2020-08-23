@@ -12,7 +12,6 @@ import React, { Component } from 'react';
 
 import { IconButton } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
-import { filterOptions } from '../../states/assignFilterSorterState';
 
 interface SorterProps {
   sorterActions: {

@@ -44,6 +44,8 @@ function HomeworkContainer({
   sortOut,
   sortTitle,
 
+  showSelectedTags,
+
   addTag,
 }: HomeworkContainerProps) {
   // const tagMap: Map<string, TagType> = useSelector(
@@ -84,6 +86,10 @@ function HomeworkContainer({
 
   const sorterDir = useSelector(
     (state: RootState) => state.assignFilterSorterReducer.sorterDir,
+  );
+
+  const tagFilter = useSelector(
+    (state: RootState) => state.assignFilterSorterReducer.tagFilter,
   );
 
   const tags = useSelector((state: RootState) => state.tagReducer.tags);
@@ -127,6 +133,7 @@ function HomeworkContainer({
               activeFilter={filter}
               activeSorter={sorter}
               activeSorterDir={sorterDir}
+              activeTagFilter={tagFilter}
               completed={0}
               tags={tags}
             />
@@ -163,11 +170,11 @@ function HomeworkContainer({
           <FilterModal
             modalVisible={filterModalVisible}
             hideModal={hideFilterModal}
-            onSubmit={() => console.warn('submit 구현 해야지')}
             tags={tags}
             onAddTag={addTag}
             activeFilter={filter}
-            filterActions={{ showAll, showCompleted, showIncomplete }}
+            tagFilter={tagFilter}
+            filterActions={{ showAll, showCompleted, showIncomplete, showSelectedTags }}
           />
         </View>
       </View>
