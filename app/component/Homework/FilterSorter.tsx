@@ -126,7 +126,6 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    margin: 5,
     backgroundColor: '#aec6df',
     borderRadius: 20,
     borderColor: 'transparent',

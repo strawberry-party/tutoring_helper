@@ -7,8 +7,8 @@ import store from '../common/store';
 function App() {
   return (
     <Provider store={store}>
-      <HomeworkContainer />
-      {/* <RootContainer /> */}
+      {/* <HomeworkContainer /> */}
+      <RootContainer />
     </Provider>
   );
 }

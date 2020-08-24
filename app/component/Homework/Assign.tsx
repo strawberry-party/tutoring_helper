@@ -106,7 +106,6 @@ function Assign({
                     onPress={onRemove}
                   />
 
-                  <AlarmDialog text={text}/>
                 </View>
               )}
             </View>

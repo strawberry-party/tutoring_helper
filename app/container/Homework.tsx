@@ -4,15 +4,15 @@ import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { connect, useSelector } from 'react-redux';
 
 import AddAssignButton from '../component/Homework/AddAssignButton';
+import AlarmDialog from '../component/Homework/AlarmDialog';
 import AssignList from '../component/Homework/AssignList';
 import AssignModal from '../component/Homework/AssignModal';
 import { AssignType } from '../types/homework';
 import { FilterButton } from '../component/Homework/FilterSorter';
 import FilterModal from '../component/Homework/FilterModal';
-import PushMaker from './PushMaker'
+import PushMaker from './PushMaker';
 import React from 'react';
 import { RootState } from '../states';
-import { TagType } from '../types/root';
 import { actions as assignActions } from '../states/assignState';
 import { actions as filterSorterActions } from '../states/assignFilterSorterState';
 import { actions as modalVisibilityActions } from '../states/assignModalState';
@@ -52,7 +52,6 @@ function HomeworkContainer({
   // const tagMap: Map<string, TagType> = useSelector(
   //   (state: RootState) => state.tagReducer.tagMap,
   // );
-  
 
   const assignMap: Map<string, AssignType> = useSelector(
     (state: RootState) => state.assignReducer.assignMap,
@@ -106,7 +105,12 @@ function HomeworkContainer({
       }}>
       <Text style={styles.titleText}>숙제 관리</Text>
       <View style={{ borderColor: 'green', borderWidth: 3, flex: 1 }}>
-        <View style={{ backgroundColor: 'pink' }}>
+        <View
+          style={{
+            backgroundColor: 'pink',
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
           <FilterButton
             showFilterModal={showFilterModal}
             // activeSorter={sorter}
@@ -114,6 +118,8 @@ function HomeworkContainer({
             // sorterDirActions={{ sortDsc, sortAsc }}
             // sorterActions={{ sortDue, sortOut, sortTitle }}
           />
+          <PushMaker />
+          <AlarmDialog text="알림"/>
         </View>
 
         <ScrollView
@@ -176,7 +182,12 @@ function HomeworkContainer({
             onAddTag={addTag}
             activeFilter={filter}
             tagFilter={tagFilter}
-            filterActions={{ showAll, showCompleted, showIncomplete, showSelectedTags }}
+            filterActions={{
+              showAll,
+              showCompleted,
+              showIncomplete,
+              showSelectedTags,
+            }}
           />
         </View>
       </View>
@@ -185,8 +196,6 @@ function HomeworkContainer({
         addModalVisible={addModalVisible}
         showAddModal={showAddModal}
       />
-
-      <PushMaker/>
     </SafeAreaView>
   );
 }
