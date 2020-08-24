@@ -2,19 +2,16 @@ import * as Animatable from 'react-native-animatable';
 
 import { AssignListType, AssignType } from '../../types/homework';
 import { Button, Card, CardItem, Icon, Text, View } from 'native-base';
-import {
-  Dimensions,
-  Pressable,
-  StyleSheet,
-  TouchableHighlight,
-} from 'react-native';
+import { Dimensions, Pressable, StyleSheet } from 'react-native';
 import React, { useState } from 'react';
 
 import AlarmDialog from './AlarmDialog';
 import { CheckBox } from 'react-native-elements';
+import { IconButton } from 'react-native-paper';
 import SwipeRow from './SwipeRow';
 import { TagMock } from '../Tag';
 import { TagType } from '../../types/root';
+import { assign } from 'lodash';
 
 interface AssignProps extends AssignType {
   onComplete: () => void;
@@ -95,17 +92,21 @@ function Assign({
               </CardItem>
               {buttonVisible && (
                 <View style={styles.overlay}>
-                  <Button icon style={styles.button} onPress={onStartEdit}>
-                    <Icon name="pencil" />
-                  </Button>
+                  <IconButton
+                    icon="pencil"
+                    color="white"
+                    style={styles.button}
+                    onPress={onStartEdit}
+                  />
 
-                  <Button icon style={styles.button} onPress={onRemove}>
-                    <Icon name="trash" />
-                  </Button>
+                  <IconButton
+                    icon="trash-can"
+                    color="white"
+                    style={styles.button}
+                    onPress={onRemove}
+                  />
 
-
-                  <AlarmDialog />
-                  
+                  <AlarmDialog text={text}/>
                 </View>
               )}
             </View>
@@ -128,12 +129,13 @@ function Assign({
             onPress={isCompleted ? onIncomplete : onComplete}
           />
 
-          <Button
+          {/* <Button
             icon
             onPress={onStartEdit}
             style={{ borderRadius: 20, backgroundColor: '#bbb' }}>
             <Icon name="pencil" />
-          </Button>
+          </Button> */}
+          
         </View>
       </View>
       {/* </TouchableHighlight> */}

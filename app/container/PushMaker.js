@@ -1,21 +1,14 @@
 import React, { Component } from 'react';
 import { Text, View } from 'react-native';
 
-import LocalNotification from './LocalNotification';
+import { Button } from 'react-native-paper';
+import LocalNotification from '../utils/LocalNotification';
 
-export default class LevelScreen extends Component {
-  // componentWillUnmount() {
-  //   LocalNotification.unregister();
-  // }
-  // componentDidMount() {
-  //   LocalNotification.register();
-  // }
+export default function PushController() {
 
-  render() {
-    return (
-      <View>
-        <Text> Hello Push </Text>
-      </View>
-    );
-  }
+  return (
+    <View>
+      <Button onPress={() => LocalNotification._unRegisterAllLocalNotification()}> 모든 알람 꺼버리기 </Button>
+    </View>
+  );
 }

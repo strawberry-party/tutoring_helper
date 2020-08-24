@@ -8,10 +8,10 @@ import {
 } from 'react-native-paper';
 import { StyleSheet, Text, View } from 'react-native';
 
-import LocalNotification from '../../container/LocalNotification';
+import LocalNotification from '../../utils/LocalNotification';
 import React from 'react';
 
-function AlarmDialog() {
+function AlarmDialog({ text }) {
   const [visible, setVisible] = React.useState(false);
   const [value, setValue] = React.useState('first');
 
@@ -19,16 +19,28 @@ function AlarmDialog() {
 
   const hideDialog = () => setVisible(false);
 
+  const onSubmit = () => {
+    switch (value) {
+      case 'first':
+        LocalNotification.triggerOneTimeLocalNotification(text, '딸기과외 한번 알림', 10);
+        break;
+      case 'second':
+        LocalNotification.triggerRepeatedLocalNotification(text, '딸기과외 반복 알림', new Date(), 10000);
+        break;
+      default:
+        console.warn("SOMETHING WENT WRONG in AlarmDialog/onSubmit");
+    }
+    hideDialog();
+  };
+
   return (
     <View>
       <IconButton
         icon="alarm"
+        color="white"
         style={styles.button}
         onPress={() => {
           showDialog();
-          LocalNotification.set('Hello world');
-          LocalNotification.register();
-          console.warn('여기에 push notification 설정 구현하기');
         }}
       />
       <Portal>
@@ -40,12 +52,12 @@ function AlarmDialog() {
                 onValueChange={(value) => setValue(value)}
                 value={value}>
                 <RadioButton.Item
-                  label="1분 뒤 (테스트 용)"
+                  label="10초 뒤에 한번 알림 (테스트 용)"
                   value="first"
                   style={styles.radioButton}
                 />
                 <RadioButton.Item
-                  label="과외 시작 15분 전"
+                  label="10초 간격으로 반복 알림 (테스트 용)"
                   value="second"
                   style={styles.radioButton}
                 />
@@ -53,7 +65,7 @@ function AlarmDialog() {
             </Paragraph>
           </Dialog.Content>
           <Dialog.Actions>
-            <Button onPress={hideDialog} style={styles.action}>
+            <Button onPress={onSubmit} style={styles.action}>
               저장
             </Button>
             <Button onPress={hideDialog} style={styles.action}>
@@ -77,9 +89,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  radioButton: {
-
-  },
+  radioButton: {},
 
   radioButtonContainer: {
     // justifyContent: 'center',
@@ -89,5 +99,5 @@ const styles = StyleSheet.create({
 
   action: {
     marginHorizontal: 15,
-  }
+  },
 });
