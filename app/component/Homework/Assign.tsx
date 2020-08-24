@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 
 import AlarmDialog from './AlarmDialog';
 import { CheckBox } from 'react-native-elements';
+import ConfirmModal from '../ConfirmModal';
 import { IconButton } from 'react-native-paper';
 import SwipeRow from './SwipeRow';
 import { TagMock } from '../Tag';
@@ -49,8 +50,13 @@ function Assign({
 
   const tag = tags.get(tagId);
 
+
+  const [confirmModalVisible, setConfirmModalVisible] = useState(false);
+  const showConfirmModal = () => setConfirmModalVisible(true);
+  const hideConfirmModal = () => setConfirmModalVisible(false);
+
   return (
-    <SwipeRow onSwipe={onRemove} swipeThreshold={-100}>
+    <SwipeRow onSwipe={showConfirmModal} swipeThreshold={-100}>
       <View
         style={{
           flexDirection: 'row',
@@ -60,6 +66,15 @@ function Assign({
           borderBottomWidth: 0.5,
           padding: 5,
         }}>
+        <ConfirmModal
+          title="정말 없애시겠어요?"
+          isVisible={confirmModalVisible}
+          cancelText="취소"
+          confirmText="확인"
+          onCancel={hideConfirmModal}
+          onConfirm={onRemove}
+          hideModal={hideConfirmModal}
+        />
         <Card style={cardStyle}>
           <Pressable onLongPress={showButton}>
             <View>
@@ -103,9 +118,8 @@ function Assign({
                     icon="trash-can"
                     color="white"
                     style={styles.button}
-                    onPress={onRemove}
+                    onPress={showConfirmModal}
                   />
-
                 </View>
               )}
             </View>
@@ -134,7 +148,6 @@ function Assign({
             style={{ borderRadius: 20, backgroundColor: '#bbb' }}>
             <Icon name="pencil" />
           </Button> */}
-          
         </View>
       </View>
       {/* </TouchableHighlight> */}

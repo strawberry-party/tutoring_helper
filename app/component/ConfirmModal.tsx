@@ -7,45 +7,49 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Button, Fab, Icon } from 'native-base';
-import React, { useState } from 'react';
+import { Button, Paragraph } from 'react-native-paper';
+
+import React from 'react';
 
 interface ConfirmModalProps {
-  addModalVisible: boolean;
-  hideAddModal: () => void;
-  showAddModal: () => void;
   cancelText: string;
   confirmText: string;
   title: string;
-  next: () => void;
 }
 
 export function ConfirmModal({
-  addModalVisible,
-  showAddModal,
-  hideAddModal,
+  title,
+  isVisible,
   cancelText,
   confirmText,
-  title,
-  next,
-}: ConfirmModalProps) {
+  onCancel,
+  onConfirm,
+  hideModal,
+}) {
+  const handleCancel = () => {
+    onCancel();
+    hideModal();
+  };
+
+  const handleConfirm = () => {
+    onConfirm();
+    hideModal();
+  };
   return (
     <Modal
       animationType="slide"
       transparent={true}
-      visible={addModalVisible}
-      onRequestClose={() => {
-        Alert.alert('Modal has been closed.');
-      }}>
+      visible={isVisible}
+      onRequestClose={handleCancel}>
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text>{title}</Text>
-          <Button onPress={hideAddModal}>
-            <Text>{cancelText}</Text>
-          </Button>
-          <TouchableOpacity onPress={next}>
-            <Text>confirmText</Text>
-          </TouchableOpacity>
+          <Paragraph style={{ marginBottom: 30 }}>
+            <Text style={styles.textStyle}>{title}</Text>
+          </Paragraph>
+          <Paragraph>
+            <Button onPress={handleCancel}>{cancelText}</Button>
+            <Button onPress={handleConfirm}>{confirmText}</Button>
+          </Paragraph>
         </View>
       </View>
     </Modal>
@@ -74,18 +78,10 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
-    width: 300,
-    height: 350,
-  },
-  openButton: {
-    backgroundColor: '#F194FF',
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
+    elevation: 10,
   },
   textStyle: {
-    color: 'white',
+    color: 'red',
     fontWeight: 'bold',
     textAlign: 'center',
   },
