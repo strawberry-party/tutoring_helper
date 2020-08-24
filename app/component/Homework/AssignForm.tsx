@@ -140,7 +140,9 @@ export default function AssignForm({
         />,
       );
     }
-    tagComponents.push(<TagForm style={style} onAddTag={onAddTag} key="tagForm" />);
+    tagComponents.push(
+      <TagForm style={style} onAddTag={onAddTag} key="tagForm" />,
+    );
 
     return tagComponents;
   }
@@ -196,24 +198,22 @@ export default function AssignForm({
   );
 }
 const styles = StyleSheet.create({
-
   tagContainer: {
     padding: 5,
     flexWrap: 'wrap',
     flexDirection: 'row',
-    
   },
   container: {
     flexGrow: 1,
     borderColor: 'pink',
-    borderWidth: 2,
+    // borderWidth: 2,
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 30,
   },
   formContainer: {
     borderColor: 'skyblue',
-    borderWidth: 2,
+    // borderWidth: 2,
     width: 270,
   },
   inputContainer: {

@@ -1,12 +1,4 @@
-import {
-  Button,
-  Form,
-  Header,
-  Icon,
-  Item,
-  Text,
-  View,
-} from 'native-base';
+import { Button, Form, Header, Icon, Item, Text, View } from 'native-base';
 import React, { Component } from 'react';
 
 import { IconButton } from 'react-native-paper';
@@ -76,7 +68,6 @@ function Sorter({
           <Picker.Item label="시작일" value="OUT" />
           <Picker.Item label="제목" value="TITLE" />
         </Picker> */}
-        
       </View>
       <Button
         small
@@ -101,9 +92,12 @@ function Sorter({
 
 export function FilterButton({ showFilterModal }) {
   return (
-    <Button style={styles.button} onPress={() => showFilterModal()}>
-      <Icon name="funnel" />
-    </Button>
+    <IconButton
+      icon="filter"
+      color="white"
+      style={styles.button}
+      onPress={() => showFilterModal()}
+    />
   );
 }
 
@@ -127,8 +121,8 @@ const styles = StyleSheet.create({
 
   button: {
     backgroundColor: '#aec6df',
-    borderRadius: 20,
     borderColor: 'transparent',
+    width: 60,
     elevation: 0,
   },
 

@@ -10,6 +10,7 @@ import React, { Component } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Assign from './Assign';
+import { Paragraph } from 'react-native-paper';
 import { TagType } from '../../types/root';
 import _ from 'lodash';
 import dayjs from 'dayjs';
@@ -29,7 +30,16 @@ interface AssignListProps extends AssignListType {
   activeTagFilter: Set<string>;
 }
 
-const noAssign = <Text style={{ fontSize: 20 }}> 새 숙제를 추가해보세요</Text>;
+const noAssign = (
+  <View>
+    <Text style={{ fontSize: 20, flexWrap: 'wrap' }}>
+      숙제가 없네요! 새 숙제를 추가해보세요
+    </Text>
+  </View>
+);
+
+// const noAssign = <Text> Hello world </Text>
+
 
 function AssignList({
   assignMap,
@@ -51,8 +61,7 @@ function AssignList({
       case 'ALL':
         var newAssignMap = new Map<string, AssignType>();
         for (let [key, assign] of assignMap) {
-          if (activeTagFilter.has(assign.tagId))
-            newAssignMap.set(key, assign);
+          if (activeTagFilter.has(assign.tagId)) newAssignMap.set(key, assign);
         }
         return newAssignMap;
       case 'COMPLETED':
@@ -66,7 +75,7 @@ function AssignList({
       case 'INCOMPLETED':
         var newAssignMap = new Map<string, AssignType>();
         for (let [key, assign] of assignMap) {
-          if ((!assign.isCompleted) && activeTagFilter.has(assign.tagId))
+          if (!assign.isCompleted && activeTagFilter.has(assign.tagId))
             newAssignMap.set(key, assign);
         }
         return newAssignMap;
@@ -148,8 +157,10 @@ function AssignList({
     items.push(comp);
   }
   return (
-    <View style={{ backgroundColor: 'red' }}>
-      <Text style={{ fontSize: 15 }}>AssignList</Text>
+    <View style={{ borderColor: 'red' }}>
+      <Paragraph>
+        <Text style={{ fontSize: 15 }}>여기는 AssignStatus가 올 자리</Text>
+      </Paragraph>
       <List style={{ backgroundColor: 'white' }}>
         {items.length === 0 ? noAssign : items}
       </List>

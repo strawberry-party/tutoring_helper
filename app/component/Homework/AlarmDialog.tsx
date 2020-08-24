@@ -81,12 +81,10 @@ function AlarmDialog({ text }) {
 export default AlarmDialog;
 const styles = StyleSheet.create({
   button: {
+    backgroundColor: '#aec6df',
+    borderColor: 'transparent',
     width: 60,
-    height: 60,
-    backgroundColor: 'rgba(0, 120, 255, 1)',
-    borderRadius: 30,
-    marginHorizontal: 15,
-    justifyContent: 'center',
+    elevation: 0,
   },
 
   radioButton: {},

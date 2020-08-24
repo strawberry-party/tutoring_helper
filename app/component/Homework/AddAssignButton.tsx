@@ -24,7 +24,6 @@ export function AddAssignButton({
     <Fab
       active={!addModalVisible}
       direction="up"
-      containerStyle={{ backgroundColor: 'black' }}
       style={{ backgroundColor: '#bbb' }}
       position="bottomRight"
       onPress={showAddModal}>

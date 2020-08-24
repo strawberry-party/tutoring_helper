@@ -100,14 +100,14 @@ function HomeworkContainer({
       style={{
         flexGrow: 1,
         borderColor: 'grey',
-        borderWidth: 3,
+        // borderWidth: 3,
         padding: 10,
       }}>
       <Text style={styles.titleText}>숙제 관리</Text>
-      <View style={{ borderColor: 'green', borderWidth: 3, flex: 1 }}>
+      <View style={{ borderColor: 'green', flex: 1 }}>
         <View
           style={{
-            backgroundColor: 'pink',
+            // backgroundColor: 'pink',
             flexDirection: 'row',
             alignItems: 'center',
           }}>
@@ -119,18 +119,18 @@ function HomeworkContainer({
             // sorterActions={{ sortDue, sortOut, sortTitle }}
           />
           <PushMaker />
-          <AlarmDialog text="알림"/>
+          <AlarmDialog text="알림" />
         </View>
 
         <ScrollView
           style={{
             borderColor: 'skyblue',
-            borderWidth: 3,
+            // borderWidth: 3,
           }}>
           <View
             style={{
               borderColor: 'blue',
-              borderWidth: 3,
+              // borderWidth: 3,
             }}>
             <AssignList
               assignMap={assignMap}
@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
 
   mock: {
     borderColor: 'pink',
-    borderWidth: 3,
+    // borderWidth: 3,
     height: 2,
   },
 });
