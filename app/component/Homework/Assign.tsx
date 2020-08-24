@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 
+import AlarmDialog from './AlarmDialog';
 import { CheckBox } from 'react-native-elements';
 import SwipeRow from './SwipeRow';
 import { TagMock } from '../Tag';
@@ -46,7 +47,7 @@ function Assign({
   const showButton = () => {
     setVisibility(true);
 
-    setTimeout(() => setVisibility(false), 1500);
+    // setTimeout(() => setVisibility(false), 1500);
   };
 
   const tag = tags.get(tagId);
@@ -101,6 +102,10 @@ function Assign({
                   <Button icon style={styles.button} onPress={onRemove}>
                     <Icon name="trash" />
                   </Button>
+
+
+                  <AlarmDialog />
+                  
                 </View>
               )}
             </View>

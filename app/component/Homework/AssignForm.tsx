@@ -140,7 +140,7 @@ export default function AssignForm({
         />,
       );
     }
-    tagComponents.push(<TagForm style={style} onAddTag={onAddTag} />);
+    tagComponents.push(<TagForm style={style} onAddTag={onAddTag} key="tagForm" />);
 
     return tagComponents;
   }

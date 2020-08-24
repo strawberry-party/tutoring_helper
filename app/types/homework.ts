@@ -1,8 +1,7 @@
-import { enableMapSet, immerable } from 'immer';
-
 import { TagType } from './root';
 import _ from 'lodash';
 import dayjs from 'dayjs';
+import { immerable } from 'immer';
 
 // TODO: print 내장 메소드 만들기
 // TODO: assigns 자료구조 Map으로 바꾸기

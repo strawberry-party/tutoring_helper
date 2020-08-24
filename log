@@ -1,0 +1,147 @@
+PS C:\Users\sanga\Documents\GitHub\tutoring_helper\android> ./gradlew bundleRelease     
+
+> Task :app:bundleReleaseJsAndAssets
+warning: the transform cache was reset.
+                 Welcome to React Native!
+                Learn once, write anywhere
+
+
+info Writing bundle output to:, C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\generated\assets\react\release\index.android.bundle
+info Writing sourcemap output to:, C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\generated\sourcemaps\react\release\index.android.bundle.map
+info Done writing bundle output
+info Done writing sourcemap output
+info Copying 24 asset files
+info Done copying assets
+
+> Task :@react-native-community_datetimepicker:compileReleaseJavaWithJavac
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+
+> Task :react-native-community_datetimepicker:compileReleaseJavaWithJavac
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+
+> Task :react-native-gesture-handler:compileReleaseJavaWithJavac
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+
+> Task :react-native-reanimated:compileReleaseJavaWithJavac
+Note: C:\Users\sanga\Documents\GitHub\tutoring_helper\node_modules\react-native-reanimated\android\src\main\java\com\swmansion\reanimated\NodesManager.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: C:\Users\sanga\Documents\GitHub\tutoring_helper\node_modules\react-native-reanimated\android\src\main\java\com\swmansion\reanimated\NodesManager.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+
+> Task :react-native-screens:compileReleaseJavaWithJavac
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\arm64-v8a\libc++_shared.so' due to missing strip tool for ABI 'ARM64_V8A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86\libjsc.so' due to missing strip tool for ABI 'X86'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86_64\libglog.so' due to missing strip tool for ABI 'X86_64'. Packaging it as is.
+
+> Task :app:stripReleaseDebugSymbols
+Compatible side by side NDK version was not found.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\arm64-v8a\libfb.so' due to missing strip tool for ABI 'ARM64_V8A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\arm64-v8a\libfbjni.so' due to missing strip tool for ABI 'ARM64_V8A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\arm64-v8a\libfolly_futures.so' due to missing strip tool for ABI 'ARM64_V8A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\arm64-v8a\libfolly_json.so' due to missing strip tool for ABI 'ARM64_V8A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\arm64-v8a\libglog.so' due to missing 
+strip tool for ABI 'ARM64_V8A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\arm64-v8a\libglog_init.so' due to missing strip tool for ABI 'ARM64_V8A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\arm64-v8a\libhermes-executor-debug.so' due to missing strip tool for ABI 'ARM64_V8A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\arm64-v8a\libhermes-executor-release.so' due to missing strip tool for ABI 'ARM64_V8A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\arm64-v8a\libhermes-inspector.so' due to missing strip tool for ABI 'ARM64_V8A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\arm64-v8a\libimagepipeline.so' due to missing strip tool for ABI 'ARM64_V8A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\arm64-v8a\libjsc.so' due to missing strip tool for ABI 'ARM64_V8A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\arm64-v8a\libjscexecutor.so' due to missing strip tool for ABI 'ARM64_V8A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\arm64-v8a\libjsijniprofiler.so' due to missing strip tool for ABI 'ARM64_V8A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\arm64-v8a\libjsinspector.so' due to missing strip tool for ABI 'ARM64_V8A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\arm64-v8a\libnative-filters.so' due to missing strip tool for ABI 'ARM64_V8A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\arm64-v8a\libnative-imagetranscoder.so' due to missing strip tool for ABI 'ARM64_V8A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\arm64-v8a\libreactnativeblob.so' due 
+to missing strip tool for ABI 'ARM64_V8A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\arm64-v8a\libreactnativejni.so' due to missing strip tool for ABI 'ARM64_V8A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\arm64-v8a\libyoga.so' due to missing 
+strip tool for ABI 'ARM64_V8A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\armeabi-v7a\libc++_shared.so' due to 
+missing strip tool for ABI 'ARMEABI_V7A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\armeabi-v7a\libfb.so' due to missing 
+strip tool for ABI 'ARMEABI_V7A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\armeabi-v7a\libfbjni.so' due to missing strip tool for ABI 'ARMEABI_V7A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\armeabi-v7a\libfolly_futures.so' due 
+to missing strip tool for ABI 'ARMEABI_V7A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\armeabi-v7a\libfolly_json.so' due to 
+missing strip tool for ABI 'ARMEABI_V7A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\armeabi-v7a\libglog.so' due to missing strip tool for ABI 'ARMEABI_V7A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\armeabi-v7a\libglog_init.so' due to missing strip tool for ABI 'ARMEABI_V7A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\armeabi-v7a\libhermes-executor-debug.so' due to missing strip tool for ABI 'ARMEABI_V7A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\armeabi-v7a\libhermes-executor-release.so' due to missing strip tool for ABI 'ARMEABI_V7A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\armeabi-v7a\libhermes-inspector.so' due to missing strip tool for ABI 'ARMEABI_V7A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\armeabi-v7a\libimagepipeline.so' due 
+to missing strip tool for ABI 'ARMEABI_V7A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\armeabi-v7a\libjsc.so' due to missing strip tool for ABI 'ARMEABI_V7A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\armeabi-v7a\libjscexecutor.so' due to missing strip tool for ABI 'ARMEABI_V7A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\armeabi-v7a\libjsijniprofiler.so' due to missing strip tool for ABI 'ARMEABI_V7A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\armeabi-v7a\libjsinspector.so' due to missing strip tool for ABI 'ARMEABI_V7A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\armeabi-v7a\libnative-filters.so' due to missing strip tool for ABI 'ARMEABI_V7A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\armeabi-v7a\libnative-imagetranscoder.so' due to missing strip tool for ABI 'ARMEABI_V7A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\armeabi-v7a\libreactnativeblob.so' due to missing strip tool for ABI 'ARMEABI_V7A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\armeabi-v7a\libreactnativejni.so' due to missing strip tool for ABI 'ARMEABI_V7A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\armeabi-v7a\libyoga.so' due to missing strip tool for ABI 'ARMEABI_V7A'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86\libc++_shared.so' due to missing 
+strip tool for ABI 'X86'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86\libfb.so' due to missing strip tool for ABI 'X86'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86\libfbjni.so' due to missing strip tool for ABI 'X86'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86\libfolly_futures.so' due to missing strip tool for ABI 'X86'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86\libfolly_json.so' due to missing 
+strip tool for ABI 'X86'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86\libglog.so' due to missing strip 
+tool for ABI 'X86'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86\libglog_init.so' due to missing strip tool for ABI 'X86'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86\libhermes-executor-debug.so' due 
+to missing strip tool for ABI 'X86'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86\libhermes-executor-release.so' due to missing strip tool for ABI 'X86'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86\libhermes-inspector.so' due to missing strip tool for ABI 'X86'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86\libimagepipeline.so' due to missing strip tool for ABI 'X86'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86\libjscexecutor.so' due to missing strip tool for ABI 'X86'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86\libjsijniprofiler.so' due to missing strip tool for ABI 'X86'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86\libjsinspector.so' due to missing strip tool for ABI 'X86'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86\libnative-filters.so' due to missing strip tool for ABI 'X86'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86\libnative-imagetranscoder.so' due to missing strip tool for ABI 'X86'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86\libreactnativeblob.so' due to missing strip tool for ABI 'X86'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86\libreactnativejni.so' due to missing strip tool for ABI 'X86'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86\libyoga.so' due to missing strip 
+tool for ABI 'X86'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86_64\libc++_shared.so' due to missing strip tool for ABI 'X86_64'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86_64\libfb.so' due to missing strip tool for ABI 'X86_64'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86_64\libfbjni.so' due to missing strip tool for ABI 'X86_64'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86_64\libfolly_futures.so' due to missing strip tool for ABI 'X86_64'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86_64\libfolly_json.so' due to missing strip tool for ABI 'X86_64'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86_64\libglog_init.so' due to missing strip tool for ABI 'X86_64'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86_64\libhermes-executor-debug.so' due to missing strip tool for ABI 'X86_64'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86_64\libhermes-executor-release.so' due to missing strip tool for ABI 'X86_64'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86_64\libhermes-inspector.so' due to missing strip tool for ABI 'X86_64'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86_64\libimagepipeline.so' due to missing strip tool for ABI 'X86_64'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86_64\libjsc.so' due to missing strip tool for ABI 'X86_64'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86_64\libjscexecutor.so' due to missing strip tool for ABI 'X86_64'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86_64\libjsijniprofiler.so' due to missing strip tool for ABI 'X86_64'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86_64\libjsinspector.so' due to missing strip tool for ABI 'X86_64'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86_64\libnative-filters.so' due to missing strip tool for ABI 'X86_64'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86_64\libnative-imagetranscoder.so' 
+due to missing strip tool for ABI 'X86_64'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86_64\libreactnativeblob.so' due to 
+missing strip tool for ABI 'X86_64'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86_64\libreactnativejni.so' due to missing strip tool for ABI 'X86_64'. Packaging it as is.
+Unable to strip library 'C:\Users\sanga\Documents\GitHub\tutoring_helper\android\app\build\intermediates\merged_native_libs\release\out\lib\x86_64\libyoga.so' due to missing strip tool for ABI 'X86_64'. Packaging it as is.
+
+> Task :app:transformClassesAndResourcesWithR8ForRelease FAILED
+R8: Program type already present: com.reactcommunity.rndatetimepicker.BuildConfig
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:transformClassesAndResourcesWithR8ForRelease'.
+> com.android.tools.r8.CompilationFailedException: Compilation failed to complete

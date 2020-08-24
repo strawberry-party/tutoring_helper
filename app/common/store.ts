@@ -9,7 +9,8 @@ import { createLogger } from 'redux-logger';
 import reducers from '../states/index';
 
 const logger = createLogger();
-const store = createStore(reducers, applyMiddleware(logger));
+// const store = createStore(reducers, applyMiddleware(logger));
+const store = createStore(reducers);
 // dispatch store to mock data
 
 tagList.forEach((tag: TagType) => {
@@ -21,7 +22,5 @@ for (let [key, assign] of assignList.assignMap) {
 }
 
 // TODO: firebase 도입한 다음에는 전체 data를 import 하고 dispatch
-
-
 
 export default store;

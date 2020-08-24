@@ -4,7 +4,6 @@ import {
   Header,
   Icon,
   Item,
-  Picker,
   Text,
   View,
 } from 'native-base';
@@ -65,7 +64,8 @@ function Sorter({
     <View style={styles.selector}>
       <Icon name="albums" />
       <View style={styles.picker}>
-        <Picker
+        <Button> </Button>
+        {/* <Picker
           mode="dropdown"
           iosIcon={<Icon style={{ fontSize: 20 }} name="arrow-down" />}
           style={{ fontSize: 15, color: 'black' }}
@@ -75,7 +75,8 @@ function Sorter({
           <Picker.Item label="마감일" value="DUE" />
           <Picker.Item label="시작일" value="OUT" />
           <Picker.Item label="제목" value="TITLE" />
-        </Picker>
+        </Picker> */}
+        
       </View>
       <Button
         small

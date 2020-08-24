@@ -9,6 +9,7 @@ import AssignModal from '../component/Homework/AssignModal';
 import { AssignType } from '../types/homework';
 import { FilterButton } from '../component/Homework/FilterSorter';
 import FilterModal from '../component/Homework/FilterModal';
+import PushMaker from './PushMaker'
 import React from 'react';
 import { RootState } from '../states';
 import { TagType } from '../types/root';
@@ -51,6 +52,7 @@ function HomeworkContainer({
   // const tagMap: Map<string, TagType> = useSelector(
   //   (state: RootState) => state.tagReducer.tagMap,
   // );
+  
 
   const assignMap: Map<string, AssignType> = useSelector(
     (state: RootState) => state.assignReducer.assignMap,
@@ -183,6 +185,8 @@ function HomeworkContainer({
         addModalVisible={addModalVisible}
         showAddModal={showAddModal}
       />
+
+      <PushMaker/>
     </SafeAreaView>
   );
 }
