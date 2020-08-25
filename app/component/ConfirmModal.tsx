@@ -1,13 +1,5 @@
-import {
-  Alert,
-  Modal,
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-  TouchableOpacity,
-  View,
-} from 'react-native';
 import { Button, Paragraph } from 'react-native-paper';
+import { Modal, StyleSheet, Text, View } from 'react-native';
 
 import React from 'react';
 
@@ -86,21 +78,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 18,
   },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-    backgroundColor: 'white',
-  },
 });
-
-/*
-
-<ConfirmModal
-  addModalVisible=
-  hideAddModal=
-  showAddModal=
-  cancelText="아니요, 계속 진행합니다"
-  confirmText="네, 취소합니다"
-  title="정말 취소하시겠어요?"
-  next=onRemove(id) />
-*/
