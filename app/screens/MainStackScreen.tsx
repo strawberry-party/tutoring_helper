@@ -1,22 +1,21 @@
 import { StyleSheet, Text } from 'react-native';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Main from './Main';
+import Main from '../component/Tutor/Main';
 import React from 'react';
-import { StudentType } from '../../types/root';
+import { StudentInfoType } from '../types/student';
 import { createStackNavigator } from '@react-navigation/stack';
-import headerOptions from '../headerOptions';
+import headerOptions from '../component/headerOptions';
 import { connect } from 'react-redux';
 
 const MainStack = createStackNavigator();
-// interface MainStackProps {
-//   student: StudentType;
-//   navigation: any;
-// }
-// { student, navigation }: MainStackProps
-function MainStackScreen(props) {
-  const student = props.currentStudent;
-  // console.log(student);
+
+interface MainStackProps {
+  currentStudentInfo: StudentInfoType;
+  navigation: any;
+}
+
+function MainStackScreen({currentStudentInfo, navigation}: MainStackProps) {
   
   return (
     <MainStack.Navigator initialRouteName="메인">
@@ -32,12 +31,12 @@ function MainStackScreen(props) {
               size={35}
               backgroundColor="#e91e63"
               onPress={() => {
-                props.navigation.openDrawer();
+                navigation.openDrawer();
               }}
             />
           ),
           headerRight: () => (
-            <Text style={styles.studentNameText}>{student.name + ' 학생'}</Text>
+            <Text style={styles.studentNameText}>{currentStudentInfo.name + ' 학생'}</Text>
           ),
         }}
       />
@@ -54,9 +53,10 @@ const styles = StyleSheet.create({
 });
 
 export default connect((state) => {
-  const currentStudentId = state.tutorReducer.selectedStudentId;
-  const studentMap = state.lessonReducer.studentMap;
+  const currentStudentId = state.currentStudentReducer.selectedStudentId;
+  const studentArray = state.tutorReducer.studentArray;
   return {
-    currentStudent: studentMap.get(currentStudentId)
-  } 
+    currentStudentInfo: studentArray.filter(student => student.key === currentStudentId)[0].info,
+  }
+  
 }, null)(MainStackScreen);

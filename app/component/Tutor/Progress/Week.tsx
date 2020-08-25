@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native';
-
 import CheckingProgress from './CheckingProgress';
 import React from 'react';
 import TestResult from './TestResult';
+import { LessonContentType, LessonTestType } from '../../../types/lesson';
 
 const styles = StyleSheet.create({
   content: {
@@ -17,16 +17,17 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function Week({contents, test, id }) {
-  // console.log(contents);
-  // console.log(test);
-  // console.log(id);
+interface WeekProps {
+  id: string;
+}
+
+export default function Week({ id }: WeekProps) {
   
   return (
     <View>
       <View style={styles.content}>
         <Text style={styles.title}>진도 체크</Text>
-        <CheckingProgress id={id} contents={contents} />
+        <CheckingProgress id={id} />
       </View>
       <View style={styles.content}>
         <Text style={{ ...styles.title, paddingBottom: 20 }}>
@@ -35,7 +36,7 @@ export default function Week({contents, test, id }) {
       </View>
       <View style={styles.content}>
         <Text style={{ ...styles.title, paddingBottom: 20 }}>Test 결과</Text>
-        <TestResult result={test} />
+        {/* <TestResult id={id} /> */}
       </View>
     </View>
   );

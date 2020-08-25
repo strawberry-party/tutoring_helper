@@ -3,6 +3,7 @@ import assignModalReducer from './assignModalState';
 import assignReducer from './assignState';
 import { combineReducers } from 'redux';
 import lessonReducer from './lessonState';
+import currentStudentReducer from './currentStudentState';
 import tutorReducer from './tutorState';
 
 const rootReducer = combineReducers({
@@ -10,6 +11,7 @@ const rootReducer = combineReducers({
   assignReducer,
   assignFilterSorterReducer,
   lessonReducer,
+  currentStudentReducer,
   tutorReducer,
 });
 

@@ -3,10 +3,13 @@ import { SectionList, StyleSheet, Text, View } from 'react-native';
 
 import { Button } from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import React from 'react';
-import { StudentType } from '../../../types/root';
+import React, { useEffect } from 'react';
+import { StudentInfoType } from '../../../types/student';
 import Week from './Week';
 import { connect } from 'react-redux';
+import database from '@react-native-firebase/database'
+
+const db = database();
 
 const styles = StyleSheet.create({
   container: {
@@ -37,20 +40,27 @@ interface SectionItem {
 }
 
 interface WeeklyProgressProps {
-  student: StudentType;
+  lessonArray: Array<LessonType>;
   navigation: any;
+  dataToLessonState: Function;
+  currentStudentId: string;
 }
 
-function WeeklyProgress(props) {
-  const lessons = props.currentStudent.lessonMap;
-  // console.log(Array.from(lessons.values()));
-  // console.log(lessons.values());
-  // console.log(lessons);
+function WeeklyProgress({lessonArray, navigation, dataToLessonState, currentStudentId}: WeeklyProgressProps) {
+  // console.log(lessonArray);
+  useEffect(() => {
+    db.ref('tutor_1/studentArray/'+currentStudentId+'/lessonArray').on('value', snapshot => {
+      // console.log('db changed');
+      // console.log(snapshot);
+      dataToLessonState('LESSONSTATE_SETUP', snapshot.val())
+    })
+  }, [])
+  
   const sectionItems = [];
-  lessons.forEach((value, key) => {
-    // console.log(key);
+  lessonArray.length === 0 ? '' : lessonArray.map((lesson) => {
+    const lessonInfo = lesson.lessonInfo;
     sectionItems.push(
-      {title: value.lessonNum + ' 회차', data: [<Week contents={value.contents} test={value.test} id={key}/>]}
+      {title: lessonInfo.lessonNum + ' 회차', data: [<Week id={lesson.key}/>]}
     )
   });
   
@@ -67,7 +77,7 @@ function WeeklyProgress(props) {
           style={styles.createButton}
           icon={<Ionicons name="add" size={20} />}
           onPress={() => {
-            props.navigation.navigate('진도추가');
+            navigation.navigate('진도추가');
           }}
         />
       }
@@ -75,10 +85,22 @@ function WeeklyProgress(props) {
   );
 }
 
-export default connect((state) => {
-  const currentStudentId = state.tutorReducer.selectedStudentId;
-  const studentMap = state.lessonReducer.studentMap;
+const mapStateToProps = (state) => {
+  const currentStudentId = state.currentStudentReducer.selectedStudentId;
+  const studentArray = state.tutorReducer.studentArray;
   return {
-    currentStudent: studentMap.get(currentStudentId)
-  } 
-}, null)(WeeklyProgress);
+    currentStudentId,
+    lessonArray: state.lessonReducer.lessonArray,
+    currentStudentInfo: studentArray.filter(student => student.key === currentStudentId)[0].info,
+  }
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return{
+    dataToLessonState: (type, data) => {
+      dispatch({type, data})
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(WeeklyProgress);

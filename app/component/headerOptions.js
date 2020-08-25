@@ -3,7 +3,7 @@ import React from 'react';
 import { Text, StyleSheet } from 'react-native';
 
 // const currentStudentId = store.getState().tutorReducer.selectedStudentId;
-// const currentStudent = store.getState().lessonReducer.studentMap.get(currentStudentId);
+// const currentStudent = store.getState().lessonReducer.studentArray.get(currentStudentId);
 // console.log(currentStudent);
 const headerOptions = {
   title: '',

@@ -1,7 +1,7 @@
 import { AssignListType, AssignType } from '../types/homework';
 
 import { LessonType } from '../types/lesson';
-import { TutorType } from '../types/root'
+import { TutorType } from '../types/student'
 import dayjs from 'dayjs';
 
 // 더미 데이터
@@ -87,7 +87,7 @@ const lessonMap: Map<string, LessonType> = new Map([
 
 export const tutor: TutorType = {
   name: '김태형',
-  studentMap: new Map([
+  studentArray: new Map([
     [
       'student_1',
       {

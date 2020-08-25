@@ -1,36 +1,33 @@
   
-import React, { Component } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet } from 'react-native';
 import { Table, Row, Rows } from 'react-native-table-component';
 import { Button } from 'react-native-elements';
-import * as RootNavigation from '../../RootNavigation';
+import * as RootNavigation from '../../../common/RootNavigation';
+import { connect } from 'react-redux';
 
-class StudentInfo extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      tableHead: ['학생', '날짜', '상세보기'],
-      tableData: [
-        ['김태형', '월, 수 18:00~19:30', <Button title='상세보기' onPress={() => {
-          RootNavigation.navigate('상세정보');
-        }} />],
-        ['최상아', '수, 금 16:00~17:30', <Button title='상세보기' onPress={() => {
-          RootNavigation.navigate('상세정보');
-        }} />],
-      ]
-    }
-  }
+function StudentInfo() {
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
-          <Row data={this.state.tableHead} style={styles.head} textStyle={styles.text}/>
-          <Rows data={this.state.tableData} style={styles.row} textStyle={styles.text}/>
-        </Table>
-      </View>
-    );
-  }
+  const [state, setState] = useState({
+    tableHead: ['학생', '날짜', '상세보기'],
+    tableData: [
+      ['김태형', '월, 수 18:00~19:30', <Button title='상세보기' onPress={() => {
+        RootNavigation.navigate('상세정보');
+      }} />],
+      ['최상아', '수, 금 16:00~17:30', <Button title='상세보기' onPress={() => {
+        RootNavigation.navigate('상세정보');
+      }} />],
+    ]
+  })
+
+  return (
+    <View style={styles.container}>
+      <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+        <Row data={state.tableHead} style={styles.head} textStyle={styles.text}/>
+        <Rows data={state.tableData} style={styles.row} textStyle={styles.text}/>
+      </Table>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -40,4 +37,12 @@ const styles = StyleSheet.create({
   text: { margin: 6 }
 });
 
-export default StudentInfo;
+const mapStateToProps = (state) => {
+  return {};
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return{};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(StudentInfo)

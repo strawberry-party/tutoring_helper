@@ -1,8 +1,8 @@
 import { Text, View } from 'react-native';
 import React from 'react';
 
-function TestResult({result}) {
-  const showResult = result.map((item, index) => (
+function TestResult({ id }) {
+  const showResult = result === undefined ? undefined : result.map((item, index) => (
     <Text key={index}>
       {item.desc}: {item.score + '점'}
     </Text>
@@ -14,4 +14,12 @@ function TestResult({result}) {
   );
 }
 
-export default TestResult;
+const mapStateToProps = (state) => {
+  return {};
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return{};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TestResult)

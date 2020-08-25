@@ -2,22 +2,17 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Foundation from 'react-native-vector-icons/Foundation';
 import HomeworkContainer from '../../container/Homework';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import MainStackScreen from './MainStackScreen';
+import MainStackScreen from '../../screens/MainStackScreen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import ProgressStackScreen from './Progress/ProgressStackScreen';
+import ProgressStackScreen from '../../screens/ProgressStackScreen';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import ScheduleStackScreen from './Schedule/ScheduleStackScreen';
-import { StudentType } from '../../types/root';
+import ScheduleStackScreen from '../../screens/ScheduleStackScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 const Tab = createBottomTabNavigator();
 
-// interface TabProps {
-//   student: StudentType;
-// }
-// { student }: TabProps)
-function Tabs(props) {
+function Tabs() {
 
   return (
     <Tab.Navigator
@@ -80,17 +75,11 @@ const assignOptions = {
 };
 
 const mapStateToProps = (state) => {
-  return {
-    
-  };
+  return {};
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return{
-    isFocus: function(type, studentId) {
-      dispatch({type, studentId});
-    }
-  }
+  return{};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Tabs)

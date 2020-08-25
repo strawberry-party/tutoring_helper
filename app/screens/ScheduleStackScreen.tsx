@@ -1,16 +1,21 @@
 import { HeaderBackButton, createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, Text } from 'react-native';
-import DetailInfo from './DetailInfo';
+import DetailInfo from '../component/Tutor/Schedule/DetailInfo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import React from 'react';
-import Schedule from './Schedule';
-import headerOptions from '../../headerOptions'
+import Schedule from '../component/Tutor/Schedule/Schedule';
+import headerOptions from '../component/headerOptions'
 import { connect } from 'react-redux';
+import { StudentInfoType } from '../types/student';
 
 const ScheduleStack = createStackNavigator();
 
-const ScheduleStackScreen = (props) => {
-  const student = props.currentStudent;
+interface ScheduleStackProps {
+  currentStudentInfo: StudentInfoType;
+  navigation: any;
+}
+
+const ScheduleStackScreen = ({currentStudentInfo, navigation}: ScheduleStackProps) => {
   return (
     <ScheduleStack.Navigator initialRouteName='일정관리'>
       <ScheduleStack.Screen
@@ -20,11 +25,11 @@ const ScheduleStackScreen = (props) => {
           ...headerOptions, title: '일정관리',
           headerLeft: () => (
             <Ionicons.Button name='menu' size={35} backgroundColor='#e91e63' onPress={() => {
-              props.navigation.openDrawer()
+              navigation.openDrawer()
             }} />
           ),
           headerRight: () => (
-            <Text style={styles.studentNameText}>{student.name + ' 학생'}</Text>
+            <Text style={styles.studentNameText}>{currentStudentInfo.name + ' 학생'}</Text>
           )
         }}
       />
@@ -35,12 +40,12 @@ const ScheduleStackScreen = (props) => {
           ...headerOptions, title: '상세정보',
           headerLeft: () => (
             <Ionicons.Button name='menu' size={35} backgroundColor='#e91e63' onPress={() => {
-              props.navigation.openDrawer()
+              navigation.openDrawer()
             }} />
           ),
           headerRight: () => (
-            <HeaderBackButton tintColor='white' backgroundColor='#e91e63' onPress={() => {
-              props.navigation.navigate('일정관리')
+            <HeaderBackButton tintColor='white' onPress={() => {
+              navigation.navigate('일정관리')
             }} />
           )
         }}
@@ -58,9 +63,9 @@ const styles = StyleSheet.create({
 })
 
 export default connect((state) => {
-  const currentStudentId = state.tutorReducer.selectedStudentId;
-  const studentMap = state.lessonReducer.studentMap;
+  const currentStudentId = state.currentStudentReducer.selectedStudentId;
+  const studentArray = state.tutorReducer.studentArray;
   return {
-    currentStudent: studentMap.get(currentStudentId)
-  } 
+    currentStudentInfo: studentArray.filter(student => student.key === currentStudentId)[0].info,
+  }
 }, null)(ScheduleStackScreen);
