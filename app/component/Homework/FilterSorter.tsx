@@ -1,18 +1,8 @@
-import {
-  Button,
-  Form,
-  Header,
-  Icon,
-  Item,
-  Picker,
-  Text,
-  View,
-} from 'native-base';
+import { Button, Form, Header, Icon, Item, Text, View } from 'native-base';
 import React, { Component } from 'react';
 
+import { IconButton } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
-import { filterOptions } from '../../states/assignFilterSorterState';
-import { log } from 'react-native-reanimated';
 
 interface SorterProps {
   sorterActions: {
@@ -66,7 +56,8 @@ function Sorter({
     <View style={styles.selector}>
       <Icon name="albums" />
       <View style={styles.picker}>
-        <Picker
+        <Button> </Button>
+        {/* <Picker
           mode="dropdown"
           iosIcon={<Icon style={{ fontSize: 20 }} name="arrow-down" />}
           style={{ fontSize: 15, color: 'black' }}
@@ -76,7 +67,7 @@ function Sorter({
           <Picker.Item label="마감일" value="DUE" />
           <Picker.Item label="시작일" value="OUT" />
           <Picker.Item label="제목" value="TITLE" />
-        </Picker>
+        </Picker> */}
       </View>
       <Button
         small
@@ -99,69 +90,14 @@ function Sorter({
   );
 }
 
-interface FilterProps {
-  filterActions: {
-    showAll: () => void;
-    showCompleted: () => void;
-    showIncomplete: () => void;
-  };
-  activeFilter;
-}
-function Filter({ filterActions, activeFilter }: FilterProps) {
-  const selectFilter = (value: string) => {
-    switch (value) {
-      case 'ALL':
-        filterActions.showAll();
-        break;
-      case 'COMPLETED':
-        filterActions.showCompleted();
-        break;
-      case 'INCOMPLETED':
-        filterActions.showIncomplete();
-        break;
-      default:
-        console.error('SOMETHING WENT WRONG in FilterSorter/selectFilter');
-    }
-  };
-
+export function FilterButton({ showFilterModal }) {
   return (
-    <View style={styles.selector}>
-      <Icon name="funnel"> </Icon>
-      <View style={styles.picker}>
-        <Picker
-          mode="dropdown"
-          iosIcon={<Icon style={{ fontSize: 20 }} name="arrow-down" />}
-          style={{ fontSize: 15, color: 'black' }}
-          placeholderIconColor="#007aff"
-          selectedValue={activeFilter}
-          onValueChange={selectFilter}>
-          <Picker.Item label="완료" value="COMPLETED" />
-          <Picker.Item label="미완료" value="INCOMPLETED" />
-          <Picker.Item label="모두" value="ALL" />
-        </Picker>
-      </View>
-    </View>
-  );
-}
-
-export default function FilterSorter({
-  activeFilter,
-  filterActions,
-  activeSorterDir,
-  activeSorter,
-  sorterDirActions,
-  sorterActions,
-}) {
-  return (
-    <View style={styles.container}>
-      <Filter activeFilter={activeFilter} filterActions={filterActions} />
-      <Sorter
-        activeSorter={activeSorter}
-        activeSorterDir={activeSorterDir}
-        sorterActions={sorterActions}
-        sorterDirActions={sorterDirActions}
-      />
-    </View>
+    <IconButton
+      icon="filter"
+      color="white"
+      style={styles.button}
+      onPress={() => showFilterModal()}
+    />
   );
 }
 
@@ -183,8 +119,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
+  button: {
+    backgroundColor: '#aec6df',
+    borderColor: 'transparent',
+    width: 60,
+    elevation: 0,
+  },
+
   picker: {
-    // width: 50,
     flex: 2,
   },
 });

@@ -1,7 +1,8 @@
 import { AssignListType, AssignType } from '../types/homework';
 
 import { LessonType } from '../types/lesson';
-import { TutorType } from '../types/student'
+import { TagType } from './../types/root';
+import { TutorType } from '../types/root';
 import dayjs from 'dayjs';
 
 // 더미 데이터
@@ -11,46 +12,56 @@ const NUM_ASSIGN = 3;
 const DEFAULT_DATE = dayjs('2020-08-13');
 
 // test 코드 만들기
-// const assigns: Array<AssignType> = [...Array(NUM_ASSIGN).keys()].map(
-//   (i: number) =>  new AssignType(
-//       `Assign ${i + 1}`,
-//       `Assign ${i + 1} desc`,
-//       dayjs('2020-01-01'), // TODO: 에러: 다 지금 날짜로 됨
-//       dayjs('2020-01-01'),
-//       true,
-//     );
-//   },
+const tag1: TagType = new TagType('수학', { backgroundColor: '#bbb' });
+const tag2: TagType = new TagType('과학', { backgroundColor: '#bbf' });
+const tag3: TagType = new TagType('화학', { backgroundColor: '#bfb' });
+export const tagList = [tag1, tag2, tag3];
+
+const assignMap = new Map<string, AssignType>();
+
+[0, 1, 2, 3].map((i: number) => assignMap.set(i.toString(), getAssign(i)));
+
+function getAssign(i: number) {
+  var newAssign: AssignType = new AssignType(
+    `Assign ${i + 1}`,
+    dayjs('2020-01-01'), // TODO: 에러: 다 지금 날짜로 됨
+    dayjs('2020-01-01'),
+    false,
+    'java'
+    // tag1 // README: 이렇게 하면 왠지 안됨
+  );
+  return newAssign;
+}
+
+export const assignList: AssignListType = new AssignListType(assignMap);
+
+// const assign1: AssignType = new AssignType(
+//   '수학의 정석 10단원',
+//   '풀어와',
+//   dayjs('2020-07-18'),
+//   dayjs('2020-07-19'),
+//   false,
 // );
 
-// export const assignList: AssignListType = { assigns };
+// const assign2: AssignType = new AssignType(
+//   '수학의 정석 9단원',
+//   '풀어와',
+//   dayjs('2020-07-18'),
+//   dayjs('2020-07-19'),
+//   false,
+// );
 
-const assign1: AssignType = new AssignType(
-  '수학의 정석 10단원',
-  '풀어와',
-  dayjs('2020-07-18'),
-  dayjs('2020-07-19'),
-  false,
-);
+// const assign3: AssignType = new AssignType(
+//   '수학의 정석 8단원',
+//   '풀어와',
+//   dayjs('2020-07-18'),
+//   dayjs('2020-07-19'),
+//   false,
+// );
 
-const assign2: AssignType = new AssignType(
-  '수학의 정석 9단원',
-  '풀어와',
-  dayjs('2020-07-18'),
-  dayjs('2020-07-19'),
-  false,
-);
-
-const assign3: AssignType = new AssignType(
-  '수학의 정석 8단원',
-  '풀어와',
-  dayjs('2020-07-18'),
-  dayjs('2020-07-19'),
-  false,
-);
-
-export const assignList: AssignListType = {
-  assigns: [assign1, assign2, assign3],
-};
+// export const assignList: AssignListType = {
+//   assigns: [assign1, assign2, assign3],
+// };
 
 const lesson_1: LessonType = {
   lessonNum: 1,
@@ -86,8 +97,9 @@ const lessonMap: Map<string, LessonType> = new Map([
 ]);
 
 export const tutor: TutorType = {
+  tagMap: new Map([['tag_1', tag1]]),
   name: '김태형',
-  studentArray: new Map([
+  studentMap: new Map([
     [
       'student_1',
       {

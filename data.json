@@ -1,0 +1,6 @@
+{
+  "tutorReducer": { },
+  "assignReducer": { },
+  "assignModalReducer": { },
+  "lessonReducer": { }
+}

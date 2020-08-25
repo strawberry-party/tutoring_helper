@@ -1,12 +1,11 @@
 import { StyleSheet, Text } from 'react-native';
-
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Main from '../component/Tutor/Main';
 import React from 'react';
 import { StudentInfoType } from '../types/student';
 import { createStackNavigator } from '@react-navigation/stack';
 import headerOptions from '../component/headerOptions';
 import { connect } from 'react-redux';
+import Main from '../component/Tutor/Main';
 
 const MainStack = createStackNavigator();
 

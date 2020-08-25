@@ -1,4 +1,4 @@
-import { Button, Icon, Input, Item } from 'native-base';
+import { Button, Fab, Icon, Input, Item } from 'native-base';
 import {
   Pressable,
   ScrollView,
@@ -8,10 +8,12 @@ import {
   View,
 } from 'react-native';
 import React, { useState } from 'react';
-
+import Tag, { TagForm } from '../Tag';
 import { AssignType } from '../../types/homework';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import { TagType } from '../../types/root';
 import dayjs from 'dayjs';
+import { name } from 'dayjs/locale/*';
 
 type AddAssign = (assign: AssignType) => void;
 type EditAssign = (id: string, assign: AssignType) => void;
@@ -25,6 +27,8 @@ interface AssignForm {
   modalType: AddModal | EditModal;
   selectedAssignId: string;
   selectedAssign: AssignType;
+  tags: Map<string, TagType>;
+  onAddTag: (tag: TagType) => void;
 }
 
 interface MyDatePickerProps {
@@ -52,11 +56,11 @@ function MyDatePicker({ onConfirm, day, msg }: MyDatePickerProps) {
     <Pressable style={styles.dateContainer} onPress={showDatePicker}>
       <Text style={styles.dateHeadline}> {msg} </Text>
       <Text style={styles.dateHeadline}>
-        {day.format('MM월 DD일 HH시 mm분').toString()}
+        {day.format('MM월 DD일').toString()}
       </Text>
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
-        mode="datetime"
+        mode="date"
         date={new Date()}
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
@@ -65,27 +69,29 @@ function MyDatePicker({ onConfirm, day, msg }: MyDatePickerProps) {
   );
 }
 
-export default function FormExample({
+export default function AssignForm({
   modalType,
   selectedAssign,
   onSubmit,
   hideModal,
   selectedAssignId,
+  tags,
+  onAddTag,
 }: AssignForm) {
-  const { title, due, out } = selectedAssign;
-  const [newTitle, setTitle] = useState(title);
+  const { text, due, out, tagId } = selectedAssign;
+  const [newText, setText] = useState(text);
   const [newDue, setDue] = useState(due);
   const [newOut, setOut] = useState(out);
+  const [selectedTagId, selectTag] = useState(tagId);
 
-  const handleSubmit = (e) => {
-    // console.log(typeof e);
-    e.preventDefault();
-
+  const tagKeyList = Array.from(tags.keys());
+  const handleSubmit = () => {
     const newAssign: AssignType = {
       ...selectedAssign,
-      title: newTitle,
+      text: newText,
       out: newOut,
       due: newDue,
+      tagId: selectedTagId,
     };
 
     switch (modalType) {
@@ -97,23 +103,55 @@ export default function FormExample({
         break;
 
       default:
-        console.error('SOMETHING WENT WRONG in FormExample/handleSubmit');
+        console.error('SOMETHING WENT WRONG in AssignForm/handleSubmit');
     }
 
     hideModal();
   };
 
   const onConfirmOut = (date: Date) => {
-    console.warn('날짜 선택(시작): ', dayjs(date).format('MM/DD').toString());
     setOut(dayjs(date));
   };
   const onConfirmDue = (date: Date) => {
-    console.warn('날짜 선택(마감): ', dayjs(date).format('MM/DD').toString());
     setDue(dayjs(date));
   };
 
+  function getTagComponents(style = {}) {
+    var tagComponents: JSX.Element[] = [];
+
+    for (var index = 1; index < tags.size; index++) {
+      var id = tagKeyList[index];
+      var tag = tags.get(id);
+
+      tagComponents.push(
+        <Tag
+          tag={tag}
+          style={style}
+          id={id}
+          key={id}
+          isSelected={selectedTagId === id}
+          onSelect={(id: string) => {
+            console.log(id + ' select');
+
+            if (selectedTagId === id) selectTag('none');
+            else selectTag(id);
+          }}
+        />,
+      );
+    }
+    tagComponents.push(
+      <TagForm style={style} onAddTag={onAddTag} key="tagForm" />,
+    );
+
+    return tagComponents;
+  }
+
   return (
     <View style={styles.container}>
+      <Fab style={styles.button} onPress={handleSubmit}>
+        <Icon name="save-outline" />
+      </Fab>
+
       <ScrollView style={styles.formContainer}>
         <View
           style={{
@@ -123,9 +161,9 @@ export default function FormExample({
             <Text style={styles.headline}> 제목 </Text>
             <Item>
               <Input
-                value={newTitle}
+                value={newText}
                 onChange={({ nativeEvent: { text } }) => {
-                  setTitle(text);
+                  setText(text);
                 }}
                 style={{ fontSize: 18 }}
               />
@@ -146,42 +184,35 @@ export default function FormExample({
               />
             </View>
           </View>
+
+          <View style={styles.inputContainer}>
+            <Text style={styles.headline}> 태그 </Text>
+            <View style={styles.tagContainer}>
+              {getTagComponents({ margin: 3 })}
+            </View>
+          </View>
         </View>
       </ScrollView>
-
-      <View style={styles.buttonContainer}>
-        <Button
-          style={{
-            ...styles.button,
-            backgroundColor: '#bbb',
-          }}
-          onPressIn={handleSubmit}>
-          <Icon name="save-outline" />
-        </Button>
-
-        <TouchableHighlight
-          style={{
-            ...styles.button,
-            backgroundColor: 'red',
-          }}
-          onPress={hideModal}>
-          <Text style={styles.buttonText}>취소</Text>
-        </TouchableHighlight>
-      </View>
     </View>
   );
 }
 const styles = StyleSheet.create({
+  tagContainer: {
+    padding: 5,
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+  },
   container: {
     flexGrow: 1,
     borderColor: 'pink',
-    borderWidth: 2,
+    // borderWidth: 2,
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 30,
   },
   formContainer: {
     borderColor: 'skyblue',
-    borderWidth: 2,
+    // borderWidth: 2,
     width: 270,
   },
   inputContainer: {
@@ -220,12 +251,12 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    borderRadius: 20,
-    padding: 10,
+    position: 'absolute',
+    bottom: 340,
     elevation: 2,
-    flex: 1,
-    width: 100,
     justifyContent: 'center',
+    backgroundColor: '#aec6df',
+    zIndex: 1,
   },
 
   buttonText: {

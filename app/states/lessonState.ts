@@ -1,9 +1,6 @@
 import { LessonType } from '../types/lesson';
 import _ from 'lodash';
 import produce from 'immer';
-import {enableMapSet} from "immer";
-
-enableMapSet()
 
 // action type
 const LESSON_ADD = 'LESSON_ADD' as const;

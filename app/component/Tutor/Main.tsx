@@ -1,6 +1,5 @@
-import { Text, View } from 'react-native';
-
 import React from 'react';
+import { Text, View } from 'react-native';
 import { StudentInfoType } from '../../types/student';
 import { connect } from 'react-redux';
 

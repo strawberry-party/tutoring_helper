@@ -5,36 +5,38 @@ import { Button, Card, CardItem, Icon, Text, View } from 'native-base';
 import { Dimensions, Pressable, StyleSheet } from 'react-native';
 import React, { useState } from 'react';
 
+import AlarmDialog from './AlarmDialog';
 import { CheckBox } from 'react-native-elements';
+import ConfirmModal from '../ConfirmModal';
+import { IconButton } from 'react-native-paper';
 import SwipeRow from './SwipeRow';
-
-interface State {
-  isEditing: boolean;
-  assignValue: AssignType;
-  isOpened: boolean;
-}
+import { TagMock } from '../Tag';
+import { TagType } from '../../types/root';
+import { assign } from 'lodash';
 
 interface AssignProps extends AssignType {
   onComplete: () => void;
   onIncomplete: () => void;
   onRemove: () => void;
   onStartEdit: () => void;
+  id: string;
+  tags: Map<string, TagType>;
 }
 
 function Assign({
-  title,
+  text,
   due,
   out,
   isCompleted,
-  status,
-
   onComplete,
   onIncomplete,
   onRemove,
   onStartEdit,
   id,
+  tagId,
+  tags,
 }: AssignProps) {
-  const dueDate = due.format('MM월 DD일 HH시 mm분까지');
+  const dueDate = due.format('MM월 DD일까지');
 
   const cardStyle = isCompleted ? styles.completedCard : styles.incompletedCard;
 
@@ -43,11 +45,18 @@ function Assign({
   const showButton = () => {
     setVisibility(true);
 
-    setTimeout(() => setVisibility(false), 1500);
+    // setTimeout(() => setVisibility(false), 1500);
   };
 
+  const tag = tags.get(tagId);
+
+
+  const [confirmModalVisible, setConfirmModalVisible] = useState(false);
+  const showConfirmModal = () => setConfirmModalVisible(true);
+  const hideConfirmModal = () => setConfirmModalVisible(false);
+
   return (
-    <SwipeRow onSwipe={onRemove} swipeThreshold={-100}>
+    <SwipeRow onSwipe={showConfirmModal} swipeThreshold={-100}>
       <View
         style={{
           flexDirection: 'row',
@@ -57,6 +66,15 @@ function Assign({
           borderBottomWidth: 0.5,
           padding: 5,
         }}>
+        <ConfirmModal
+          title="정말 없애시겠어요?"
+          isVisible={confirmModalVisible}
+          cancelText="취소"
+          confirmText="확인"
+          onCancel={hideConfirmModal}
+          onConfirm={onRemove}
+          hideModal={hideConfirmModal}
+        />
         <Card style={cardStyle}>
           <Pressable onLongPress={showButton}>
             <View>
@@ -71,17 +89,9 @@ function Assign({
                   alignItems: 'center',
                   borderRadius: 20,
                 }}>
-                <Text
-                  style={{
-                    fontWeight: '700',
-                    flex: 1,
-                    borderRightColor: '#bbb',
-                    borderRightWidth: 1,
-                    marginRight: 10,
-                  }}>
-                  태그
-                </Text>
-                <Text style={{ fontWeight: '400', flex: 2 }}>{title}</Text>
+                <TagMock tag={tag} style={{ marginRight: 10 }} id={tagId} />
+
+                <Text style={{ fontWeight: '400', flex: 2 }}>{text}</Text>
               </CardItem>
 
               <CardItem
@@ -92,19 +102,24 @@ function Assign({
                   justifyContent: 'space-between',
                   borderRadius: 20,
                 }}>
-                <Text style={{ flex: 4 }}> </Text>
-
+                <Text></Text>
                 <Text> {dueDate} </Text>
               </CardItem>
               {buttonVisible && (
                 <View style={styles.overlay}>
-                  <Button icon style={styles.button} onPress={onStartEdit}>
-                    <Icon name="pencil" />
-                  </Button>
+                  <IconButton
+                    icon="pencil"
+                    color="white"
+                    style={styles.button}
+                    onPress={onStartEdit}
+                  />
 
-                  <Button icon style={styles.button} onPress={onRemove}>
-                    <Icon name="trash" />
-                  </Button>
+                  <IconButton
+                    icon="trash-can"
+                    color="white"
+                    style={styles.button}
+                    onPress={showConfirmModal}
+                  />
                 </View>
               )}
             </View>
@@ -127,14 +142,15 @@ function Assign({
             onPress={isCompleted ? onIncomplete : onComplete}
           />
 
-          <Button
+          {/* <Button
             icon
             onPress={onStartEdit}
             style={{ borderRadius: 20, backgroundColor: '#bbb' }}>
             <Icon name="pencil" />
-          </Button>
+          </Button> */}
         </View>
       </View>
+      {/* </TouchableHighlight> */}
     </SwipeRow>
   );
 }

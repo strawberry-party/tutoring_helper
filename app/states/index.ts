@@ -5,6 +5,10 @@ import { combineReducers } from 'redux';
 import lessonReducer from './lessonState';
 import currentStudentReducer from './currentStudentState';
 import tutorReducer from './tutorState';
+import tagReducer from './tagState';
+import { enableMapSet } from 'immer';
+
+enableMapSet();
 
 const rootReducer = combineReducers({
   assignModalReducer,
@@ -13,6 +17,7 @@ const rootReducer = combineReducers({
   lessonReducer,
   currentStudentReducer,
   tutorReducer,
+  tagReducer,
 });
 
 export default rootReducer;
