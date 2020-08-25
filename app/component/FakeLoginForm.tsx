@@ -33,7 +33,7 @@ function Login() {
   );
 }
 
-// 구글 로그인 및 페이크 로그인 state 추가
+// TODO: 구글 로그인 및 페이크 로그인 state 추가
 
 export default Login;
 const styles = StyleSheet.create({
