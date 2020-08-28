@@ -18,6 +18,8 @@ export class AssignListType implements Assigns {
   constructor(
     assignMap: Map<string, AssignType> = new Map<string, AssignType>(),
     completed: number = 0,
+    // incompleted: number = 0,
+    // delayed 
   ) {
     this.assignMap = assignMap;
     this.completed = completed;
