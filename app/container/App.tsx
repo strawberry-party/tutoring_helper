@@ -9,7 +9,6 @@ function App() {
   return (
     <Provider store={store}>
       {/* <DrawerNavigator dbData/> */}
-      <Text>Hello world </Text>
       <StudentCalendar />
     </Provider>
   );
