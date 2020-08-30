@@ -17,21 +17,20 @@ type ScheduleUnitType = 'week' | 'times' | 'period';
 
 export class RepeatedScheduleInfo {
   scheduleUnit: ScheduleUnitType;
-  // classTime: Map<Days, LessonTime>;
+  dailyScheduleMap: Map<Days, LessonTime>;
   start: dayjs.Dayjs;
   end: dayjs.Dayjs;
-  days: Set<Days>;
 
   constructor(
-    scheduleUnit = 'times' as ScheduleUnitType,
+    scheduleUnit = 'week' as ScheduleUnitType,
     start = dayjs(),
     end = dayjs(),
-    days = new Set(['mon' as Days]),
+    dailyScheduleMap = new Map<Days, LessonTime>(),
   ) {
     this.scheduleUnit = scheduleUnit;
     this.start = start;
     this.end = end;
-    this.days = days;
+    this.dailyScheduleMap = dailyScheduleMap;
   }
 }
 

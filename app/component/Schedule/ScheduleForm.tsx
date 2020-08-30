@@ -24,6 +24,7 @@ import dayjs from 'dayjs';
 
 type AddSchedule = (assign: ScheduleType) => void;
 type EditSchedule = (id: string, assign: ScheduleType) => void;
+type Days = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun';
 
 type AddModal = 'AddModal';
 type EditModal = 'EditModal';
@@ -47,30 +48,25 @@ function parseTime(time: LessonTime | RepeatedScheduleInfo) {
     return Object.assign(
       {
         repeatType: 'false',
-        days: 'none',
+        dailyScheduleMap: new Map<Days, LessonTime>(),
         scheduleUnit: 'none',
       },
       time as LessonTime,
     );
 }
 
-const dayList = ['일', '월', '화', '수', '목', '금', '토'];
-const dayChips = dayList.map((day, index) => (
-  <TouchableHighlight
-    underlayColor="#bbb"
-    style={{
-      alignItems: 'center',
-      margin: 3,
-      width: 40,
-      backgroundColor: '#ddd',
-      borderRadius: 20,
-      padding: 5,
-    }}
-    onPress={() => {
-      console.warn('hi');
-    }}
-    key={index}>
-    <View>
+function getDayTag(day: string, key?) {
+  return (
+    <View
+      style={{
+        alignItems: 'center',
+        margin: 3,
+        width: 40,
+        backgroundColor: '#ddd',
+        borderRadius: 20,
+        padding: 5,
+      }}
+      key={key}>
       <Text
         style={{
           textAlign: 'center',
@@ -78,10 +74,22 @@ const dayChips = dayList.map((day, index) => (
         {day}
       </Text>
     </View>
+  );
+}
+
+const dayList = ['일', '월', '화', '수', '목', '금', '토'];
+const dayChips = dayList.map((day, index) => (
+  <TouchableHighlight
+    underlayColor="#bbb"
+    onPress={() => {
+      console.warn('hi');
+    }}
+    key={index}>
+    {getDayTag(day)}
   </TouchableHighlight>
 ));
 
-function DayDatePicker({onConfirm}) {
+function DayDatePicker({ onConfirm }) {
   return (
     <Chip style={{ alignItems: 'center', justifyContent: 'center' }}>
       <MyDatePicker
@@ -106,51 +114,45 @@ function getDays(days: string[]) {
       style={{
         flexDirection: 'row',
         alignItems: 'center',
-        alignContent: 'center',
-        marginVertical: 5,
+        justifyContent: 'flex-start',
+        marginVertical: 8,
       }}>
-      <View
-        style={{
-          alignItems: 'center',
-          marginRight: 10,
-          width: 40,
-          backgroundColor: '#ddd',
-          borderRadius: 20,
-          padding: 5,
-        }}>
-        <Text
-          style={{
-            textAlign: 'center',
-          }}>
-          {day}
-        </Text>
-      </View>
+      {getDayTag(day)}
+      <DayDatePicker onConfirm={() => {}} />
+      <Text style={{ marginRight: 20 }}> 부터 </Text>
 
       <DayDatePicker onConfirm={() => {}} />
-
-      <Text> ~ </Text>
-      <MyDatePicker
-        onConfirm={() => {}}
-        day={dayjs()}
-        mode="time"
-        style={{
-          justifyContent: 'center',
-          flexDirection: 'row',
-          alignContent: 'center',
-        }}
-        dateTextStyle={{ fontSize: 15, color: 'black' }}
-      />
+      <Text> 까지 </Text>
     </View>
   ));
 
   return dayTimePicker;
-  // return <View> {dayTimePicker} </View>;
+}
+
+function extractPickerItem({ id, name }, key) {
+  return <Picker.Item label={name} value={id} key={key} />;
+}
+
+const studentList = [
+  { id: 'student_1', name: '김태형' },
+  { id: 'student_2', name: '최상아' },
+];
+
+const tagList = [
+  { id: 'tag_1', name: '수학' },
+  { id: 'tag_2', name: '과학' },
+];
+
+function extractAllPickerItems(studentList) {
+  return studentList.map((info, index) => extractPickerItem(info, index));
 }
 
 export default function ScheduleForm({ selectedSchedule }) {
   const { text, studentId, tagId, time, memo } = selectedSchedule;
 
-  const { start, end, repeatType, days, scheduleUnit } = parseTime(time);
+  const { start, end, repeatType, dailyScheduleMap, scheduleUnit } = parseTime(
+    time,
+  );
 
   const [newText, setText] = useState(text);
   const [selectedStudentId, selectStudent] = useState(studentId);
@@ -160,11 +162,12 @@ export default function ScheduleForm({ selectedSchedule }) {
   const [newEnd, setEnd] = useState(end);
   const [repeat, setRepeat] = useState(repeatType);
 
-  const [newDays, setDays] = useState(days);
   const [newScheduleUnit, setScheduleUnit] = useState(scheduleUnit);
 
   const [endAfterNumWeek, setEndAfterNumWeek] = useState(0);
   const [endAfterNumTimes, setEndAfterNumTimes] = useState(0);
+
+  const [newDailyScheduleMap, setDailyScheduleMap] = useState(dailyScheduleMap);
 
   const handleSubmit = () => {
     const newTime: LessonTime = new LessonTime(newStart, newEnd);
@@ -235,8 +238,7 @@ export default function ScheduleForm({ selectedSchedule }) {
               onValueChange={(itemValue, itemIndex) => selectStudent(itemValue)}
               mode="dropdown"
               itemStyle={{ fontSize: 16 }}>
-              <Picker.Item label="김태형" value="student_1" />
-              <Picker.Item label="최상아" value="student_2" />
+              {extractAllPickerItems(studentList)}
             </Picker>
           </View>
 
@@ -253,8 +255,7 @@ export default function ScheduleForm({ selectedSchedule }) {
               onValueChange={(itemValue, itemIndex) => selectTag(itemValue)}
               mode="dropdown"
               itemStyle={{ fontSize: 16 }}>
-              <Picker.Item label="수학" value="tag_1" />
-              <Picker.Item label="과학" value="tag_2" />
+              {extractAllPickerItems(tagList)}
             </Picker>
           </View>
 
