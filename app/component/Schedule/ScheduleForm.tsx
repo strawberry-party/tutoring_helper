@@ -10,7 +10,7 @@ import {
 import React, { useState } from 'react';
 import Tag, { TagForm } from '../../Tag';
 
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import MyDatePicker from '../common/MyDatePicker';
 import { ScheduleType } from '../../../types/schedule';
 import { TagType } from '../../../types/root';
 import dayjs from 'dayjs';
@@ -32,43 +32,6 @@ interface ScheduleForm {
   onAddTag: (tag: TagType) => void;
 }
 
-interface MyDatePickerProps {
-  day: dayjs.Dayjs;
-  onConfirm: (date: Date) => void;
-  msg: string;
-}
-
-function MyDatePicker({ onConfirm, day, msg }: MyDatePickerProps) {
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
-
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
-
-  const handleConfirm = (date: Date) => {
-    onConfirm(date);
-    hideDatePicker();
-  };
-  return (
-    <Pressable style={styles.dateContainer} onPress={showDatePicker}>
-      <Text style={styles.dateHeadline}> {msg} </Text>
-      <Text style={styles.dateHeadline}>
-        {day.format('MM월 DD일').toString()}
-      </Text>
-      <DateTimePickerModal
-        isVisible={isDatePickerVisible}
-        mode="date"
-        date={new Date()}
-        onConfirm={handleConfirm}
-        onCancel={hideDatePicker}
-      />
-    </Pressable>
-  );
-}
 
 export default function ScheduleForm({
   modalType,
@@ -79,7 +42,7 @@ export default function ScheduleForm({
   tags,
   onAddTag,
 }: ScheduleForm) {
-  const { text, begin, end, tagId } = selectedSchedule;
+  const { text, studentId, tagId } = selectedSchedule;
   const [newText, setText] = useState(text);
   const [newBegin, setBegin] = useState(begin);
   const [newEnd, setEnd] = useState(end);

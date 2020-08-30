@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 
 import { Chip } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
-import Tag from '../Tag';
+import Tag from '../common/Tag';
 import produce from 'immer';
 
 interface FilterProps {

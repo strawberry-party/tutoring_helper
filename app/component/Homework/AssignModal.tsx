@@ -1,12 +1,8 @@
 import {
-  Alert,
   Modal,
   StyleSheet,
-  Text,
-  TouchableHighlight,
   View,
 } from 'react-native';
-import { Button, Fab, Icon } from 'native-base';
 import React, { useState } from 'react';
 
 import AssignForm from './AssignForm';

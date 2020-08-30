@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Text, View } from 'react-native';
 
 import { Button } from 'react-native-paper';
-import LocalNotification from '../utils/LocalNotification';
+import LocalNotification from '../../utils/LocalNotification';
 
 export default function PushController() {
 

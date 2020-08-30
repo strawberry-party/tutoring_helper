@@ -5,14 +5,13 @@ import { Button, Card, CardItem, Icon, Text, View } from 'native-base';
 import { Dimensions, Pressable, StyleSheet } from 'react-native';
 import React, { useState } from 'react';
 
-import AlarmDialog from './AlarmDialog';
+import AlarmDialog from '../common/AlarmDialog';
 import { CheckBox } from 'react-native-elements';
-import ConfirmModal from '../ConfirmModal';
+import ConfirmModal from '../common/ConfirmModal';
 import { IconButton } from 'react-native-paper';
-import SwipeRow from './SwipeRow';
-import { TagMock } from '../Tag';
+import SwipeRow from '../common/SwipeRow';
+import { TagMock } from '../common/Tag';
 import { TagType } from '../../types/root';
-import { assign } from 'lodash';
 
 interface AssignProps extends AssignType {
   onComplete: () => void;

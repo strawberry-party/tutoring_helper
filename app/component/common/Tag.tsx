@@ -2,9 +2,9 @@ import { Chip, TextInput } from 'react-native-paper';
 import { Icon, Input } from 'native-base';
 import React, { useState } from 'react';
 
-import { TagType } from '../types/root';
+import { TagType } from '../../types/root';
 import { Text } from 'react-native';
-import { selectTag } from '../states/tagState';
+import { selectTag } from '../../states/tagState';
 
 interface TagProps {
   tag: TagType;

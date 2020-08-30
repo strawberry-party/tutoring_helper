@@ -3,13 +3,11 @@ import 'react-native-gesture-handler';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { connect, useSelector } from 'react-redux';
 
-import AddAssignButton from '../component/common/AddButton';
-import AlarmDialog from '../component/common/AlarmDialog';
-import AssignList from '../component/Homework/AssignList';
-import AssignModal from '../component/Homework/AssignModal';
+import AddAssignButton from '../component/Schedule/AddAssignButton';
+import AlarmDialog from '../component/Schedule/AlarmDialog';
+import AssignList from '../component/Schedule/AssignList';
+import AssignModal from '../component/Schedule/AssignModal';
 import { AssignType } from '../types/homework';
-import { FilterButton } from '../component/Homework/FilterSorter';
-import FilterModal from '../component/Homework/FilterModal';
 import PushMaker from '../component/common/PushMaker';
 import React from 'react';
 import { RootState } from '../states';
@@ -18,10 +16,20 @@ import { actions as filterSorterActions } from '../states/assignFilterSorterStat
 import { actions as modalVisibilityActions } from '../states/assignModalState';
 import { actions as tagActions } from '../states/tagState';
 
-type HomeworkContainerProps = any; // TODO: 타입 정의, any 대체하기
+// import { FilterButton } from '../component/Schedule/FilterSorter';
+// import FilterModal from '../component/Schedule/FilterModal';
 
-// type HomeworkContainerProps = any;
-function HomeworkContainer({
+
+
+
+
+
+
+
+type ScheduleContainerProps = any; // TODO: 타입 정의, any 대체하기
+
+// type ScheduleContainerProps = any;
+function ScheduleContainer({
   hideAddModal,
   showAddModal,
   hideEditModal,
@@ -47,7 +55,7 @@ function HomeworkContainer({
   showSelectedTags,
 
   addTag,
-}: HomeworkContainerProps) {
+}: ScheduleContainerProps) {
   // const tagMap: Map<string, TagType> = useSelector(
   //   (state: RootState) => state.tagReducer.tagMap,
   // );
@@ -241,5 +249,5 @@ const mapDispatchToProps = Object.assign(
   tagActions,
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomeworkContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(ScheduleContainer);
 // TutoringHelper의 props로 mapStateToProps의 리턴객체를 전해준다

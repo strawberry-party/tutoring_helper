@@ -1,19 +1,18 @@
 import { Button, Fab, Icon, Input, Item } from 'native-base';
+import React, { useState } from 'react';
 import {
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableHighlight,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
-import Tag, { TagForm } from '../Tag';
+import Tag, { TagForm } from '../common/Tag';
+
 import { AssignType } from '../../types/homework';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import MyDatePicker from '../common/MyDatePicker';
 import { TagType } from '../../types/root';
 import dayjs from 'dayjs';
-import { name } from 'dayjs/locale/*';
 
 type AddAssign = (assign: AssignType) => void;
 type EditAssign = (id: string, assign: AssignType) => void;
@@ -29,44 +28,6 @@ interface AssignForm {
   selectedAssign: AssignType;
   tags: Map<string, TagType>;
   onAddTag: (tag: TagType) => void;
-}
-
-interface MyDatePickerProps {
-  day: dayjs.Dayjs;
-  onConfirm: (date: Date) => void;
-  msg: string;
-}
-
-function MyDatePicker({ onConfirm, day, msg }: MyDatePickerProps) {
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
-
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
-
-  const handleConfirm = (date: Date) => {
-    onConfirm(date);
-    hideDatePicker();
-  };
-  return (
-    <Pressable style={styles.dateContainer} onPress={showDatePicker}>
-      <Text style={styles.dateHeadline}> {msg} </Text>
-      <Text style={styles.dateHeadline}>
-        {day.format('MM월 DD일').toString()}
-      </Text>
-      <DateTimePickerModal
-        isVisible={isDatePickerVisible}
-        mode="date"
-        date={new Date()}
-        onConfirm={handleConfirm}
-        onCancel={hideDatePicker}
-      />
-    </Pressable>
-  );
 }
 
 export default function AssignForm({
