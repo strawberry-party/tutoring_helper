@@ -1,12 +1,13 @@
 import { HeaderBackButton, createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, Text } from 'react-native';
-import DetailInfo from '../component/Tutor/Schedule/DetailInfo';
+
+import DetailInfo from '../component/Schedule/DetailInfo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import React from 'react';
-import Schedule from '../component/Tutor/Schedule/Schedule';
-import headerOptions from '../component/headerOptions'
-import { connect } from 'react-redux';
+import Schedule from '../component/Schedule/Schedule';
 import { StudentInfoType } from '../types/student';
+import { connect } from 'react-redux';
+import headerOptions from '../component/headerOptions'
 
 const ScheduleStack = createStackNavigator();
 

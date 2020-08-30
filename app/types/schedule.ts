@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 
 type Days = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun';
 
-class LessonTime {
+export class LessonTime {
   start: dayjs.Dayjs;
   end: dayjs.Dayjs;
 
@@ -17,14 +17,21 @@ type ScheduleUnitType = 'week' | 'times' | 'period';
 
 export class RepeatedScheduleInfo {
   scheduleUnit: ScheduleUnitType;
-  classTime: Map<Days, LessonTime>;
+  // classTime: Map<Days, LessonTime>;
+  start: dayjs.Dayjs;
+  end: dayjs.Dayjs;
+  days: Set<Days>;
 
   constructor(
     scheduleUnit = 'times' as ScheduleUnitType,
-    classTime = new Map([['mon' as Days, new LessonTime()]]),
+    start = dayjs(),
+    end = dayjs(),
+    days = new Set(['mon' as Days]),
   ) {
     this.scheduleUnit = scheduleUnit;
-    this.classTime = classTime;
+    this.start = start;
+    this.end = end;
+    this.days = days;
   }
 }
 
@@ -38,12 +45,12 @@ export class ScheduleType {
   memo?: string;
 
   constructor(
-    text: string = '기본 텍스트',
+    text: string = '',
     studentId: string = 'student_1',
     tagId: string = 'none',
 
-    time: LessonTime | RepeatedScheduleInfo,
-    memo: string = '메모 없음',
+    time: LessonTime | RepeatedScheduleInfo = new LessonTime(),
+    memo: string = '',
   ) {
     this.text = text;
     this.studentId = studentId;

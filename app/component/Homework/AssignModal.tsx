@@ -1,12 +1,9 @@
-import {
-  Modal,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { Modal, StyleSheet, View } from 'react-native';
 import React, { useState } from 'react';
 
 import AssignForm from './AssignForm';
 import { AssignType } from '../../types/homework';
+import MyModal from '../common/MyModal';
 import { TagType } from '../../types/root';
 
 interface AssignModalProps {
@@ -31,27 +28,23 @@ function AssignModal({
   onAddTag,
 }: AssignModalProps) {
   return (
-    <View style={styles.centeredView}>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={hideModal}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <AssignForm
-              onSubmit={onSubmit}
-              hideModal={hideModal}
-              selectedAssignId={selectedAssignId}
-              modalType={modalType}
-              selectedAssign={selectedAssign}
-              tags={tags}
-              onAddTag={onAddTag}
-            />
-          </View>
-        </View>
-      </Modal>
-    </View>
+    <MyModal
+      modalVisible={modalVisible}
+      hideModal={hideModal}
+      onSubmit={onSubmit}
+      data={{ modalType, selectedAssign, selectedAssignId }}
+      tags={tags}
+      onAddTag={onAddTag}>
+      <AssignForm
+        onSubmit={onSubmit}
+        hideModal={hideModal}
+        selectedAssignId={selectedAssignId}
+        modalType={modalType}
+        selectedAssign={selectedAssign}
+        tags={tags}
+        onAddTag={onAddTag}
+      />
+    </MyModal>
   );
 }
 
@@ -81,8 +74,7 @@ export function AddAssignModal({
   );
 }
 
-interface EditAssignModalProps extends AssignModalProps {
-}
+interface EditAssignModalProps extends AssignModalProps {}
 
 export function EditAssignModal({
   modalVisible,

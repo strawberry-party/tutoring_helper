@@ -10,8 +10,8 @@ import { Button, Fab, Icon } from 'native-base';
 import React, { useState } from 'react';
 
 import ScheduleForm from './ScheduleForm';
-import { ScheduleType } from '../../../types/schedule';
-import { TagType } from '../../../types/root';
+import { ScheduleType } from '../../types/schedule';
+import { TagType } from '../../types/root';
 
 interface ScheduleModalProps {
   modalVisible: boolean;

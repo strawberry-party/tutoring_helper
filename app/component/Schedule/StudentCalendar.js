@@ -4,7 +4,7 @@ import { Alert, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react
 import { Button, Icon, IconButton } from 'react-native-paper';
 import React, { Component } from 'react';
 
-import { KR_LOCAL_CONFIG } from '../../../utils/calendarConfig';
+import { KR_LOCAL_CONFIG } from '../../utils / calendarConfig';
 import { LocaleConfig } from 'react-native-calendars';
 import _ from 'lodash';
 

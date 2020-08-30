@@ -7,13 +7,19 @@ import dayjs from 'dayjs';
 interface MyDatePickerProps {
   day: dayjs.Dayjs;
   onConfirm: (date: Date) => void;
-  msg: string;
+  msg?: string;
+  mode?: 'date' | 'time' | 'datetime';
+  style?: Object;
+  dateTextStyle?: Object;
 }
 
 export default function MyDatePicker({
   onConfirm,
   day,
-  msg,
+  msg = '',
+  mode = 'date',
+  style,
+  dateTextStyle,
 }: MyDatePickerProps) {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
@@ -30,14 +36,20 @@ export default function MyDatePicker({
     hideDatePicker();
   };
   return (
-    <Pressable style={styles.dateContainer} onPress={showDatePicker}>
-      <Text style={styles.dateHeadline}> {msg} </Text>
-      <Text style={styles.dateHeadline}>
-        {day.format('MM월 DD일').toString()}
+    <Pressable
+      style={style ? style : styles.dateContainer}
+      onPress={showDatePicker}>
+      {msg.length > 0 && <Text style={styles.dateHeadline}> {msg} </Text>}
+      <Text style={dateTextStyle ? dateTextStyle : styles.dateHeadline}>
+        {mode == 'time'
+          ? day.format('HH시 mm분').toString()
+          : mode === 'date'
+          ? day.format('MM월 DD일').toString()
+          : day.format('MM월 DD일 HH시 mm분').toString()}
       </Text>
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
-        mode="date"
+        mode={mode}
         date={new Date()}
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
@@ -49,7 +61,7 @@ export default function MyDatePicker({
 const styles = StyleSheet.create({
   dateHeadline: {
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: '300',
     color: 'black',
     minWidth: 30,
     alignSelf: 'center',
@@ -65,8 +77,6 @@ const styles = StyleSheet.create({
     minWidth: 150,
     justifyContent: 'flex-start',
     flexDirection: 'row',
-    backgroundColor: '#bbb',
-    marginBottom: 10,
     height: 40,
   },
 });

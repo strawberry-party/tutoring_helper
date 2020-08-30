@@ -20,12 +20,6 @@ import { actions as tagActions } from '../states/tagState';
 // import FilterModal from '../component/Schedule/FilterModal';
 
 
-
-
-
-
-
-
 type ScheduleContainerProps = any; // TODO: 타입 정의, any 대체하기
 
 // type ScheduleContainerProps = any;
@@ -118,13 +112,6 @@ function ScheduleContainer({
             flexDirection: 'row',
             alignItems: 'center',
           }}>
-          <FilterButton
-            showFilterModal={showFilterModal}
-            // activeSorter={sorter}
-            // activeSorterDir={sorterDir}
-            // sorterDirActions={{ sortDsc, sortAsc }}
-            // sorterActions={{ sortDue, sortOut, sortTitle }}
-          />
           <PushMaker />
           <AlarmDialog text="알림" />
         </View>
