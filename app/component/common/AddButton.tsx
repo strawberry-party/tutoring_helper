@@ -3,18 +3,18 @@ import { Button, Fab, Icon } from 'native-base';
 import React from 'react';
 
 interface AddButtonProps {
-  addModalVisible: boolean;
-  showAddModal: () => void;
+  visible: boolean;
+  show: () => void;
 }
 
-export function AddButton({ addModalVisible, showAddModal }: AddButtonProps) {
+export function AddButton({ visible, show }: AddButtonProps) {
   return (
     <Fab
-      active={!addModalVisible}
+      active={!visible}
       direction="up"
       style={{ backgroundColor: '#bbb' }}
       position="bottomRight"
-      onPress={showAddModal}>
+      onPress={show}>
       <Icon name="add" />
     </Fab>
   );

@@ -26,14 +26,14 @@ interface ScheduleModalProps {
 
 function ScheduleModal({
   modalVisible,
-  hideModal,
-  onSubmit,
-  modalType,
-  selectedScheduleId,
   selectedSchedule,
-  tags,
-  onAddTag,
-}: ScheduleModalProps) {
+  hideModal,
+
+  // onSubmit,
+  // selectedScheduleId,
+  // tags,
+  // onAddTag,
+}) {
   return (
     <View style={styles.centeredView}>
       <Modal
@@ -43,15 +43,7 @@ function ScheduleModal({
         onRequestClose={hideModal}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <ScheduleForm
-              onSubmit={onSubmit}
-              hideModal={hideModal}
-              selectedScheduleId={selectedScheduleId}
-              modalType={modalType}
-              selectedSchedule={selectedSchedule}
-              tags={tags}
-              onAddTag={onAddTag}
-            />
+            <ScheduleForm selectedSchedule={selectedSchedule} />
           </View>
         </View>
       </Modal>
@@ -61,56 +53,6 @@ function ScheduleModal({
 
 interface AddScheduleModalProps extends ScheduleModalProps {}
 
-export function AddScheduleModal({
-  modalVisible,
-  hideModal,
-  onSubmit,
-  tags,
-  modalType,
-  onAddTag,
-  selectedScheduleId,
-  selectedSchedule,
-}: AddScheduleModalProps) {
-  return (
-    <ScheduleModal
-      modalVisible={modalVisible}
-      hideModal={hideModal}
-      onSubmit={onSubmit}
-      modalType={modalType}
-      selectedScheduleId={selectedScheduleId}
-      selectedSchedule={selectedSchedule}
-      tags={tags}
-      onAddTag={onAddTag}
-    />
-  );
-}
-
-interface EditScheduleModalProps extends ScheduleModalProps {
-}
-
-export function EditScheduleModal({
-  modalVisible,
-  hideModal,
-  selectedScheduleId,
-  selectedSchedule,
-  tags,
-  onAddTag,
-  onSubmit,
-  modalType,
-}: EditScheduleModalProps) {
-  return (
-    <ScheduleModal
-      modalVisible={modalVisible}
-      hideModal={hideModal}
-      onSubmit={onSubmit}
-      modalType={modalType}
-      selectedScheduleId={selectedScheduleId}
-      selectedSchedule={selectedSchedule}
-      tags={tags}
-      onAddTag={onAddTag}
-    />
-  );
-}
 
 export default ScheduleModal;
 
@@ -134,7 +76,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    width: 300,
-    height: 500,
+    width: '80%',
+    height: '80%',
   },
 });

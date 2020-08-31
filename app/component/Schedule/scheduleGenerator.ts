@@ -1,3 +1,16 @@
+function repeatByDue(){
+
+}
+
+function repeatByTimes(){
+
+}
+
+function repeatByWeek(numOfWeek: number, ){
+  
+}
+
+
 // function repeat(days: {Wed, Sat}, endDate: , startDate: , time: ) {
 
 

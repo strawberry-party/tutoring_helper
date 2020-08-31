@@ -4,7 +4,7 @@ import DrawerNavigator from './DrawerNavigator';
 import HomeworkContainer from './Homework';
 import { Provider } from 'react-redux';
 import React from 'react';
-import ScheduleForm from '../component/Schedule/ScheduleForm';
+import ScheduleContainer from './Schedule';
 import StudentCalendar from '../component/Schedule/StudentCalendar';
 import { Text } from 'react-native';
 import store from '../common/store';
@@ -12,12 +12,7 @@ import store from '../common/store';
 function App() {
   return (
     <Provider store={store}>
-      {/* <StudentCalendar /> */}
-      <ScheduleForm
-      selectedSchedule={
-        new ScheduleType()
-      }
-      />
+      <ScheduleContainer />
     </Provider>
   );
 }

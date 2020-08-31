@@ -42,20 +42,20 @@ interface ScheduleFormProps {
 }
 
 function parseTime(time: LessonTime | RepeatedScheduleInfo) {
-  if (new Set(Object.keys(time)).has('scheduleUnit')) {
+  if (new Set(Object.keys(time)).has('endPoint')) {
     return Object.assign({ repeatType: 'true' }, time as RepeatedScheduleInfo);
   } else
     return Object.assign(
       {
         repeatType: 'false',
         dailyScheduleMap: new Map<Days, LessonTime>(),
-        scheduleUnit: 'none',
+        endPoint: 'none',
       },
       time as LessonTime,
     );
 }
 
-function getDayTag(day: string, key?) {
+function getDayTag(day: string, key?, onPress?: () => void) {
   return (
     <View
       style={{
@@ -129,10 +129,6 @@ function getDays(days: string[]) {
   return dayTimePicker;
 }
 
-function extractPickerItem({ id, name }, key) {
-  return <Picker.Item label={name} value={id} key={key} />;
-}
-
 const studentList = [
   { id: 'student_1', name: '김태형' },
   { id: 'student_2', name: '최상아' },
@@ -143,6 +139,10 @@ const tagList = [
   { id: 'tag_2', name: '과학' },
 ];
 
+function extractPickerItem({ id, name }, key) {
+  return <Picker.Item label={name} value={id} key={key} />;
+}
+
 function extractAllPickerItems(studentList) {
   return studentList.map((info, index) => extractPickerItem(info, index));
 }
@@ -150,7 +150,7 @@ function extractAllPickerItems(studentList) {
 export default function ScheduleForm({ selectedSchedule }) {
   const { text, studentId, tagId, time, memo } = selectedSchedule;
 
-  const { start, end, repeatType, dailyScheduleMap, scheduleUnit } = parseTime(
+  const { start, end, repeatType, dailyScheduleMap, endPoint } = parseTime(
     time,
   );
 
@@ -160,9 +160,11 @@ export default function ScheduleForm({ selectedSchedule }) {
 
   const [newStart, setStart] = useState(start);
   const [newEnd, setEnd] = useState(end);
+  const [newMemo, setMemo] = useState(memo);
+
   const [repeat, setRepeat] = useState(repeatType);
 
-  const [newScheduleUnit, setScheduleUnit] = useState(scheduleUnit);
+  const [newEndPoint, setEndPoint] = useState(endPoint);
 
   const [endAfterNumWeek, setEndAfterNumWeek] = useState(0);
   const [endAfterNumTimes, setEndAfterNumTimes] = useState(0);
@@ -184,18 +186,16 @@ export default function ScheduleForm({ selectedSchedule }) {
   const onConfirmEnd = (date: Date) => {
     setEnd(dayjs(date));
   };
-  const onConfirmstart = (date: Date) => {
+  const onConfirmStart = (date: Date) => {
     setStart(dayjs(date));
   };
 
-  function getTagComponents(style = {}) {
-    var tagComponents: JSX.Element[] = [];
-
-    return <Text> TagSelector </Text>;
-  }
-
   const onChangeTitle = (text) => {
     setText(text);
+  };
+
+  const onChangeMemo = (text) => {
+    setMemo(text);
   };
 
   return (
@@ -269,7 +269,7 @@ export default function ScheduleForm({ selectedSchedule }) {
                 mode={'datetime'}
               />
               <MyDatePicker
-                onConfirm={onConfirmstart}
+                onConfirm={onConfirmStart}
                 day={newStart}
                 msg={'종료'}
                 mode={'datetime'}
@@ -320,103 +320,123 @@ export default function ScheduleForm({ selectedSchedule }) {
           </View>
 
           {repeat === 'true' && (
-            <View style={[styles.inputContainer]}>
-              <Text style={styles.headline}> 반복 종료 시점 </Text>
-              <View>
-                <Pressable
-                  onPress={() => {
-                    setScheduleUnit('false');
-                  }}>
-                  <View style={styles.radioButtonContainer}>
-                    <RadioButton
-                      value="week"
-                      status={
-                        newScheduleUnit === 'week' ? 'checked' : 'unchecked'
-                      }
-                      onPress={() => setScheduleUnit('week')}
-                    />
-                    <TextInput
-                      mode="outlined"
-                      style={{
-                        height: 25,
-                        marginRight: 10,
-                        alignItems: 'center',
-                      }}
-                      keyboardType="decimal-pad"
-                      onChangeText={(text) => {
-                        setEndAfterNumWeek(Number(text));
-                      }}
-                      value={endAfterNumWeek.toString()}
-                      disabled={!(newScheduleUnit === 'week')}
-                      maxLength={2}
-                    />
-
-                    <Text style={[styles.inputText, { marginTop: 6 }]}>
-                      주 후
-                    </Text>
-                  </View>
-                </Pressable>
-                <Pressable
-                  onPress={() => {
-                    setScheduleUnit('times');
-                  }}>
-                  <View style={styles.radioButtonContainer}>
-                    <RadioButton
-                      value="times"
-                      status={
-                        newScheduleUnit === 'times' ? 'checked' : 'unchecked'
-                      }
-                      onPress={() => {
-                        setScheduleUnit('times');
-                      }}
-                    />
-                    <TextInput
-                      mode="outlined"
-                      style={{ height: 25, marginRight: 10 }}
-                      keyboardType="number-pad"
-                      onChangeText={(text) => {
-                        setEndAfterNumTimes(Number(text));
-                      }}
-                      value={
-                        endAfterNumTimes !== 0
-                          ? endAfterNumTimes.toString()
-                          : ''
-                      }
-                      disabled={!(newScheduleUnit === 'times')}
-                      maxLength={2}
-                    />
-                    <Text style={[styles.inputText, { marginTop: 6 }]}>
-                      회 후
-                    </Text>
-                  </View>
-                </Pressable>
-              </View>
-
-              <Text style={styles.headline}> 요일 </Text>
-              <View style={styles.tagContainer}>{dayChips}</View>
-              <Text style={styles.headline}> 요일별 수업 시간 </Text>
-              {getDays(dayList)}
+            <View>
+              <EndPointSelector
+                setEndPoint={setEndPoint}
+                newEndPoint={newEndPoint}
+                endAfterNumWeek={endAfterNumWeek}
+                setEndAfterNumWeek={setEndAfterNumWeek}
+                endAfterNumTimes={endAfterNumTimes}
+                setEndAfterNumTimes={setEndAfterNumTimes}
+              />
+              <DailyScheduleSelector />
             </View>
           )}
 
-          <View
-            style={[
-              styles.inputContainer,
-              { borderBottomColor: 'transparent' },
-            ]}>
-            <Text style={styles.headline}> 메모 </Text>
-            <TextInput
-              value={newText}
-              onChangeText={onChangeTitle}
-              style={[styles.inputText, styles.memoContainer]}
-              multiline
-            />
-          </View>
+          <MemoBox newMemo={newMemo} onChangeMemo={onChangeMemo} />
         </View>
       </ScrollView>
     </View>
   );
 }
+
+function EndPointSelector({
+  setEndPoint,
+  newEndPoint,
+  endAfterNumWeek,
+  setEndAfterNumWeek,
+  endAfterNumTimes,
+  setEndAfterNumTimes,
+}) {
+  return (
+    <View style={[styles.inputContainer]}>
+      <Text style={styles.headline}> 반복 종료 시점 </Text>
+      <View>
+        <Pressable
+          onPress={() => {
+            setEndPoint('false');
+          }}>
+          <View style={styles.radioButtonContainer}>
+            <RadioButton
+              value="week"
+              status={newEndPoint === 'week' ? 'checked' : 'unchecked'}
+              onPress={() => setEndPoint('week')}
+            />
+            <TextInput
+              mode="outlined"
+              style={{
+                height: 25,
+                marginRight: 10,
+                alignItems: 'center',
+              }}
+              keyboardType="decimal-pad"
+              onChangeText={(text) => {
+                setEndAfterNumWeek(Number(text));
+              }}
+              value={endAfterNumWeek.toString()}
+              disabled={!(newEndPoint === 'week')}
+              maxLength={2}
+            />
+
+            <Text style={[styles.inputText, { marginTop: 6 }]}>주 후</Text>
+          </View>
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            setEndPoint('times');
+          }}>
+          <View style={styles.radioButtonContainer}>
+            <RadioButton
+              value="times"
+              status={newEndPoint === 'times' ? 'checked' : 'unchecked'}
+              onPress={() => {
+                setEndPoint('times');
+              }}
+            />
+            <TextInput
+              mode="outlined"
+              style={{ height: 25, marginRight: 10 }}
+              keyboardType="number-pad"
+              onChangeText={(text) => {
+                setEndAfterNumTimes(Number(text));
+              }}
+              value={endAfterNumTimes !== 0 ? endAfterNumTimes.toString() : ''}
+              disabled={!(newEndPoint === 'times')}
+              maxLength={2}
+            />
+            <Text style={[styles.inputText, { marginTop: 6 }]}>회 후</Text>
+          </View>
+        </Pressable>
+      </View>
+    </View>
+  );
+}
+
+function DailyScheduleSelector() {
+  return (
+    <View style={[styles.inputContainer]}>
+      <Text style={styles.headline}> 요일 </Text>
+      <View style={styles.tagContainer}>{dayChips}</View>
+      <Text style={styles.headline}> 요일별 수업 시간 </Text>
+      {getDays(dayList)}
+    </View>
+  );
+}
+
+function MemoBox({ newMemo, onChangeMemo }) {
+  return (
+    <View style={[styles.inputContainer, { borderBottomColor: 'transparent' }]}>
+      <Text style={styles.headline}> 메모 </Text>
+      <TextInput
+        value={newMemo}
+        onChangeText={onChangeMemo}
+        style={[styles.inputText, styles.memoContainer]}
+        multiline
+      />
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   tag: {
     alignContent: 'center',

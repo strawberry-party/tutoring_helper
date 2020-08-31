@@ -192,8 +192,8 @@ function HomeworkContainer({
       </View>
 
       <AddAssignButton
-        addModalVisible={addModalVisible}
-        showAddModal={showAddModal}
+        visible={addModalVisible}
+        show={showAddModal}
       />
     </SafeAreaView>
   );

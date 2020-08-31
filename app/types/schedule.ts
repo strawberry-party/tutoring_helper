@@ -13,21 +13,21 @@ export class LessonTime {
   }
 }
 
-type ScheduleUnitType = 'week' | 'times' | 'period';
+type EndPointType = 'week' | 'times' | 'period';
 
 export class RepeatedScheduleInfo {
-  scheduleUnit: ScheduleUnitType;
+  endPoint: EndPointType;
   dailyScheduleMap: Map<Days, LessonTime>;
   start: dayjs.Dayjs;
   end: dayjs.Dayjs;
 
   constructor(
-    scheduleUnit = 'week' as ScheduleUnitType,
+    endPoint = 'week' as EndPointType,
     start = dayjs(),
     end = dayjs(),
     dailyScheduleMap = new Map<Days, LessonTime>(),
   ) {
-    this.scheduleUnit = scheduleUnit;
+    this.endPoint = endPoint;
     this.start = start;
     this.end = end;
     this.dailyScheduleMap = dailyScheduleMap;

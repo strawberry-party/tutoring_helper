@@ -27,7 +27,7 @@ function getAssign(i: number) {
     dayjs('2020-01-01'), // TODO: 에러: 다 지금 날짜로 됨
     dayjs('2020-01-01'),
     false,
-    'java'
+    'java',
     // tag1 // README: 이렇게 하면 왠지 안됨
   );
   return newAssign;
@@ -78,7 +78,10 @@ const lesson_2: LessonType = {
     ['lessonContent_1', { text: '4단원', isCompleted: false }],
   ]),
   file: '',
-  test: [{ desc: '2단원', score: 90 }, {desc: '3단원', score: 100}],
+  test: [
+    { desc: '2단원', score: 90 },
+    { desc: '3단원', score: 100 },
+  ],
 };
 const lesson_3: LessonType = {
   lessonNum: 3,
