@@ -10,35 +10,37 @@ import Main from '../component/Tutor/Main';
 const MainStack = createStackNavigator();
 
 interface MainStackProps {
-  currentStudentInfo: StudentInfoType;
+  studentName: string;
   navigation: any;
 }
 
-function MainStackScreen({currentStudentInfo, navigation}: MainStackProps) {
-  
+function MainStackScreen({ studentName, navigation }: MainStackProps) {
   return (
-    <MainStack.Navigator initialRouteName="메인">
-      <MainStack.Screen
-        name="메인"
-        component={Main}
-        options={{
-          ...headerOptions,
-          title: '메인',
-          headerLeft: () => (
-            <Ionicons.Button
-              name="menu"
-              size={35}
-              backgroundColor="#e91e63"
-              onPress={() => {
-                navigation.openDrawer();
-              }}
-            />
-          ),
-          headerRight: () => (
-            <Text style={styles.studentNameText}>{currentStudentInfo.name + ' 학생'}</Text>
-          ),
-        }}
-      />
+    <MainStack.Navigator
+      initialRouteName="메인"
+      screenOptions={{
+        headerTintColor: 'white',
+        headerStyle: {
+          backgroundColor: '#e91e63',
+        },
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+        headerLeft: () => (
+          <Ionicons.Button
+            name="menu"
+            size={35}
+            backgroundColor="#e91e63"
+            onPress={() => {
+              navigation.openDrawer();
+            }}
+          />
+        ),
+        headerRight: () => (
+          <Text style={styles.studentNameText}>{studentName + ' 학생'}</Text>
+        ),
+      }}>
+      <MainStack.Screen name="메인" component={Main} />
     </MainStack.Navigator>
   );
 }
@@ -52,10 +54,7 @@ const styles = StyleSheet.create({
 });
 
 export default connect((state) => {
-  const currentStudentId = state.currentStudentReducer.selectedStudentId;
-  const studentArray = state.tutorReducer.studentArray;
   return {
-    currentStudentInfo: studentArray.filter(student => student.key === currentStudentId)[0].info,
-  }
-  
+    studentName: state.currentStudentReducer.name,
+  };
 }, null)(MainStackScreen);

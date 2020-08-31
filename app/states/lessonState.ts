@@ -55,7 +55,7 @@ const lessonReducer = (
         
         draft.lessonArray = [];
         const lessonArray = action.data;
-        lessonArray === undefined ? '' : Object.entries(action.data).reverse().map(([key, lessonInfo]) => {
+        lessonArray === (undefined || null) ? '' : Object.entries(action.data).reverse().map(([key, lessonInfo]) => {
           draft.lessonArray.push({key, lessonInfo})
         })
         break;

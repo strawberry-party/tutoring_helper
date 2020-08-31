@@ -1,15 +1,14 @@
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Foundation from 'react-native-vector-icons/Foundation';
-import HomeworkContainer from '../../container/Homework';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MainStackScreen from '../../screens/MainStackScreen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProgressStackScreen from '../../screens/ProgressStackScreen';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import ScheduleStackScreen from '../../screens/ScheduleStackScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import initialScreen from '../initialScreen';
+import HomeworkStackScreen from '../../screens/HomeworkStackScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -41,7 +40,7 @@ function Tabs() {
         key={'과제'}
         name={'과제'}
         options={assignOptions}
-        component={initialScreen}
+        component={HomeworkStackScreen}
       />
     </Tab.Navigator>
   );

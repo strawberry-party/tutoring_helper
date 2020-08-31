@@ -2,7 +2,6 @@ import { StyleSheet, Text } from 'react-native';
 import CreateProgress from '../component/Tutor/Progress/CreateProgress';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import React from 'react';
-import { StudentInfoType } from '../types/student';
 import WeeklyProgress from '../component/Tutor/Progress/WeeklyProgress';
 import { createStackNavigator } from '@react-navigation/stack';
 import { connect } from 'react-redux';
@@ -13,11 +12,11 @@ const db = database();
 const ProgressStack = createStackNavigator();
 
 interface ProgressStackScreenProps {
-  currentStudentInfo: StudentInfoType;
+  studentName: string;
   navigation: any;
 }
 
-function ProgressStackScreen({currentStudentInfo, navigation}: ProgressStackScreenProps) {
+function ProgressStackScreen({studentName, navigation}: ProgressStackScreenProps) {
   return (
     <ProgressStack.Navigator
       screenOptions={{
@@ -39,7 +38,7 @@ function ProgressStackScreen({currentStudentInfo, navigation}: ProgressStackScre
           />
         ),
         headerRight: () => (
-          <Text style={styles.studentNameText}>{currentStudentInfo.name + ' 학생'}</Text>
+          <Text style={styles.studentNameText}>{studentName + ' 학생'}</Text>
         ),
       }}
       initialRouteName="진도관리">
@@ -58,10 +57,8 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-  const currentStudentId = state.currentStudentReducer.selectedStudentId;
-  const studentArray = state.tutorReducer.studentArray;
   return {
-    currentStudentInfo: studentArray.filter(student => student.key === currentStudentId)[0].info,
+    studentName: state.currentStudentReducer.name,
   }
 };
 

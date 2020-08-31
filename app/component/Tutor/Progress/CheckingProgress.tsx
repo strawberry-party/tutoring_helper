@@ -8,16 +8,12 @@ import _ from 'lodash';
 const db = database();
 
 function CheckingProgress({id, lessonArray, currentStudentId}) {
-  // console.log(contents);
   const contents = lessonArray.filter(lesson => lesson.key === id)[0].lessonInfo.contents
-  // console.log(contents);
   
   const checkboxItems: Array<JSX.Element> = [];
-  // console.log(checkboxItems);
   
   contents === undefined ? '' : Object.entries(contents).reverse().map(([key, value]) => {
     // console.log(value);
-    
     var isCompleted = value.isCompleted;
     checkboxItems.push(
       <CheckBox
@@ -25,7 +21,7 @@ function CheckingProgress({id, lessonArray, currentStudentId}) {
         title={value.text}
         checked={isCompleted}
         onPress={() => {
-          db.ref('tutor_1/studentArray/'+currentStudentId+'/lessonArray/'+id+'/contents/'+key).update({
+          db.ref(`tutor_1/studentArray/${currentStudentId}/lessonArray/${id}/contents/${key}`).update({
             isCompleted: !isCompleted,
           })
           isCompleted = !isCompleted;

@@ -1,15 +1,87 @@
-import { LessonContentType, LessonType } from '../../../types/lesson';
-import { SectionList, StyleSheet, Text, View } from 'react-native';
-
-import { Button } from 'react-native-elements';
+import { LessonType } from '../../../types/lesson';
+import { SectionList, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import React, { useEffect } from 'react';
-import { StudentInfoType } from '../../../types/student';
 import Week from './Week';
 import { connect } from 'react-redux';
-import database from '@react-native-firebase/database'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import database from '@react-native-firebase/database';
+import { Fab } from 'native-base';
 
 const db = database();
+
+interface SectionItem {
+  title: string;
+  data: Array<JSX.Element>;
+}
+
+interface WeeklyProgressProps {
+  lessonArray: Array<LessonType>;
+  navigation: any;
+  dataToLessonState: Function;
+  currentStudentId: string;
+  currentStudentlessonTotalNum: number;
+}
+
+function WeeklyProgress({
+  lessonArray,
+  navigation,
+  dataToLessonState,
+  currentStudentId,
+  currentStudentlessonTotalNum
+}: WeeklyProgressProps) {
+
+  useEffect(() => {
+    db.ref(`tutor_1/studentArray/${currentStudentId}/lessonArray`).on(
+      'value',
+      (snapshot) => {
+        dataToLessonState('LESSONSTATE_SETUP', snapshot.val());
+      },
+    );
+  }, []);
+
+  const handleDelete = (key) => {
+    db.ref(`tutor_1/studentArray/${currentStudentId}`).update({
+      lessonTotalNum: currentStudentlessonTotalNum - 1,
+    })
+    db.ref(`tutor_1/studentArray/${currentStudentId}/lessonArray/${key}`).remove()
+  }
+
+  const sectionItems = [];
+  lessonArray.length === 0
+    ? ''
+    : lessonArray.map((lesson) => {
+        const lessonInfo = lesson.lessonInfo;
+        sectionItems.push({
+          title: lessonInfo.lessonNum + ' 회차',
+          key: lesson.key,
+          data: [<Week id={lesson.key} />],
+        });
+      })
+      
+  sectionItems.sort((a, b) => (a.title > b.title) ? 1 : -1); //회차 순으로 정렬
+
+  return (
+    <View style={{flex: 1, backgroundColor: '#ffffff'}}>
+      <SectionList
+        sections={sectionItems}
+        renderItem={({ item }) => <Text style={styles.item}>{item}</Text>}
+        renderSectionHeader={({ section }) => (
+          <View>
+            <Text style={styles.sectionHeader}>{section.title}</Text>
+            <TouchableOpacity style={{position: "absolute", right: 15, top: 5, zIndex: 1}} onPress={() => handleDelete(section.key)}>
+              <MaterialCommunityIcons name="delete-forever-outline" size={20} />
+            </TouchableOpacity>
+          </View>
+        )}
+        keyExtractor={(item, index) => index.toString()}
+      />
+      <Fab style={styles.createButton} onPress={() => navigation.navigate('진도추가')}>
+        <Ionicons name="add" size={20} />
+      </Fab>
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -27,79 +99,31 @@ const styles = StyleSheet.create({
   },
   item: {
     backgroundColor: '#ffffff',
+    borderBottomColor: '#c0b4b8',
+    borderBottomWidth: 1,
   },
   createButton: {
     position: 'absolute',
-    bottom: 100,
+    bottom: 15,
+    elevation: 2,
+    backgroundColor: '#ed4a82',
+    zIndex: 1,
   },
 });
 
-interface SectionItem {
-  title: string;
-  data: Array<JSX.Element>;
-}
-
-interface WeeklyProgressProps {
-  lessonArray: Array<LessonType>;
-  navigation: any;
-  dataToLessonState: Function;
-  currentStudentId: string;
-}
-
-function WeeklyProgress({lessonArray, navigation, dataToLessonState, currentStudentId}: WeeklyProgressProps) {
-  // console.log(lessonArray);
-  useEffect(() => {
-    db.ref('tutor_1/studentArray/'+currentStudentId+'/lessonArray').on('value', snapshot => {
-      // console.log('db changed');
-      // console.log(snapshot);
-      dataToLessonState('LESSONSTATE_SETUP', snapshot.val())
-    })
-  }, [])
-  
-  const sectionItems = [];
-  lessonArray.length === 0 ? '' : lessonArray.map((lesson) => {
-    const lessonInfo = lesson.lessonInfo;
-    sectionItems.push(
-      {title: lessonInfo.lessonNum + ' 회차', data: [<Week id={lesson.key}/>]}
-    )
-  });
-  
-  return (
-    <SectionList
-      sections={sectionItems}
-      renderItem={({ item }) => <Text style={styles.item}>{item}</Text>}
-      renderSectionHeader={({ section }) => (
-        <Text style={styles.sectionHeader}>{section.title}</Text>
-      )}
-      keyExtractor={(item, index) => index.toString()}
-      ListFooterComponent={
-        <Button
-          style={styles.createButton}
-          icon={<Ionicons name="add" size={20} />}
-          onPress={() => {
-            navigation.navigate('진도추가');
-          }}
-        />
-      }
-    />
-  );
-}
-
 const mapStateToProps = (state) => {
-  const currentStudentId = state.currentStudentReducer.selectedStudentId;
-  const studentArray = state.tutorReducer.studentArray;
   return {
-    currentStudentId,
+    currentStudentId: state.currentStudentReducer.selectedStudentId,
     lessonArray: state.lessonReducer.lessonArray,
-    currentStudentInfo: studentArray.filter(student => student.key === currentStudentId)[0].info,
-  }
+    currentStudentlessonTotalNum: state.currentStudentReducer.lessonTotalNum,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return{
-    dataToLessonState: (type, data) => {
-      dispatch({type, data})
-    }
+  return {
+    dataToLessonState: (type, data, lessonNum) => {
+      dispatch({ type, data, lessonNum });
+    },
   };
 };
 

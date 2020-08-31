@@ -11,12 +11,15 @@ import { AssignType } from '../types/homework';
 import { FilterButton } from '../component/Homework/FilterSorter';
 import FilterModal from '../component/Homework/FilterModal';
 import PushMaker from './PushMaker';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { RootState } from '../states';
 import { actions as assignActions } from '../states/assignState';
 import { actions as filterSorterActions } from '../states/assignFilterSorterState';
 import { actions as modalVisibilityActions } from '../states/assignModalState';
 import { actions as tagActions } from '../states/tagState';
+import database from '@react-native-firebase/database'
+
+const db = database();
 
 type HomeworkContainerProps = any; // TODO: 타입 정의, any 대체하기
 
@@ -29,6 +32,7 @@ function HomeworkContainer({
   showFilterModal,
   hideFilterModal,
 
+  setupAssign,
   addAssign,
   completeAssign,
   incompleteAssign,
@@ -45,12 +49,22 @@ function HomeworkContainer({
   sortTitle,
 
   showSelectedTags,
+  currentStudentId,
 
   addTag,
 }: HomeworkContainerProps) {
   // const tagMap: Map<string, TagType> = useSelector(
   //   (state: RootState) => state.tagReducer.tagMap,
   // );
+  useEffect(() => {
+    db.ref(`tutor_1/studentArray/${currentStudentId}/assigns`).on(
+      'value',
+      (snapshot) => {
+        // console.log(snapshot.val());
+        setupAssign(snapshot.val().assignList, snapshot.val().assignStatus.completedAssignNum);
+      },
+    );
+  }, []);
 
   const assignMap: Map<string, AssignType> = useSelector(
     (state: RootState) => state.assignReducer.assignMap,
@@ -226,6 +240,7 @@ function mapStateToProps(state) {
     filterModalVisible: state.assignModalReducer.filterModalVisible,
     filter: state.assignFilterSorterReducer.filter,
     sorter: state.assignFilterSorterReducer.sorter,
+    currentStudentId: state.currentStudentReducer.selectedStudentId,
   };
 }
 
