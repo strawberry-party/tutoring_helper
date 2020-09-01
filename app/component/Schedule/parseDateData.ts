@@ -1,25 +1,97 @@
+import {
+  EndAfterType,
+  RepeatedScheduleInfo,
+  ScheduleType,
+  WeeklyScheduleType,
+} from './../../types/schedule';
+import { forEach, forIn } from 'lodash';
+
+import dayjs from 'dayjs';
+
 const today = new Date().toISOString().split('T')[0];
 const fastDate = getPastDate(3);
 const futureDates = getFutureDates(9);
 const dates = [fastDate, today].concat(futureDates);
+var weekday = require('dayjs/plugin/weekday');
+dayjs.extend(weekday);
 
-const scheduleGenerator = [
+const repeatedScheduleInfoList: RepeatedScheduleInfo[] = [
   {
-    repeatType: 'none',
-    repeatTime: 1,
-    data: {start: '2020-09-13', end: '2020-09-13'}
+    endAfter: { numOfWeek: 2 },
+    startPoint: dayjs('2020-09-13'),
+    weeklySchedule: new WeeklyScheduleType(
+      new Map([
+        ['mon', { start: dayjs('2020-09-13'), end: dayjs('2020-09-14') }],
+      ]),
+    ),
   },
 
-
-  
+  {
+    endAfter: { numOfTimes: 4 },
+    startPoint: dayjs('2020-09-13'),
+    weeklySchedule: new WeeklyScheduleType(
+      new Map([
+        ['mon', { start: dayjs('2020-09-13'), end: dayjs('2020-09-14') }],
+        ['tue', { start: dayjs('2020-09-13'), end: dayjs('2020-09-14') }],
+      ]),
+    ),
+  },
 ];
 
+function scheduleGenerator(
+  repeatedScheduleInfo: RepeatedScheduleInfo,
+  repeatedScheduleInfoId: string,
+  text: string,
+  studentId: string,
+  tagId: string,
+  memo?: string,
+): ScheduleType[] {
+  const { endAfter, startPoint, weeklySchedule } = repeatedScheduleInfo;
+  const endPoint = getEndPoint(endAfter, startPoint);
+  // startPoint 부터 endPoint까지 weeklySchedule에 있는 요일에 대해 스케쥴 생성
+
+  let schedules: ScheduleType[] = [];
+  let groundDay = startPoint;
+
+  
+  // for (let i = 0; i < 7; i++) {
+  //   let code = i.toString();
+  //   if (dayjs(groundDay).day() === i) {
+  //     schedules.concat([]);
+  //   }
+  // }
+
+  return schedules;
+}
+
+
+function getEndPoint(
+  endAfter: EndAfterType,
+  startPoint: dayjs.Dayjs,
+): dayjs.Dayjs {
+  // TODO
+  return dayjs();
+}
+
+// 일별 일정으로 정리
 const dailySchedule = [
   {
     date: '2020-09-13',
     data: [
-      { start: '4pm', end: '1h', text: 'text', studentId: 'student_1', tagId: 'tag_1' },
-      { start: '6pm', end: '1h', text: 'text', studentId: 'student_2', tagId: 'tag_2' },
+      {
+        start: '4pm',
+        end: '1h',
+        text: 'text',
+        studentId: 'student_1',
+        tagId: 'tag_1',
+      },
+      {
+        start: '6pm',
+        end: '1h',
+        text: 'text',
+        studentId: 'student_2',
+        tagId: 'tag_2',
+      },
     ],
   },
 

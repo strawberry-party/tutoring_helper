@@ -1,6 +1,6 @@
 import { Agenda, Calendar, CalendarList } from 'react-native-calendars';
 import { AgendaList, CalendarProvider, ExpandableCalendar, WeekCalendar } from 'react-native-calendars';
-import { Alert, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Button, Icon, IconButton } from 'react-native-paper';
 import React, { Component, useState } from 'react';
 import { lightThemeColor, themeColor } from './scheduleThemeProvider'
@@ -110,13 +110,28 @@ export default function StudentCalendar(props) {
           hideKnob
         />
       }
-      <AgendaList
-        sections={agendaSections}
-        extraData={state}
-        renderItem={renderItem}
-        hideKnob
-        sectionStyle={styles.section}
-      />
+
+      <ScrollView
+        style={{
+          borderColor: 'skyblue',
+          // borderWidth: 3,
+        }}>
+        <View
+          style={{
+            borderColor: 'blue',
+            // borderWidth: 3,
+          }}>
+          <AgendaList
+            sections={agendaSections}
+            extraData={state}
+            renderItem={renderItem}
+            hideKnob
+            sectionStyle={styles.section}
+          />
+        </View>
+      </ScrollView>
+
+
     </CalendarProvider>
 
 

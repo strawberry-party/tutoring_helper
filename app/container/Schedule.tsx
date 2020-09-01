@@ -55,19 +55,7 @@ function ScheduleContainer({}: ScheduleContainerProps) {
           <AlarmDialog text="알림" />
         </View>
 
-        <ScrollView
-          style={{
-            borderColor: 'skyblue',
-            // borderWidth: 3,
-          }}>
-          <View
-            style={{
-              borderColor: 'blue',
-              // borderWidth: 3,
-            }}>
-            <StudentCalendar />
-          </View>
-        </ScrollView>
+        <StudentCalendar />
 
         <View style={styles.mock}>
           <ScheduleModal

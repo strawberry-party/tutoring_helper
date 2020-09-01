@@ -22,6 +22,7 @@ type HomeworkContainerProps = any; // TODO: 타입 정의, any 대체하기
 
 // type HomeworkContainerProps = any;
 function HomeworkContainer({
+  
   hideAddModal,
   showAddModal,
   hideEditModal,
@@ -233,6 +234,8 @@ function mapStateToProps(state) {
 //   bindActionCreators(Object.assign({}, assignActions, modalVisibilityActions), dispatch);
 // }
 
+// const myMApDispatchToPRops = (callback) => store.dispatch(callback)
+
 const mapDispatchToProps = Object.assign(
   {},
   assignActions,
@@ -240,6 +243,8 @@ const mapDispatchToProps = Object.assign(
   filterSorterActions,
   tagActions,
 );
+
+// { addAssign: addAssign, }
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeworkContainer);
 // TutoringHelper의 props로 mapStateToProps의 리턴객체를 전해준다
