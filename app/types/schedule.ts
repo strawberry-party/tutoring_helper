@@ -4,6 +4,19 @@ import dayjs from 'dayjs';
 
 type Days = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun';
 
+export interface AgendaCardType {
+  startPoint: string; // dayjs.Dayjs;
+  endPoint: string; // dayjs.Dayjs;
+
+  text?: string;
+  memo?: string;
+}
+
+export interface DailyAgendasType {
+  date: string;
+  data: ({} | AgendaCardType)[];
+}
+
 export class LessonTime {
   start: dayjs.Dayjs;
   end: dayjs.Dayjs;
@@ -42,13 +55,13 @@ const dayToCode: Object = {
 };
 
 export class WeeklyScheduleType {
-  '0': NoneOrSomeLessonTime;
-  '1': NoneOrSomeLessonTime;
-  '2': NoneOrSomeLessonTime;
-  '3': NoneOrSomeLessonTime;
-  '4': NoneOrSomeLessonTime;
-  '5': NoneOrSomeLessonTime;
-  '6': NoneOrSomeLessonTime;
+  '0'?: NoneOrSomeLessonTime;
+  '1'?: NoneOrSomeLessonTime;
+  '2'?: NoneOrSomeLessonTime;
+  '3'?: NoneOrSomeLessonTime;
+  '4'?: NoneOrSomeLessonTime;
+  '5'?: NoneOrSomeLessonTime;
+  '6'?: NoneOrSomeLessonTime;
 
   constructor(
     dailyScheduleMap: Map<Days, LessonTime> = new Map<Days, LessonTime>(),
@@ -58,13 +71,6 @@ export class WeeklyScheduleType {
       const todayCode: string = dayToCode[day];
       this[todayCode] = lessonTime as NoneOrSomeLessonTime;
       codeSet.add(todayCode);
-    }
-
-    for (let i = 0; i < 7; i++) {
-      let code = i.toString();
-      if (!codeSet.has(code)) {
-        this[code] = 'noLessonToday' as NoneOrSomeLessonTime;
-      }
     }
   }
 }

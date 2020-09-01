@@ -1,10 +1,12 @@
 import {
+  AgendaCardType,
+  DailyAgendasType,
   EndAfterType,
+  LessonTime,
   RepeatedScheduleInfo,
   ScheduleType,
   WeeklyScheduleType,
 } from './../../types/schedule';
-import { forEach, forIn } from 'lodash';
 
 import dayjs from 'dayjs';
 
@@ -38,6 +40,7 @@ const repeatedScheduleInfoList: RepeatedScheduleInfo[] = [
   },
 ];
 
+// TODO (규빈)
 function scheduleGenerator(
   repeatedScheduleInfo: RepeatedScheduleInfo,
   repeatedScheduleInfoId: string,
@@ -56,78 +59,51 @@ function scheduleGenerator(
   // for (let i = 0; i < 7; i++) {
   //   let code = i.toString();
   //   if (dayjs(groundDay).day() === i) {
-  //     schedules.concat([]);
+  //     schedules.concat(getRepeatedSchedules(startPoint, endPoint, weeklySchedule[i] ));
   //   }
   // }
 
   return schedules;
 }
 
+// TODO (규빈)
+function getRepeatedSchedules(
+  startPoint: dayjs.Dayjs,
+  endPoint: dayjs.Dayjs,
+  dailyLessonTime: LessonTime,
+): ScheduleType[] {
+  return [];
+}
+
+// TODO (규빈)
 function getEndPoint(
   endAfter: EndAfterType,
   startPoint: dayjs.Dayjs,
 ): dayjs.Dayjs {
-  // TODO
+  // TODO: EndAfterType : week / times / endPoint
+
   return dayjs();
 }
 
-// 일별 일정으로 정리
-const dailySchedule = [
-  {
-    date: '2020-09-13',
-    data: [
-      {
-        start: '4pm',
-        end: '1h',
-        text: 'text',
-        studentId: 'student_1',
-        tagId: 'tag_1',
-      },
-      {
-        start: '6pm',
-        end: '1h',
-        text: 'text',
-        studentId: 'student_2',
-        tagId: 'tag_2',
-      },
-    ],
-  },
-
-  {
-    date: '2020-09-15',
-    data: [
-      { start: '4pm', end: '1h', text: 'text', studentId: 'student_1' },
-      { start: '6pm', end: '1h', text: 'text', studentId: 'student_2' },
-    ],
-  },
-]; // data에도 어떤 config에서 generate 됐는지 알려주는 id가 필요함. 그래야 나중에 선택 -> 수정했을 때 넘길 수 있음
-
-
-
-export interface AgendaCardType {
-  startPoint: string; // dayjs.Dayjs;
-  endPoint: string; // dayjs.Dayjs;
-
-  text?: string;
-  memo?: string;
+// TODO (규빈)
+/// 일별 일정으로 정리하는 함수
+function sortIntoDailyAgendas(schedules: ScheduleType[]): DailyAgendasType[] {
+  return [];
 }
 
-export interface DailyAgendasType {
-  title: string;
-  data: ({} | AgendaCardType)[];
-}
-
+// TODO: data에도 어떤 config에서 generate 됐는지 알려주는 id가 필요함. 그래야 나중에 선택 -> 수정했을 때 넘길 수 있음
+// TODO: 현재 렌더링할 영역 (dates 배열) 전부에 대해 agenda가 없다면 data: [{}]으로 자동 초기화
 export const dailyAgendas: DailyAgendasType[] = [
   {
-    title: dates[0],
+    date: dates[0],
     data: [
       { startPoint: '12:30', endPoint: '14:30', text: '과외' },
       { startPoint: '12:30', endPoint: '14:30', text: '과외' },
-      { startPoint: '12:30', endPoint: '14:30', },
+      { startPoint: '12:30', endPoint: '14:30' },
     ],
   },
 
-  { title: dates[4], data: [{}] },
+  { date: dates[4], data: [{}] },
 ];
 
 function getFutureDates(days: number) {

@@ -10,7 +10,7 @@ import { Icon } from 'react-native-paper'
 import PropTypes from 'prop-types';
 import React from 'react';
 
-const weekDaysNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const weekDaysNames = ['일', '월', '화', '수', '목', '금', '토'];
 
 export default class CalendarHeaderComponent extends React.Component {
   constructor(props) {
@@ -51,10 +51,11 @@ export default class CalendarHeaderComponent extends React.Component {
             onPress={this.props.onPressListView}
             disabled={this.props.horizontal}
           >
-            <Image
+            <Text> 주별보기 </Text>
+            {/* <Image
               style={styles.icon}
               source={require('../../images/list.png')}
-            />
+            /> */}
           </TouchableOpacity>
           <TouchableOpacity
             style={[
@@ -65,10 +66,11 @@ export default class CalendarHeaderComponent extends React.Component {
             onPress={this.props.onPressGridView}
             disabled={!this.props.horizontal}
           >
-            <Image
+            <Text> 월별보기 </Text>
+            {/* <Image
               style={styles.icon}
               source={require('../../images/grid.png')}
-            />
+            /> */}
           </TouchableOpacity>
         </View>
         {

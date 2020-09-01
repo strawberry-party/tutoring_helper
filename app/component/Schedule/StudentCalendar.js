@@ -1,15 +1,18 @@
 import AgendaCard, { EmptyCard } from './AgendaCard'
-import { AgendaList, CalendarProvider, ExpandableCalendar, WeekCalendar } from 'react-native-calendars';
+import { AgendaList, Calendar, CalendarProvider, ExpandableCalendar, WeekCalendar } from 'react-native-calendars';
 import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Button, Icon, IconButton } from 'react-native-paper';
 import React, { useState } from 'react';
 import { lightThemeColor, themeColor } from './scheduleThemeProvider'
 
+import CalendarDayComponent from './CalendarDayComponent';
+import CalendarHeaderComponent from './CalendarHeaderComponent';
 import { KR_LOCAL_CONFIG } from '../../utils/calendarConfig';
 import { LocaleConfig } from 'react-native-calendars';
 import { ScheduleType } from '../../types/schedule';
 import _ from 'lodash';
-import { dailyAgendas, } from './parseDateData'
+import { dailyAgendas, } from './parseDateData';
+import dayjs from 'dayjs';
 import { getTheme } from './scheduleThemeProvider';
 
 // TODO: 타입 오류 있는 Agenda 분리, 기타 컴포넌트에는 타입 적용
@@ -17,6 +20,9 @@ import { getTheme } from './scheduleThemeProvider';
 LocaleConfig.locales['kr'] = KR_LOCAL_CONFIG;
 LocaleConfig.defaultLocale = 'kr';
 
+function notYetImplemented() {
+  console.warn('어서 일해라');
+}
 
 const onDateChanged = (/* date, updateSource */) => {
   // console.warn('ExpandableCalendarScreen onDateChanged: ', date, updateSource);
@@ -63,6 +69,14 @@ export default function StudentCalendar({ weekView }) {
   }
 
 
+  const [calendarDate, setCalendarDate] = useState(dayjs());
+  const [horizontal, setHorizontal] = useState(true);
+
+  const onPressArrowLeft = () => {
+    setCalendarDate(calendarDate.subtract(1, 'month'))
+    console.log('onPressArrowLeft: ' + calendarDate.format('YYYY MM DD'));
+  }
+
   return (
     <CalendarProvider
       date={dailyAgendas[0].title}
@@ -76,8 +90,8 @@ export default function StudentCalendar({ weekView }) {
       style={{ backgroundColor: 'red', padding: 10 }}
     >
 
-      {/* <Calendar
-        current={calendarDate}
+      <Calendar
+        current={calendarDate.toDate()}
         horizontal={horizontal}
 
         dayComponent={CalendarDayComponent}
@@ -89,12 +103,12 @@ export default function StudentCalendar({ weekView }) {
           paddingLeft: 0, paddingRight: 0
         }}
         onPressArrowLeft={onPressArrowLeft}
-        onPressArrowRight={onPressArrowRight}
-        onPressListView={onPressListView}
-        onPressGridView={onPressGridView}
+        onPressArrowRight={notYetImplemented}
+        onPressListView={notYetImplemented}
+        onPressGridView={notYetImplemented}
         markedDates={getMarkedDates()}
-        onDayPress={onDayPress}
-      /> */}
+        onDayPress={notYetImplemented}
+      />
 
       {/* {weekView ?
           <WeekCalendar
