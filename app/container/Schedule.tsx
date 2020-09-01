@@ -55,7 +55,7 @@ function ScheduleContainer({}: ScheduleContainerProps) {
           <AlarmDialog text="알림" />
         </View>
 
-        <StudentCalendar />
+        <StudentCalendar weekView={false} />
 
         <View style={styles.mock}>
           <ScheduleModal

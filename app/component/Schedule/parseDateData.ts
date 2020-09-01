@@ -53,7 +53,6 @@ function scheduleGenerator(
   let schedules: ScheduleType[] = [];
   let groundDay = startPoint;
 
-  
   // for (let i = 0; i < 7; i++) {
   //   let code = i.toString();
   //   if (dayjs(groundDay).day() === i) {
@@ -63,7 +62,6 @@ function scheduleGenerator(
 
   return schedules;
 }
-
 
 function getEndPoint(
   endAfter: EndAfterType,
@@ -104,30 +102,31 @@ const dailySchedule = [
   },
 ]; // data에도 어떤 config에서 generate 됐는지 알려주는 id가 필요함. 그래야 나중에 선택 -> 수정했을 때 넘길 수 있음
 
-export const agendaSections = [
+
+
+export interface AgendaCardType {
+  startPoint: string; // dayjs.Dayjs;
+  endPoint: string; // dayjs.Dayjs;
+
+  text?: string;
+  memo?: string;
+}
+
+export interface DailyAgendasType {
+  title: string;
+  data: ({} | AgendaCardType)[];
+}
+
+export const dailyAgendas: DailyAgendasType[] = [
   {
     title: dates[0],
-    data: [{ hour: '12am', duration: '1h', title: 'First Yoga' }],
-  },
-  {
-    title: dates[1],
     data: [
-      { hour: '4pm', duration: '1h', title: 'Pilates ABC' },
-      { hour: '5pm', duration: '1h', title: 'Vinyasa Yoga' },
+      { startPoint: '12:30', endPoint: '14:30', text: '과외' },
+      { startPoint: '12:30', endPoint: '14:30', text: '과외' },
+      { startPoint: '12:30', endPoint: '14:30', },
     ],
   },
-  {
-    title: dates[2],
-    data: [
-      { hour: '1pm', duration: '1h', title: 'Ashtanga Yoga' },
-      { hour: '2pm', duration: '1h', title: 'Deep Streches' },
-      { hour: '3pm', duration: '1h', title: 'Private Yoga' },
-    ],
-  },
-  {
-    title: dates[3],
-    data: [{ hour: '12am', duration: '1h', title: 'Ashtanga Yoga' }],
-  },
+
   { title: dates[4], data: [{}] },
 ];
 
