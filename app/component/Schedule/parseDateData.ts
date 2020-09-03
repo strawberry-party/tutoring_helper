@@ -17,6 +17,7 @@ const dates = [fastDate, today].concat(futureDates);
 var weekday = require('dayjs/plugin/weekday');
 dayjs.extend(weekday);
 
+/// 반복 설정한 스케줄의 정보를 저장하는 리스트
 const repeatedScheduleInfoList: RepeatedScheduleInfo[] = [
   {
     endAfter: { numOfWeek: 2 },

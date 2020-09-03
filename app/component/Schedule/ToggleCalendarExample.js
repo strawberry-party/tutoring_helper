@@ -8,9 +8,9 @@ import {
 } from 'react-native';
 
 import { Calendar } from 'react-native-toggle-calendar';
-import CalendarDayComponent from './CalendarDayComponent';
-import CalendarFooterComponent from './CalendarFooterComponent';
-import CalendarHeaderComponent from './CalendarHeaderComponent';
+import CalendarDayComponent from './CalendarDayComponent'
+import CalendarFooterComponent from './CalendarFooterComponent'
+import CalendarHeaderComponent from './CalendarDayComponent';
 import React from 'react';
 import moment from 'moment';
 
@@ -18,7 +18,7 @@ let selectedCalendarDate = moment();
 const minimumDate = moment().add(-1, 'day'); // one day before for midnight check-in usecase
 const currentDate = moment();
 
-class App extends React.Component {
+export default class ToggleCalendarExample extends React.Component {
 
   constructor(props) {
     super(props);
@@ -121,34 +121,89 @@ class App extends React.Component {
 
   render() {
     return (
-      <>
-        <StatusBar barStyle="dark-content" />
-        <SafeAreaView>
-          <Calendar
-            current={this.state.selectedCalendarMonthString}
-            minDate={minimumDate.format('YYYY-MM-DD')}
+      <View>
+        {/* <StatusBar barStyle="dark-content" /> */}
+        <SafeAreaView style={{ justifyContent: 'center', alignItems: 'center' }}>
+          {/* <Calendar
+            current={this.state.calendarDate}
             dayComponent={CalendarDayComponent}
             calendarHeaderComponent={CalendarHeaderComponent}
-            headerData={this.state.calendarHeaderData}
-            style={styles.calendar}
+            headerData={{
+              calendarDate: calendarDate.format('DD MMM, YYYY')
+            }}
+            style={{
+              paddingLeft: 0, paddingRight: 0
+            }}
             onPressArrowLeft={this.onPressArrowLeft}
             onPressArrowRight={this.onPressArrowRight}
             onPressListView={this.onPressListView}
             onPressGridView={this.onPressGridView}
-            markedDates={this.state.calendarMarkedDates}
+            markedDates={{
+              '2019-02-23': { soldOut: false, blocked: false, inventory: 2 },
+              '2019-02-24': { soldOut: false, blocked: false, inventory: 2 },
+              '2019-02-25': { soldOut: false, blocked: true, inventory: 0 },
+              '2019-02-26': { soldOut: true, blocked: true, inventory: 2 }
+            }}
             horizontal={this.state.horizontal}
             onDayPress={this.onDayPress}
-            showPastDatesInHorizontal={1}
-            horizontalEndReachedThreshold={50}
-            horizontalStartReachedThreshold={0}
-            loading={this.state.calendarLoading}
+          /> */}
+
+          {/* CalendarDayComponent.propTypes = {
+            children: PropTypes.any,
+  state: PropTypes.string,
+  marking: PropTypes.any,
+  horizontal: PropTypes.bool,
+  date: PropTypes.object,
+  onPress: PropTypes.func.isRequired,
+  current: PropTypes.string
+}; */}
+
+          {/* <View style={{ marginTop: 100, }}>
+            <CalendarDayComponent
+              state='today'
+              marking={{}}
+              horizontal={true}
+              date={{ dateString: '2020-10-18', weekDay: 0 }}
+              onPress={(date) => console.warn('pressed date')}
+              current={'2020-10-18'}
+              text='hello' />
+
+            <CalendarHeaderComponent
+              headerData={{ calendarDate: '2020-08-14', }}
+              onPressArrowLeft={this.onPressArrowLeft}
+              onPressArrowRight={this.onPressArrowRight}
+              onPressListView={this.onPressListView}
+              onPressGridView={this.onPressGridView}
+              horizontal={true}
+            >
+            </CalendarHeaderComponent>
+
+          </View> */}
+
+          <Calendar
+            // current={this.state.selectedCalendarMonthString}
+            // minDate={minimumDate.format('YYYY-MM-DD')}
+            // // dayComponent={Hello}
+            // calendarHeaderComponent={CalendarHeaderComponent}
+            // headerData={this.state.calendarHeaderData}
+            // style={styles.calendar}
+            // onPressArrowLeft={this.onPressArrowLeft}
+            // onPressArrowRight={this.onPressArrowRight}
+            // onPressListView={this.onPressListView}
+            // onPressGridView={this.onPressGridView}
+            // markedDates={this.state.calendarMarkedDates}
+            // horizontal={this.state.horizontal}
+            // onDayPress={this.onDayPress}
+            // showPastDatesInHorizontal={1}
+            // horizontalEndReachedThreshold={50}
+            // horizontalStartReachedThreshold={0}
+            // loading={this.state.calendarLoading}
           />
-          <CalendarFooterComponent
+          {/* <CalendarFooterComponent
             calendarDateString={selectedCalendarDate.format('DD MMM, YYYY')}
-          />
+          /> */}
         </SafeAreaView>
-      </>
-    );
+      </View>);
   }
 };
 
@@ -157,3 +212,5 @@ const styles = StyleSheet.create({
   }
 });
 
+
+const Hello = () => <Text> Hello </Text>

@@ -5,14 +5,15 @@ import HomeworkContainer from './Homework';
 import { Provider } from 'react-redux';
 import React from 'react';
 import ScheduleContainer from './Schedule';
-import StudentCalendar from '../component/Schedule/StudentCalendar';
 import { Text } from 'react-native';
+import ToggleCalendarExample from '../component/Schedule/ToggleCalendarExample';
 import store from '../common/store';
 
 function App() {
   return (
     <Provider store={store}>
-      <ScheduleContainer />
+      {/* <ScheduleContainer /> */}
+      <ToggleCalendarExample />
     </Provider>
   );
 }
