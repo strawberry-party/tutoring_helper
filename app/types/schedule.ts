@@ -4,19 +4,17 @@ import dayjs from 'dayjs';
 
 type Days = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun';
 
-export interface AgendaCardType {
-  startPoint: string; // dayjs.Dayjs;
-  endPoint: string; // dayjs.Dayjs;
+const dayToCode: Object = {
+  sun: '0',
+  mon: '1',
+  tue: '2',
+  wed: '3',
+  thu: '4',
+  fri: '5',
+  sat: '6',
+};
 
-  text?: string;
-  memo?: string;
-}
-
-export interface DailyAgendasType {
-  date: string;
-  data: ({} | AgendaCardType)[];
-}
-
+/// 수업 하나의 시작 시간과 종료 시간을 묶어놓은 타입
 export class LessonTime {
   start: dayjs.Dayjs;
   end: dayjs.Dayjs;
@@ -27,6 +25,7 @@ export class LessonTime {
   }
 }
 
+/// 종료 시점 종류를 나타내는 타입.
 interface EndAfterNWeeks {
   numOfWeek: number;
 }
@@ -44,16 +43,7 @@ type NoneOrSomeLessonTime = NoLesson | LessonTime;
 
 export type EndAfterType = EndAfterNTimes | EndAfterNWeeks | EndAfterThisDay;
 
-const dayToCode: Object = {
-  sun: '0',
-  mon: '1',
-  tue: '2',
-  wed: '3',
-  thu: '4',
-  fri: '5',
-  sat: '6',
-};
-
+/// 요일별 Schedule의 LessonTime을 나타내는 타입
 export class WeeklyScheduleType {
   '0'?: NoneOrSomeLessonTime;
   '1'?: NoneOrSomeLessonTime;
@@ -76,30 +66,18 @@ export class WeeklyScheduleType {
 }
 
 export class RepeatedScheduleInfo {
-  // text: string;
-  // studentId: string;
-  // tagId: string;
-  // memo?: string;
-  // 필요 없는 듯
-
+  formWorkSchedule: ScheduleType;
   endAfter: EndAfterType;
   weeklySchedule: WeeklyScheduleType;
-
-  // 0: 일
-  // 1: 월
-  // 2: 화
-  // 3: 수
-  // 4: 목
-  // 5: 금
-  // 6: 토
-
   startPoint: dayjs.Dayjs;
 
   constructor(
+    formWorkSchedule = new ScheduleType('default'),
     endAfter = ({ numOfWeek: 1 } as EndAfterNWeeks) as EndAfterType,
     startPoint = dayjs(),
     weeklySchedule: WeeklyScheduleType = new WeeklyScheduleType(),
   ) {
+    this.formWorkSchedule = formWorkSchedule;
     this.endAfter = endAfter;
     this.startPoint = startPoint;
     this.weeklySchedule = weeklySchedule;
@@ -117,10 +95,11 @@ export class ScheduleType {
   memo?: string;
 
   constructor(
+    linkedRepeatedScheduleInfoId: string = 'none',
+
     text: string = '',
     studentId: string = 'student_1',
     tagId: string = 'none',
-    linkedRepeatedScheduleInfoId: string = 'none',
     time: LessonTime = new LessonTime(),
     memo: string = '',
   ) {
@@ -132,3 +111,5 @@ export class ScheduleType {
     this.memo = memo;
   }
 }
+
+

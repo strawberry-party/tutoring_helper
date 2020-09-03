@@ -1,12 +1,10 @@
-import AgendaCard, { EmptyCard } from './AgendaCard'
-import { AgendaList, Calendar, CalendarProvider, ExpandableCalendar, WeekCalendar } from 'react-native-calendars';
+import { AgendaList, Calendar, CalendarList, CalendarProvider, ExpandableCalendar, WeekCalendar } from 'react-native-calendars';
 import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Button, Icon, IconButton } from 'react-native-paper';
+import { Button, Card, Icon, IconButton, ToggleButton } from 'react-native-paper';
 import React, { useState } from 'react';
 import { lightThemeColor, themeColor } from './scheduleThemeProvider'
 
-import CalendarDayComponent from './CalendarDayComponent';
-import CalendarHeaderComponent from './CalendarHeaderComponent';
+import AgendaCard from './AgendaCard'
 import { KR_LOCAL_CONFIG } from '../../utils/calendarConfig';
 import { LocaleConfig } from 'react-native-calendars';
 import { ScheduleType } from '../../types/schedule';
@@ -27,6 +25,7 @@ function notYetImplemented() {
 const onDateChanged = (/* date, updateSource */) => {
   // console.warn('ExpandableCalendarScreen onDateChanged: ', date, updateSource);
   // fetch and set data for date + week ahead
+  console.warn('onDateChanged');
 }
 
 const onMonthChange = (/* month, updateSource */) => {
@@ -37,98 +36,91 @@ function buttonPressed() {
   Alert.alert('show more');
 }
 
-function itemPressed(id) {
-  Alert.alert(id);
-}
-
-function renderItem({ item }) {
-  if (_.isEmpty(item)) {
-    return <EmptyCard />
-  }
-  return (
-    <AgendaCard item={item} itemPressed={itemPressed} buttonPressed={buttonPressed} />
-  );
-}
 
 
-export default function StudentCalendar({ weekView }) {
+
+
+export default function StudentCalendar({ selectedSchedule, onPressSchedule }) {
   const [state, setState] = useState({});
 
+  const [calendarVisible, setCalendarVisible] = useState('expanded');
 
   function getMarkedDates() {
     const marked = {};
     dailyAgendas.forEach(item => {
       // NOTE: only mark dates with data
       if (item.data && item.data.length > 0 && !_.isEmpty(item.data[0])) {
-        marked[item.title] = { marked: true };
+        marked[item.date] = { marked: true };
       } else {
-        marked[item.title] = { disabled: true };
+        marked[item.date] = { disabled: true };
       }
     });
     return marked;
   }
 
+  const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'));
+
 
   const [calendarDate, setCalendarDate] = useState(dayjs());
   const [horizontal, setHorizontal] = useState(true);
 
-  const onPressArrowLeft = () => {
-    setCalendarDate(calendarDate.subtract(1, 'month'))
-    console.log('onPressArrowLeft: ' + calendarDate.format('YYYY MM DD'));
+  function renderItem({ item }) {
+    return (
+      <AgendaCard schedule={item} onPressAgendaCard={itemPressed} />
+    );
+  }
+  const onDayPress = (day) => {
+    setSelectedDate(day.dateString);
+  };
+
+  function itemPressed(item) {
+    onPressSchedule(item);
   }
 
   return (
     <CalendarProvider
-      date={dailyAgendas[0].title}
-      onDateChanged={onDateChanged}
-      onMonthChange={onMonthChange}
+      date={calendarDate.toDate()}
+      // onDateChanged={onDateChanged}
+      // onMonthChange={onMonthChange}
+
       showTodayButton
       disabledOpacity={0.6}
       theme={{
         todayButtonTextColor: themeColor
       }}
-      style={{ backgroundColor: 'red', padding: 10 }}
     >
-
-      <Calendar
-        current={calendarDate.toDate()}
-        horizontal={horizontal}
-
-        dayComponent={CalendarDayComponent}
-        calendarHeaderComponent={CalendarHeaderComponent}
-        headerData={{
-          calendarDate: calendarDate.format('DD MMM, YYYY')
-        }}
-        style={{
-          paddingLeft: 0, paddingRight: 0
-        }}
-        onPressArrowLeft={onPressArrowLeft}
-        onPressArrowRight={notYetImplemented}
-        onPressListView={notYetImplemented}
-        onPressGridView={notYetImplemented}
-        markedDates={getMarkedDates()}
-        onDayPress={notYetImplemented}
-      />
-
-      {/* {weekView ?
-          <WeekCalendar
-            firstDay={1}
-            markedDates={getMarkedDates()}
-          /> :
-          <ExpandableCalendar
-            initialPosition={ExpandableCalendar.positions.OPEN}
-            calendarStyle={styles.calendar}
-            headerStyle={styles.calendar} // for horizontal only
-            theme={getTheme()}
-            disableAllTouchEventsForDisabledDays
-            firstDay={1}
-            markedDates={getMarkedDates()}
-            hideKnob
-          />
-        } */}
 
       <ScrollView>
         <View>
+          <ToggleButton.Row onValueChange={value => setCalendarVisible(value)} value={calendarVisible} style={{ width: 40, }}>
+            <ToggleButton icon="calendar" value="expanded" color={calendarVisible ? '#bbb' : 'black'} style={styles.button} />
+            {/* <ToggleButton icon="arrow-collapse" value="collapsed" color='black' style={styles.button} /> */}
+          </ToggleButton.Row>
+
+          <View style={{ margin: 10, justifyContent: 'center', }}>
+            <View style={{ borderRadius: 30, overflow: 'hidden' }}>
+              {calendarVisible === 'expanded' &&
+                <Calendar
+                  style={{
+                    overflow: 'hidden',
+                    flexGrow: 1,
+                  }}
+                  current={calendarDate.format('YYYY-MM-DD').toString()}
+                  calendarWidth={300}
+                  calendarHeight={200}
+                  onDayPress={onDayPress}
+                  markedDates={{
+                    [selectedDate]: {
+                      selected: true,
+                      disableTouchEvent: true,
+                      selectedColor: 'orange',
+                      selectedTextColor: 'red',
+                    }, ...getMarkedDates()
+                  }}
+                />}
+            </View>
+          </View>
+
           <AgendaList
             sections={dailyAgendas}
             extraData={state}
@@ -146,10 +138,14 @@ export default function StudentCalendar({ weekView }) {
 
 
 const styles = StyleSheet.create({
+  button: {
+    borderRadius: 30,
+
+  },
   calendar: {
     paddingLeft: 20,
     paddingRight: 20,
-    backgroundColor: 'blue'
+    overflow: 'hidden',
   },
   section: {
     backgroundColor: lightThemeColor,

@@ -1,6 +1,4 @@
 import {
-  AgendaCardType,
-  DailyAgendasType,
   EndAfterType,
   LessonTime,
   RepeatedScheduleInfo,
@@ -9,17 +7,41 @@ import {
 } from './../../types/schedule';
 
 import dayjs from 'dayjs';
+import { times } from 'lodash';
 
+export interface DailyAgendasType {
+  date: string;
+  data: ScheduleType[];
+}
+
+/// 현재 선택된 날짜를 기준으로, 이전 3일 + 이후 9일 총 12일어치만 불러옴
 const today = new Date().toISOString().split('T')[0];
 const fastDate = getPastDate(3);
 const futureDates = getFutureDates(9);
+
+function getFutureDates(days: number) {
+  const array = [];
+  for (let index = 1; index <= days; index++) {
+    const date = new Date(Date.now() + 864e5 * index); // 864e5 == 86400000 == 24*60*60*1000
+    const dateString = date.toISOString().split('T')[0];
+    array.push(dateString);
+  }
+  return array;
+}
+
+function getPastDate(days: number) {
+  return new Date(Date.now() - 864e5 * days).toISOString().split('T')[0];
+}
+
 const dates = [fastDate, today].concat(futureDates);
 var weekday = require('dayjs/plugin/weekday');
 dayjs.extend(weekday);
 
 /// 반복 설정한 스케줄의 정보를 저장하는 리스트
+/// 파이어베이스 도입 완료하면 파이어베이스에서 불러옴
 const repeatedScheduleInfoList: RepeatedScheduleInfo[] = [
   {
+    formWorkSchedule: new ScheduleType('default'),
     endAfter: { numOfWeek: 2 },
     startPoint: dayjs('2020-09-13'),
     weeklySchedule: new WeeklyScheduleType(
@@ -30,6 +52,7 @@ const repeatedScheduleInfoList: RepeatedScheduleInfo[] = [
   },
 
   {
+    formWorkSchedule: new ScheduleType('default'),
     endAfter: { numOfTimes: 4 },
     startPoint: dayjs('2020-09-13'),
     weeklySchedule: new WeeklyScheduleType(
@@ -85,38 +108,50 @@ function getEndPoint(
 
   return dayjs();
 }
+const formatString = 'YYYY-MM-DD';
 
-// TODO (규빈)
-/// 일별 일정으로 정리하는 함수
+/// ScheduleType들을 일별 일정으로 정리하는 함수 (같은 날짜 내용 합치기)
+var dateToIndexMap: Map<string, number> = new Map([
+  ['2020-09-13', 0],
+  ['2020-10-18', 1],
+]);
+
 function sortIntoDailyAgendas(schedules: ScheduleType[]): DailyAgendasType[] {
-  return [];
+  var dailyAgendas: DailyAgendasType[] = [];
+
+  schedules.forEach((schedule: ScheduleType) => {
+    var startPoint = schedule.time.start.format(formatString);
+    if (dateToIndexMap.has(startPoint))
+      dailyAgendas[dateToIndexMap.get(startPoint)].data.push(schedule);
+    else {
+      dailyAgendas.push({ date: startPoint, data: [schedule] });
+      dateToIndexMap.set(startPoint, dailyAgendas.length);
+    }
+  });
+  return dailyAgendas;
 }
 
-// TODO: data에도 어떤 config에서 generate 됐는지 알려주는 id가 필요함. 그래야 나중에 선택 -> 수정했을 때 넘길 수 있음
-// TODO: 현재 렌더링할 영역 (dates 배열) 전부에 대해 agenda가 없다면 data: [{}]으로 자동 초기화
-export const dailyAgendas: DailyAgendasType[] = [
-  {
-    date: dates[0],
-    data: [
-      { startPoint: '12:30', endPoint: '14:30', text: '과외' },
-      { startPoint: '12:30', endPoint: '14:30', text: '과외' },
-      { startPoint: '12:30', endPoint: '14:30' },
-    ],
-  },
+// TODO: 현재 렌더링할 날짜들 (dates 배열) 중 schedule 없는 날이 있으면 data는 []이 되어야 함
+// TODO: mockData : schedule 더 쓰기
 
-  { date: dates[4], data: [{}] },
+// mockData
+
+/// 화면에 AgendaCard 컴포넌트 및 캘린더의 marked dot으로 렌더링되는 ScheduleType 데이터
+/// 파이어베이스 도입 완료하면 파이어베이스에서 불러옴
+const schedules: ScheduleType[] = [
+  new ScheduleType(),
+  new ScheduleType('none', '과외', 'student_2', 'tag_2', {
+    start: dayjs('2020-09-13'),
+    end: dayjs('2020-09-14'),
+  }),
+  new ScheduleType('none', '과외', 'student_2', 'tag_2', {
+    start: dayjs('2020-09-13'),
+    end: dayjs('2020-09-14'),
+  }),
+  new ScheduleType('none', '과외', 'student_2', 'tag_2', {
+    start: dayjs('2020-09-13'),
+    end: dayjs('2020-09-14'),
+  }),
 ];
 
-function getFutureDates(days: number) {
-  const array = [];
-  for (let index = 1; index <= days; index++) {
-    const date = new Date(Date.now() + 864e5 * index); // 864e5 == 86400000 == 24*60*60*1000
-    const dateString = date.toISOString().split('T')[0];
-    array.push(dateString);
-  }
-  return array;
-}
-
-function getPastDate(days: number) {
-  return new Date(Date.now() - 864e5 * days).toISOString().split('T')[0];
-}
+export const dailyAgendas: DailyAgendasType[] = sortIntoDailyAgendas(schedules);

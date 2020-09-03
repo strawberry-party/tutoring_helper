@@ -34,6 +34,9 @@ function ScheduleContainer({}: ScheduleContainerProps) {
 
   const tags = useSelector((state: RootState) => state.tagReducer.tags);
   const [formVisible, setFormVisible] = useState(false);
+  const [schedules, setSchedules] = useState([]);
+  const [repeatInfos, setRepeatInfos] = useState([]);
+  const [selectedSchedule, setSelectedSchedule] = useState(new ScheduleType());
 
   return (
     <SafeAreaView
@@ -52,15 +55,21 @@ function ScheduleContainer({}: ScheduleContainerProps) {
             alignItems: 'center',
           }}>
           <PushMaker />
-          <AlarmDialog text="알림" />
+          {/* <AlarmDialog text="알림" /> */}
         </View>
 
-        <StudentCalendar weekView={false} />
+        <StudentCalendar
+          selectedSchedule={selectedSchedule}
+          onPressSchedule={(schedule) => {
+            // setSelectedSchedule(schedule);
+            console.warn(schedule.text);
+          }}
+        />
 
         <View style={styles.mock}>
           <ScheduleModal
             modalVisible={formVisible}
-            selectedSchedule={new ScheduleType()}
+            selectedSchedule={selectedSchedule}
             hideModal={() => setFormVisible(false)}
           />
         </View>

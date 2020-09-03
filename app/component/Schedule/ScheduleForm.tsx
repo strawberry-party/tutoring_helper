@@ -481,9 +481,10 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     borderColor: 'skyblue',
-    // borderWidth: 2,
-    width: '90%',
-    marginBottom: 100,
+    borderWidth: 2,
+    width: 300,
+    padding: 10,
+    // marginBottom: 100,
   },
   inputContainer: {
     marginBottom: 15,
@@ -502,12 +503,13 @@ const styles = StyleSheet.create({
   buttonContainer: {
     justifyContent: 'flex-start',
     flexDirection: 'row',
-    marginVertical: 15,
+    marginBottom: 15,
   },
 
   button: {
     justifyContent: 'center',
     backgroundColor: '#aec6df',
+    height: 80,
   },
 
   buttonText: {
