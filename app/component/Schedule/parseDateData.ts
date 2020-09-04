@@ -1,4 +1,5 @@
 import {
+  Days,
   EndAfterType,
   LessonTime,
   RepeatedScheduleInfo,
@@ -7,10 +8,10 @@ import {
 } from './../../types/schedule';
 
 import dayjs from 'dayjs';
-import { times } from 'lodash';
+import scheduleGenerator from './scheduleUtils/scheduleGenerator';
 
 export interface DailyAgendasType {
-  date: string;
+  title: string;
   data: ScheduleType[];
 }
 
@@ -34,98 +35,94 @@ function getPastDate(days: number) {
 }
 
 const dates = [fastDate, today].concat(futureDates);
+
 var weekday = require('dayjs/plugin/weekday');
 dayjs.extend(weekday);
 
 /// 반복 설정한 스케줄의 정보를 저장하는 리스트
-/// 파이어베이스 도입 완료하면 파이어베이스에서 불러옴
-const repeatedScheduleInfoList: RepeatedScheduleInfo[] = [
+
+const timeOnlyFormatString = 'HH:mm';
+const fullFormatString = 'YYYY-MM-DD HH:mm';
+
+export function getDailyLessonTime(startString, endString): LessonTime {
+  return new LessonTime(
+    dayjs(startString, timeOnlyFormatString),
+    dayjs(endString, timeOnlyFormatString),
+  );
+}
+
+export const repeatedScheduleInfoList: RepeatedScheduleInfo[] = [
   {
-    formWorkSchedule: new ScheduleType('default'),
-    endAfter: { numOfWeek: 2 },
+    formWorkSchedule: new ScheduleType('repetition_1'),
+    endAfter: { numOfTimes: 2 },
+    startPoint: dayjs('2020-09-13'),
+    weeklySchedule: new WeeklyScheduleType(
+      new Map([['mon', getDailyLessonTime('10:30', '13:00')]]),
+    ),
+  },
+
+  {
+    formWorkSchedule: new ScheduleType('repetition_2'),
+    endAfter: { numOfTimes: 4 },
     startPoint: dayjs('2020-09-13'),
     weeklySchedule: new WeeklyScheduleType(
       new Map([
-        ['mon', { start: dayjs('2020-09-13'), end: dayjs('2020-09-14') }],
+        ['mon', getDailyLessonTime('18:30', '21:00')],
+        ['wed', getDailyLessonTime('12:30', '14:00')],
       ]),
     ),
   },
 
   {
-    formWorkSchedule: new ScheduleType('default'),
-    endAfter: { numOfTimes: 4 },
+    formWorkSchedule: new ScheduleType('repetition_3'),
+    endAfter: { endDay: dayjs('2020-10-18', 'YYYY-MM-DD') },
     startPoint: dayjs('2020-09-13'),
     weeklySchedule: new WeeklyScheduleType(
       new Map([
-        ['mon', { start: dayjs('2020-09-13'), end: dayjs('2020-09-14') }],
-        ['tue', { start: dayjs('2020-09-13'), end: dayjs('2020-09-14') }],
+        ['tue', getDailyLessonTime('08:30', '13:00')],
+        ['sat', getDailyLessonTime('12:30', '17:00')],
       ]),
     ),
   },
 ];
 
-// TODO (규빈)
-function scheduleGenerator(
-  repeatedScheduleInfo: RepeatedScheduleInfo,
-  repeatedScheduleInfoId: string,
-  text: string,
-  studentId: string,
-  tagId: string,
-  memo?: string,
-): ScheduleType[] {
-  const { endAfter, startPoint, weeklySchedule } = repeatedScheduleInfo;
-  const endPoint = getEndPoint(endAfter, startPoint);
-  // startPoint 부터 endPoint까지 weeklySchedule에 있는 요일에 대해 스케쥴 생성
+var scheduleGenerated: ScheduleType[] = [];
 
-  let schedules: ScheduleType[] = [];
-  let groundDay = startPoint;
-
-  // for (let i = 0; i < 7; i++) {
-  //   let code = i.toString();
-  //   if (dayjs(groundDay).day() === i) {
-  //     schedules.concat(getRepeatedSchedules(startPoint, endPoint, weeklySchedule[i] ));
-  //   }
-  // }
-
-  return schedules;
+for (let index = 0; index < repeatedScheduleInfoList.length; index++) {
+  const repeatedScheduleInfo = repeatedScheduleInfoList[index];
+  var a = scheduleGenerator(repeatedScheduleInfo);
+  a.forEach((schedule) => {
+    console.log(
+      schedule.time.start.format(formatString) +
+        ' ~ ' +
+        schedule.time.end.format(formatString),
+    );
+  });
+  scheduleGenerated = scheduleGenerated.concat(
+    scheduleGenerator(repeatedScheduleInfo),
+  );
 }
 
-// TODO (규빈)
-function getRepeatedSchedules(
-  startPoint: dayjs.Dayjs,
-  endPoint: dayjs.Dayjs,
-  dailyLessonTime: LessonTime,
-): ScheduleType[] {
-  return [];
-}
-
-// TODO (규빈)
-function getEndPoint(
-  endAfter: EndAfterType,
-  startPoint: dayjs.Dayjs,
-): dayjs.Dayjs {
-  // TODO: EndAfterType : week / times / endPoint
-
-  return dayjs();
-}
 const formatString = 'YYYY-MM-DD';
 
 /// ScheduleType들을 일별 일정으로 정리하는 함수 (같은 날짜 내용 합치기)
-var dateToIndexMap: Map<string, number> = new Map([
-  ['2020-09-13', 0],
-  ['2020-10-18', 1],
-]);
+// var dateToIndexMap: Map<string, number> = new Map([
+//   ['2020-09-13', 0],
+//   ['2020-10-18', 1],
+// ]);
 
 function sortIntoDailyAgendas(schedules: ScheduleType[]): DailyAgendasType[] {
   var dailyAgendas: DailyAgendasType[] = [];
+  var dateToIndexMap: Map<string, number> = new Map<string, number>();
 
   schedules.forEach((schedule: ScheduleType) => {
     var startPoint = schedule.time.start.format(formatString);
-    if (dateToIndexMap.has(startPoint))
-      dailyAgendas[dateToIndexMap.get(startPoint)].data.push(schedule);
-    else {
-      dailyAgendas.push({ date: startPoint, data: [schedule] });
+    if (dateToIndexMap.has(startPoint)) {
+      var index: number = dateToIndexMap.get(startPoint);
+      dailyAgendas[index].data.push(schedule);
+    } else {
       dateToIndexMap.set(startPoint, dailyAgendas.length);
+      dailyAgendas.push({ title: startPoint, data: [schedule] });
     }
   });
   return dailyAgendas;
@@ -141,17 +138,19 @@ function sortIntoDailyAgendas(schedules: ScheduleType[]): DailyAgendasType[] {
 const schedules: ScheduleType[] = [
   new ScheduleType(),
   new ScheduleType('none', '과외', 'student_2', 'tag_2', {
-    start: dayjs('2020-09-13'),
-    end: dayjs('2020-09-14'),
+    start: dayjs('2020-09-13 10:00', fullFormatString),
+    end: dayjs('2020-09-13 12:00', fullFormatString),
+  }),
+  new ScheduleType('none', '과외', 'student_3', 'tag_2', {
+    start: dayjs('2020-09-14 15:00', fullFormatString),
+    end: dayjs('2020-09-14 18:00', fullFormatString),
   }),
   new ScheduleType('none', '과외', 'student_2', 'tag_2', {
-    start: dayjs('2020-09-13'),
-    end: dayjs('2020-09-14'),
-  }),
-  new ScheduleType('none', '과외', 'student_2', 'tag_2', {
-    start: dayjs('2020-09-13'),
-    end: dayjs('2020-09-14'),
+    start: dayjs('2020-09-23 09:00', fullFormatString),
+    end: dayjs('2020-09-23 18:00', fullFormatString),
   }),
 ];
 
-export const dailyAgendas: DailyAgendasType[] = sortIntoDailyAgendas(schedules);
+export const dailyAgendas: DailyAgendasType[] = sortIntoDailyAgendas(
+  scheduleGenerated,
+);

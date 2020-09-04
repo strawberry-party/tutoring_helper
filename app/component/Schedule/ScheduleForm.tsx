@@ -1,9 +1,12 @@
 import { Button, Input, Item } from 'native-base';
 import { Chip, FAB, RadioButton, TextInput } from 'react-native-paper';
 import {
+  EndAfterNTimes,
+  EndAfterThisDay,
   LessonTime,
   RepeatedScheduleInfo,
   ScheduleType,
+  WeeklyScheduleType,
 } from '../../types/schedule';
 import {
   Pressable,
@@ -39,20 +42,6 @@ interface ScheduleFormProps {
   selectedScheduleId: string;
   tags: Map<string, TagType>;
   onAddTag: (tag: TagType) => void;
-}
-
-function parseTime(time: LessonTime | RepeatedScheduleInfo) {
-  if (new Set(Object.keys(time)).has('endPoint')) {
-    return Object.assign({ repeatType: 'true' }, time as RepeatedScheduleInfo);
-  } else
-    return Object.assign(
-      {
-        repeatType: 'false',
-        dailyScheduleMap: new Map<Days, LessonTime>(),
-        endPoint: 'none',
-      },
-      time as LessonTime,
-    );
 }
 
 function getDayTag(day: string, key?, onPress?: () => void) {
@@ -148,12 +137,17 @@ function extractAllPickerItems(studentList) {
 }
 
 export default function ScheduleForm({ selectedSchedule }) {
-  const { text, studentId, tagId, time, memo } = selectedSchedule;
-
-  const { start, end, repeatType, dailyScheduleMap, endPoint } = parseTime(
+  const {
+    text,
+    studentId,
+    tagId,
     time,
-  );
+    memo,
+    linkedRepeatedScheduleInfoId,
+  } = selectedSchedule;
 
+  // create / edit schedule
+  const { start, end } = time;
   const [newText, setText] = useState(text);
   const [selectedStudentId, selectStudent] = useState(studentId);
   const [selectedTagId, selectTag] = useState(tagId);
@@ -162,25 +156,50 @@ export default function ScheduleForm({ selectedSchedule }) {
   const [newEnd, setEnd] = useState(end);
   const [newMemo, setMemo] = useState(memo);
 
-  const [repeat, setRepeat] = useState(repeatType);
+  // create / edit repeatedScheduleInfo
+  const [repeat, setRepeat] = useState('false');
 
-  const [newEndPoint, setEndPoint] = useState(endPoint);
+  const repeatedScheduleInfo =
+    linkedRepeatedScheduleInfoId === 'none'
+      ? new RepeatedScheduleInfo()
+      : repeatedScheduleInfos.get(linkedRepeatedScheduleInfoId);
 
-  const [endAfterNumWeek, setEndAfterNumWeek] = useState(0);
-  const [endAfterNumTimes, setEndAfterNumTimes] = useState(0);
+  const { endAfter, weeklySchedule } = repeatedScheduleInfo;
 
-  const [newDailyScheduleMap, setDailyScheduleMap] = useState(dailyScheduleMap);
+  var endNumWeek = (endAfter as EndAfterNWeeks).numOfWeek;
+  var endPoint = (endAfter as EndAfterThisDay).endDay;
+  var endNumTimes = (endAfter as EndAfterNTimes).numOfTimes;
+
+  const [newEndPoint, setEndPoint] = useState(endPoint ? endPoint : 0);
+  const [endAfterNumWeek, setEndAfterNumWeek] = useState(
+    endNumWeek ? endNumWeek : 0,
+  );
+  const [endAfterNumTimes, setEndAfterNumTimes] = useState(
+    endNumTimes ? endNumTimes : 0,
+  );
+
+  const [newDailyScheduleMap, setDailyScheduleMap] = useState(weeklySchedule);
 
   const handleSubmit = () => {
     const newTime: LessonTime = new LessonTime(newStart, newEnd);
+    if (!repeat) {
+      const newSchedule: ScheduleType = {
+        ...selectedSchedule,
+        text: newText,
+        studentId: selectedStudentId,
+        tagId: selectedTagId,
 
-    const newSchedule: ScheduleType = {
-      ...selectedSchedule,
-      time: newTime,
-      tagId: selectedTagId,
-    };
+        time: newTime,
+        linkedRepeatedScheduleInfoId: 'none',
 
-    console.warn('schedule submit');
+        memo: newMemo,
+      };
+
+      // addSchedule(newSchedule)
+      return;
+    }
+
+    const newRepeatedScheduleInfo = console.warn('schedule submit');
   };
 
   const onConfirmEnd = (date: Date) => {
@@ -220,7 +239,7 @@ export default function ScheduleForm({ selectedSchedule }) {
             <TextInput
               value={newText}
               onChangeText={onChangeTitle}
-              style={[styles.inputText, { fontSize: 20 }]}
+              style={[styles.inputText, { fontSize: 20, color: '#bbb' }]}
               placeholder={'제목 추가'}
             />
           </View>
@@ -229,12 +248,6 @@ export default function ScheduleForm({ selectedSchedule }) {
             <Text style={styles.headline}> 학생 </Text>
             <Picker
               selectedValue={selectedStudentId}
-              style={{
-                borderRadius: 60,
-                width: '50%',
-                borderWidth: 10,
-                borderColor: 'blue',
-              }}
               onValueChange={(itemValue, itemIndex) => selectStudent(itemValue)}
               mode="dropdown"
               itemStyle={{ fontSize: 16 }}>
@@ -246,12 +259,6 @@ export default function ScheduleForm({ selectedSchedule }) {
             <Text style={styles.headline}> 과목 태그 </Text>
             <Picker
               selectedValue={selectedTagId}
-              style={{
-                borderRadius: 60,
-                width: '50%',
-                borderWidth: 10,
-                borderColor: 'blue',
-              }}
               onValueChange={(itemValue, itemIndex) => selectTag(itemValue)}
               mode="dropdown"
               itemStyle={{ fontSize: 16 }}>
@@ -480,8 +487,6 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   formContainer: {
-    borderColor: 'skyblue',
-    borderWidth: 2,
     width: 300,
     padding: 10,
     // marginBottom: 100,

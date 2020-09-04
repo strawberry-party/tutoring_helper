@@ -2,7 +2,7 @@ import { InteractionManager } from 'react-native';
 import { TagType } from './root';
 import dayjs from 'dayjs';
 
-type Days = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun';
+export type Days = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun';
 
 const dayToCode: Object = {
   sun: '0',
@@ -25,43 +25,41 @@ export class LessonTime {
   }
 }
 
-/// 종료 시점 종류를 나타내는 타입.
-interface EndAfterNWeeks {
-  numOfWeek: number;
-}
-
-interface EndAfterNTimes {
+/// 종료 시점 종류를 나타내는 타입.e
+export interface EndAfterNTimes {
   numOfTimes: number;
 }
 
-interface EndAfterThisDay {
+export interface EndAfterThisDay {
   endDay: dayjs.Dayjs;
 }
 
-type NoLesson = 'noLessonToday';
-type NoneOrSomeLessonTime = NoLesson | LessonTime;
-
-export type EndAfterType = EndAfterNTimes | EndAfterNWeeks | EndAfterThisDay;
+export type EndAfterType = EndAfterNTimes |  EndAfterThisDay;
 
 /// 요일별 Schedule의 LessonTime을 나타내는 타입
 export class WeeklyScheduleType {
-  '0'?: NoneOrSomeLessonTime;
-  '1'?: NoneOrSomeLessonTime;
-  '2'?: NoneOrSomeLessonTime;
-  '3'?: NoneOrSomeLessonTime;
-  '4'?: NoneOrSomeLessonTime;
-  '5'?: NoneOrSomeLessonTime;
-  '6'?: NoneOrSomeLessonTime;
+  '0'?: LessonTime;
+  '1'?: LessonTime;
+  '2'?: LessonTime;
+  '3'?: LessonTime;
+  '4'?: LessonTime;
+  '5'?: LessonTime;
+  '6'?: LessonTime;
+
+  numOfLessonPerWeek: number;
 
   constructor(
     dailyScheduleMap: Map<Days, LessonTime> = new Map<Days, LessonTime>(),
   ) {
+    var numOfLessonPerWeek = 0;
     let codeSet = new Set();
     for (let [day, lessonTime] of dailyScheduleMap) {
       const todayCode: string = dayToCode[day];
-      this[todayCode] = lessonTime as NoneOrSomeLessonTime;
+      this[todayCode] = lessonTime as LessonTime;
       codeSet.add(todayCode);
+      numOfLessonPerWeek += 1;
     }
+    this.numOfLessonPerWeek = numOfLessonPerWeek;
   }
 }
 
@@ -73,7 +71,7 @@ export class RepeatedScheduleInfo {
 
   constructor(
     formWorkSchedule = new ScheduleType('default'),
-    endAfter = ({ numOfWeek: 1 } as EndAfterNWeeks) as EndAfterType,
+    endAfter = ({ numOfTimes: 1 } as EndAfterNTimes) as EndAfterType,
     startPoint = dayjs(),
     weeklySchedule: WeeklyScheduleType = new WeeklyScheduleType(),
   ) {
@@ -97,7 +95,7 @@ export class ScheduleType {
   constructor(
     linkedRepeatedScheduleInfoId: string = 'none',
 
-    text: string = '',
+    text: string = '제목을 입력해주세요',
     studentId: string = 'student_1',
     tagId: string = 'none',
     time: LessonTime = new LessonTime(),
@@ -111,5 +109,3 @@ export class ScheduleType {
     this.memo = memo;
   }
 }
-
-

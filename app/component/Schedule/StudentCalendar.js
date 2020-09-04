@@ -36,8 +36,7 @@ function buttonPressed() {
   Alert.alert('show more');
 }
 
-
-
+const studentDotColors = { student_1: 'red', student_2: 'blue', student_3: 'green' };
 
 
 export default function StudentCalendar({ selectedSchedule, onPressSchedule }) {
@@ -45,16 +44,31 @@ export default function StudentCalendar({ selectedSchedule, onPressSchedule }) {
 
   const [calendarVisible, setCalendarVisible] = useState('expanded');
 
-  function getMarkedDates() {
+  function getDottedDates(selectedDate) {
     const marked = {};
     dailyAgendas.forEach(item => {
       // NOTE: only mark dates with data
+      var dots = [];
       if (item.data && item.data.length > 0 && !_.isEmpty(item.data[0])) {
-        marked[item.date] = { marked: true };
+        const schedules = item.data;
+        schedules.forEach((schedule) => {
+
+          let studentId = schedule.studentId
+          dots.push({ key: item.data.text, color: studentDotColors[studentId] });
+        });
+
+        marked[item.title] = { dots };
+
       } else {
-        marked[item.date] = { disabled: true };
+        marked[item.title] = { disabled: true };
       }
+
     });
+
+    marked[selectedDate] = Object.assign({
+      selected: true, disableTouchEvent: true,
+      selectedColor: '#bbbe',
+    }, marked[selectedDate])
     return marked;
   }
 
@@ -109,14 +123,19 @@ export default function StudentCalendar({ selectedSchedule, onPressSchedule }) {
                   calendarWidth={300}
                   calendarHeight={200}
                   onDayPress={onDayPress}
-                  markedDates={{
-                    [selectedDate]: {
-                      selected: true,
-                      disableTouchEvent: true,
-                      selectedColor: 'orange',
-                      selectedTextColor: 'red',
-                    }, ...getMarkedDates()
-                  }}
+                  markingType={'multi-dot'}
+                  markedDates={getDottedDates(selectedDate)}
+                // markedDates={{
+                //   [selectedDate]: {
+                //     selected: true,
+                //     disableTouchEvent: true,
+                //     selectedColor: '#bbb',
+                //     // selectedTextColor: 'red',
+                //   }, ...getMarkedDates()
+                // }}
+
+
+
                 />}
             </View>
           </View>
@@ -128,6 +147,7 @@ export default function StudentCalendar({ selectedSchedule, onPressSchedule }) {
             hideKnob
             sectionStyle={styles.section}
             sectionTextStyle={styles.sectionTextStyle}
+
           />
         </View>
       </ScrollView>
