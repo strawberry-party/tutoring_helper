@@ -7,9 +7,8 @@ import { lightThemeColor, themeColor } from './scheduleThemeProvider'
 import AgendaCard from './AgendaCard'
 import { KR_LOCAL_CONFIG } from '../../utils/calendarConfig';
 import { LocaleConfig } from 'react-native-calendars';
-import { ScheduleType } from '../../types/schedule';
 import _ from 'lodash';
-import { dailyAgendas, } from './parseDateData';
+import { dailyAgendas } from '../../common/scheduleMockData';
 import dayjs from 'dayjs';
 import { getTheme } from './scheduleThemeProvider';
 
@@ -44,6 +43,7 @@ export default function StudentCalendar({ selectedSchedule, onPressSchedule }) {
 
   const [calendarVisible, setCalendarVisible] = useState('expanded');
 
+  
   function getDottedDates(selectedDate) {
     const marked = {};
     dailyAgendas.forEach(item => {
@@ -133,9 +133,6 @@ export default function StudentCalendar({ selectedSchedule, onPressSchedule }) {
                 //     // selectedTextColor: 'red',
                 //   }, ...getMarkedDates()
                 // }}
-
-
-
                 />}
             </View>
           </View>

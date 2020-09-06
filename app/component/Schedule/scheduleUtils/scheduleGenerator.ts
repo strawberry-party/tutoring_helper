@@ -8,7 +8,7 @@ import {
 } from '../../../types/schedule';
 
 import dayjs from 'dayjs';
-import { getDailyLessonTime } from '../parseDateData';
+import { getDailyLessonTime } from '../../../common/scheduleMockData';
 import getRepeatedSchedules from './getRepeatedSchedules';
 
 const formatString = 'YYYY-MM-DD HH:mm';
@@ -23,7 +23,7 @@ export function test_scheduleGenerator() {
     endAfter: { numOfTimes: 2 },
     startPoint: dayjs('2020-09-13'),
     weeklySchedule: new WeeklyScheduleType(
-      new Map([['mon', getDailyLessonTime('10:30', '13:00')]]),
+      new Map([[1, getDailyLessonTime('10:30', '13:00')]]),
     ),
   };
 
@@ -42,8 +42,8 @@ export function test_scheduleGenerator() {
     startPoint: dayjs('2020-09-13'),
     weeklySchedule: new WeeklyScheduleType(
       new Map([
-        ['tue', getDailyLessonTime('08:30', '13:00')],
-        ['sat', getDailyLessonTime('12:30', '17:00')],
+        [2, getDailyLessonTime('08:30', '13:00')],
+        [6, getDailyLessonTime('12:30', '17:00')],
       ]),
     ),
   };
@@ -55,14 +55,12 @@ export function test_scheduleGenerator() {
         schedule.time.end.format(formatString),
     );
   });
-
 }
 
 export default function scheduleGenerator(
   repeatedScheduleInfo: RepeatedScheduleInfo,
 ): ScheduleType[] {
   const { endAfter } = repeatedScheduleInfo;
-  console.log('scheduleGenerator');
 
   const numOfTimes = (endAfter as EndAfterNTimes).numOfTimes;
   const endDay = (endAfter as EndAfterThisDay).endDay;
@@ -82,8 +80,6 @@ function generateScheduleByTimes(
   numOfTimes: number,
   repeatedScheduleInfo: RepeatedScheduleInfo,
 ): ScheduleType[] {
-  console.log('generateScheduleByTimes');
-
   const { startPoint, weeklySchedule, formWorkSchedule } = repeatedScheduleInfo;
 
   let schedules: ScheduleType[] = [];
@@ -133,8 +129,6 @@ function generateScheduleByEndPoint(
   endPoint: dayjs.Dayjs,
   repeatedScheduleInfo: RepeatedScheduleInfo,
 ) {
-  console.log('generateScheduleByEndPoint');
-
   const { startPoint, weeklySchedule, formWorkSchedule } = repeatedScheduleInfo;
 
   var schedules: ScheduleType[] = [];

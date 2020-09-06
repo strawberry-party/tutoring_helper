@@ -11,7 +11,6 @@ import { RootState } from '../states';
 import ScheduleModal from '../component/Schedule/ScheduleModal';
 import { ScheduleType } from '../types/schedule';
 import StudentCalendar from '../component/Schedule/StudentCalendar';
-import { actions as tagActions } from '../states/tagState';
 
 // import { FilterButton } from '../component/Schedule/FilterSorter';
 // import FilterModal from '../component/Schedule/FilterModal';
@@ -32,7 +31,6 @@ function ScheduleContainer({}: ScheduleContainerProps) {
   //   (state: RootState) => state.assignFilterSorterReducer.filter,
   // );
 
-  const tags = useSelector((state: RootState) => state.tagReducer.tags);
   const [formVisible, setFormVisible] = useState(false);
   const [schedules, setSchedules] = useState([]);
   const [repeatInfos, setRepeatInfos] = useState([]);
@@ -106,7 +104,7 @@ function mapStateToProps(state) {
   };
 }
 
-const mapDispatchToProps = Object.assign({ tagActions });
+const mapDispatchToProps = null;
 
 export default connect(mapStateToProps, mapDispatchToProps)(ScheduleContainer);
 // TutoringHelper의 props로 mapStateToProps의 리턴객체를 전해준다

@@ -35,48 +35,29 @@ function ScheduleModal({
   // onAddTag,
 }) {
   return (
-    <View style={styles.centeredView}>
+    <View style={styles.modalView}>
       <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
         onRequestClose={hideModal}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <ScheduleForm selectedSchedule={selectedSchedule} />
-          </View>
+        <View style={styles.modalView}>
+          <ScheduleForm selectedSchedule={selectedSchedule} />
         </View>
       </Modal>
     </View>
   );
 }
 
-interface AddScheduleModalProps extends ScheduleModalProps {}
-
-
 export default ScheduleModal;
 
 const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-  },
   modalView: {
-    paddingVertical: 15,
+    flex: 1,
     backgroundColor: 'white',
-    borderRadius: 20,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    justifyContent: 'center',
+
     elevation: 5,
-    width: '80%',
-    height: '80%',
   },
 });

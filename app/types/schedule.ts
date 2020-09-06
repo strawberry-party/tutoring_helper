@@ -4,16 +4,6 @@ import dayjs from 'dayjs';
 
 export type Days = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun';
 
-const dayToCode: Object = {
-  sun: '0',
-  mon: '1',
-  tue: '2',
-  wed: '3',
-  thu: '4',
-  fri: '5',
-  sat: '6',
-};
-
 /// 수업 하나의 시작 시간과 종료 시간을 묶어놓은 타입
 export class LessonTime {
   start: dayjs.Dayjs;
@@ -34,9 +24,63 @@ export interface EndAfterThisDay {
   endDay: dayjs.Dayjs;
 }
 
-export type EndAfterType = EndAfterNTimes |  EndAfterThisDay;
+export type EndAfterType = EndAfterNTimes | EndAfterThisDay;
 
 /// 요일별 Schedule의 LessonTime을 나타내는 타입
+
+type Grow<T, A extends Array<T>> = ((x: T, ...xs: A) => void) extends (
+  ...a: infer X
+) => void
+  ? X
+  : never;
+type GrowToSize<T, A extends Array<T>, N extends number> = {
+  0: A;
+  1: GrowToSize<T, Grow<T, A>, N>;
+}[A['length'] extends N ? 0 : 1];
+
+type FixedArray<T, N extends number> = GrowToSize<T, [], N>;
+
+export type LessonOrNone = LessonTime | 'none';
+export type Week = FixedArray<LessonOrNone, 7>;
+
+export function generateWeek(item: LessonOrNone): Week {
+  var aux = nones;
+  for (let i = 0; i < 7; i++) {
+    aux[i] = item;
+  }
+  return aux;
+}
+
+export const nones: Week = [
+  'none',
+  'none',
+  'none',
+  'none',
+  'none',
+  'none',
+  'none',
+];
+
+const dayToCode: Object = {
+  sun: '0',
+  mon: '1',
+  tue: '2',
+  wed: '3',
+  thu: '4',
+  fri: '5',
+  sat: '6',
+};
+
+export class WeeklyScheduleFormVersion {
+  startTimes: Week;
+  endTimes: Week;
+
+  constructor(startTimes: Week, endTimes: Week) {
+    this.startTimes = startTimes;
+    this.endTimes = endTimes;
+  }
+}
+
 export class WeeklyScheduleType {
   '0'?: LessonTime;
   '1'?: LessonTime;
@@ -49,14 +93,12 @@ export class WeeklyScheduleType {
   numOfLessonPerWeek: number;
 
   constructor(
-    dailyScheduleMap: Map<Days, LessonTime> = new Map<Days, LessonTime>(),
+    dailyScheduleMap: Map<number, LessonTime> = new Map<number, LessonTime>(),
   ) {
     var numOfLessonPerWeek = 0;
-    let codeSet = new Set();
     for (let [day, lessonTime] of dailyScheduleMap) {
-      const todayCode: string = dayToCode[day];
+      const todayCode: string = day.toString();
       this[todayCode] = lessonTime as LessonTime;
-      codeSet.add(todayCode);
       numOfLessonPerWeek += 1;
     }
     this.numOfLessonPerWeek = numOfLessonPerWeek;
@@ -108,4 +150,9 @@ export class ScheduleType {
     this.time = time;
     this.memo = memo;
   }
+}
+
+export interface DailyAgendasType {
+  title: string;
+  data: ScheduleType[];
 }
