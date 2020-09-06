@@ -28,12 +28,17 @@ function ScheduleModal({
   modalVisible,
   selectedSchedule,
   hideModal,
-
+  addSchedule,
   // onSubmit,
   // selectedScheduleId,
   // tags,
   // onAddTag,
 }) {
+
+  const onSubmit = (schedule: ScheduleType) => {
+    addSchedule(schedule);
+    hideModal();
+  }
   return (
     <View style={styles.modalView}>
       <Modal
@@ -42,7 +47,10 @@ function ScheduleModal({
         visible={modalVisible}
         onRequestClose={hideModal}>
         <View style={styles.modalView}>
-          <ScheduleForm selectedSchedule={selectedSchedule} />
+          <ScheduleForm
+            selectedSchedule={selectedSchedule}
+            onSubmit={onSubmit}
+          />
         </View>
       </Modal>
     </View>

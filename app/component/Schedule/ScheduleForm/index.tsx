@@ -45,7 +45,7 @@ const tagList = [
   { id: 'tag_2', name: '과학' },
 ];
 
-export default function ScheduleForm({ selectedSchedule }) {
+export default function ScheduleForm({ selectedSchedule, onSubmit }) {
   const {
     text,
     studentId,
@@ -95,8 +95,9 @@ export default function ScheduleForm({ selectedSchedule }) {
   );
 
   const handleSubmit = () => {
+    console.warn('schedule submit' + repeat);
     const newTime: LessonTime = new LessonTime(newStart, newEnd);
-    if (!repeat) {
+    if (repeat === 'false') {
       const newSchedule: ScheduleType = {
         ...selectedSchedule,
         text: newText,
@@ -109,13 +110,10 @@ export default function ScheduleForm({ selectedSchedule }) {
         memo: newMemo,
       };
 
-      // addSchedule(newSchedule)
-      return;
+      onSubmit(newSchedule);
     } else {
       console.warn('어서 일해라');
     }
-
-    const newRepeatedScheduleInfo = console.warn('schedule submit');
   };
 
   const onConfirmEnd = (date: Date) => {
@@ -156,10 +154,9 @@ export default function ScheduleForm({ selectedSchedule }) {
   };
 
   const setAllSameTime = () => {
-    setStartTimes(generateWeek(newStart))
-    setEndTimes(generateWeek(newEnd))
+    setStartTimes(generateWeek(newStart));
+    setEndTimes(generateWeek(newEnd));
   };
-
 
   return (
     <View style={styles.container}>

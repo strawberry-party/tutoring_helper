@@ -3,6 +3,10 @@ import 'react-native-gesture-handler';
 import React, { useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { connect, useSelector } from 'react-redux';
+import {
+  schedules as initialSchedules,
+  repeatedScheduleInfoList,
+} from '../common/scheduleMockData';
 
 import AddButton from '../component/common/AddButton';
 import AlarmDialog from '../component/common/AlarmDialog';
@@ -32,9 +36,13 @@ function ScheduleContainer({}: ScheduleContainerProps) {
   // );
 
   const [formVisible, setFormVisible] = useState(false);
-  const [schedules, setSchedules] = useState([]);
-  const [repeatInfos, setRepeatInfos] = useState([]);
+  const [schedules, setSchedules] = useState(initialSchedules);
+  const [repeatInfos, setRepeatInfos] = useState(repeatedScheduleInfoList);
   const [selectedSchedule, setSelectedSchedule] = useState(new ScheduleType());
+
+  const addSchedule = (schedule: ScheduleType) => {
+    setSchedules([...schedules, schedule])
+  }
 
   return (
     <SafeAreaView
@@ -62,6 +70,7 @@ function ScheduleContainer({}: ScheduleContainerProps) {
             // setSelectedSchedule(schedule);
             console.warn(schedule.text);
           }}
+          schedules={schedules}
         />
 
         <View style={styles.mock}>
@@ -69,6 +78,7 @@ function ScheduleContainer({}: ScheduleContainerProps) {
             modalVisible={formVisible}
             selectedSchedule={selectedSchedule}
             hideModal={() => setFormVisible(false)}
+            addSchedule={addSchedule}
           />
         </View>
       </View>

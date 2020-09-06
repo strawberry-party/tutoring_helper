@@ -7,13 +7,13 @@ import { lightThemeColor, themeColor } from './scheduleThemeProvider'
 import AgendaCard from './AgendaCard'
 import { KR_LOCAL_CONFIG } from '../../utils/calendarConfig';
 import { LocaleConfig } from 'react-native-calendars';
+import { ScheduleType } from '../../types/schedule';
 import _ from 'lodash';
-import { dailyAgendas } from '../../common/scheduleMockData';
 import dayjs from 'dayjs';
 import { getTheme } from './scheduleThemeProvider';
+import sortIntoDailyAgendas from './scheduleUtils/sortIntoDailyAgendas';
 
 // TODO: 타입 오류 있는 Agenda 분리, 기타 컴포넌트에는 타입 적용
-
 LocaleConfig.locales['kr'] = KR_LOCAL_CONFIG;
 LocaleConfig.defaultLocale = 'kr';
 
@@ -38,15 +38,17 @@ function buttonPressed() {
 const studentDotColors = { student_1: 'red', student_2: 'blue', student_3: 'green' };
 
 
-export default function StudentCalendar({ selectedSchedule, onPressSchedule }) {
+export default function StudentCalendar({ selectedSchedule, onPressSchedule, schedules }) {
   const [state, setState] = useState({});
 
   const [calendarVisible, setCalendarVisible] = useState('expanded');
 
-  
-  function getDottedDates(selectedDate) {
+
+  const getDailyAgendas = (schedules) => sortIntoDailyAgendas(schedules);
+
+  function getDottedDates(selectedDate, schedules) {
     const marked = {};
-    dailyAgendas.forEach(item => {
+    getDailyAgendas(schedules).forEach(item => {
       // NOTE: only mark dates with data
       var dots = [];
       if (item.data && item.data.length > 0 && !_.isEmpty(item.data[0])) {
@@ -124,7 +126,7 @@ export default function StudentCalendar({ selectedSchedule, onPressSchedule }) {
                   calendarHeight={200}
                   onDayPress={onDayPress}
                   markingType={'multi-dot'}
-                  markedDates={getDottedDates(selectedDate)}
+                  markedDates={getDottedDates(selectedDate, schedules)}
                 // markedDates={{
                 //   [selectedDate]: {
                 //     selected: true,
@@ -138,7 +140,7 @@ export default function StudentCalendar({ selectedSchedule, onPressSchedule }) {
           </View>
 
           <AgendaList
-            sections={dailyAgendas}
+            sections={getDailyAgendas(schedules)}
             extraData={state}
             renderItem={renderItem}
             hideKnob
