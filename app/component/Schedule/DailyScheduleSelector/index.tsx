@@ -22,7 +22,7 @@ export default function DailyScheduleSelector({
   onChangeStartTimes,
   endTimes,
   startTimes,
-  setAllSameTime,
+  setAllSameTime,  
 }) {
   const [selectedDays, selectDays] = useState(new Array<number>());
 

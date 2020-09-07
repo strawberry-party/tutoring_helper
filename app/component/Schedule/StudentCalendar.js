@@ -38,10 +38,10 @@ function buttonPressed() {
 const studentDotColors = { student_1: 'red', student_2: 'blue', student_3: 'green' };
 
 
-export default function StudentCalendar({ selectedSchedule, onPressSchedule, schedules }) {
+export default function StudentCalendar({ selectedSchedule, onPressSchedule, schedules, selectedScheduleId }) {
   const [state, setState] = useState({});
 
-  const [calendarVisible, setCalendarVisible] = useState('expanded');
+  const [calendarStatus, setCalendarStatus] = useState('expanded');
 
 
   const getDailyAgendas = (schedules) => sortIntoDailyAgendas(schedules);
@@ -80,18 +80,17 @@ export default function StudentCalendar({ selectedSchedule, onPressSchedule, sch
   const [calendarDate, setCalendarDate] = useState(dayjs());
   const [horizontal, setHorizontal] = useState(true);
 
-  function renderItem({ item }) {
+  function renderItem({ item, index }) {
     return (
-      <AgendaCard schedule={item} onPressAgendaCard={itemPressed} />
+      <AgendaCard schedule={item} 
+      scheduleId={index}
+      onPressAgendaCard={() => onPressSchedule(item, index)} />
     );
   }
+  
   const onDayPress = (day) => {
     setSelectedDate(day.dateString);
   };
-
-  function itemPressed(item) {
-    onPressSchedule(item);
-  }
 
   return (
     <CalendarProvider
@@ -108,14 +107,20 @@ export default function StudentCalendar({ selectedSchedule, onPressSchedule, sch
 
       <ScrollView>
         <View>
-          <ToggleButton.Row onValueChange={value => setCalendarVisible(value)} value={calendarVisible} style={{ width: 40, }}>
-            <ToggleButton icon="calendar" value="expanded" color={calendarVisible ? '#bbb' : 'black'} style={styles.button} />
-            {/* <ToggleButton icon="arrow-collapse" value="collapsed" color='black' style={styles.button} /> */}
+          <ToggleButton.Row onValueChange={value => setCalendarStatus(value)} value={calendarStatus} style={{ width: 40, }}>
+            <ToggleButton icon="calendar"
+              disabled={calendarStatus === 'expanded'}
+              value="expanded"
+              color={calendarStatus === 'expanded' ? 'blue' : 'black'}
+              style={styles.button} />
+            <ToggleButton icon="format-list-text" value="collapsed"
+              disabled={calendarStatus === 'collapsed'}
+              color={calendarStatus === 'collapsed' ? 'blue' : 'black'} style={styles.button} />
           </ToggleButton.Row>
 
           <View style={{ margin: 10, justifyContent: 'center', }}>
             <View style={{ borderRadius: 30, overflow: 'hidden' }}>
-              {calendarVisible === 'expanded' &&
+              {calendarStatus === 'expanded' &&
                 <Calendar
                   style={{
                     overflow: 'hidden',

@@ -32,8 +32,8 @@ export default function MyDatePicker({
   };
 
   const handleConfirm = (date: Date) => {
-    onConfirm(date);
     hideDatePicker();
+    onConfirm(date);
   };
   return (
     <Pressable

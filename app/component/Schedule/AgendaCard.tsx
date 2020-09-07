@@ -31,7 +31,7 @@ export interface AgendaCardType {
 //   );
 // }
 
-function AgendaCard({ schedule, onPressAgendaCard }: AgendaCardType) {
+function AgendaCard({ schedule, onPressAgendaCard }) {
   const {
     text,
     studentId,
@@ -41,12 +41,8 @@ function AgendaCard({ schedule, onPressAgendaCard }: AgendaCardType) {
     memo,
   } = schedule;
 
-  const onPress = () => {
-    onPressAgendaCard(schedule);
-    console.warn('pressed ' + text);
-  };
   return (
-    <TouchableOpacity onPress={onPress} style={styles.item}>
+    <TouchableOpacity onPress={onPressAgendaCard} style={styles.item}>
       <Text style={styles.title}>{text}</Text>
       <Text style={styles.time}>
         {time.start.format('HH:mm') + ' ~ ' + time.end.format('HH:mm')}

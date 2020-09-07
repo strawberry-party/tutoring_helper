@@ -1,7 +1,7 @@
 import { HeaderBackButton, createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, Text } from 'react-native';
 
-import DetailInfo from '../component/Schedule/DetailInfo';
+import DetailInfo from '../component/Schedule/ScheduleDetailModal';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import React from 'react';
 import Schedule from '../component/Schedule/Schedule';

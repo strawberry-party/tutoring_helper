@@ -25,7 +25,7 @@ import { TagType } from '../../../types/root';
 import dayjs from 'dayjs';
 import { repeatedScheduleInfoMap } from '../../../common/scheduleMockData';
 import styles from './styles';
-import weeklyScheduleParser from '../scheduleUtils/weeklyScheduleParser';
+import weeklyScheduleParser from '../DailyScheduleSelector/weeklyScheduleParser';
 
 interface ScheduleFormProps {
   selectedSchedule: ScheduleType;
@@ -45,7 +45,12 @@ const tagList = [
   { id: 'tag_2', name: '과학' },
 ];
 
-export default function ScheduleForm({ selectedSchedule, onSubmit }) {
+export default function ScheduleForm({
+  selectedSchedule,
+  selectedScheduleId,
+  onSubmitToAdd,
+  onSubmitToEdit,
+}) {
   const {
     text,
     studentId,
@@ -97,23 +102,26 @@ export default function ScheduleForm({ selectedSchedule, onSubmit }) {
   const handleSubmit = () => {
     console.warn('schedule submit' + repeat);
     const newTime: LessonTime = new LessonTime(newStart, newEnd);
+    var newSchedule: ScheduleType = selectedSchedule;
     if (repeat === 'false') {
-      const newSchedule: ScheduleType = {
+      newSchedule = {
         ...selectedSchedule,
         text: newText,
         studentId: selectedStudentId,
         tagId: selectedTagId,
-
         time: newTime,
         linkedRepeatedScheduleInfoId: 'none',
-
         memo: newMemo,
       };
-
-      onSubmit(newSchedule);
     } else {
+
+      
+      
       console.warn('어서 일해라');
     }
+
+    if (selectedScheduleId === 'none') onSubmitToAdd(newSchedule);
+    else onSubmitToEdit(newSchedule, selectedScheduleId);
   };
 
   const onConfirmEnd = (date: Date) => {

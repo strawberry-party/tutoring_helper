@@ -29,16 +29,21 @@ function ScheduleModal({
   selectedSchedule,
   hideModal,
   addSchedule,
-  // onSubmit,
-  // selectedScheduleId,
+  editSchedule,
+  selectedScheduleId,
   // tags,
   // onAddTag,
 }) {
-
-  const onSubmit = (schedule: ScheduleType) => {
+  const onSubmitToAdd = (schedule: ScheduleType) => {
     addSchedule(schedule);
     hideModal();
-  }
+  };
+
+  const onSubmitToEdit = (schedule: ScheduleType, scheduleId: number) => {
+    editSchedule(schedule, scheduleId);
+    hideModal();
+  };
+
   return (
     <View style={styles.modalView}>
       <Modal
@@ -48,8 +53,10 @@ function ScheduleModal({
         onRequestClose={hideModal}>
         <View style={styles.modalView}>
           <ScheduleForm
+            selectedScheduleId={selectedScheduleId}
             selectedSchedule={selectedSchedule}
-            onSubmit={onSubmit}
+            onSubmitToAdd={onSubmitToAdd}
+            onSubmitToEdit={onSubmitToEdit}
           />
         </View>
       </Modal>

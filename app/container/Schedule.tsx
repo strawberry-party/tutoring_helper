@@ -1,6 +1,7 @@
 import 'react-native-gesture-handler';
 
 import React, { useState } from 'react';
+import { RepeatedScheduleInfo, ScheduleType } from '../types/schedule';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { connect, useSelector } from 'react-redux';
 import {
@@ -12,8 +13,8 @@ import AddButton from '../component/common/AddButton';
 import AlarmDialog from '../component/common/AlarmDialog';
 import PushMaker from '../component/common/PushMaker';
 import { RootState } from '../states';
-import ScheduleModal from '../component/Schedule/ScheduleModal';
-import { ScheduleType } from '../types/schedule';
+import ScheduleDetailModal from '../component/Schedule/ScheduleDetailModal';
+import ScheduleFormModal from '../component/Schedule/ScheduleFormModal';
 import StudentCalendar from '../component/Schedule/StudentCalendar';
 
 // import { FilterButton } from '../component/Schedule/FilterSorter';
@@ -36,13 +37,56 @@ function ScheduleContainer({}: ScheduleContainerProps) {
   // );
 
   const [formVisible, setFormVisible] = useState(false);
+  const [detailVisible, setDetailVisible] = useState(false);
   const [schedules, setSchedules] = useState(initialSchedules);
   const [repeatInfos, setRepeatInfos] = useState(repeatedScheduleInfoList);
   const [selectedSchedule, setSelectedSchedule] = useState(new ScheduleType());
+  const [selectedScheduleId, setSelectedScheduleId]: [
+    number | 'none',
+    React.Dispatch<React.SetStateAction<number | 'none'>>,
+  ] = useState('none');
 
   const addSchedule = (schedule: ScheduleType) => {
-    setSchedules([...schedules, schedule])
-  }
+    setSchedules(schedules.concat(schedule));
+    setSelectedSchedule(schedule);
+    setSelectedScheduleId(schedules.length - 1);
+  };
+
+  const editSchedule = (newSchedule: ScheduleType, scheduleId: number) => {
+    setSchedules([
+      ...schedules.slice(scheduleId),
+      newSchedule,
+      ...schedules.slice(scheduleId + 1, schedules.length),
+    ]);
+
+    setSelectedSchedule(newSchedule);
+    setSelectedScheduleId(scheduleId);
+  };
+
+  const removeSchedule = (scheduleId: number) => {
+    setSelectedSchedule(new ScheduleType());
+    setSelectedScheduleId('none');
+    setSchedules(schedules.filter((item, id) => id !== scheduleId));
+  };
+
+  const addRepeatInfo = (repeatInfo: RepeatedScheduleInfo) => {
+    setRepeatInfos(repeatInfos.concat(repeatInfo));
+  };
+
+  const editRepeatInfo = (
+    repeatInfo: RepeatedScheduleInfo,
+    repeatInfoId: number,
+  ) => {
+    setRepeatInfos([
+      ...repeatInfos.slice(repeatInfoId),
+      repeatInfo,
+      ...repeatInfos.slice(repeatInfoId + 1, repeatInfos.length),
+    ]);
+  };
+
+  const removeRepeatInfo = (repeatInfoId: number) => {
+    setRepeatInfos(repeatInfos.filter((item, id) => id !== repeatInfoId));
+  };
 
   return (
     <SafeAreaView
@@ -66,19 +110,42 @@ function ScheduleContainer({}: ScheduleContainerProps) {
 
         <StudentCalendar
           selectedSchedule={selectedSchedule}
-          onPressSchedule={(schedule) => {
-            // setSelectedSchedule(schedule);
-            console.warn(schedule.text);
+          selectedScheduleId={selectedScheduleId}
+          onPressSchedule={(
+            schedule: ScheduleType,
+            scheduleId: number | 'none',
+          ) => {
+            setSelectedSchedule(schedule);
+            setSelectedScheduleId(scheduleId);
+            setDetailVisible(true);
           }}
           schedules={schedules}
         />
 
         <View style={styles.mock}>
-          <ScheduleModal
+          <ScheduleFormModal
             modalVisible={formVisible}
             selectedSchedule={selectedSchedule}
-            hideModal={() => setFormVisible(false)}
+            selectedScheduleId={selectedScheduleId}
+            hideModal={() => {
+              setFormVisible(false);
+              setDetailVisible(true);
+            }}
             addSchedule={addSchedule}
+            editSchedule={editSchedule}
+          />
+        </View>
+
+        <View style={styles.mock}>
+          <ScheduleDetailModal
+            showModal={() => setDetailVisible(true)}
+            modalVisible={detailVisible}
+            selectedSchedule={selectedSchedule}
+            hideModal={() => setDetailVisible(false)}
+            removeSchedule={removeSchedule}
+            repeatedScheduleInfos={repeatInfos}
+            selectedScheduleId={selectedScheduleId}
+            showFormModal={() => setFormVisible(true)}
           />
         </View>
       </View>
