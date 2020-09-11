@@ -4,8 +4,8 @@ import { Button } from 'react-native-paper';
 import { Text } from 'native-base';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import { View } from 'react-native';
-import { test_getRepeatedSchedules } from './scheduleUtils/getRepeatedSchedules';
-import { test_scheduleGenerator } from './scheduleUtils/scheduleGenerator';
+import { test_getRepeatedSchedules } from './scheduleUtils/getRepeatedFormWorkSchedules';
+import { test_scheduleGenerator } from './scheduleUtils/formWorkScheduleGenerator';
 
 class Tester extends Component {
 

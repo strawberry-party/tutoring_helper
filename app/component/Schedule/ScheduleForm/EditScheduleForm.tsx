@@ -1,11 +1,14 @@
 import {
   EndAfterNTimes,
   EndAfterThisDay,
+  EndAfterType,
+  FormWorkScheduleType,
   LessonOrNone,
   LessonTime,
   RepeatedScheduleInfo,
   ScheduleType,
   Week,
+  WeeklyScheduleType,
   generateWeek,
 } from '../../../types/schedule';
 import { MemoBox, TitleInput } from './TextInputs';
@@ -13,21 +16,23 @@ import React, { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import { StudentPicker, SubjectTagPicker } from './Pickers';
 import Tag, { TagForm } from '../../common/Tag';
+import weeklyScheduleParser, {
+  getWeeklySchedule,
+} from '../DailyScheduleSelector/weeklyScheduleParser';
 
-import { Button } from 'react-native-paper';
 import DailyScheduleSelector from '../DailyScheduleSelector/index';
 import EndPointSelector from './EndPointSelector';
 import { Header } from './etc';
 import { LessonTimePicker } from './TimePickers';
 import { Reminder } from './Reminder';
 import { RepeatSelector } from './RepeatSelector';
+import SubmitOptionModal from './SubmitOptionModal';
 import { TagType } from '../../../types/root';
 import dayjs from 'dayjs';
-import { repeatedScheduleInfoMap } from '../../../common/scheduleMockData';
+import { repeatedScheduleInfoList } from '../../../common/scheduleMockData';
 import styles from './styles';
-import weeklyScheduleParser from '../DailyScheduleSelector/weeklyScheduleParser';
 
-interface ScheduleFormProps {
+interface EditScheduleFormProps {
   selectedSchedule: ScheduleType;
   hideModal: () => void;
   selectedScheduleId: string;
@@ -45,13 +50,30 @@ const tagList = [
   { id: 'tag_2', name: '과학' },
 ];
 
-export default function ScheduleForm({
+const defaultEndAfter = ({ numOfTimes: 1 } as EndAfterNTimes) as EndAfterType;
+const defaultWeeklySchedule = new WeeklyScheduleType();
+
+const ALL = 'ALL' as const;
+const ONLY_THIS = 'ONLY_THIS' as const;
+
+// 4 modes of submit
+const EDIT_REPEAT = 'EDIT_REPEAT';
+const ADD_REPEAT = 'ADD_REPEAT';
+const REMOVE_REPEAT = 'REMOVE_REPEAT';
+const NOTHING_WITH_REPEAT = 'NOTHING_WITH_REPEAT';
+
+export default function EditScheduleForm({
   selectedSchedule,
-  selectedScheduleId,
-  onSubmitToAdd,
-  onSubmitToEdit,
+  editSchedule,
+  removeLinkedSchedules,
+  onHide,
+  addRepeatInfo,
+  editRepeatInfo,
+  removeRepeatInfo,
+  repeatedScheduleInfo,
 }) {
   const {
+    id,
     text,
     studentId,
     tagId,
@@ -59,6 +81,86 @@ export default function ScheduleForm({
     memo,
     linkedRepeatedScheduleInfoId,
   } = selectedSchedule;
+
+  const handleSubmit = () => {
+    const hasLinked: boolean =
+      selectedSchedule.linkedRepeatedScheduleInfoId !== 'none';
+
+    // 기존의 스케줄에 연결된 반복정보가 있는 경우
+    if (repeat && hasLinked) {
+      onShowSubmitOptionModal();
+      return;
+    }
+
+    if (!repeat && hasLinked) {
+      handle_REMOVE_REPEAT();
+      return;
+    }
+
+    if (repeat && !hasLinked) {
+      handle_ADD_REPEAT();
+      return;
+    }
+
+    if (!repeat && !hasLinked) {
+      handle_NOTHING_WITH_REPEAT();
+    }
+  };
+
+  const handle_EDIT_REPEAT = () => {
+    switch (submitOption) {
+      case 'ONLY_THIS': // TODO: 이 일정: 이 일정만 수정
+        handle_NOTHING_WITH_REPEAT();
+        break;
+      case 'ALL': // TODO: 모든 일정: 일정 수정, 반복 정보 수정
+        editRepeatInfo(
+          new RepeatedScheduleInfo(
+            linkedRepeatedScheduleInfoId,
+            getFormWorkSchedule(),
+            getEndAfter(),
+            newStart,
+            getWeeklySchedule(startTimes, endTimes),
+          ),
+        );
+        onHide();
+        break;
+
+      case 'FORWARD': // TODO: 이 일정 및 향후 일정
+        console.warn('어서 일해라');
+        onHide();
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handle_ADD_REPEAT = () => {
+    addRepeatInfo(
+      getFormWorkSchedule(),
+      getEndAfter(),
+      newStart,
+      getWeeklySchedule(startTimes, endTimes),
+    );
+  };
+
+  const handle_REMOVE_REPEAT = () => {
+    // 반복정보 삭제, 이 일정을 제외한 반복일정 모두 삭제, 기존 스케줄 수정
+    removeRepeatInfo(linkedRepeatedScheduleInfoId);
+    removeLinkedSchedules(linkedRepeatedScheduleInfoId, id)
+    onHide();
+  };
+
+  const handle_NOTHING_WITH_REPEAT = () => {
+    // 기존 스케줄 수정
+    editSchedule(
+      new ScheduleType(id, linkedRepeatedScheduleInfoId, getFormWorkSchedule()),
+    );
+    onHide();
+  };
+
+  const [submitOptionModalVisible, setSubmitOptionModalVisible] = useState(
+    false,
+  );
 
   // create / edit schedule
   const { start, end } = time;
@@ -70,26 +172,33 @@ export default function ScheduleForm({
   const [newEnd, setEnd] = useState(end);
   const [newMemo, setMemo] = useState(memo);
 
+  const onHideSubmitOptionModal = () => {
+    setSubmitOptionModalVisible(false);
+  };
+
+  const onShowSubmitOptionModal = () => {
+    setSubmitOptionModalVisible(true);
+  };
+
   // create / edit repeatedScheduleInfo
-  const [repeat, setRepeat] = useState('false');
 
-  const repeatedScheduleInfo =
-    linkedRepeatedScheduleInfoId === 'none'
-      ? new RepeatedScheduleInfo()
-      : repeatedScheduleInfoMap.get(linkedRepeatedScheduleInfoId);
+  const [repeat, setRepeat] = useState(linkedRepeatedScheduleInfoId !== 'none');
 
-  const { endAfter, weeklySchedule } = repeatedScheduleInfo;
+  const { endAfter, weeklySchedule } = repeatedScheduleInfo
+    ? repeatedScheduleInfo
+    : { endAfter: defaultEndAfter, weeklySchedule: defaultWeeklySchedule };
 
   var lastDay = (endAfter as EndAfterThisDay).endDay;
   var endNumTimes = (endAfter as EndAfterNTimes).numOfTimes;
 
-  const [newEndPoint, setEndPoint] = useState(lastDay ? 'lastDay' : 'times');
+  const [endPointMode, setEndPoint] = useState(lastDay ? 'lastDay' : 'times');
+
   const [endAfterNumTimes, setEndAfterNumTimes] = useState(
     endNumTimes ? endNumTimes : 0,
   );
+
   const [newLastDay, setLastDay] = useState(lastDay ? lastDay : dayjs());
 
-  const [newWeeklySchedule, setWeeklySchedule] = useState(weeklySchedule);
   const [reminder, setReminder] = useState(30); // remind this schedule before x minutes
 
   const [startTimes, setStartTimes] = useState(
@@ -98,30 +207,32 @@ export default function ScheduleForm({
   const [endTimes, setEndTimes] = useState(
     weeklyScheduleParser(weeklySchedule).endTimes,
   );
+  const [submitOption, setSubmitOption] = useState('NONE');
 
-  const handleSubmit = () => {
-    console.warn('schedule submit' + repeat);
-    const newTime: LessonTime = new LessonTime(newStart, newEnd);
-    var newSchedule: ScheduleType = selectedSchedule;
-    if (repeat === 'false') {
-      newSchedule = {
-        ...selectedSchedule,
-        text: newText,
-        studentId: selectedStudentId,
-        tagId: selectedTagId,
-        time: newTime,
-        linkedRepeatedScheduleInfoId: 'none',
-        memo: newMemo,
-      };
-    } else {
+  const getFormWorkSchedule = () => {
+    return new FormWorkScheduleType(
+      newText,
+      selectedStudentId,
+      selectedTagId,
+      new LessonTime(newStart, newEnd),
+      newMemo,
+    );
+  };
 
-      
-      
-      console.warn('어서 일해라');
-    }
+  const getEndAfter = () => {
+    var endAfter: EndAfterType =
+      endPointMode === 'lastDay'
+        ? ({ endDay: lastDay } as EndAfterThisDay)
+        : ({ numOfTimes: endAfterNumTimes } as EndAfterNTimes);
+    return endAfter;
+  };
 
-    if (selectedScheduleId === 'none') onSubmitToAdd(newSchedule);
-    else onSubmitToEdit(newSchedule, selectedScheduleId);
+  const onSaveSubmitOption = (
+    value: 'ONLY_THIS' | 'ALL' | 'FORWARD' | 'NONE',
+  ) => {
+    setSubmitOption(value);
+    handle_EDIT_REPEAT();
+    console.warn('submitOption: ' + submitOption);
   };
 
   const onConfirmEnd = (date: Date) => {
@@ -193,7 +304,7 @@ export default function ScheduleForm({
             newStart={newStart}
           />
 
-          {repeat === 'true' && (
+          {repeat && (
             <View>
               <DailyScheduleSelector
                 onChangeEndTimes={onChangeEndTimes}
@@ -204,7 +315,7 @@ export default function ScheduleForm({
               />
               <EndPointSelector
                 setEndPoint={setEndPoint}
-                newEndPoint={newEndPoint}
+                newEndPoint={endPointMode}
                 endAfterNumTimes={endAfterNumTimes}
                 setEndAfterNumTimes={setEndAfterNumTimes}
                 newLastDay={newLastDay}
@@ -217,6 +328,13 @@ export default function ScheduleForm({
             defaultReminder={reminder}
             onSubmitDialog={(minute: number) => setReminder(minute)}
           />
+
+          <SubmitOptionModal
+            visible={submitOptionModalVisible}
+            onSubmit={onSaveSubmitOption}
+            onHide={onHideSubmitOptionModal}
+          />
+
           <MemoBox newMemo={newMemo} onChangeMemo={onChangeMemo} />
         </View>
       </ScrollView>

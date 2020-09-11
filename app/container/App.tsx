@@ -8,7 +8,6 @@ import HomeworkContainer from './Homework';
 import { Provider } from 'react-redux';
 import React from 'react';
 import ScheduleContainer from './Schedule';
-import ScheduleForm from '../component/Schedule/ScheduleForm';
 import Tester from '../component/Schedule/ScheduleTester';
 import { Text } from 'react-native';
 import store from '../common/store';
@@ -17,6 +16,7 @@ function App() {
   return (
     <Provider store={store}>
       <ScheduleContainer />
+      {/* <Text> 헬로 월드 </Text> */}
     </Provider>
   );
 }

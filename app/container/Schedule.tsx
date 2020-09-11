@@ -1,7 +1,15 @@
 import 'react-native-gesture-handler';
 
+import {
+  AddScheduleModal,
+  EditScheduleModal,
+} from '../component/Schedule/ScheduleFormModal';
+import {
+  FormWorkScheduleType,
+  RepeatedScheduleInfo,
+  ScheduleType,
+} from '../types/schedule';
 import React, { useState } from 'react';
-import { RepeatedScheduleInfo, ScheduleType } from '../types/schedule';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { connect, useSelector } from 'react-redux';
 import {
@@ -14,8 +22,9 @@ import AlarmDialog from '../component/common/AlarmDialog';
 import PushMaker from '../component/common/PushMaker';
 import { RootState } from '../states';
 import ScheduleDetailModal from '../component/Schedule/ScheduleDetailModal';
-import ScheduleFormModal from '../component/Schedule/ScheduleFormModal';
 import StudentCalendar from '../component/Schedule/StudentCalendar';
+import _ from 'lodash';
+import formWorkScheduleGenerator from '../component/Schedule/scheduleUtils/formWorkScheduleGenerator';
 
 // import { FilterButton } from '../component/Schedule/FilterSorter';
 // import FilterModal from '../component/Schedule/FilterModal';
@@ -36,57 +45,157 @@ function ScheduleContainer({}: ScheduleContainerProps) {
   //   (state: RootState) => state.assignFilterSorterReducer.filter,
   // );
 
-  const [formVisible, setFormVisible] = useState(false);
+  const [addFormVisible, setAddFormVisible] = useState(false);
+  const [editFormVisible, setEditFormVisible] = useState(false);
+
   const [detailVisible, setDetailVisible] = useState(false);
+
   const [schedules, setSchedules] = useState(initialSchedules);
   const [repeatInfos, setRepeatInfos] = useState(repeatedScheduleInfoList);
-  const [selectedSchedule, setSelectedSchedule] = useState(new ScheduleType());
-  const [selectedScheduleId, setSelectedScheduleId]: [
-    number | 'none',
-    React.Dispatch<React.SetStateAction<number | 'none'>>,
-  ] = useState('none');
 
-  const addSchedule = (schedule: ScheduleType) => {
-    setSchedules(schedules.concat(schedule));
-    setSelectedSchedule(schedule);
-    setSelectedScheduleId(schedules.length - 1);
+  const [selectedScheduleId, setSelectedScheduleId] = useState('none');
+
+  const onChangeSchedules = (newSchedules: ScheduleType[]) => {
+    setSchedules(newSchedules);
+    console.log('====================================');
+    console.log('newSchedules: ');
+    console.log('id\ttext\tlessonTime');
+    newSchedules.forEach((item) => {
+      item.print();
+    });
+    console.log('====================================');
   };
 
-  const editSchedule = (newSchedule: ScheduleType, scheduleId: number) => {
-    setSchedules([
-      ...schedules.slice(scheduleId),
-      newSchedule,
-      ...schedules.slice(scheduleId + 1, schedules.length),
-    ]);
-
-    setSelectedSchedule(newSchedule);
-    setSelectedScheduleId(scheduleId);
+  const onChangeRepeatInfos = (repeatInfos: RepeatedScheduleInfo[]) => {
+    setRepeatInfos(repeatInfos);
+    console.log('====================================');
+    console.log('repeatInfos: ');
+    repeatInfos.forEach((item) => {
+      item.print();
+    });
+    console.log('====================================');
   };
 
-  const removeSchedule = (scheduleId: number) => {
-    setSelectedSchedule(new ScheduleType());
-    setSelectedScheduleId('none');
-    setSchedules(schedules.filter((item, id) => id !== scheduleId));
-  };
-
-  const addRepeatInfo = (repeatInfo: RepeatedScheduleInfo) => {
-    setRepeatInfos(repeatInfos.concat(repeatInfo));
-  };
-
-  const editRepeatInfo = (
-    repeatInfo: RepeatedScheduleInfo,
-    repeatInfoId: number,
+  const makeSchedule = (
+    formWork: FormWorkScheduleType,
+    linkedRepeatedScheduleInfoId: string,
   ) => {
-    setRepeatInfos([
-      ...repeatInfos.slice(repeatInfoId),
-      repeatInfo,
-      ...repeatInfos.slice(repeatInfoId + 1, repeatInfos.length),
-    ]);
+    var newId: string = _.uniqueId('schedule_');
+    setSelectedScheduleId(newId);
+    return new ScheduleType(newId, linkedRepeatedScheduleInfoId, formWork);
   };
 
-  const removeRepeatInfo = (repeatInfoId: number) => {
-    setRepeatInfos(repeatInfos.filter((item, id) => id !== repeatInfoId));
+  const addSchedule = (
+    formWork: FormWorkScheduleType,
+    linkedRepeatedScheduleInfoId: string = 'none',
+  ) => {
+    setSchedules([
+      ...schedules,
+      makeSchedule(formWork, linkedRepeatedScheduleInfoId),
+    ]);
+
+    // console.log('==========CHANGED SCHEDULES BY ADD SCHEDULE==============');
+    // schedules.forEach((item: ScheduleType) => item.print());
+    // console.log('====================================');
   };
+
+  // 더 생각해봐야할듯
+  const editSchedule = (newSchedule: ScheduleType) => {
+    setSchedules(
+      schedules.map((item: ScheduleType) =>
+        item.id === newSchedule.id ? newSchedule : item,
+      ),
+    );
+  };
+
+  const removeSchedule = (scheduleId: string) => {
+    setSelectedScheduleId('none');
+    setSchedules(
+      schedules.filter((item: ScheduleType) => item.id !== scheduleId),
+    );
+  };
+
+  const removeLinkedSchedules = (
+    repeatInfoId: string,
+    onlySurvivedId: string = 'none',
+  ) => {
+    setSchedules(
+      schedules.filter(
+        (item: ScheduleType) =>
+          item.linkedRepeatedScheduleInfoId !== repeatInfoId ||
+          item.id === onlySurvivedId,
+      ),
+    );
+  };
+
+  const addRepeatInfo = (
+    formWork: FormWorkScheduleType,
+    endAfter,
+    newStart,
+    weeklySchedule,
+  ) => {
+    var newId = _.uniqueId('repeat_');
+    var repeatInfo = new RepeatedScheduleInfo(
+      newId,
+      formWork,
+      endAfter,
+      newStart,
+      weeklySchedule,
+    );
+    setRepeatInfos([...repeatInfos, repeatInfo]);
+    console.log(
+      '==========CHANGED repeatInfos BY ADD repeatInfos==============',
+    );
+    repeatInfos.map((item: RepeatedScheduleInfo) => item.print());
+    console.log('====================================');
+
+    var formWorks = formWorkScheduleGenerator(repeatInfo);
+    var newSchedules: ScheduleType[] = [];
+    for (let i = 0; i < formWorks.length; i++) {
+      formWorks[i].print();
+      newSchedules.push(makeSchedule(formWorks[i], newId));
+    }
+    setSchedules(schedules.concat(newSchedules));
+  };
+
+  const editRepeatInfo = (repeatInfo: RepeatedScheduleInfo) => {
+    setRepeatInfos(
+      repeatInfos.map((item: RepeatedScheduleInfo) =>
+        item.id === repeatInfo.id ? repeatInfo : item,
+      ),
+    );
+
+    setSchedules(
+      schedules.filter(
+        (item: ScheduleType) =>
+          item.linkedRepeatedScheduleInfoId !== repeatInfo.id,
+      ),
+    );
+
+    formWorkScheduleGenerator(repeatInfo).map((item) =>
+      addSchedule(item, repeatInfo.id),
+    );
+  };
+
+  const removeRepeatInfo = (repeatInfoId: string) => {
+    setRepeatInfos(repeatInfos.filter((item) => item.id !== repeatInfoId));
+  };
+
+  function getRepeatInfo(): RepeatedScheduleInfo {
+    const selectedSchedule = getSchedule();
+    if (selectedSchedule === 'none') return new RepeatedScheduleInfo('none');
+    else
+      return repeatInfos.find(
+        (item) => item.id === selectedSchedule.linkedRepeatedScheduleInfoId,
+      );
+  }
+
+  function getSchedule(): ScheduleType | 'none' {
+    const selectedSchedule = schedules.find(
+      (item) => item.id === selectedScheduleId,
+    );
+    return selectedSchedule ? selectedSchedule : 'none';
+  }
 
   return (
     <SafeAreaView
@@ -100,7 +209,6 @@ function ScheduleContainer({}: ScheduleContainerProps) {
       <View style={{ borderColor: 'green', flex: 1 }}>
         <View
           style={{
-            // backgroundColor: 'pink',
             flexDirection: 'row',
             alignItems: 'center',
           }}>
@@ -108,49 +216,67 @@ function ScheduleContainer({}: ScheduleContainerProps) {
           {/* <AlarmDialog text="알림" /> */}
         </View>
 
+        {/* <Text> 헬로 월드 </Text> */}
+
         <StudentCalendar
-          selectedSchedule={selectedSchedule}
+          selectedSchedule={getSchedule()}
           selectedScheduleId={selectedScheduleId}
-          onPressSchedule={(
-            schedule: ScheduleType,
-            scheduleId: number | 'none',
-          ) => {
-            setSelectedSchedule(schedule);
-            setSelectedScheduleId(scheduleId);
+          onPressSchedule={(schedule: ScheduleType) => {
+            setSelectedScheduleId(schedule.id);
             setDetailVisible(true);
           }}
           schedules={schedules}
         />
 
         <View style={styles.mock}>
-          <ScheduleFormModal
-            modalVisible={formVisible}
-            selectedSchedule={selectedSchedule}
-            selectedScheduleId={selectedScheduleId}
+          <AddScheduleModal
+            modalVisible={addFormVisible}
             hideModal={() => {
-              setFormVisible(false);
-              setDetailVisible(true);
+              setAddFormVisible(false);
             }}
             addSchedule={addSchedule}
-            editSchedule={editSchedule}
+            addRepeatInfo={addRepeatInfo}
           />
         </View>
 
-        <View style={styles.mock}>
+        {/* <View style={styles.mock}>
+          <EditScheduleModal
+            modalVisible={editFormVisible}
+            hideModal={() => {
+              setEditFormVisible(false);
+            }}
+            selectedSchedule={getSchedule()}
+            editSchedule={editSchedule}
+            addRepeatInfo={addRepeatInfo}
+            editRepeatInfo={editRepeatInfo}
+            repeatedScheduleInfo={getRepeatInfo()}
+            removeRepeatInfo={removeRepeatInfo}
+            removeLinkedSchedules={removeLinkedSchedules}
+
+            
+          />
+        </View> */}
+
+        {/* <View style={styles.mock}>
           <ScheduleDetailModal
+            selectedSchedule={schedules.find(
+              (item) => item.id === selectedScheduleId,
+            )}
             showModal={() => setDetailVisible(true)}
             modalVisible={detailVisible}
-            selectedSchedule={selectedSchedule}
             hideModal={() => setDetailVisible(false)}
             removeSchedule={removeSchedule}
             repeatedScheduleInfos={repeatInfos}
             selectedScheduleId={selectedScheduleId}
-            showFormModal={() => setFormVisible(true)}
+            showFormModal={() => setEditFormVisible(true)}
           />
-        </View>
+        </View> */}
       </View>
 
-      <AddButton visible={formVisible} show={() => setFormVisible(true)} />
+      <AddButton
+        visible={addFormVisible}
+        show={() => setAddFormVisible(true)}
+      />
     </SafeAreaView>
   );
 }

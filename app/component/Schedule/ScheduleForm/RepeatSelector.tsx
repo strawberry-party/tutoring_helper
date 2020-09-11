@@ -18,27 +18,27 @@ export function RepeatSelector({ setRepeat, repeat }) {
       <View>
         <Pressable
           onPress={() => {
-            setRepeat('false');
+            setRepeat(false);
           }}>
           <View style={styles.radioButtonContainer}>
             <RadioButton
               value="false"
-              status={repeat === 'false' ? 'checked' : 'unchecked'}
-              onPress={() => setRepeat('false')}
+              status={!repeat ? 'checked' : 'unchecked'}
+              onPress={() => setRepeat(false)}
             />
             <Text style={styles.inputText}>한 번만</Text>
           </View>
         </Pressable>
         <Pressable
           onPress={() => {
-            setRepeat('true');
+            setRepeat(true);
           }}>
           <View style={styles.radioButtonContainer}>
             <RadioButton
               value="true"
-              status={repeat === 'true' ? 'checked' : 'unchecked'}
+              status={repeat ? 'checked' : 'unchecked'}
               onPress={() => {
-                setRepeat('true');
+                setRepeat(true);
               }}
             />
             <Text style={styles.inputText}>반복하기</Text>

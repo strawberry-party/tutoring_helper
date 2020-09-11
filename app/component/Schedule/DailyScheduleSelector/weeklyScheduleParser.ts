@@ -1,8 +1,12 @@
 import {
+  LessonTime,
+  Week,
   WeeklyScheduleFormVersion,
   WeeklyScheduleType,
   nones,
 } from './../../../types/schedule';
+
+import dayjs from 'dayjs';
 
 export default function weeklyScheduleParser(
   weeklySchedule: WeeklyScheduleType,
@@ -18,4 +22,23 @@ export default function weeklyScheduleParser(
     }
   }
   return new WeeklyScheduleFormVersion(startTimes, endTimes);
+}
+
+export function getWeeklySchedule(
+  startTimes: Week,
+  endTimes: Week,
+  selectedDays: Array<number>,
+): WeeklyScheduleType {
+  var weeklyScheduleList = [];
+  for (let index = 0; index < 7; index++) {
+    if (selectedDays.includes(index))
+      weeklyScheduleList.push([
+        index,
+        new LessonTime(
+          startTimes[index] as dayjs.Dayjs,
+          endTimes[index] as dayjs.Dayjs,
+        ),
+      ]);
+  }
+  return new WeeklyScheduleType(new Map(weeklyScheduleList));
 }

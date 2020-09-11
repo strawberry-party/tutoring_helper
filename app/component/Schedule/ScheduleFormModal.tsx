@@ -9,7 +9,8 @@ import {
 import { Button, Fab, Icon } from 'native-base';
 import React, { useState } from 'react';
 
-import ScheduleForm from './ScheduleForm';
+import AddScheduleForm from './ScheduleForm/AddScheduleForm';
+import EditScheduleForm from './ScheduleForm/EditScheduleForm';
 import { ScheduleType } from '../../types/schedule';
 import { TagType } from '../../types/root';
 
@@ -24,25 +25,13 @@ interface ScheduleModalProps {
   onAddTag: (tag: TagType) => void;
 }
 
-function ScheduleModal({
+export function AddScheduleModal({
   modalVisible,
-  selectedSchedule,
   hideModal,
   addSchedule,
-  editSchedule,
-  selectedScheduleId,
-  // tags,
-  // onAddTag,
+  addRepeatInfo,
 }) {
-  const onSubmitToAdd = (schedule: ScheduleType) => {
-    addSchedule(schedule);
-    hideModal();
-  };
 
-  const onSubmitToEdit = (schedule: ScheduleType, scheduleId: number) => {
-    editSchedule(schedule, scheduleId);
-    hideModal();
-  };
 
   return (
     <View style={styles.modalView}>
@@ -52,11 +41,10 @@ function ScheduleModal({
         visible={modalVisible}
         onRequestClose={hideModal}>
         <View style={styles.modalView}>
-          <ScheduleForm
-            selectedScheduleId={selectedScheduleId}
-            selectedSchedule={selectedSchedule}
-            onSubmitToAdd={onSubmitToAdd}
-            onSubmitToEdit={onSubmitToEdit}
+          <AddScheduleForm
+            addSchedule={addSchedule}
+            hideModal={hideModal}
+            addRepeatInfo={addRepeatInfo}
           />
         </View>
       </Modal>
@@ -64,7 +52,40 @@ function ScheduleModal({
   );
 }
 
-export default ScheduleModal;
+export function EditScheduleModal({
+  modalVisible,
+  hideModal,
+  selectedSchedule,
+  editSchedule,
+  addRepeatInfo,
+  editRepeatInfo,
+  repeatedScheduleInfo,
+  removeRepeatInfo,
+  removeLinkedSchedules,
+}) {
+  return (
+    <View style={styles.modalView}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={hideModal}>
+        <View style={styles.modalView}>
+          <EditScheduleForm
+            onHide={hideModal}
+            selectedSchedule={selectedSchedule}
+            repeatedScheduleInfo={repeatedScheduleInfo}
+            editSchedule={editSchedule}
+            removeLinkedSchedules={removeLinkedSchedules}
+            addRepeatInfo={addRepeatInfo}
+            editRepeatInfo={editRepeatInfo}
+            removeRepeatInfo={removeRepeatInfo}
+          />
+        </View>
+      </Modal>
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
   modalView: {

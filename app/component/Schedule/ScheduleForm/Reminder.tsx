@@ -8,6 +8,7 @@ import {
   RadioButton,
 } from 'react-native-paper';
 import {
+  Modal,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -67,30 +68,33 @@ function AlarmDialog({ defaultReminder, visible, handleSubmit, onHide }) {
   };
 
   return (
-    <View style={{ zIndex: 1 }}>
-      <Portal>
-        <Dialog visible={visible} onDismiss={onHide}>
+    <Modal
+      visible={visible}
+      onRequestClose={onHide}
+      animationType="slide"
+      transparent={true}>
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
           <Dialog.Title> 리마인더 설정 </Dialog.Title>
           <Dialog.Content>
-              <RadioButton.Group
-                onValueChange={(value) => setValue(value)}
-                value={value}
-                >
-                <RadioButton.Item label="알리지 않음" value="0"/>
-                <RadioButton.Item label="5분 전에 알림" value="5" />
-                <RadioButton.Item label="15분 전에 알림" value="15" />
-                <RadioButton.Item label="30분 전에 알림" value="30" />
-                <RadioButton.Item label="1시간 전에 알림" value="60" />
-                <RadioButton.Item label="2시간 전에 알림" value="120" />
-              </RadioButton.Group>
+            <RadioButton.Group
+              onValueChange={(value) => setValue(value)}
+              value={value}>
+              <RadioButton.Item label="알리지 않음" value="0" />
+              <RadioButton.Item label="5분 전에 알림" value="5" />
+              <RadioButton.Item label="15분 전에 알림" value="15" />
+              <RadioButton.Item label="30분 전에 알림" value="30" />
+              <RadioButton.Item label="1시간 전에 알림" value="60" />
+              <RadioButton.Item label="2시간 전에 알림" value="120" />
+            </RadioButton.Group>
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={onSubmit} style={styles.action}>
               저장
             </Button>
           </Dialog.Actions>
-        </Dialog>
-      </Portal>
-    </View>
+        </View>
+      </View>
+    </Modal>
   );
 }

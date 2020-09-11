@@ -18,14 +18,14 @@ import styles from './styles';
 type Days = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun';
 
 export default function DailyScheduleSelector({
+  selectedDays,
+  selectDays,
   onChangeEndTimes,
   onChangeStartTimes,
   endTimes,
   startTimes,
-  setAllSameTime,  
+  setAllSameTime,
 }) {
-  const [selectedDays, selectDays] = useState(new Array<number>());
-
   const onPressDay = (dayId: number) => {
     if (selectedDays.includes(dayId))
       selectDays(selectedDays.filter((id) => id !== dayId));
@@ -38,9 +38,12 @@ export default function DailyScheduleSelector({
         onPress={() => onPressDay(index)}
         isSelected={selectedDays.includes(index)}
         id={index}
+        key={index}
       />
     );
   });
+
+
 
   return (
     <View style={[styles.inputContainer]}>
@@ -58,7 +61,7 @@ export default function DailyScheduleSelector({
     </View>
   );
 }
-const dayList = ['일', '월', '화', '수', '목', '금', '토'];
+export const dayList = ['일', '월', '화', '수', '목', '금', '토'];
 
 function getDayScheduleSelector(id, visible) {}
 
@@ -77,8 +80,8 @@ function DayScheduleSelectorContainer({
             <DayScheduleSelector
               key={id}
               id={id}
-              end={endTimes[id] === 'none' ? dayjs() : endTimes[id]}
-              start={startTimes[id] === 'none' ? dayjs() : startTimes[id]}
+              start={startTimes[id]}
+              end={endTimes[id]}
               onChangeEndTimes={onChangeEndTimes}
               onChangeStartTimes={onChangeStartTimes}
             />
@@ -97,7 +100,7 @@ function DayChip({ onPress, isSelected, id }) {
             ? [styles.dayChipText, styles.selectedDay]
             : [styles.dayChipText, styles.unselectedDay]
         }>
-        {dayList[id]}
+        {dayList[id].toString()}
       </Text>
     </Pressable>
   );

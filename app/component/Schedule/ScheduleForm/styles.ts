@@ -1,8 +1,29 @@
-import {
-  StyleSheet,
-} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
+  modalView: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    width: 300,
+    // height: 500,
+    position: 'absolute',
+    alignSelf: 'center',
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
   tag: {
     alignContent: 'center',
   },
@@ -57,7 +78,7 @@ const styles = StyleSheet.create({
   },
   reminderButtonContainer: {
     flexDirection: 'column',
-    marginBottom: 30,  
+    marginBottom: 30,
   },
 
   headline: {
@@ -82,7 +103,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
-    textAlignVertical: 'center'
+    textAlignVertical: 'center',
   },
 
   reminderButton: {

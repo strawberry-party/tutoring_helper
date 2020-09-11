@@ -22,14 +22,14 @@ export function LessonTimePicker({
       <Text style={styles.headline}> 시간 </Text>
       <View style={{ padding: 5 }}>
         <MyDatePicker
-          onConfirm={onConfirmEnd}
-          day={newEnd}
+          onConfirm={onConfirmStart}
+          day={newStart}
           msg={'시작'}
           mode={'datetime'}
         />
         <MyDatePicker
-          onConfirm={onConfirmStart}
-          day={newStart}
+          onConfirm={onConfirmEnd}
+          day={newEnd}
           msg={'종료'}
           mode={'datetime'}
         />
