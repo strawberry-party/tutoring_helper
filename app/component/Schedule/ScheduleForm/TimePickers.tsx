@@ -26,6 +26,7 @@ export function LessonTimePicker({
           day={newStart}
           msg={'시작'}
           mode={'datetime'}
+        
         />
         <MyDatePicker
           onConfirm={onConfirmEnd}

@@ -1,5 +1,4 @@
-import { Button, Input, Item } from 'native-base';
-import { Chip, FAB, RadioButton, TextInput } from 'react-native-paper';
+import { Button, Chip, FAB, RadioButton, TextInput } from 'react-native-paper';
 import {
   Pressable,
   ScrollView,
@@ -11,6 +10,8 @@ import {
 import React, { useState } from 'react';
 
 import MyDatePicker from '../../common/MyDatePicker';
+import { Picker } from '@react-native-community/picker';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import styles from './styles';
 
 export default function EndPointSelector({
@@ -22,33 +23,28 @@ export default function EndPointSelector({
   newLastDay,
 }) {
   return (
-    <View style={[styles.inputContainer]}>
-      <Text style={styles.headline}> 반복 종료 시점 </Text>
-      <View>
-        <Pressable
-          onPress={() => {
-            setEndPoint('false');
-          }}>
-          <View style={styles.radioButtonContainer}>
-            <RadioButton
-              value="lastDay"
-              status={newEndPoint === 'lastDay' ? 'checked' : 'unchecked'}
-              onPress={() => setEndPoint('lastDay')}
-            />
+    <View
+      style={[
+        styles.inputContainer,
+        {
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-around',
+        },
+      ]}>
+      <Text style={styles.headline}>종료일</Text>
 
-            <MyDatePicker
-              onConfirm={onConfirmLastDay}
-              day={newLastDay}
-              mode="date"
-              style={{
-                justifyContent: 'center',
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}
-              dateTextStyle={{fontSize: 15, color: 'black' }}
-            />
-          </View>
-        </Pressable>
+      {/* <Picker
+        style={{ flex: 1 }}
+        selectedValue={newEndPoint}
+        onValueChange={(itemValue, itemIndex) => setEndPoint(itemValue)}
+        mode="dropdown"
+        itemStyle={{ fontSize: 16, justifyContent: 'center' }}>
+        <Picker.Item label={newLastDay.format('MM월 DD일')} value={'lastDay'} />
+        <Picker.Item label={`${endAfterNumTimes} 회 후`} value={'times'} />
+      </Picker> */}
+
+      <View style={{ flexDirection: 'row' }}>
         <Pressable
           onPress={() => {
             setEndPoint('times');
@@ -72,10 +68,73 @@ export default function EndPointSelector({
               disabled={!(newEndPoint === 'times')}
               maxLength={2}
             />
-            <Text style={[styles.inputText]}>회 후</Text>
+            <Text style={[{ fontSize: 15 }]}>회 후</Text>
+          </View>
+        </Pressable>
+
+        <Pressable
+          onPress={() => {
+            setEndPoint('false');
+          }}>
+          <View style={styles.radioButtonContainer}>
+            <RadioButton
+              value="lastDay"
+              status={newEndPoint === 'lastDay' ? 'checked' : 'unchecked'}
+              onPress={() => setEndPoint('lastDay')}
+            />
+
+            <MyDatePicker
+              onConfirm={onConfirmLastDay}
+              day={newLastDay}
+              mode="date"
+              style={{
+                justifyContent: 'center',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
+              dateTextStyle={{
+                fontSize: 15,
+                fontWeight: '100',
+                color: '#6D7EE9',
+              }}
+            />
           </View>
         </Pressable>
       </View>
+    </View>
+  );
+}
+
+export function StartPointSelector({ startPoint, onConfirmStartPoint }) {
+  return (
+    <View
+      style={[
+        styles.inputContainer,
+        {
+          flexDirection: 'row',
+          borderBottomColor: 'transparent',
+          alignItems: 'center',
+          justifyContent: 'space-around',
+        },
+      ]}>
+      <Text style={[styles.headline]}>시작일</Text>
+      <TouchableOpacity onPress={() => {}}>
+        <MyDatePicker
+          onConfirm={onConfirmStartPoint}
+          day={startPoint}
+          mode="date"
+          style={{
+            justifyContent: 'center',
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}
+          dateTextStyle={{
+            fontSize: 15,
+            fontWeight: '100',
+            color: '#6D7EE9',
+          }}
+        />
+      </TouchableOpacity>
     </View>
   );
 }

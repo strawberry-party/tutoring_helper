@@ -10,6 +10,7 @@ import {
   Week,
   WeeklyScheduleType,
 } from '../../../types/schedule';
+import EndPointSelector, { StartPointSelector } from './EndPointSelector';
 import { MemoBox, TitleInput } from './TextInputs';
 import React, { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
@@ -20,7 +21,6 @@ import weeklyScheduleParser, {
 } from '../DailyScheduleSelector/weeklyScheduleParser';
 
 import DailyScheduleSelector from '../DailyScheduleSelector/index';
-import EndPointSelector from './EndPointSelector';
 import { Header } from './etc';
 import { LessonTimePicker } from './TimePickers';
 import { Reminder } from './Reminder';
@@ -58,13 +58,16 @@ export default function AddScheduleForm({
   addRepeatInfo,
   hideModal,
 }) {
+  const now = dayjs(dayjs().format('YYYY-MM-DD HH'), 'YYYY-MM-DD HH');
+  const now2Hour = now.add(2, 'hour');
+
   // create schedule
   const [text, setText] = useState('제목');
   const [selectedStudentId, selectStudent] = useState('student_1');
   const [selectedTagId, selectTag] = useState('tag_1');
 
-  const [start, setStart] = useState(dayjs());
-  const [end, setEnd] = useState(dayjs());
+  const [start, setStart] = useState(now);
+  const [end, setEnd] = useState(now2Hour);
   const [memo, setMemo] = useState('');
 
   // create  repeatedScheduleInfo
@@ -77,8 +80,6 @@ export default function AddScheduleForm({
   const [lastDay, setLastDay] = useState(dayjs().add(20, 'day'));
 
   const [reminder, setReminder] = useState(30); // remind this schedule before x minutes
-  const now2Hour = dayjs().add(2, 'hour');
-  const now = dayjs();
   const [startTimes, setStartTimes] = useState(generateWeek(now));
   const [endTimes, setEndTimes] = useState(generateWeek(now2Hour));
   const [selectedDays, selectDays] = useState(new Array<number>());
@@ -187,13 +188,14 @@ export default function AddScheduleForm({
             onSelectTag={selectTag}
           />
           <RepeatSelector repeat={repeat} setRepeat={setRepeat} />
-
-          <LessonTimePicker
-            onConfirmEnd={onConfirmEnd}
-            onConfirmStart={onConfirmStart}
-            newEnd={end}
-            newStart={start}
-          />
+          {!repeat && (
+            <LessonTimePicker
+              onConfirmEnd={onConfirmEnd}
+              onConfirmStart={onConfirmStart}
+              newEnd={end}
+              newStart={start}
+            />
+          )}
 
           {repeat && (
             <View>
@@ -205,6 +207,10 @@ export default function AddScheduleForm({
                 setAllSameTime={setAllSameTime}
                 selectedDays={selectedDays}
                 selectDays={selectDays}
+              />
+              <StartPointSelector
+                startPoint={start}
+                onConfirmStartPoint={onConfirmStart}
               />
               <EndPointSelector
                 setEndPoint={setEndPointMode}

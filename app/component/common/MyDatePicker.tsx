@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text } from 'react-native';
 import React, { useState } from 'react';
 
+import { Button } from 'react-native-paper';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import dayjs from 'dayjs';
 
@@ -36,7 +37,7 @@ export default function MyDatePicker({
     onConfirm(date);
   };
   return (
-    <Pressable
+    <Button
       style={style ? style : styles.dateContainer}
       onPress={showDatePicker}>
       {msg.length > 0 && <Text style={styles.dateHeadline}> {msg} </Text>}
@@ -54,7 +55,7 @@ export default function MyDatePicker({
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
       />
-    </Pressable>
+    </Button>
   );
 }
 

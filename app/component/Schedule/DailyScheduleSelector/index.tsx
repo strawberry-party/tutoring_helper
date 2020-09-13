@@ -43,8 +43,6 @@ export default function DailyScheduleSelector({
     );
   });
 
-
-
   return (
     <View style={[styles.inputContainer]}>
       <Text style={styles.headline}> 요일별 수업 시간 </Text>
@@ -62,8 +60,6 @@ export default function DailyScheduleSelector({
   );
 }
 export const dayList = ['일', '월', '화', '수', '목', '금', '토'];
-
-function getDayScheduleSelector(id, visible) {}
 
 function DayScheduleSelectorContainer({
   selectedDays,
@@ -123,7 +119,7 @@ function DayScheduleSelector({
         }}
         value={start}
       />
-      <Text style={{ marginRight: 20 }}> 부터 </Text>
+      <Text style={{ marginRight: 15 }}> 부터 </Text>
       <DayDatePicker
         onConfirm={(date) => {
           onChangeEndTimes(id, dayjs(date));
@@ -137,18 +133,16 @@ function DayScheduleSelector({
 
 function DayDatePicker({ onConfirm, value }) {
   return (
-    <Chip style={{ alignItems: 'center', justifyContent: 'center' }}>
-      <MyDatePicker
-        onConfirm={onConfirm}
-        day={value}
-        mode="time"
-        style={{
-          justifyContent: 'center',
-          flexDirection: 'row',
-          alignContent: 'center',
-        }}
-        dateTextStyle={{ fontSize: 15, color: 'black' }}
-      />
-    </Chip>
+    <MyDatePicker
+      onConfirm={onConfirm}
+      day={value}
+      mode="time"
+      style={{
+        justifyContent: 'center',
+        flexDirection: 'row',
+        alignContent: 'center',
+      }}
+      dateTextStyle={{ fontSize: 15, color: 'black' }}
+    />
   );
 }

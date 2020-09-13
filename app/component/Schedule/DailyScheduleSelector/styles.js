@@ -69,7 +69,8 @@ const styles = StyleSheet.create({
 
   dayScheduleSelectorText:{
     marginRight: 15,
-    fontSize: 15,
+    fontSize: 16,
+    fontWeight: '400'
   },
   inputContainer: {
     marginBottom: 15,

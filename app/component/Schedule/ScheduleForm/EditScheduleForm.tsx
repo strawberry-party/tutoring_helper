@@ -11,6 +11,7 @@ import {
   WeeklyScheduleType,
   generateWeek,
 } from '../../../types/schedule';
+import EndPointSelector, { StartPointSelector } from './EndPointSelector';
 import { MemoBox, TitleInput } from './TextInputs';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
@@ -21,7 +22,6 @@ import weeklyScheduleParser, {
 } from '../DailyScheduleSelector/weeklyScheduleParser';
 
 import DailyScheduleSelector from '../DailyScheduleSelector/index';
-import EndPointSelector from './EndPointSelector';
 import { Header } from './etc';
 import { LessonTimePicker } from './TimePickers';
 import { Reminder } from './Reminder';
@@ -71,7 +71,6 @@ export default function EditScheduleForm({
   editRepeatInfo,
   removeRepeatInfo,
   repeatedScheduleInfo,
-  addSchedule,
 }) {
   const {
     id,
@@ -111,42 +110,14 @@ export default function EditScheduleForm({
     }
   };
 
-  // const handle_EDIT_REPEAT = () => {
-  //   switch (submitOption) {
-  //     case 'ONLY_THIS': // TODO: 이 일정: 이 일정만 수정
-  //       handle_NOTHING_WITH_REPEAT();
-  //       break;
-  //     case 'ALL': // TODO: 모든 일정: 일정 수정, 반복 정보 수정
-  //       editRepeatInfo(
-  //         new RepeatedScheduleInfo(
-  //           linkedRepeatedScheduleInfoId,
-  //           getFormWorkSchedule(),
-  //           getEndAfter(),
-  //           newStart,
-  //           getWeeklySchedule(startTimes, endTimes, selectedDays),
-  //         ),
-  //       );
-  //       onHide();
-  //       break;
-
-  //     case 'FORWARD': // TODO: 이 일정 및 향후 일정
-  //       console.warn('어서 일해라');
-  //       onHide();
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // };
-
   const handle_ADD_REPEAT = () => {
-    const newId: string = addRepeatInfo(
+    addRepeatInfo(
       getFormWorkSchedule(),
       getEndAfter(),
       newStart,
       getWeeklySchedule(startTimes, endTimes, selectedDays),
     );
     removeSchedule(id);
-    // editSchedule(new ScheduleType(id, newId, getFormWorkSchedule()));
     onHide();
   };
 
@@ -333,12 +304,14 @@ export default function EditScheduleForm({
           />
           <RepeatSelector repeat={repeat} setRepeat={setRepeat} />
 
-          <LessonTimePicker
-            onConfirmEnd={onConfirmEnd}
-            onConfirmStart={onConfirmStart}
-            newEnd={newEnd}
-            newStart={newStart}
-          />
+          {!repeat && (
+            <LessonTimePicker
+              onConfirmEnd={onConfirmEnd}
+              onConfirmStart={onConfirmStart}
+              newEnd={newEnd}
+              newStart={newStart}
+            />
+          )}
 
           {repeat && (
             <View>
@@ -351,6 +324,11 @@ export default function EditScheduleForm({
                 selectedDays={selectedDays}
                 selectDays={selectDays}
               />
+              <StartPointSelector
+                startPoint={newStart}
+                onConfirmStartPoint={onConfirmStart}
+              />
+
               <EndPointSelector
                 setEndPoint={setEndPoint}
                 newEndPoint={endPointMode}
