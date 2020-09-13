@@ -31,8 +31,6 @@ export function AddScheduleModal({
   addSchedule,
   addRepeatInfo,
 }) {
-
-
   return (
     <View style={styles.modalView}>
       <Modal
@@ -61,7 +59,8 @@ export function EditScheduleModal({
   editRepeatInfo,
   repeatedScheduleInfo,
   removeRepeatInfo,
-  removeLinkedSchedules,
+  removeSchedule,
+  addSchedule,
 }) {
   return (
     <View style={styles.modalView}>
@@ -76,10 +75,11 @@ export function EditScheduleModal({
             selectedSchedule={selectedSchedule}
             repeatedScheduleInfo={repeatedScheduleInfo}
             editSchedule={editSchedule}
-            removeLinkedSchedules={removeLinkedSchedules}
+            removeSchedule={removeSchedule}
             addRepeatInfo={addRepeatInfo}
             editRepeatInfo={editRepeatInfo}
             removeRepeatInfo={removeRepeatInfo}
+            addSchedule={addSchedule}
           />
         </View>
       </Modal>

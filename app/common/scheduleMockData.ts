@@ -51,7 +51,7 @@ const r3: RepeatedScheduleInfo = new RepeatedScheduleInfo(
   ]),
 );
 
-export const repeatedScheduleInfoList: RepeatedScheduleInfo[] = [r1, r2, r3];
+export const repeatedScheduleInfoList: RepeatedScheduleInfo[] = [r1, r2];
 
 // schedule examples
 
@@ -138,8 +138,8 @@ function generateScheduleFromFormWorkSchedule(
     formWork,
   );
 }
-export const schedules = schedulesWithOutRepetition.concat(
-  schedulesWithRepetition,
-);
-// export const schedules: ScheduleType[] = [];
+// export const schedules = schedulesWithOutRepetition.concat(
+//   schedulesWithRepetition,
+// );
+export const schedules: ScheduleType[] = [];
 export const dailyAgendas: DailyAgendasType[] = sortIntoDailyAgendas(schedules);

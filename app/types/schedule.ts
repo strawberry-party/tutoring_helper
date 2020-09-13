@@ -68,10 +68,12 @@ const dayList = ['일', '월', '화', '수', '목', '금', '토'];
 export class WeeklyScheduleFormVersion {
   startTimes: Week;
   endTimes: Week;
+  selectedDays: number[];
 
-  constructor(startTimes: Week, endTimes: Week) {
+  constructor(startTimes: Week, endTimes: Week, selectedDays: number[]) {
     this.startTimes = startTimes;
     this.endTimes = endTimes;
+    this.selectedDays = selectedDays;
   }
 }
 
@@ -167,9 +169,7 @@ export class FormWorkScheduleType {
   }
 
   public print() {
-    console.log(
-      `formWorkSchedule: | ${this.text} | ${this.time.toString()}`,
-    );
+    console.log(`formWorkSchedule: | ${this.text} | ${this.time.toString()}`);
   }
 }
 

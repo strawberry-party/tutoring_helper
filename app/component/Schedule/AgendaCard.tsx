@@ -47,6 +47,7 @@ function AgendaCard({ schedule, onPressAgendaCard }) {
       <Text style={styles.time}>
         {time.start.format('HH:mm') + ' ~ ' + time.end.format('HH:mm')}
       </Text>
+      <Text> {linkedRepeatedScheduleInfoId} </Text>
     </TouchableOpacity>
   );
 }

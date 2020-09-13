@@ -13,15 +13,17 @@ export default function weeklyScheduleParser(
 ): WeeklyScheduleFormVersion {
   var startTimes = nones;
   var endTimes = nones;
+  var selectedDays: number[] = [];
 
   for (let i = 0; i < 7; i++) {
     let iThSchedule = weeklySchedule[i.toString()];
     if (iThSchedule) {
       startTimes[i] = iThSchedule.start;
       endTimes[i] = iThSchedule.end;
+      selectedDays.push(i);
     }
   }
-  return new WeeklyScheduleFormVersion(startTimes, endTimes);
+  return new WeeklyScheduleFormVersion(startTimes, endTimes, selectedDays);
 }
 
 export function getWeeklySchedule(

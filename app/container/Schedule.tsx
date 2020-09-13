@@ -9,7 +9,7 @@ import {
   RepeatedScheduleInfo,
   ScheduleType,
 } from '../types/schedule';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { connect, useSelector } from 'react-redux';
 import {
@@ -55,33 +55,13 @@ function ScheduleContainer({}: ScheduleContainerProps) {
 
   const [selectedScheduleId, setSelectedScheduleId] = useState('none');
 
-  const onChangeSchedules = (newSchedules: ScheduleType[]) => {
-    setSchedules(newSchedules);
-    console.log('====================================');
-    console.log('newSchedules: ');
-    console.log('id\ttext\tlessonTime');
-    newSchedules.forEach((item) => {
-      item.print();
-    });
-    console.log('====================================');
-  };
-
-  const onChangeRepeatInfos = (repeatInfos: RepeatedScheduleInfo[]) => {
-    setRepeatInfos(repeatInfos);
-    console.log('====================================');
-    console.log('repeatInfos: ');
-    repeatInfos.forEach((item) => {
-      item.print();
-    });
-    console.log('====================================');
-  };
+  const [mode, setMode] = useState('INITIAL');
 
   const makeSchedule = (
     formWork: FormWorkScheduleType,
     linkedRepeatedScheduleInfoId: string,
   ) => {
     var newId: string = _.uniqueId('schedule_');
-    setSelectedScheduleId(newId);
     return new ScheduleType(newId, linkedRepeatedScheduleInfoId, formWork);
   };
 
@@ -93,10 +73,6 @@ function ScheduleContainer({}: ScheduleContainerProps) {
       ...schedules,
       makeSchedule(formWork, linkedRepeatedScheduleInfoId),
     ]);
-
-    // console.log('==========CHANGED SCHEDULES BY ADD SCHEDULE==============');
-    // schedules.forEach((item: ScheduleType) => item.print());
-    // console.log('====================================');
   };
 
   // 더 생각해봐야할듯
@@ -115,17 +91,23 @@ function ScheduleContainer({}: ScheduleContainerProps) {
     );
   };
 
-  const removeLinkedSchedules = (
-    repeatInfoId: string,
-    onlySurvivedId: string = 'none',
+  const makeRepeatInfo = (
+    formWork: FormWorkScheduleType,
+    endAfter,
+    newStart,
+    weeklySchedule,
   ) => {
-    setSchedules(
-      schedules.filter(
-        (item: ScheduleType) =>
-          item.linkedRepeatedScheduleInfoId !== repeatInfoId ||
-          item.id === onlySurvivedId,
+    var newId = _.uniqueId('repeat_');
+    return {
+      item: new RepeatedScheduleInfo(
+        newId,
+        formWork,
+        endAfter,
+        newStart,
+        weeklySchedule,
       ),
-    );
+      id: newId,
+    };
   };
 
   const addRepeatInfo = (
@@ -134,51 +116,132 @@ function ScheduleContainer({}: ScheduleContainerProps) {
     newStart,
     weeklySchedule,
   ) => {
-    var newId = _.uniqueId('repeat_');
-    var repeatInfo = new RepeatedScheduleInfo(
-      newId,
+    // var newId = _.uniqueId('repeat_');
+    // var repeatInfo = new RepeatedScheduleInfo(
+    //   newId,
+    //   formWork,
+    //   endAfter,
+    //   newStart,
+    //   weeklySchedule,
+    // );
+    // repeatInfo.print();
+    const { item, id } = makeRepeatInfo(
       formWork,
       endAfter,
       newStart,
       weeklySchedule,
     );
-    setRepeatInfos([...repeatInfos, repeatInfo]);
-    console.log(
-      '==========CHANGED repeatInfos BY ADD repeatInfos==============',
-    );
-    repeatInfos.map((item: RepeatedScheduleInfo) => item.print());
-    console.log('====================================');
 
-    var formWorks = formWorkScheduleGenerator(repeatInfo);
-    var newSchedules: ScheduleType[] = [];
-    for (let i = 0; i < formWorks.length; i++) {
-      formWorks[i].print();
-      newSchedules.push(makeSchedule(formWorks[i], newId));
-    }
-    setSchedules(schedules.concat(newSchedules));
+    item.print();
+
+    setRepeatInfos([...repeatInfos, item]);
+    setMode('ADD_REPEAT');
+    return id;
   };
 
   const editRepeatInfo = (repeatInfo: RepeatedScheduleInfo) => {
+    setMode('EDIT_REPEAT');
+    const {
+      formWorkSchedule,
+      endAfter,
+      startPoint,
+      weeklySchedule,
+    } = repeatInfo;
+
+    const newRepeatInfo = makeRepeatInfo(
+      formWorkSchedule,
+      endAfter,
+      startPoint,
+      weeklySchedule,
+    ).item;
+
     setRepeatInfos(
-      repeatInfos.map((item: RepeatedScheduleInfo) =>
-        item.id === repeatInfo.id ? repeatInfo : item,
-      ),
+      repeatInfos
+        .filter((item: RepeatedScheduleInfo) => item.id !== repeatInfo.id)
+        .concat([newRepeatInfo]),
     );
-
-    setSchedules(
-      schedules.filter(
-        (item: ScheduleType) =>
-          item.linkedRepeatedScheduleInfoId !== repeatInfo.id,
-      ),
-    );
-
-    formWorkScheduleGenerator(repeatInfo).map((item) =>
-      addSchedule(item, repeatInfo.id),
-    );
+    // setSchedules(
+    //   schedules.filter(
+    //     (item: ScheduleType) =>
+    //       item.linkedRepeatedScheduleInfoId !== repeatInfo.id,
+    //   ),
+    // );
+    // setSelectedScheduleId('none');
+    // setMode('ADD_NEW_SCHEDULES');
+    console.log('============EDIT_REPEAT===============');
+    console.log(weeklySchedule);
+    console.log('====================================');
   };
 
-  const removeRepeatInfo = (repeatInfoId: string) => {
+  useEffect(() => {
+    console.log('==========CHANGED repeatInfos ====');
+    repeatInfos.map((item: RepeatedScheduleInfo) => item.print());
+    console.log('====================================');
+
+    if (mode === 'ADD_REPEAT') {
+      var item = repeatInfos[repeatInfos.length - 1];
+      var formWorks = formWorkScheduleGenerator(item);
+      var newSchedules: ScheduleType[] = [];
+      for (let i = 0; i < formWorks.length; i++) {
+        formWorks[i].print();
+        newSchedules.push(makeSchedule(formWorks[i], item.id));
+      }
+      setSchedules(schedules.concat(newSchedules));
+    } else if (mode === 'REMOVE_REPEAT') {
+      console.log('====================================');
+      console.log('REMOVING LINKED SCHEDULES');
+      console.log('====================================');
+
+      if (getSchedule() === 'none')
+        console.error('[ERROR] REMOVE_REPEAT: NO SCHEDULE');
+      else {
+        var schedule = getSchedule() as ScheduleType;
+        setSchedules(
+          schedules.filter(
+            (item: ScheduleType) =>
+              item.linkedRepeatedScheduleInfoId !==
+              schedule.linkedRepeatedScheduleInfoId,
+          ),
+        );
+        setSelectedScheduleId('none');
+      }
+    } else if (mode === 'EDIT_REPEAT') {
+      if (getSchedule() === 'none')
+        console.error('[ERROR] EDIT_REPEAT: NO SCHEDULE');
+      else {
+        // var schedule = getSchedule() as ScheduleType;
+        // setSchedules(
+        //   schedules.filter(
+        //     (item: ScheduleType) =>
+        //       item.linkedRepeatedScheduleInfoId !==
+        //       schedule.linkedRepeatedScheduleInfoId,
+        //   ),
+        // );
+        // setSelectedScheduleId('none');
+        var newRepeatInfo = repeatInfos[repeatInfos.length - 1];
+        formWorkScheduleGenerator(newRepeatInfo).forEach((item) => {
+          console.log('ITEM ADDED IN EDIT REPEAT INFO');
+          item.print();
+          addSchedule(item, newRepeatInfo.id);
+        });
+      }
+    }
+  }, [repeatInfos]);
+
+  useEffect(() => {
+    console.log('==========CHANGED SCHEDULES==============');
+    schedules.forEach((item: ScheduleType) => item.print());
+    console.log('====================================');
+  }, [schedules]);
+
+  useEffect(() => {
+    if (selectedScheduleId === 'none') setDetailVisible(false);
+  }, [selectedScheduleId]);
+
+  const removeRepeatInfo = (repeatInfoId: string, callBack = () => {}) => {
     setRepeatInfos(repeatInfos.filter((item) => item.id !== repeatInfoId));
+    setMode('REMOVE_REPEAT');
+    callBack();
   };
 
   function getRepeatInfo(): RepeatedScheduleInfo {
@@ -239,7 +302,7 @@ function ScheduleContainer({}: ScheduleContainerProps) {
           />
         </View>
 
-        {/* <View style={styles.mock}>
+        <View style={styles.mock}>
           <EditScheduleModal
             modalVisible={editFormVisible}
             hideModal={() => {
@@ -251,17 +314,14 @@ function ScheduleContainer({}: ScheduleContainerProps) {
             editRepeatInfo={editRepeatInfo}
             repeatedScheduleInfo={getRepeatInfo()}
             removeRepeatInfo={removeRepeatInfo}
-            removeLinkedSchedules={removeLinkedSchedules}
-
-            
+            removeSchedule={removeSchedule}
+            addSchedule={addSchedule}
           />
-        </View> */}
+        </View>
 
-        {/* <View style={styles.mock}>
+        <View style={styles.mock}>
           <ScheduleDetailModal
-            selectedSchedule={schedules.find(
-              (item) => item.id === selectedScheduleId,
-            )}
+            selectedSchedule={getSchedule()}
             showModal={() => setDetailVisible(true)}
             modalVisible={detailVisible}
             hideModal={() => setDetailVisible(false)}
@@ -270,7 +330,7 @@ function ScheduleContainer({}: ScheduleContainerProps) {
             selectedScheduleId={selectedScheduleId}
             showFormModal={() => setEditFormVisible(true)}
           />
-        </View> */}
+        </View>
       </View>
 
       <AddButton

@@ -12,7 +12,7 @@ import {
   generateWeek,
 } from '../../../types/schedule';
 import { MemoBox, TitleInput } from './TextInputs';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import { StudentPicker, SubjectTagPicker } from './Pickers';
 import Tag, { TagForm } from '../../common/Tag';
@@ -50,7 +50,7 @@ const tagList = [
   { id: 'tag_2', name: '과학' },
 ];
 
-const defaultEndAfter = ({ numOfTimes: 1 } as EndAfterNTimes) as EndAfterType;
+const defaultEndAfter = ({ numOfTimes: 5 } as EndAfterNTimes) as EndAfterType;
 const defaultWeeklySchedule = new WeeklyScheduleType();
 
 const ALL = 'ALL' as const;
@@ -65,12 +65,13 @@ const NOTHING_WITH_REPEAT = 'NOTHING_WITH_REPEAT';
 export default function EditScheduleForm({
   selectedSchedule,
   editSchedule,
-  removeLinkedSchedules,
+  removeSchedule,
   onHide,
   addRepeatInfo,
   editRepeatInfo,
   removeRepeatInfo,
   repeatedScheduleInfo,
+  addSchedule,
 }) {
   const {
     id,
@@ -86,68 +87,76 @@ export default function EditScheduleForm({
     const hasLinked: boolean =
       selectedSchedule.linkedRepeatedScheduleInfoId !== 'none';
 
-    // 기존의 스케줄에 연결된 반복정보가 있는 경우
+    // 기존의 스케줄에 연결된 반복정보가 있고, 그 반복정보를 변경한 경우
     if (repeat && hasLinked) {
       onShowSubmitOptionModal();
       return;
     }
 
+    // 기존의 스케줄에 연결된 반복정보가 있고, 반복정보를 제거하는 경우
     if (!repeat && hasLinked) {
       handle_REMOVE_REPEAT();
       return;
     }
 
+    // 기존의 스케줄에 연결된 반복정보가 없고, 반복정보를 생성하는 경우
     if (repeat && !hasLinked) {
       handle_ADD_REPEAT();
       return;
     }
 
+    // 기존의 스케줄에 연결된 반복정보가 없고, 반복정보를 추가하지 않아 반복정보 관련 작업을 수행하지 않는 경우
     if (!repeat && !hasLinked) {
       handle_NOTHING_WITH_REPEAT();
     }
   };
 
-  const handle_EDIT_REPEAT = () => {
-    switch (submitOption) {
-      case 'ONLY_THIS': // TODO: 이 일정: 이 일정만 수정
-        handle_NOTHING_WITH_REPEAT();
-        break;
-      case 'ALL': // TODO: 모든 일정: 일정 수정, 반복 정보 수정
-        editRepeatInfo(
-          new RepeatedScheduleInfo(
-            linkedRepeatedScheduleInfoId,
-            getFormWorkSchedule(),
-            getEndAfter(),
-            newStart,
-            getWeeklySchedule(startTimes, endTimes),
-          ),
-        );
-        onHide();
-        break;
+  // const handle_EDIT_REPEAT = () => {
+  //   switch (submitOption) {
+  //     case 'ONLY_THIS': // TODO: 이 일정: 이 일정만 수정
+  //       handle_NOTHING_WITH_REPEAT();
+  //       break;
+  //     case 'ALL': // TODO: 모든 일정: 일정 수정, 반복 정보 수정
+  //       editRepeatInfo(
+  //         new RepeatedScheduleInfo(
+  //           linkedRepeatedScheduleInfoId,
+  //           getFormWorkSchedule(),
+  //           getEndAfter(),
+  //           newStart,
+  //           getWeeklySchedule(startTimes, endTimes, selectedDays),
+  //         ),
+  //       );
+  //       onHide();
+  //       break;
 
-      case 'FORWARD': // TODO: 이 일정 및 향후 일정
-        console.warn('어서 일해라');
-        onHide();
-        break;
-      default:
-        break;
-    }
-  };
+  //     case 'FORWARD': // TODO: 이 일정 및 향후 일정
+  //       console.warn('어서 일해라');
+  //       onHide();
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // };
 
   const handle_ADD_REPEAT = () => {
-    addRepeatInfo(
+    const newId: string = addRepeatInfo(
       getFormWorkSchedule(),
       getEndAfter(),
       newStart,
-      getWeeklySchedule(startTimes, endTimes),
+      getWeeklySchedule(startTimes, endTimes, selectedDays),
     );
+    removeSchedule(id);
+    // editSchedule(new ScheduleType(id, newId, getFormWorkSchedule()));
+    onHide();
   };
 
   const handle_REMOVE_REPEAT = () => {
     // 반복정보 삭제, 이 일정을 제외한 반복일정 모두 삭제, 기존 스케줄 수정
-    removeRepeatInfo(linkedRepeatedScheduleInfoId);
-    removeLinkedSchedules(linkedRepeatedScheduleInfoId, id)
-    onHide();
+    removeRepeatInfo(linkedRepeatedScheduleInfoId, () => {
+      // editSchedule(new ScheduleType(id, 'none', getFormWorkSchedule()));
+      onHide();
+    });
+    addSchedule(getFormWorkSchedule());
   };
 
   const handle_NOTHING_WITH_REPEAT = () => {
@@ -186,7 +195,10 @@ export default function EditScheduleForm({
 
   const { endAfter, weeklySchedule } = repeatedScheduleInfo
     ? repeatedScheduleInfo
-    : { endAfter: defaultEndAfter, weeklySchedule: defaultWeeklySchedule };
+    : {
+        endAfter: defaultEndAfter,
+        weeklySchedule: defaultWeeklySchedule,
+      };
 
   var lastDay = (endAfter as EndAfterThisDay).endDay;
   var endNumTimes = (endAfter as EndAfterNTimes).numOfTimes;
@@ -194,10 +206,12 @@ export default function EditScheduleForm({
   const [endPointMode, setEndPoint] = useState(lastDay ? 'lastDay' : 'times');
 
   const [endAfterNumTimes, setEndAfterNumTimes] = useState(
-    endNumTimes ? endNumTimes : 0,
+    endNumTimes ? endNumTimes : 5,
   );
 
-  const [newLastDay, setLastDay] = useState(lastDay ? lastDay : dayjs());
+  const [newLastDay, setLastDay] = useState(
+    lastDay ? lastDay : dayjs().add(20, 'day'),
+  );
 
   const [reminder, setReminder] = useState(30); // remind this schedule before x minutes
 
@@ -207,7 +221,9 @@ export default function EditScheduleForm({
   const [endTimes, setEndTimes] = useState(
     weeklyScheduleParser(weeklySchedule).endTimes,
   );
-  const [submitOption, setSubmitOption] = useState('NONE');
+  const [selectedDays, selectDays] = useState(weeklyScheduleParser(weeklySchedule).selectedDays);
+
+  // const [submitOption, setSubmitOption] = useState('NONE');
 
   const getFormWorkSchedule = () => {
     return new FormWorkScheduleType(
@@ -230,9 +246,31 @@ export default function EditScheduleForm({
   const onSaveSubmitOption = (
     value: 'ONLY_THIS' | 'ALL' | 'FORWARD' | 'NONE',
   ) => {
-    setSubmitOption(value);
-    handle_EDIT_REPEAT();
-    console.warn('submitOption: ' + submitOption);
+    console.warn('submitOption: ' + value);
+    switch (value) {
+      case 'ONLY_THIS': // TODO: 이 일정: 이 일정만 수정
+        handle_NOTHING_WITH_REPEAT();
+        break;
+      case 'ALL': // TODO: 모든 일정: 일정 수정, 반복 정보 수정
+        editRepeatInfo(
+          new RepeatedScheduleInfo(
+            linkedRepeatedScheduleInfoId,
+            getFormWorkSchedule(),
+            getEndAfter(),
+            newStart,
+            getWeeklySchedule(startTimes, endTimes, selectedDays),
+          ),
+        );
+        onHide();
+        break;
+
+      case 'FORWARD': // TODO: 이 일정 및 향후 일정
+        console.warn('어서 일해라');
+        onHide();
+        break;
+      default:
+        break;
+    }
   };
 
   const onConfirmEnd = (date: Date) => {
@@ -312,6 +350,8 @@ export default function EditScheduleForm({
                 endTimes={endTimes}
                 startTimes={startTimes}
                 setAllSameTime={setAllSameTime}
+                selectedDays={selectedDays}
+                selectDays={selectDays}
               />
               <EndPointSelector
                 setEndPoint={setEndPoint}

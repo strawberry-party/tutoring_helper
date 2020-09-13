@@ -24,7 +24,7 @@ export default function SubmitOptionModal({ visible, onSubmit, onHide }) {
   const [value, setValue] = useState('NONE')
 
   const handleHide = () => {
-    onSubmit('NONE');
+    // onSubmit('NONE');
     onHide();
   }
 
@@ -50,7 +50,7 @@ export default function SubmitOptionModal({ visible, onSubmit, onHide }) {
             </RadioButton.Group>
           </Dialog.Content>
           <Dialog.Actions>
-            <Button onPress={onSubmit(value)} style={styles.action}>
+            <Button onPress={() => onSubmit(value)} style={styles.action}>
               저장
             </Button>
           </Dialog.Actions>
