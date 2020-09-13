@@ -1,4 +1,8 @@
-import { LessonTime, ScheduleType, WeeklyScheduleType } from '../types/schedule';
+import {
+  LessonTime,
+  ScheduleType,
+  WeeklyScheduleType,
+} from '../types/schedule';
 
 import AssignContainer from './Homework';
 import DailyScheduleSelector from '../component/Schedule/DailyScheduleSelector';

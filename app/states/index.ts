@@ -2,11 +2,12 @@ import assignFilterSorterReducer from './assignFilterSorterState';
 import assignModalReducer from './assignModalState';
 import assignReducer from './assignState';
 import { combineReducers } from 'redux';
-import lessonReducer from './lessonState';
 import currentStudentReducer from './currentStudentState';
-import tutorReducer from './tutorState';
-import tagReducer from './tagState';
 import { enableMapSet } from 'immer';
+import lessonReducer from './lessonState';
+import scheduleReducer from './scheduleState';
+import tagReducer from './tagState';
+import tutorReducer from './tutorState';
 
 enableMapSet();
 
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   currentStudentReducer,
   tutorReducer,
   tagReducer,
+  scheduleReducer,
 });
 
 export default rootReducer;

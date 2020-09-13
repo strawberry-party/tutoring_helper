@@ -9,7 +9,6 @@ import {
 } from '../../../types/schedule';
 
 import dayjs from 'dayjs';
-import { getDailyLessonTime } from '../../../common/scheduleMockData';
 import getRepeatedFormWorkSchedules from './getRepeatedFormWorkSchedules';
 
 const formatString = 'YYYY-MM-DD HH:mm';

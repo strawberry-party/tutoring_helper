@@ -1,7 +1,6 @@
 import { DailyAgendasType, ScheduleType } from '../../../types/schedule';
 
 import _ from 'lodash';
-import dayjs from 'dayjs';
 
 const formatString = 'YYYY-MM-DD';
 // const hourMinuteFormatString = 'HH:mm'
@@ -12,7 +11,9 @@ export default function sortIntoDailyAgendas(
 ): DailyAgendasType[] {
   var dailyAgendas: DailyAgendasType[] = [];
   var dateToIndexMap: Map<string, number> = new Map<string, number>();
+  console.log('sortIntoDailyAgendas: ' + schedules.length);
   schedules.forEach((schedule: ScheduleType) => {
+    console.log(schedule.time.start);
     var startPoint = schedule.time.start.format(formatString);
     // var detailTime = schedule.time.start.format(hourMinuteFormatString);
     if (dateToIndexMap.has(startPoint)) {

@@ -152,18 +152,14 @@ export default function EditScheduleForm({
 
   const handle_REMOVE_REPEAT = () => {
     // 반복정보 삭제, 이 일정을 제외한 반복일정 모두 삭제, 기존 스케줄 수정
-    removeRepeatInfo(linkedRepeatedScheduleInfoId, () => {
-      // editSchedule(new ScheduleType(id, 'none', getFormWorkSchedule()));
-      onHide();
-    });
-    addSchedule(getFormWorkSchedule());
+    removeRepeatInfo(linkedRepeatedScheduleInfoId);
+    editSchedule(getFormWorkSchedule(), id);
+    onHide();
   };
 
   const handle_NOTHING_WITH_REPEAT = () => {
     // 기존 스케줄 수정
-    editSchedule(
-      new ScheduleType(id, linkedRepeatedScheduleInfoId, getFormWorkSchedule()),
-    );
+    editSchedule(getFormWorkSchedule(), id);
     onHide();
   };
 
@@ -221,7 +217,9 @@ export default function EditScheduleForm({
   const [endTimes, setEndTimes] = useState(
     weeklyScheduleParser(weeklySchedule).endTimes,
   );
-  const [selectedDays, selectDays] = useState(weeklyScheduleParser(weeklySchedule).selectedDays);
+  const [selectedDays, selectDays] = useState(
+    weeklyScheduleParser(weeklySchedule).selectedDays,
+  );
 
   // const [submitOption, setSubmitOption] = useState('NONE');
 

@@ -79,11 +79,6 @@ export default function AddScheduleForm({
   const [reminder, setReminder] = useState(30); // remind this schedule before x minutes
   const now2Hour = dayjs().add(2, 'hour');
   const now = dayjs();
-
-  const nows = generateWeek(dayjs());
-  console.log('now: ' + now.format('YYYY-MM-DD HH:mm'));
-  console.log('now2Hour: ' + now2Hour.format('YYYY-MM-DD HH:mm'));
-
   const [startTimes, setStartTimes] = useState(generateWeek(now));
   const [endTimes, setEndTimes] = useState(generateWeek(now2Hour));
   const [selectedDays, selectDays] = useState(new Array<number>());
@@ -111,9 +106,19 @@ export default function AddScheduleForm({
       addSchedule(getFormWorkSchedule());
       hideModal();
     } else {
+      // console.log(getWeeklySchedule(startTimes, endTimes, selectedDays));
+      // console.log(start);
       addRepeatInfo(
-        getFormWorkSchedule(),
-        getEndAfter(),
+        new FormWorkScheduleType(
+          text,
+          selectedStudentId,
+          selectedTagId,
+          new LessonTime(start, end),
+          memo,
+        ),
+        endPointMode === 'lastDay'
+          ? ({ endDay: lastDay } as EndAfterThisDay)
+          : ({ numOfTimes: endAfterNumTimes } as EndAfterNTimes),
         start,
         getWeeklySchedule(startTimes, endTimes, selectedDays),
       );

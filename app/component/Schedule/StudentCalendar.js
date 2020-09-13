@@ -1,6 +1,6 @@
 import { AgendaList, Calendar, CalendarList, CalendarProvider, ExpandableCalendar, WeekCalendar } from 'react-native-calendars';
 import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Button, Card, Icon, IconButton, ToggleButton } from 'react-native-paper';
+import { Button, Card, DataTable, Icon, IconButton, ToggleButton } from 'react-native-paper';
 import React, { useState } from 'react';
 import { lightThemeColor, themeColor } from './scheduleThemeProvider'
 
@@ -17,38 +17,26 @@ import sortIntoDailyAgendas from './scheduleUtils/sortIntoDailyAgendas';
 LocaleConfig.locales['kr'] = KR_LOCAL_CONFIG;
 LocaleConfig.defaultLocale = 'kr';
 
-function notYetImplemented() {
-  console.warn('어서 일해라');
-}
-
-const onDateChanged = (/* date, updateSource */) => {
-  // console.warn('ExpandableCalendarScreen onDateChanged: ', date, updateSource);
-  // fetch and set data for date + week ahead
-  console.warn('onDateChanged');
-}
-
-const onMonthChange = (/* month, updateSource */) => {
-  // console.warn('ExpandableCalendarScreen onMonthChange: ', month, updateSource);
-}
-
-function buttonPressed() {
-  Alert.alert('show more');
-}
-
 const studentDotColors = { student_1: 'red', student_2: 'blue', student_3: 'green' };
 
-
-export default function StudentCalendar({ selectedSchedule, onPressSchedule, schedules, selectedScheduleId }) {
+export default function StudentCalendar({ repeatInfos, selectedSchedule, onPressSchedule, schedules, selectedScheduleId, dailyAgendas }) {
   const [state, setState] = useState({});
-
   const [calendarStatus, setCalendarStatus] = useState('expanded');
+  const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'));
+  const [calendarDate, setCalendarDate] = useState(dayjs());
+  const [horizontal, setHorizontal] = useState(true);
 
-
-  const getDailyAgendas = (schedules) => sortIntoDailyAgendas(schedules);
+  function renderItem({ item, index }) {
+    return (
+      <AgendaCard schedule={item}
+        scheduleId={index}
+        onPressAgendaCard={() => onPressSchedule(item, index)} />
+    );
+  }
 
   function getDottedDates(selectedDate, schedules) {
     const marked = {};
-    getDailyAgendas(schedules).forEach(item => {
+    dailyAgendas.forEach(item => {
       // NOTE: only mark dates with data
       var dots = [];
       if (item.data && item.data.length > 0 && !_.isEmpty(item.data[0])) {
@@ -64,30 +52,17 @@ export default function StudentCalendar({ selectedSchedule, onPressSchedule, sch
       } else {
         marked[item.title] = { disabled: true };
       }
+    })
 
-    });
 
     marked[selectedDate] = Object.assign({
       selected: true, disableTouchEvent: true,
       selectedColor: '#bbbe',
     }, marked[selectedDate])
     return marked;
-  }
 
-  const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'));
+  };
 
-
-  const [calendarDate, setCalendarDate] = useState(dayjs());
-  const [horizontal, setHorizontal] = useState(true);
-
-  function renderItem({ item, index }) {
-    return (
-      <AgendaCard schedule={item} 
-      scheduleId={index}
-      onPressAgendaCard={() => onPressSchedule(item, index)} />
-    );
-  }
-  
   const onDayPress = (day) => {
     setSelectedDate(day.dateString);
   };
@@ -95,9 +70,6 @@ export default function StudentCalendar({ selectedSchedule, onPressSchedule, sch
   return (
     <CalendarProvider
       date={calendarDate.toDate()}
-      // onDateChanged={onDateChanged}
-      // onMonthChange={onMonthChange}
-
       showTodayButton
       disabledOpacity={0.6}
       theme={{
@@ -132,26 +104,17 @@ export default function StudentCalendar({ selectedSchedule, onPressSchedule, sch
                   onDayPress={onDayPress}
                   markingType={'multi-dot'}
                   markedDates={getDottedDates(selectedDate, schedules)}
-                // markedDates={{
-                //   [selectedDate]: {
-                //     selected: true,
-                //     disableTouchEvent: true,
-                //     selectedColor: '#bbb',
-                //     // selectedTextColor: 'red',
-                //   }, ...getMarkedDates()
-                // }}
                 />}
             </View>
           </View>
 
           <AgendaList
-            sections={getDailyAgendas(schedules)}
+            sections={dailyAgendas}
             extraData={state}
             renderItem={renderItem}
             hideKnob
             sectionStyle={styles.section}
             sectionTextStyle={styles.sectionTextStyle}
-
           />
         </View>
       </ScrollView>
@@ -162,9 +125,30 @@ export default function StudentCalendar({ selectedSchedule, onPressSchedule, sch
 
 
 const styles = StyleSheet.create({
+  subTitle: {
+    fontSize: 15,
+    fontWeight: 'bold'
+
+  },
+  titleCell: {
+    marginRight: 30,
+  },
+  cell: {
+    borderRightColor: 'black',
+    borderRightWidth: 2,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   button: {
     borderRadius: 30,
-
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold'
+  },
+  tempStyle: {
+    borderBottomColor: 'black',
+    borderBottomWidth: 4,
   },
   calendar: {
     paddingLeft: 20,

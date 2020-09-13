@@ -14,7 +14,7 @@ export class LessonTime {
     this.end = end;
   }
 
-  toString() {
+  public toString() {
     return `${this.start.format('MM/DD HH:mm')} ~ ${this.end.format(
       'MM/DD HH:mm',
     )}`;
@@ -144,6 +144,12 @@ export class RepeatedScheduleInfo {
     console.log(`id: ${this.id}`);
     console.log(this.weeklySchedule.toString());
   }
+
+  public toString() {
+    return `${
+      this.id
+    } | ${this.formWorkSchedule.toString()} | ${this.weeklySchedule.toString()}`;
+  }
 }
 
 export class FormWorkScheduleType {
@@ -170,6 +176,10 @@ export class FormWorkScheduleType {
 
   public print() {
     console.log(`formWorkSchedule: | ${this.text} | ${this.time.toString()}`);
+  }
+
+  public toString() {
+    return `formWorkSchedule: | ${this.text} | ${this.time.toString()}`;
   }
 }
 
@@ -205,6 +215,10 @@ export class ScheduleType {
     console.log(
       `schedule: ${this.id} | ${this.text} | ${this.time.toString()}`,
     );
+  }
+
+  public toString() {
+    return `${this.id} | ${this.text} | ${this.time.toString()}`;
   }
 }
 

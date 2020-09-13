@@ -10,7 +10,6 @@ import { Appbar, List } from 'react-native-paper';
 
 import ConfirmModal from '../common/ConfirmModal';
 import React from 'react';
-import ScheduleForm from './ScheduleForm';
 import { ScheduleType } from '../../types/schedule';
 import { TagType } from '../../types/root';
 
