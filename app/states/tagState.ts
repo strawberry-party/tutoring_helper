@@ -4,16 +4,14 @@ import produce from 'immer';
 
 interface TagState {
   selectedTagId: string;
-  tags: Map<string, TagType>;
+  subjectTags: [];
+  bookTags: [],
 }
 
 const initialState = {
-  selectedTagId: 'none',
-  tags: new Map<string, TagType>([
-    ['none', new TagType()],
-    ['java', new TagType('JAVA', { backgroundColor: 'pink' })],
-    // ['EE209', new TagType('전자공학을 위한 프로그래밍 구조론', {backgroundColor: 'yellow'})],
-  ]), // TODO: defaultTag, tag1 넣기
+  selectedTagId: '',
+  subjectTags: [],
+  bookTags: [],
 };
 
 // action type
@@ -34,9 +32,10 @@ const TAG_SETUP = 'TAG_SETUP' as const;
 // tag CRUD
 
 // global tag selecting action for tag edit start
-export const setupTag = (tags: Array<TagType>) => ({
+export const setupTag = (subjectTags: Array<TagType>, bookTags: Array<TagType>) => ({
   type: TAG_SETUP,
-  tags,
+  subjectTags,
+  bookTags,
 })
 
 export const selectTag = (id: string) => ({
@@ -71,26 +70,32 @@ export const actions = {
 };
 
 // reducer
-const tagReducer = (state: TagState = initialState, action: TagAction) =>
+const tagReducer = (state = initialState, action: TagAction) =>
   produce(state, (draft) => {
     switch (action.type) {
       case TAG_SETUP:
-        Object.entries(action.tags).reverse().map(([key, tag]) => {
-          draft.tags.set(key, tag);
+        draft.subjectTags = [];
+        draft.bookTags = [];
+        action.subjectTags === undefined ? '' : Object.entries(action.subjectTags).reverse().map(([key, info]) => {
+          draft.subjectTags.push({key, info});
         })
+        action.bookTags === undefined ? '' : Object.entries(action.bookTags).reverse().map(([key, info]) => {
+          draft.bookTags.push({key, info});
+        })
+        
         break;
-      case TAG_SELECT:
-        draft.selectedTagId = action.id;
-        break;
-      case TAG_ADD:
-        draft.tags.set(action.id, action.tag);
-        break;
-      case TAG_EDIT:
-        draft.tags.set(action.id, action.tag);
-        break;
-      case TAG_REMOVE:
-        draft.tags.delete(action.id);
-        break;
+      // case TAG_SELECT:
+      //   draft.selectedTagId = action.id;
+      //   break;
+      // case TAG_ADD:
+      //   draft.tags.set(action.id, action.tag);
+      //   break;
+      // case TAG_EDIT:
+      //   draft.tags.set(action.id, action.tag);
+      //   break;
+      // case TAG_REMOVE:
+      //   draft.tags.delete(action.id);
+      //   break;
 
       default:
         break;

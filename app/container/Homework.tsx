@@ -50,6 +50,7 @@ function HomeworkContainer({
 
   showSelectedTags,
   currentStudentId,
+  tutorId,
 
   addTag,
 }: HomeworkContainerProps) {
@@ -57,7 +58,7 @@ function HomeworkContainer({
   //   (state: RootState) => state.tagReducer.tagMap,
   // );
   useEffect(() => {
-    db.ref(`tutor_1/studentArray/${currentStudentId}/assigns`).on(
+    db.ref(`tutors/${tutorId}/studentArray/${currentStudentId}/assigns`).on(
       'value',
       (snapshot) => {
         // console.log(snapshot.val());
@@ -241,6 +242,7 @@ function mapStateToProps(state) {
     filter: state.assignFilterSorterReducer.filter,
     sorter: state.assignFilterSorterReducer.sorter,
     currentStudentId: state.currentStudentReducer.selectedStudentId,
+    tutorId: state.tutorReducer.uid,
   };
 }
 

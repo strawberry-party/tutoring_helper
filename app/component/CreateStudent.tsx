@@ -1,71 +1,225 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Button, ScrollView } from 'react-native';
-import { Input, Form, Item } from 'native-base';
+//학생 추가하는 컴포넌트
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Button,
+} from 'react-native';
 import { connect } from 'react-redux';
 import database from '@react-native-firebase/database';
 import _ from 'lodash';
+import { TextInput, Chip } from 'react-native-paper';
+import Postcode from 'react-native-daum-postcode';
+import Modal from 'react-native-modal';
+import ModifySubjectTag from './ModifySubjectTag';
+import { WeeklyScheduleType } from '../types/schedule';
+import DailyScheduleSelectorContainer from './DailyScheduleSelectorContainer';
+import ModifyBookTag from './ModifyBookTag';
 
-const db = database();
-
-function CreateStudent({ studentNum, navigation }) {
-  // useIsFocused() ? console.warn('아직 완벽히 구현되지 않은 페이지 입니다.') : '';
-  
+function CreateStudent({ tutorId, studentNum, bookTagArray, subjectTagArray }) {
+  const id = _.uniqueId('student_');
   const [state, setState] = useState({
     name: '',
     address: '',
     nextTime: '',
     lessonArray: [],
-    subject: [],
+    subjectTag: [],
+    bookTag: [],
   });
-  const handleSubmit = (state) => {
-    db.ref(`tutor_1`).update({
-      studentNum: studentNum + 1,
-    });
-    db.ref(`tutor_1/studentArray/${_.uniqueId('student_')}`).set(state)
-    navigation.navigate('김태형 학생');
+  const [isSubjectModalVisible, setSubjectModalVisible] = useState(false);
+  const [isBookModalVisible, setBookModalVisible] = useState(false);
+
+  const toggleSubjectModal = () => {
+    setSubjectModalVisible(!isSubjectModalVisible);
   };
+  const toggleBookModal = () => {
+    setBookModalVisible(!isBookModalVisible);
+  };
+
+  const handleSubmit = () => {
+    database()
+      .ref(`tutors/${tutorId}`)
+      .update({
+        studentNum: studentNum + 1,
+      });
+    const info = JSON.parse(JSON.stringify(state)); //state 복제
+    delete info.subjectTag;
+    delete info.bookTag;
+    database().ref(`tutors/${tutorId}/studentArray/${id}`).set(info);
+    state.subjectTag.forEach((tag) => {
+      database()
+        .ref(`tutors/${tutorId}/studentArray/${id}/subjectTag/${tag.key}`)
+        .set(tag.info);
+    });
+    state.bookTag.forEach((tag) => {
+      database()
+        .ref(`tutors/${tutorId}/studentArray/${id}/bookTag/${tag.key}`)
+        .set(tag.info);
+    });
+    // navigation.navigate(id);
+  };
+  const handleSubjectTag = (tagInfo) => {
+    if (state.subjectTag.includes(tagInfo)) {
+      alert('이미 추가한 태그입니다!');
+      return;
+    }
+    var newTag = state.subjectTag;
+    newTag.push(tagInfo);
+    setState({ ...state, subjectTag: newTag });
+  };
+  const handleBookTag = (tagInfo) => {
+    if (state.bookTag.includes(tagInfo)) {
+      alert('이미 추가한 태그입니다!');
+      return;
+    }
+    var newTag = state.bookTag;
+    newTag.push(tagInfo);
+    setState({ ...state, bookTag: newTag });
+  };
+
+  //과목 태그
+  const currentSubjectTag = [];
+  state.subjectTag.map((tagInfo) => {
+    currentSubjectTag.push(
+      <Chip
+        key={tagInfo.key}
+        style={{ marginRight: 5 }}
+        children={tagInfo.info.name}
+        onClose={() => {
+          const newTag = state.subjectTag.filter(
+            (check) => check.key !== tagInfo.key,
+          );
+          setState({ ...state, subjectTag: newTag });
+        }}
+      />,
+    );
+  });
+  const subjectTagScrollItem = [];
+  subjectTagArray.map((item) => {
+    subjectTagScrollItem.push(
+      <Chip
+        key={item.key}
+        style={{ marginRight: 5 }}
+        onPress={() => handleSubjectTag(item)}
+        children={item.info.name}
+      />,
+    );
+  });
+  //교재 태그
+  const currentBookTag = [];
+  state.bookTag.map((tagInfo) => {
+    currentBookTag.push(
+      <Chip
+        key={tagInfo.key}
+        style={{ marginRight: 5 }}
+        children={tagInfo.info.name}
+        onClose={() => {
+          const newTag = state.bookTag.filter(
+            (check) => check.key !== tagInfo.key,
+          );
+          setState({ ...state, bookTag: newTag });
+        }}
+      />,
+    );
+  });
+  const bookTagScrollItem = [];
+  bookTagArray.map((item) => {
+    bookTagScrollItem.push(
+      <Chip
+        key={item.key}
+        style={{ marginRight: 5 }}
+        onPress={() => handleBookTag(item)}
+        children={item.info.name}
+      />,
+    );
+  });
 
   return (
     <ScrollView style={styles.container}>
-      <Form>
-          <View style={styles.studentNameInput}>
-            <Item>
-              <Input
-                placeholder="학생 이름"
-                onChangeText={(text) => setState({ ...state, name: text })}
-              />
-            </Item>
-          </View>
-        <View style={styles.subjectInput}>
-          <Item>
-            <Text>과외 과목</Text>
-          </Item>
+      <TextInput
+        mode="outlined"
+        label="학생 이름"
+        value={state.name}
+        onChangeText={(text) => setState({ ...state, name: text })}
+        style={styles.textInput}
+        selectionColor="#f48eb1"
+        theme={{ colors: { primary: '#f48eb1', placeholder: '#b2b2b2' } }}
+      />
+      <View style={styles.item}>
+        <View style={styles.subheader}>
+          <Text style={styles.text}>과목</Text>
+          <ScrollView horizontal={true} style={{ marginLeft: 5 }}>
+            {currentSubjectTag}
+          </ScrollView>
+          <TouchableOpacity
+            style={{ marginTop: 5, marginRight: 10 }}
+            onPress={toggleSubjectModal}>
+            <Text>태그 수정</Text>
+          </TouchableOpacity>
+          <Modal isVisible={isSubjectModalVisible}>
+            <ModifySubjectTag />
+            <Button title="Hide modal" onPress={toggleSubjectModal} />
+          </Modal>
         </View>
-        <View style={styles.materialInput}>
-          <Item>
-            <Text>교재 태그</Text>
-          </Item>
+        <ScrollView horizontal={true} style={{ marginTop: 10, marginLeft: 30 }}>
+          {subjectTagScrollItem.length === 0 ? <Text>과목을 추가해보세요!</Text> : subjectTagScrollItem}
+        </ScrollView>
+      </View>
+      <View style={styles.item}>
+        <View style={styles.subheader}>
+          <Text style={styles.text}>교재</Text>
+          <ScrollView horizontal={true} style={{ marginLeft: 5 }}>
+            {currentBookTag}
+          </ScrollView>
+          <TouchableOpacity
+            style={{ marginTop: 5, marginRight: 10 }}
+            onPress={toggleBookModal}>
+            <Text>태그 수정</Text>
+          </TouchableOpacity>
+          <Modal isVisible={isBookModalVisible}>
+            <ModifyBookTag />
+            <Button title="Hide modal" onPress={toggleBookModal} />
+          </Modal>
         </View>
-        <View style={styles.dayInput}>
-          <Item>
-            <Input
-              placeholder="과외 요일 설정"
-              onChangeText={(text) => setState({ ...state, nextTime: text })}
-            />
-          </Item>
-        </View>
-        <View style={styles.placeInput}>
-          <Item last>
-            <Input
-              placeholder="과외 장소"
-              onChangeText={(text) => setState({ ...state, address: text })}
-            />
-          </Item>
-        </View>
-        <View>
-          <Button onPress={() => {handleSubmit(state)}} title="추가" />
-        </View>
-      </Form>
+        <ScrollView horizontal={true} style={{ marginTop: 10, marginLeft: 30 }}>
+          {bookTagScrollItem.length === 0 ? <Text>교재를 추가해보세요!</Text> : bookTagScrollItem}
+        </ScrollView>
+      </View>
+      <View style={styles.item}>
+        <Text style={styles.text}>요일 설정</Text>
+        <ScrollView horizontal={true} style={{ marginTop: 10, marginLeft: 30 }}>
+          <DailyScheduleSelectorContainer
+            weeklySchedule={new WeeklyScheduleType()}
+          />
+        </ScrollView>
+      </View>
+      <View style={styles.item}>
+        <Text style={styles.text}>장소 설정</Text>
+        <Text>{state.address}</Text>
+        <Postcode
+          style={{
+            backgroundColor: '#ffffff',
+            marginTop: 10,
+            width: 400,
+            height: 200,
+            alignSelf: 'center',
+            zIndex: 20,
+          }}
+          jsOptions={{ animation: true }}
+          onSelected={(data) => {
+            setState({ ...state, address: data.address });
+          }}
+          onError={(error) => console.warn(error)}
+        />
+      </View>
+      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+        <Text style={{ color: '#ffffff', fontWeight: '500', fontSize: 20 }}>
+          학생 추가
+        </Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 }
@@ -74,35 +228,53 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    borderColor: 'red',
-    borderWidth: 1,
+    backgroundColor: '#ffffff',
+    zIndex: 1,
   },
-  // addButton: {
-  //   position: 'absolute',
-  //   top: 20,
-  //   right: 20,
-  // },
-  studentNameInput: {
-    flex: 2,
-    width: 300,
-  },
-  subjectInput: {
+  item: {
     flex: 1,
+    marginBottom: 5,
+    paddingBottom: 10,
+    borderBottomColor: '#000000',
+    borderBottomWidth: 0.5,
   },
-  materialInput: {
+  subheader: {
     flex: 1,
+    flexDirection: 'row',
   },
-  dayInput: {
-    flex: 1,
+
+  text: {
+    color: 'purple',
+    fontWeight: 'bold',
+    fontSize: 20,
+    marginTop: 10,
+    marginLeft: 20,
   },
-  placeInput: {
-    flex: 1,
+
+  textInput: {
+    backgroundColor: '#ffffff',
+    marginHorizontal: 20,
+    marginVertical: 10,
+  },
+
+  button: {
+    backgroundColor: '#e91e63',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+    marginTop: 30,
+    alignSelf: 'center',
+    height: 60,
+    width: 312,
   },
 });
 
 const mapStateToProps = (state) => {
   return {
+    tutorId: state.tutorReducer.uid,
     studentNum: state.tutorReducer.studentNum,
+    subjectTagArray: state.tagReducer.subjectTags,
+    bookTagArray: state.tagReducer.bookTags,
   };
 };
 

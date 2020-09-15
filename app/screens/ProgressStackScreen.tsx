@@ -1,8 +1,8 @@
 import { StyleSheet, Text } from 'react-native';
-import CreateProgress from '../component/Tutor/Progress/CreateProgress';
+import CreateProgress from '../component/Progress/CreateProgress';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import React from 'react';
-import WeeklyProgress from '../component/Tutor/Progress/WeeklyProgress';
+import WeeklyProgress from '../component/Progress/WeeklyProgress';
 import { createStackNavigator } from '@react-navigation/stack';
 import { connect } from 'react-redux';
 import database from '@react-native-firebase/database'

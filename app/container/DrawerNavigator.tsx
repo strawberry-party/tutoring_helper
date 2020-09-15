@@ -1,12 +1,13 @@
 import { connect } from 'react-redux';
 import DrawerContent from './DrawerContent';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Tabs from '../component/Tutor/Tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { StudentType } from '../types/student';
 import CreateStudentScreen from '../screens/CreateStudentScreen';
 import database from '@react-native-firebase/database';
 import InitialScreen from '../screens/InitialScreen';
+import UpdateStudent from '../component/UpdateStudent';
 
 const db = database();
 const Drawer = createDrawerNavigator();
@@ -16,6 +17,17 @@ interface DrawerScreenProps {
   changeStudent: Function;
   dataToTutorState: Function;
   dataToTagState: Function;
+  dataToBookState: Function;
+  userId: string;
+}
+
+interface User {
+  email?: string;
+  name?: string;
+  studentNum?: number;
+  studentArray?: Array<StudentType>
+  subjectTagArray?: object;
+  bookTagArray?: object;
 }
 
 function DrawerNavigator({
@@ -23,17 +35,37 @@ function DrawerNavigator({
   changeStudent,
   dataToTutorState,
   dataToTagState,
+  dataToBookState,
+  userId,
 }: DrawerScreenProps) {
   useEffect(() => {
+    db.ref('tutors').on(`value`, (snapshot) => {
+      var userData;
+      var subjectTags;
+      var bookTags;
 
-    db.ref(`tutor_1`).on('value', (snapshot) => {
-      // console.log('db changed');
-      // console.log(snapshot.val());
-      dataToTutorState('TUTORSTATE_SETUP', snapshot.val());
-      dataToTagState('TAG_SETUP', snapshot.val().tagArray);
+      Object.entries(snapshot.val()).forEach(([key, b]) => {
+        const user: User = b;
+        if (key === userId) {
+          userData = {
+            uid: key,
+            name: user.name,
+            studentNum: user.studentNum,
+            studentArray: user.studentArray,
+          };
+          subjectTags = user.subjectTagArray;
+          bookTags = user.bookTagArray;
+        }
+      });
+      dataToTutorState('TUTORSTATE_SETUP', userData);
+      dataToTagState('TAG_SETUP', subjectTags, bookTags);
     });
+    database().ref('books').on('value', snapshot => {
+      dataToBookState('BOOK_SETUP', snapshot.val())
+    })
   }, []);
-  const initialDrawerScreen = (
+
+  const initialDrawerScreen = [
     <Drawer.Screen
       key="학생추가"
       name="학생추가"
@@ -41,14 +73,22 @@ function DrawerNavigator({
       options={{
         drawerLabel: () => null,
       }}
+    />,
+    <Drawer.Screen
+      key="학생정보 수정"
+      name="학생정보 수정"
+      component={UpdateStudent}
+      options={{
+        drawerLabel: () => null,
+      }}
     />
-  );
+  ]
   var drawerScreens = [];
-  studentArray.map((student) => {
+  studentArray.forEach((student) => {
     drawerScreens.push(
       <Drawer.Screen
         key={student.key}
-        name={student.info.name + ' 학생'}
+        name={student.key}
         component={Tabs}
         listeners={{
           focus: () => {
@@ -60,14 +100,21 @@ function DrawerNavigator({
           },
         }}
       />,
+      <Drawer.Screen
+        key={student.key+ "_U"}
+        name={student.key+ "_U"}
+        component={UpdateStudent}
+        initialParams={{key: student.key}}
+        options={{
+          drawerLabel: () => null,
+        }}
+      />
     );
   });
 
   drawerScreens = [...drawerScreens, initialDrawerScreen];
-
-  return drawerScreens.length === 1 ? (
-    <InitialScreen />
-  ) : (
+  
+  return (
     <Drawer.Navigator
       drawerContent={(props) => <DrawerContent {...props} />}
       drawerContentOptions={{
@@ -93,9 +140,12 @@ const mapDispatchToProps = (dispatch) => {
     changeStudent: (type, info) => {
       dispatch({ type, info });
     },
-    dataToTagState: (type, tags) => {
-      dispatch({ type, tags });
+    dataToTagState: (type, subjectTags, bookTags) => {
+      dispatch({ type, subjectTags, bookTags });
     },
+    dataToBookState: (type, books) => {
+      dispatch({ type, books })
+    }
   };
 };
 

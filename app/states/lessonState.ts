@@ -51,11 +51,9 @@ const lessonReducer = (
     switch (action.type) {
 
       case 'LESSONSTATE_SETUP':
-        // console.log('lesson setup');
         
         draft.lessonArray = [];
-        const lessonArray = action.data;
-        lessonArray === (undefined || null) ? '' : Object.entries(action.data).reverse().map(([key, lessonInfo]) => {
+        action.data === undefined || null ? '' : Object.entries(action.data).reverse().map(([key, lessonInfo]) => {
           draft.lessonArray.push({key, lessonInfo})
         })
         break;

@@ -12,14 +12,12 @@ import auth from '@react-native-firebase/auth';
 
 const db = database();
 
-function DrawerContent({studentNum, tutorName, studentArray, navigation}) {
-  console.log(auth().currentUser);
-  
+function DrawerContent({tutorId, studentNum, studentArray, navigation}) {
   const handleDelete = (key) => {
-    db.ref(`tutor_1`).update({
+    db.ref(`tutors/${tutorId}`).update({
       studentNum: studentNum - 1,
     })
-    db.ref(`tutor_1/studentArray/${key}`).remove()
+    db.ref(`tutors/${tutorId}/studentArray/${key}`).remove()
   }
   
   const signOutUser = () => {
@@ -28,17 +26,22 @@ function DrawerContent({studentNum, tutorName, studentArray, navigation}) {
       .then(() => console.log('로그아웃'));
   };
 
+  const handleUpdate = (key) => {
+    navigation.navigate(key+ '_U')
+  }
+
   const contents = [];
   studentArray.map(student => {
+    const subjects = student.info.subjectTag === undefined ? <Text style={{fontStyle: 'italic', fontSize: 14, color: '#ff0000'}}>과목을 추가하세요!</Text> : Object.entries(student.info.subjectTag).map(([, value]) => value.name).join(', ')
     contents.push(
       <View key={student.key} >
-        <TouchableOpacity style={styles.itemContainer} onPress={() => navigation.navigate(student.info.name+ ' 학생')}>
+        <TouchableOpacity style={styles.itemContainer} onPress={() => navigation.navigate(student.key)}>
           <View style={styles.item}>
             <View style={{marginTop: 5, alignItems: 'center'}}>
               <Text style={{fontSize: 25}}>{student.info.name} 학생</Text>
             </View>
             <View style={{marginLeft: 20,}}>
-              <Text>과외 과목: {student.info.subject}</Text>
+              <Text>과외 과목: {subjects}</Text>
               <Text>과외 요일: {student.info.nextTime}</Text>
               <Text>과외 장소: {student.info.address}</Text>
             </View>
@@ -46,6 +49,9 @@ function DrawerContent({studentNum, tutorName, studentArray, navigation}) {
         </TouchableOpacity >
         <TouchableOpacity style={{position: "absolute", right: 15, top: 5, zIndex: 1}} onPress={() => handleDelete(student.key)}>
           <MaterialCommunityIcons name="delete-forever-outline" size={20} />
+        </TouchableOpacity>
+        <TouchableOpacity style={{position: "absolute", right: 15, bottom: 5, zIndex: 1}} onPress={() => handleUpdate(student.key)}>
+          <MaterialCommunityIcons name="account-edit" size={20} />
         </TouchableOpacity>
       </View>
     )
@@ -124,13 +130,13 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return {
+    tutorId: state.tutorReducer.uid,
     studentNum: state.tutorReducer.studentNum,
-    tutorName: state.tutorReducer.name,
     studentArray: state.tutorReducer.studentArray,
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = () => {
   return{};
 };
 

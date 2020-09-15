@@ -6,6 +6,8 @@ import lessonReducer from './lessonState';
 import currentStudentReducer from './currentStudentState';
 import tutorReducer from './tutorState';
 import tagReducer from './tagState';
+import bookReducer from './bookState';
+import loginReducer from './loginReducer';
 import { enableMapSet } from 'immer';
 
 enableMapSet();
@@ -18,6 +20,8 @@ const rootReducer = combineReducers({
   currentStudentReducer,
   tutorReducer,
   tagReducer,
+  loginReducer,
+  bookReducer,
 });
 
 export default rootReducer;

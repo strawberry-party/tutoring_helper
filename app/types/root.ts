@@ -17,10 +17,10 @@ export interface TutorType {
 
 export class TagType {
   style: Object;
-  name: string;
+  text: string;
 
   constructor(
-    name: string = 'none',
+    text: string = 'none',
     style: Object = {
       backgroundColor: 'white',
       borderStyle: 'dashed',
@@ -29,7 +29,7 @@ export class TagType {
       textColor: 'white',
     },
   ) {
-    this.name = name;
+    this.text = text;
     this.style = style;
   }
 }
