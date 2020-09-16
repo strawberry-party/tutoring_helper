@@ -23,7 +23,7 @@ interface SubAssignProps extends SubAssignType {
   onComplete: () => void;
   onIncomplete: () => void;
   onRemove: () => void;
-  onUpdate: (text: string) => void;
+  updateSubAssign: (id: string, newValue: string) => void;
 }
 
 class SubAssign extends Component<SubAssignProps, State> {
@@ -64,7 +64,7 @@ class SubAssign extends Component<SubAssignProps, State> {
               ]}
               value={value}
               multiline={true}
-              onChangeText={this._controlInput}
+              onChangeText={this._controllInput}
               returnKeyType={'done'}
               onBlur={this._finishEditing}
               underlineColorAndroid={'transparent'}
@@ -121,11 +121,11 @@ class SubAssign extends Component<SubAssignProps, State> {
   _finishEditing = (event) => {
     event.stopPropagation();
     const { value } = this.state;
-    const { id, onUpdate } = this.props;
-    onUpdate(value);
+    const { id, updateSubAssign } = this.props;
+    updateSubAssign(id, value);
     this.setState({ isEditing: false });
   };
-  _controlInput = (text) => {
+  _controllInput = (text) => {
     this.setState({ value: text });
   };
 }
