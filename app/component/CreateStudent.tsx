@@ -29,6 +29,10 @@ function CreateStudent({ tutorId, studentNum, bookTagArray, subjectTagArray }) {
     subjectTag: [],
     bookTag: [],
   });
+  const [addressInfo, setAddress] = useState({
+    code: '',
+    detail: '',
+  })
   const [isSubjectModalVisible, setSubjectModalVisible] = useState(false);
   const [isBookModalVisible, setBookModalVisible] = useState(false);
   const [isAddressModalVisible, setAddressModalVisible] = useState(false);
@@ -222,32 +226,61 @@ function CreateStudent({ tutorId, studentNum, bookTagArray, subjectTagArray }) {
         <Text style={styles.text}>장소 설정</Text>
         <TextInput
           mode="outlined"
-          label="주소 검색"
           disabled={true}
-          value={state.name}
-          // onChangeText={(text) => setState({ ...state, name: text })}
+          value={addressInfo.code}
           style={styles.textInput}
           selectionColor="#f48eb1"
           theme={{ colors: { primary: '#f48eb1', placeholder: '#b2b2b2' } }}
         />
-        <TouchableOpacity style={styles.addressSearchButton}>
-          <Text style={{textAlign: 'center'}}>주소 검색</Text>
+        <TouchableOpacity
+          style={styles.addressSearchButton}
+          onPress={toggleAddressModal}>
+          <Text style={{ textAlign: 'center' }}>주소 검색</Text>
         </TouchableOpacity>
-        <Text>{state.address}</Text>
-        <Postcode
-          style={{
-            backgroundColor: '#ffffff',
-            marginTop: 10,
-            width: 400,
-            height: 200,
-            alignSelf: 'center',
-            zIndex: 20,
+        <Modal
+          style={{ margin: 0, backgroundColor: 'white' }}
+          hasBackdrop={false}
+          isVisible={isAddressModalVisible}>
+          <Text style={{ fontSize: 30, top: 10, left: 20, marginBottom: 10 }}>
+            우편번호 찾기
+          </Text>
+          <Postcode
+            style={{
+              marginTop: 10,
+              width: 400,
+              height: 200,
+              alignSelf: 'center',
+            }}
+            jsOptions={{ animation: true }}
+            onSelected={(data) => {
+              setAddress({ ...addressInfo, code: data.address });
+              toggleAddressModal();
+            }}
+            onError={(error) => console.warn(error)}
+          />
+          <TouchableOpacity
+            style={{
+              position: 'absolute',
+              top: 15,
+              right: 15,
+              width: 40,
+              height: 30,
+            }}
+            onPress={toggleAddressModal}>
+            <Text>닫기</Text>
+          </TouchableOpacity>
+        </Modal>
+        <TextInput
+          mode="outlined"
+          label="상세 주소"
+          value={addressInfo.detail}
+          onChangeText={(text) => {
+            setAddress({ ...addressInfo, detail: text })
+            setState({...state, address: addressInfo.code + ' ' + addressInfo.detail})
           }}
-          jsOptions={{ animation: true }}
-          onSelected={(data) => {
-            setState({ ...state, address: data.address });
-          }}
-          onError={(error) => console.warn(error)}
+          style={{backgroundColor: '#ffffff', marginHorizontal: 20, marginBottom: 10}}
+          selectionColor="#f48eb1"
+          theme={{ colors: { primary: '#f48eb1', placeholder: '#b2b2b2' } }}
         />
       </View>
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
