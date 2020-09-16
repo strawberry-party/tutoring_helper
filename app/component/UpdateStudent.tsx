@@ -13,8 +13,8 @@ import _ from 'lodash';
 import { TextInput, Chip } from 'react-native-paper';
 import Postcode from 'react-native-daum-postcode';
 import Modal from 'react-native-modal';
-import ModifySubjectTag from './ModifySubjectTag';
-import ModifyBookTag from './ModifyBookTag';
+import UpdateSubjectTag from './UpdateSubjectTag';
+import UpdateBookTag from './UpdateBookTag';
 import { Week, generateWeek, WeeklyScheduleType } from '../types/schedule';
 import DailyScheduleSelectorContainer from './DailyScheduleSelectorContainer';
 
@@ -206,7 +206,7 @@ function UpdateStudent({
             <Text>태그 수정</Text>
           </TouchableOpacity>
           <Modal isVisible={isSubjectModalVisible}>
-            <ModifySubjectTag />
+            <UpdateSubjectTag />
             <Button title="Hide modal" onPress={toggleSubjectModal} />
           </Modal>
         </View>
@@ -230,7 +230,7 @@ function UpdateStudent({
             <Text>태그 수정</Text>
           </TouchableOpacity>
           <Modal isVisible={isBookModalVisible}>
-            <ModifyBookTag />
+            <UpdateBookTag />
             <Button title="Hide modal" onPress={toggleBookModal} />
           </Modal>
         </View>

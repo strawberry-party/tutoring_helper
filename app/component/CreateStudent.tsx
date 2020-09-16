@@ -14,10 +14,10 @@ import _ from 'lodash';
 import { TextInput, Chip } from 'react-native-paper';
 import Postcode from 'react-native-daum-postcode';
 import Modal from 'react-native-modal';
-import ModifySubjectTag from './ModifySubjectTag';
+import UpdateSubjectTag from './UpdateSubjectTag';
 import { WeeklyScheduleType } from '../types/schedule';
 import DailyScheduleSelectorContainer from './DailyScheduleSelectorContainer';
-import ModifyBookTag from './ModifyBookTag';
+import UpdateBookTag from './UpdateBookTag';
 
 function CreateStudent({ tutorId, studentNum, bookTagArray, subjectTagArray }) {
   const id = _.uniqueId('student_');
@@ -31,12 +31,16 @@ function CreateStudent({ tutorId, studentNum, bookTagArray, subjectTagArray }) {
   });
   const [isSubjectModalVisible, setSubjectModalVisible] = useState(false);
   const [isBookModalVisible, setBookModalVisible] = useState(false);
+  const [isAddressModalVisible, setAddressModalVisible] = useState(false);
 
   const toggleSubjectModal = () => {
     setSubjectModalVisible(!isSubjectModalVisible);
   };
   const toggleBookModal = () => {
     setBookModalVisible(!isBookModalVisible);
+  };
+  const toggleAddressModal = () => {
+    setAddressModalVisible(!isAddressModalVisible);
   };
 
   const handleSubmit = () => {
@@ -159,13 +163,19 @@ function CreateStudent({ tutorId, studentNum, bookTagArray, subjectTagArray }) {
             onPress={toggleSubjectModal}>
             <Text>태그 수정</Text>
           </TouchableOpacity>
-          <Modal isVisible={isSubjectModalVisible}>
-            <ModifySubjectTag />
+          <Modal
+            onBackdropPress={toggleSubjectModal}
+            isVisible={isSubjectModalVisible}>
+            <UpdateSubjectTag />
             <Button title="Hide modal" onPress={toggleSubjectModal} />
           </Modal>
         </View>
         <ScrollView horizontal={true} style={{ marginTop: 10, marginLeft: 30 }}>
-          {subjectTagScrollItem.length === 0 ? <Text>과목을 추가해보세요!</Text> : subjectTagScrollItem}
+          {subjectTagScrollItem.length === 0 ? (
+            <Text>과목을 추가해보세요!</Text>
+          ) : (
+            subjectTagScrollItem
+          )}
         </ScrollView>
       </View>
       <View style={styles.item}>
@@ -179,13 +189,25 @@ function CreateStudent({ tutorId, studentNum, bookTagArray, subjectTagArray }) {
             onPress={toggleBookModal}>
             <Text>태그 수정</Text>
           </TouchableOpacity>
-          <Modal isVisible={isBookModalVisible}>
-            <ModifyBookTag />
-            <Button title="Hide modal" onPress={toggleBookModal} />
+          <Modal
+            style={{ margin: 0, backgroundColor: 'white' }}
+            hasBackdrop={false}
+            isVisible={isBookModalVisible}>
+            <Text>교재 수정</Text>
+            <UpdateBookTag />
+            <TouchableOpacity
+              style={{ position: 'absolute', top: 15, right: 15 }}
+              onPress={toggleBookModal}>
+              <Text>완료</Text>
+            </TouchableOpacity>
           </Modal>
         </View>
         <ScrollView horizontal={true} style={{ marginTop: 10, marginLeft: 30 }}>
-          {bookTagScrollItem.length === 0 ? <Text>교재를 추가해보세요!</Text> : bookTagScrollItem}
+          {bookTagScrollItem.length === 0 ? (
+            <Text>교재를 추가해보세요!</Text>
+          ) : (
+            bookTagScrollItem
+          )}
         </ScrollView>
       </View>
       <View style={styles.item}>
@@ -198,6 +220,19 @@ function CreateStudent({ tutorId, studentNum, bookTagArray, subjectTagArray }) {
       </View>
       <View style={styles.item}>
         <Text style={styles.text}>장소 설정</Text>
+        <TextInput
+          mode="outlined"
+          label="주소 검색"
+          disabled={true}
+          value={state.name}
+          // onChangeText={(text) => setState({ ...state, name: text })}
+          style={styles.textInput}
+          selectionColor="#f48eb1"
+          theme={{ colors: { primary: '#f48eb1', placeholder: '#b2b2b2' } }}
+        />
+        <TouchableOpacity style={styles.addressSearchButton}>
+          <Text style={{textAlign: 'center'}}>주소 검색</Text>
+        </TouchableOpacity>
         <Text>{state.address}</Text>
         <Postcode
           style={{
@@ -256,7 +291,18 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginVertical: 10,
   },
-
+  addressSearchButton: {
+    justifyContent: 'center',
+    position: 'absolute',
+    right: 28,
+    top: 62,
+    backgroundColor: '#bdbfc0',
+    borderColor: '#e9e9ea',
+    borderWidth: 1,
+    borderRadius: 3,
+    width: 70,
+    height: 40,
+  },
   button: {
     backgroundColor: '#e91e63',
     justifyContent: 'center',

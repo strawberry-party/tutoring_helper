@@ -30,6 +30,10 @@ function DrawerContent({tutorId, studentNum, studentArray, navigation}) {
     navigation.navigate(key+ '_U')
   }
 
+  const updateInfo = () => {
+    navigation.navigate('선생님정보 수정')
+  }
+
   const contents = [];
   studentArray.map(student => {
     const subjects = student.info.subjectTag === undefined ? <Text style={{fontStyle: 'italic', fontSize: 14, color: '#ff0000'}}>과목을 추가하세요!</Text> : Object.entries(student.info.subjectTag).map(([, value]) => value.name).join(', ')
@@ -60,7 +64,10 @@ function DrawerContent({tutorId, studentNum, studentArray, navigation}) {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.logoutButton} onPress={signOutUser}>
-        <Text>Logout</Text>
+        <Text>로그아웃</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.updateInfoButton} onPress={updateInfo}>
+        <Text>정보수정</Text>
       </TouchableOpacity>
       <View style={styles.profile}>
         <Text style={{width: 40, height: 40}}>선생님 아이콘</Text>
@@ -94,6 +101,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 5,
     left: 5,
+    zIndex: 3,
+  },
+  updateInfoButton: {
+    position: 'absolute',
+    top: 5,
+    right: 5,
     zIndex: 3,
   },
   profile: {

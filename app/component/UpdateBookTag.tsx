@@ -44,7 +44,6 @@ const ModifyBookTag = ({ tutorId, bookTagArray }) => {
 
   return (
     <View style={{ margin: 20, flex: 1, backgroundColor: 'white' }}>
-      <Text>교재 태그 수정</Text>
       <FlatList
         data={bookTagArray}
         renderItem={renderItem}

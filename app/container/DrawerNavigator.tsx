@@ -6,8 +6,8 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { StudentType } from '../types/student';
 import CreateStudentScreen from '../screens/CreateStudentScreen';
 import database from '@react-native-firebase/database';
-import InitialScreen from '../screens/InitialScreen';
 import UpdateStudent from '../component/UpdateStudent';
+import UpdateTutorInfo from '../component/Tutor/UpdateTutorInfo';
 
 const db = database();
 const Drawer = createDrawerNavigator();
@@ -78,6 +78,14 @@ function DrawerNavigator({
       key="학생정보 수정"
       name="학생정보 수정"
       component={UpdateStudent}
+      options={{
+        drawerLabel: () => null,
+      }}
+    />,
+    <Drawer.Screen
+      key="선생님정보 수정"
+      name="선생님정보 수정"
+      component={UpdateTutorInfo}
       options={{
         drawerLabel: () => null,
       }}
