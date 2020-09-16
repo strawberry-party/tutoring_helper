@@ -1,192 +1,157 @@
-import {
-  Accordion,
-  Body,
-  Button,
-  Card,
-  CardItem,
-  Container,
-  Text,
-  View,
-} from 'native-base';
-import {
-  AssignListType,
-  AssignType,
-  SubAssignType,
-} from '../../types/homework';
-import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
-import React, { Component } from 'react';
+import * as Animatable from 'react-native-animatable';
 
-import AddSubAssign from './AddSubAssign';
-import Moment from 'moment';
-import SubAssign from './SubAssign';
+import { AssignListType, AssignType } from '../../types/homework';
+import { Button, Card, CardItem, Icon, Text, View } from 'native-base';
+import { Dimensions, Pressable, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
 
-interface State {
-  isEditing: boolean;
-  assignValue: AssignType;
-  isOpened: boolean;
-}
+import AlarmDialog from './AlarmDialog';
+import { CheckBox } from 'react-native-elements';
+import ConfirmModal from '../ConfirmModal';
+import { IconButton } from 'react-native-paper';
+import SwipeRow from './SwipeRow';
+import { TagMock } from '../Tag';
+import { TagType } from '../../types/root';
+import { assign } from 'lodash';
 
 interface AssignProps extends AssignType {
   onComplete: () => void;
   onIncomplete: () => void;
   onRemove: () => void;
-  subAssignActions: any;
-  // isEditing: boolean;
-}
-
-const toBeImplemented = (id: any) => alert(id + ': not yet implemented!');
-
-interface AccordionItem {
-  raw: AssignType;
+  onStartEdit: () => void;
+  id: string;
+  tags: Map<string, TagType>;
 }
 
 function Assign({
-  title,
-  desc,
+  text,
   due,
   out,
   isCompleted,
-  status,
-  subAssigns,
   onComplete,
   onIncomplete,
   onRemove,
-  subAssignActions,
+  onStartEdit,
   id,
+  tagId,
+  tags,
 }: AssignProps) {
-  function _renderHeader(item: AccordionItem, expanded: boolean) {
-    const { desc, due, out, isCompleted, status, subAssigns } = item.raw;
-    const dueDate = Moment(due).format('MM/DD');
-    const outDate = Moment(out).format('MM/DD');
+  const dueDate = due.format('MM월 DD일까지');
 
-    return (
-      <Card style={{ backgroundColor: 'white', borderRadius: 10 }}>
-        <CardItem
-          header
-          bordered
-          style={{
-            flexDirection: 'row',
-            padding: 10,
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            borderRadius: 20,
-          }}>
-          <Text
-            style={{
-              ...styles.text,
-              textDecorationLine: isCompleted ? 'line-through' : 'none',
-            }}>
-            {' '}
-            {outDate} 숙제{' '}
-          </Text>
-          {expanded ? (
-            <Text style={{ fontSize: 18 }}>⏫</Text>
-          ) : (
-            //   <Icon style={{ fontSize: 18 }} name="remove-circle" />
-            <Text style={{ fontSize: 18 }}>🔽</Text>
-            // <Icon style={{ fontSize: 18 }} name="add-circle" />
-          )}
+  const cardStyle = isCompleted ? styles.completedCard : styles.incompletedCard;
 
-          <TouchableOpacity
-            onPress={() => console.log('수정 아직 구현안함')}
-            style={{
-              margin: 10,
-              backgroundColor: '#f9f9f9',
-            }}>
-            <Text style={{ fontSize: 20 }}>✏</Text>
-          </TouchableOpacity>
+  const [buttonVisible, setVisibility] = useState(false);
 
-          <TouchableOpacity
-            onPress={onRemove}
-            style={{
-              margin: 10,
-              backgroundColor: '#f9f9f9',
-            }}>
-            <Text>❌</Text>
-          </TouchableOpacity>
-        </CardItem>
+  const showButton = () => {
+    setVisibility(true);
 
-        <CardItem bordered style={{ borderRadius: 20 }}>
-          <Body>
-            <Text style={{ fontWeight: '700' }}>{title}</Text>
-            <Text style={{ fontWeight: '400' }}>{desc}</Text>
-          </Body>
-        </CardItem>
-        <CardItem
-          footer
-          bordered
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            borderRadius: 20,
-          }}>
-          <Text style={{ flex: 4 }}>DUE: {dueDate} </Text>
-          <Text style={{ flex: 2 }}> {status * 100} % 완료 </Text>
+    // setTimeout(() => setVisibility(false), 1500);
+  };
 
-          {isCompleted ? (
-            <TouchableOpacity
-              onPress={onIncomplete}
-              style={{
-                margin: 10,
-                backgroundColor: '#f9f9f9',
-              }}>
-              <Text>■</Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              onPress={onComplete}
-              style={{
-                margin: 10,
-                backgroundColor: '#f9f9f9',
-              }}>
-              <Text>□</Text>
-            </TouchableOpacity>
-          )}
-        </CardItem>
-      </Card>
-    );
-  }
+  const tag = tags.get(tagId);
 
-  function _renderContent(item: AccordionItem) {
-    const { desc, due, out, isCompleted, status, subAssigns, id } = item.raw;
-    const subAssignList = subAssigns.map((subAssign: SubAssignType) => {
-      return (
-        <SubAssign
-          {...subAssign}
-          onIncomplete={() => subAssignActions.incompleteSubAssign(id, subAssign.id)}
-          onComplete={() => subAssignActions.completeSubAssign(id, subAssign.id)}
-          onRemove={() => subAssignActions.removeSubAssign(id, subAssign.id)}
-          updateSubAssign={toBeImplemented}
-          key={subAssign.id}
-        />
-      );
-    });
 
-    return (
-      <View>
-        <Card>
-          <CardItem bordered header>
-            <AddSubAssign onAdd={
-              (subAssign: SubAssignType) =>
-              subAssignActions.addSubAssign(id, subAssign)} />
-          </CardItem>
-          <CardItem bordered style={{ borderRadius: 20 }}>
-            <Body>{subAssignList}</Body>
-          </CardItem>
-        </Card>
-      </View>
-    );
-  }
+  const [confirmModalVisible, setConfirmModalVisible] = useState(false);
+  const showConfirmModal = () => setConfirmModalVisible(true);
+  const hideConfirmModal = () => setConfirmModalVisible(false);
 
   return (
-    <Accordion
-      style={styles.cardView}
-      dataArray={[
-        { raw: { title, desc, due, out, isCompleted, status, subAssigns, id } },
-      ]}
-      renderHeader={_renderHeader}
-      renderContent={_renderContent}
-    />
+    <SwipeRow onSwipe={showConfirmModal} swipeThreshold={-100}>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          borderColor: '#eee',
+          borderBottomWidth: 0.5,
+          padding: 5,
+        }}>
+        <ConfirmModal
+          title="정말 없애시겠어요?"
+          isVisible={confirmModalVisible}
+          cancelText="취소"
+          confirmText="확인"
+          onCancel={hideConfirmModal}
+          onConfirm={onRemove}
+          hideModal={hideConfirmModal}
+        />
+        <Card style={cardStyle}>
+          <Pressable onLongPress={showButton}>
+            <View>
+              <CardItem
+                header
+                bordered
+                style={{
+                  flex: 1,
+                  flexDirection: 'row',
+                  padding: 5,
+                  justifyContent: 'space-evenly',
+                  alignItems: 'center',
+                  borderRadius: 20,
+                }}>
+                <TagMock tag={tag} style={{ marginRight: 10 }} id={tagId} />
+
+                <Text style={{ fontWeight: '400', flex: 2 }}>{text}</Text>
+              </CardItem>
+
+              <CardItem
+                footer
+                bordered
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  borderRadius: 20,
+                }}>
+                <Text></Text>
+                <Text> {dueDate} </Text>
+              </CardItem>
+              {buttonVisible && (
+                <View style={styles.overlay}>
+                  <IconButton
+                    icon="pencil"
+                    color="white"
+                    style={styles.button}
+                    onPress={onStartEdit}
+                  />
+
+                  <IconButton
+                    icon="trash-can"
+                    color="white"
+                    style={styles.button}
+                    onPress={showConfirmModal}
+                  />
+                </View>
+              )}
+            </View>
+          </Pressable>
+        </Card>
+
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: 'white',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderColor: '#eee',
+            padding: 5,
+          }}>
+          <CheckBox
+            size={36}
+            checked={isCompleted}
+            onPress={isCompleted ? onIncomplete : onComplete}
+          />
+
+          {/* <Button
+            icon
+            onPress={onStartEdit}
+            style={{ borderRadius: 20, backgroundColor: '#bbb' }}>
+            <Icon name="pencil" />
+          </Button> */}
+        </View>
+      </View>
+      {/* </TouchableHighlight> */}
+    </SwipeRow>
   );
 }
 
@@ -194,6 +159,13 @@ export default Assign;
 
 const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
+  incompletedCard: { backgroundColor: 'white', borderRadius: 20, flex: 5 },
+  completedCard: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    flex: 5,
+    opacity: 0.3,
+  },
   cardView: {
     margin: 5,
     padding: 5,
@@ -208,46 +180,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  circle: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    borderWidth: 3,
-    marginRight: 20,
-  },
-  completedCircle: {
-    borderColor: '#bbb',
-  },
-  uncompletedCircle: {
-    borderColor: '#F23657',
-  },
-  text: {
-    fontWeight: '600',
-    fontSize: 20,
-  },
-  completedText: {
-    color: '#bbb',
-    textDecorationLine: 'line-through',
-  },
-  uncompletedText: {
-    color: '#353839',
-  },
-  column: {
+  overlay: {
+    flexGrow: 1,
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: '100%',
+    height: '100%',
+    alignSelf: 'center',
+    justifyContent: 'center',
     flexDirection: 'row',
+    borderRadius: 20,
     alignItems: 'center',
-    width: width / 2,
+    paddingVertical: 25,
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
   },
-  actions: {
-    flexDirection: 'row',
-  },
-  actionText: {},
-  actionContainer: {
-    marginVertical: 10,
-    marginHorizontal: 10,
-  },
-  input: {
-    width: width / 2,
-    marginVertical: 15,
-    paddingBottom: 5,
+  button: {
+    width: 60,
+    height: 60,
+    backgroundColor: 'rgba(0, 120, 255, 1)',
+    borderRadius: 30,
+    marginHorizontal: 15,
+    justifyContent: 'center',
   },
 });

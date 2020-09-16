@@ -1,0 +1,1 @@
+java -jar "C:/Users/tyler/Desktop/tutoring_helper/bundletool-all-1.1.0.jar" build-apks --bundle="C:/Users/tyler/Desktop/tutoring_helper/android/app/build/outputs/bundle/release/app-release.aab" --output="C:/Users/tyler/Desktop/tutoring_helper/app.apks" --mode=universal
