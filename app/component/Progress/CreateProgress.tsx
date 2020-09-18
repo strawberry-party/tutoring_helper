@@ -1,21 +1,22 @@
-import { Form, Input, Item } from 'native-base';
-import React, { useState, useEffect } from 'react';
-import { StudentInfoType } from '../../types/student';
-import { connect } from 'react-redux';
-import database from '@react-native-firebase/database';
-import _ from 'lodash';
 import {
   Button,
-  TouchableOpacity,
-  Text,
   Image,
   ScrollView,
-  View,
   StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
+import { Form, Input, Item } from 'native-base';
+import React, { useEffect, useState } from 'react';
+
 import DocumentPicker from 'react-native-document-picker';
-import { TextInput } from 'react-native-paper';
 import { Picker } from '@react-native-community/picker';
+import { StudentInfoType } from '../../types/student';
+import { TextInput } from 'react-native-paper';
+import _ from 'lodash';
+import { connect } from 'react-redux';
+import database from '@react-native-firebase/database';
 
 const db = database();
 
@@ -35,13 +36,14 @@ function CreateProgress({
   bookArray,
 }: CreateProgressProps) {
   const lessonId = _.uniqueId('lesson_');
-  if (currentStudentlessonTotalNum === undefined) currentStudentlessonTotalNum = 0;
-  
+  if (currentStudentlessonTotalNum === undefined)
+    currentStudentlessonTotalNum = 0;
+
   const [state, setState] = useState({
     text: '',
     files: [],
   });
-  
+
   const handleSubmit = () => {
     db.ref(`tutors/${tutorId}/studentArray/${currentStudentId}`).update({
       lessonTotalNum: currentStudentlessonTotalNum + 1,
@@ -58,7 +60,7 @@ function CreateProgress({
     ).set({
       text: state.text,
       isCompleted: false,
-    })
+    });
     navigation.navigate('진도관리');
   };
 
@@ -81,10 +83,10 @@ function CreateProgress({
 
   return (
     <Form>
-      <Picker>
+      {/* <Picker>
 
-      </Picker>
-      {/* <TextInput
+      </Picker> */}
+      <TextInput
         mode="outlined"
         label="진도 내용"
         value={state.text}
@@ -92,7 +94,7 @@ function CreateProgress({
         style={styles.textInput}
         selectionColor="#f48eb1"
         theme={{ colors: { primary: '#f48eb1', placeholder: '#b2b2b2' } }}
-      /> */}
+      />
       <TouchableOpacity
         activeOpacity={0.5}
         style={styles.buttonStyle}
@@ -116,7 +118,10 @@ function CreateProgress({
           </View>
         ))}
       </ScrollView>
-      <TouchableOpacity style={state.text==='' ? styles.disabledButton : styles.button} onPress={handleSubmit} disabled={state.text==='' ? true : false}>
+      <TouchableOpacity
+        style={state.text === '' ? styles.disabledButton : styles.button}
+        onPress={handleSubmit}
+        disabled={state.text === '' ? true : false}>
         <Text style={{ color: '#ffffff', fontWeight: '500', fontSize: 20 }}>
           진도 추가
         </Text>
