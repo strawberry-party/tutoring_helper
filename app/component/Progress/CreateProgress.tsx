@@ -11,20 +11,15 @@ import {
   ScrollView,
   View,
   StyleSheet,
+  Button,
+  FlatList,
 } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import { Picker } from '@react-native-community/picker';
+import Modal from 'react-native-modal';
+import { List } from 'react-native-paper';
 
 const db = database();
-
-const initialBookInfo = {
-  book: {},
-  bookName: '교재를 선택하세요',
-  bigChapters: [],
-  bigChapterName: '대단원을 선택하세요',
-  smallChapters: [],
-  smallChapterName: '소단원을 선택하세요',
-};
 
 function CreateProgress({
   currentStudentlessonTotalNum,
@@ -36,23 +31,109 @@ function CreateProgress({
   const lessonId = _.uniqueId('lesson_');
   if (currentStudentlessonTotalNum === undefined)
     currentStudentlessonTotalNum = 0;
-  const [bookInfo, setBook] = useState(initialBookInfo);
-  const [hasSmallChapter, setHasSmallChapter] = useState(false);
+  const [bookInfo, setBook] = useState({
+    book: {},
+    bookName: '',
+    bigChapters: [],
+    selectedChapters: [],
+  });
+  const [isChapterModalVisible, setChapterModalVisible] = useState(false);
   const [state, setState] = useState({
-    chapter: null,
+    chapterArray: null,
     files: [],
   });
-  
   const bookNames = bookArray.map((book) => book.info.name);
   const bookNamesPicker = bookNames.map((bookName) => {
     return <Picker.Item key={bookName} label={bookName} value={bookName} />;
   });
-  const bigChaptersPicker = bookInfo.bigChapters.map((chapter) => {
-    return <Picker.Item key={chapter} label={chapter} value={chapter} />;
-  });
-  const smallChaptersPicker = bookInfo.smallChapters.map((chapter) => {
-    return <Picker.Item key={chapter} label={chapter} value={chapter} />;
-  });
+
+  const handlePress = (chapter) => {
+    var isIn = false;
+    bookInfo.selectedChapters.forEach((check) => {
+      if (check.key === chapter.key) {
+        isIn = true;
+      }
+    });
+    if (isIn) {
+      console.log('안에있음');
+      var temp = bookInfo.selectedChapters.filter(
+        (check) => check.key !== chapter.key,
+      );
+    } else {
+      if (typeof chapter.value === 'number') {
+        //단원 마무리 처럼 소단원 key의 value가 바로 문제 수가 오는 경우 처리
+        var temp = [
+          ...bookInfo.selectedChapters,
+          { ...chapter, value: { [chapter.key]: chapter.value } },
+        ];
+      }
+      var temp = [...bookInfo.selectedChapters, chapter];
+    }
+    setBook({ ...bookInfo, selectedChapters: temp });
+  };
+
+  const renderChapters = ({ item }) =>
+    checkSmallChapter(item) ? (
+      <List.AccordionGroup>
+        <List.Accordion title={item.key} id={item.key}>
+          {smallChapters(item)}
+        </List.Accordion>
+      </List.AccordionGroup>
+    ) : (
+      <TouchableOpacity
+        style={{ marginVertical: 10, borderWidth: 1, paddingVertical: 10 }}
+        onPress={() => handlePress(item)}>
+        <Text>{item.key}</Text>
+      </TouchableOpacity>
+    );
+
+  const smallChapters = (bigChapter) => {
+    return Object.entries(bigChapter.value)
+      .sort()
+      .map(([key, value]) => (
+        <TouchableOpacity
+          key={bigChapter.key + key}
+          style={{ marginVertical: 10, borderWidth: 1, paddingVertical: 10 }}
+          onPress={() => {
+            const newKey = bigChapter.key + '-' + key;
+            const chapter = { key: newKey, value };
+            handlePress(chapter);
+          }}>
+          <Text>{key}</Text>
+        </TouchableOpacity>
+      ));
+  };
+
+  const checkSmallChapter = (chapter) => {
+    var hasObject = false;
+    Object.values(chapter.value).forEach((value) => {
+      if (typeof value !== 'number') {
+        hasObject = true;
+      }
+    });
+    return hasObject;
+  };
+
+  const toggleChapterModal = () => {
+    setChapterModalVisible(!isChapterModalVisible);
+    const chapterArray = bookInfo.selectedChapters.map((chapter) => {
+      const problems = Object.entries(chapter.value)
+        .reverse()
+        .map(([key, value]) => {
+          return {
+            title: key,
+            count: value,
+            correct: 0
+          };
+        });
+      return {
+        title: chapter.key,
+        problems,
+        checked: false,
+      };
+    });
+    setState({ ...state, chapterArray });
+  };
 
   const handleSubmit = () => {
     db.ref(`tutors/${tutorId}/studentArray/${currentStudentId}`).update({
@@ -63,65 +144,23 @@ function CreateProgress({
     ).set({
       file: state.files,
       lessonNum: currentStudentlessonTotalNum + 1,
-      chapter: state.chapter,
+      chapterArray: state.chapterArray,
     });
     navigation.navigate('진도관리');
   };
 
   const selectBook = (bookName) => {
-    setHasSmallChapter(false);
     const book = bookArray.filter((book) => book.info.name == bookName)[0];
-    const bigChapters = Object.keys(book.info.contents).sort();
+    const bigChapters = Object.entries(book.info.contents)
+      .sort()
+      .map(([key, value]) => Object.assign({}, { key, value }));
     setBook({
       ...bookInfo,
       book,
       bookName,
       bigChapters,
-      smallChapters: [],
-      smallChapterName: '소단원을 선택하세요',
+      selectedChapters: [],
     });
-  };
-
-  const selectBigChapter = (chapterName) => {
-    const content = bookInfo.book.info.contents[chapterName];
-    var hasObject = false;
-    Object.values(content).forEach((value) => {
-      if (typeof value !== 'number') {
-        hasObject = true;
-      }
-    });
-    if (hasObject) {
-      // 소단원이 존재할 시
-      setHasSmallChapter(true);
-      const smallChapters = Object.keys(content).sort();
-      setBook({ ...bookInfo, bigChapterName: chapterName, smallChapters });
-      return;
-    } else {
-      const chapter = {
-        [chapterName]: content,
-      };
-      setBook({ ...bookInfo, bigChapterName: chapterName });
-      setState({ ...state, chapter });
-    }
-  };
-
-  const selectSmallChapter = (chapterName) => {
-    const content =
-      bookInfo.book.info.contents[bookInfo.bigChapterName][chapterName];
-    var chapter = {};
-    if (typeof content === 'number') {
-      chapter = {
-        [chapterName]: {
-          [chapterName]: content,
-        },
-      };
-    } else {
-      chapter = {
-        [chapterName]: content,
-      };
-    }
-    setBook({ ...bookInfo, smallChapterName: chapterName });
-    setState({ ...state, chapter });
   };
 
   const selectMultipleFile = async () => {
@@ -151,29 +190,34 @@ function CreateProgress({
         <Picker.Item label="교재를 선택하세요" value={-1} />
         {bookNamesPicker}
       </Picker>
-      <Picker
-        prompt="대단원을 선택하세요"
-        selectedValue={bookInfo.bigChapterName}
-        onValueChange={(itemValue) =>
-          itemValue === -1 ? '' : selectBigChapter(itemValue)
-        }>
-        <Picker.Item label="대단원을 선택하세요" value={-1} />
-        {bigChaptersPicker}
-      </Picker>
-      {hasSmallChapter ? (
-        <Picker
-          prompt="소단원을 선택하세요"
-          enabled={hasSmallChapter}
-          selectedValue={bookInfo.smallChapterName}
-          onValueChange={(itemValue) =>
-            itemValue === -1 ? '' : selectSmallChapter(itemValue)
-          }>
-          <Picker.Item label="소단원을 선택하세요" value={-1} />
-          {smallChaptersPicker}
-        </Picker>
-      ) : (
-        null
-      )}
+      <TouchableOpacity style={{margin: 10}} onPress={toggleChapterModal}>
+        <Text>단원을 선택하세요</Text>
+      </TouchableOpacity>
+      <Modal
+        scrollHorizontal={false}
+        style={{ backgroundColor: '#ffffff' }}
+        onBackdropPress={toggleChapterModal}
+        isVisible={isChapterModalVisible}>
+        <FlatList
+          contentContainerStyle={{ flexGrow: 2 }}
+          data={bookInfo.bigChapters}
+          renderItem={renderChapters}
+          keyExtractor={(bigChapter) => bigChapter.key}
+        />
+        <FlatList
+          contentContainerStyle={{ flexGrow: 1 }}
+          data={bookInfo.selectedChapters}
+          renderItem={({ item }) => <Text>{item.key}</Text>}
+          keyExtractor={(chapter) => chapter.key}
+        />
+        <Button title="선택 완료" onPress={toggleChapterModal} />
+      </Modal>
+      <FlatList
+        contentContainerStyle={{ flexGrow: 1 }}
+        data={bookInfo.selectedChapters}
+        renderItem={({ item }) => <Text>{item.key}</Text>}
+        keyExtractor={(chapter) => chapter.key}
+      />
 
       <TouchableOpacity
         activeOpacity={0.5}
@@ -199,9 +243,11 @@ function CreateProgress({
         ))}
       </ScrollView>
       <TouchableOpacity
-        style={state.chapter === null ? styles.disabledButton : styles.button}
+        style={
+          state.chapterArray === null ? styles.disabledButton : styles.button
+        }
         onPress={handleSubmit}
-        disabled={state.chapter === null ? true : false}>
+        disabled={state.chapterArray === null ? true : false}>
         <Text style={{ color: '#ffffff', fontWeight: '500', fontSize: 20 }}>
           진도 추가
         </Text>
