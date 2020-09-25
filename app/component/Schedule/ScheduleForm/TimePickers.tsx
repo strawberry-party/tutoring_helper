@@ -1,13 +1,7 @@
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-  View,
-} from 'react-native';
 import React, { useState } from 'react';
+import { Text, View } from 'react-native';
 
+import Icon from 'react-native-vector-icons/Ionicons';
 import MyDatePicker from '../../common/MyDatePicker';
 import styles from './styles';
 
@@ -17,23 +11,49 @@ export function LessonTimePicker({
   newEnd,
   newStart,
 }) {
+  const hasError = () => {
+    return newStart.isAfter(newEnd);
+  };
+
   return (
-    <View style={styles.inputContainer}>
-      <Text style={styles.headline}> 시간 </Text>
+    <View style={[styles.inputContainer, {alignItems: 'flex-start'}]}>
+      <Icon
+        name="time-outline"
+        size={30}
+        color="#bbb"
+        style={{ marginTop: 10 }}
+      />
+
       <View style={{ padding: 5 }}>
-        <MyDatePicker
-          onConfirm={onConfirmStart}
-          day={newStart}
-          msg={'시작'}
-          mode={'datetime'}
-        
-        />
-        <MyDatePicker
-          onConfirm={onConfirmEnd}
-          day={newEnd}
-          msg={'종료'}
-          mode={'datetime'}
-        />
+        <View style={styles.datePickerContainer}>
+          <MyDatePicker
+            onConfirm={onConfirmStart}
+            day={newStart}
+            mode={'date'}
+            dateTextStyle={hasError() ? styles.errorText : styles.dateTextStyle}
+          />
+          <MyDatePicker
+            onConfirm={onConfirmStart}
+            day={newStart}
+            mode={'time'}
+            dateTextStyle={hasError() ? styles.errorText : styles.dateTextStyle}
+          />
+        </View>
+
+        <View style={styles.datePickerContainer}>
+          <MyDatePicker
+            onConfirm={onConfirmEnd}
+            day={newEnd}
+            mode={'date'}
+            dateTextStyle={styles.dateTextStyle}
+          />
+          <MyDatePicker
+            onConfirm={onConfirmEnd}
+            day={newEnd}
+            mode={'time'}
+            dateTextStyle={styles.dateTextStyle}
+          />
+        </View>
       </View>
     </View>
   );

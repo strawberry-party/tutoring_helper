@@ -45,13 +45,13 @@ export default function MyDatePicker({
         {mode == 'time'
           ? day.format('HH시 mm분').toString()
           : mode === 'date'
-          ? day.format('MM월 DD일').toString()
+          ? day.format('YYYY년 MM월 DD일').toString()
           : day.format('MM월 DD일 HH시 mm분').toString()}
       </Text>
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
         mode={mode}
-        date={new Date()}
+        date={day.toDate()}
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
       />

@@ -23,7 +23,7 @@ import weeklyScheduleParser, {
 import DailyScheduleSelector from '../DailyScheduleSelector/index';
 import { Header } from './etc';
 import { LessonTimePicker } from './TimePickers';
-import { Reminder } from './Reminder';
+import ReminderSelector from './ReminderSelector';
 import { RepeatSelector } from './RepeatSelector';
 import SubmitOptionModal from './SubmitOptionModal';
 import { TagType } from '../../../types/root';
@@ -102,7 +102,24 @@ export default function AddScheduleForm({
     return endAfter;
   };
 
+  const isValid = () => {
+    if (repeat) {
+      return (
+        !(selectedDays.length === 0) &&
+        (!(endPointMode === 'lastDay') || !start.isAfter(lastDay))
+      );
+    } else {
+      return !start.isAfter(end);
+    }
+  };
+
   const handleSubmit = () => {
+    if (!isValid()) {
+      console.log('invalid input');
+
+      return;
+    }
+    
     if (!repeat) {
       addSchedule(getFormWorkSchedule());
       hideModal();
@@ -164,14 +181,10 @@ export default function AddScheduleForm({
     );
   };
 
-  const setAllSameTime = () => {
-    setStartTimes(generateWeek(start));
-    setEndTimes(generateWeek(end));
-  };
-
   return (
     <View style={styles.container}>
-      <Header handleSubmit={handleSubmit} />
+      <Header handleSubmit={handleSubmit} label={'일정 만들기'} />
+
       <ScrollView style={styles.formContainer}>
         <View>
           <TitleInput value={text} onChangeText={onChangeTitle} />
@@ -204,7 +217,6 @@ export default function AddScheduleForm({
                 onChangeStartTimes={onChangeStartTimes}
                 endTimes={endTimes}
                 startTimes={startTimes}
-                setAllSameTime={setAllSameTime}
                 selectedDays={selectedDays}
                 selectDays={selectDays}
               />
@@ -213,17 +225,18 @@ export default function AddScheduleForm({
                 onConfirmStartPoint={onConfirmStart}
               />
               <EndPointSelector
-                setEndPoint={setEndPointMode}
-                newEndPoint={endPointMode}
+                startPoint={start}
+                setEndPointMode={setEndPointMode}
+                endPointMode={endPointMode}
                 endAfterNumTimes={endAfterNumTimes}
                 setEndAfterNumTimes={setEndAfterNumTimes}
-                newLastDay={lastDay}
+                lastDay={lastDay}
                 onConfirmLastDay={onConfirmLastDay}
               />
             </View>
           )}
 
-          <Reminder
+          <ReminderSelector
             defaultReminder={reminder}
             onSubmitDialog={(minute: number) => setReminder(minute)}
           />

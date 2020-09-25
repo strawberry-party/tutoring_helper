@@ -15,21 +15,9 @@ import { ScheduleType } from '../../types/schedule';
 export interface AgendaCardType {
   schedule: ScheduleType;
   onPressAgendaCard: (schedule: ScheduleType) => void;
-  // startPoint: string; // dayjs.Dayjs;
-  // endPoint: string; // dayjs.Dayjs;
-
-  // text?: string;
-  // memo?: string;
 }
 
 /// 일정이 없으면 아무것도 렌더링하지 않는 것으로 결정
-// export function EmptyCard() {
-//   return (
-//     <View style={styles.emptyItem}>
-//       <Text style={styles.emptyItemText}>일정이 없어요! </Text>
-//     </View>
-//   );
-// }
 
 function AgendaCard({ schedule, onPressAgendaCard }) {
   const {

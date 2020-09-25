@@ -12,20 +12,18 @@ import {
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { connect, useSelector } from 'react-redux';
-import {
-  schedules as initialSchedules,
-  repeatedScheduleInfoList,
-} from '../common/scheduleMockData';
 
 import AddButton from '../component/common/AddButton';
-import AlarmDialog from '../component/common/AlarmDialog';
+import { Dayjs } from 'dayjs';
+import { FilterButton } from '../component/common/Buttons';
+import FilterModal from '../component/Schedule/FilterModal';
 import PushMaker from '../component/common/PushMaker';
 import { RootState } from '../states';
 import ScheduleDetailModal from '../component/Schedule/ScheduleDetailModal';
 import ScheduleTester from '../component/Schedule/ScheduleTester';
 import StudentCalendar from '../component/Schedule/StudentCalendar';
 import _ from 'lodash';
-import formWorkScheduleGenerator from '../component/Schedule/scheduleUtils/formWorkScheduleGenerator';
+import dayjs from 'dayjs';
 import { actions as scheduleActions } from '../states/scheduleState';
 import sortIntoDailyAgendas from '../component/Schedule/scheduleUtils/sortIntoDailyAgendas';
 
@@ -45,6 +43,7 @@ function ScheduleContainer({
   removeRepetition,
   editRepetition,
 }: ScheduleContainerProps) {
+  const tags = useSelector((state: RootState) => state.tagReducer.tags);
   const schedules = useSelector((state) => state.scheduleReducer.schedules);
   const repeatInfos = useSelector((state) => state.scheduleReducer.repeatInfos);
   const selectedScheduleId = useSelector(
@@ -56,6 +55,15 @@ function ScheduleContainer({
   const [addFormVisible, setAddFormVisible] = useState(false);
   const [editFormVisible, setEditFormVisible] = useState(false);
   const [detailVisible, setDetailVisible] = useState(false);
+  const [filterVisible, setFilterVisible] = useState(false);
+
+  const [activeFilter, setActiveFilter] = useState({
+    type: 'some' as 'all' | 'none' | 'some',
+    students: ['student_1'],
+    tags: ['tag_1'],
+    durationStart: dayjs(),
+    durationEnd: dayjs(),
+  });
 
   // useEffect(() => {
   //   console.log('==========CHANGED repeatInfos ====');
@@ -68,6 +76,16 @@ function ScheduleContainer({
   //   schedules.forEach((item: ScheduleType) => item.print());
   //   console.log('====================================');
   // }, [schedules]);
+
+
+  const onAddSchedule = (
+    formWorkSchedule,
+    linkedRepeatedScheduleInfoId = 'none',
+    reminder = 0
+  ) => {
+    addSchedule(formWorkSchedule, linkedRepeatedScheduleInfoId);
+    addReminder(formWorkSchedule, reminder);
+  };
 
   useEffect(() => {
     if (selectedScheduleId === 'none') setDetailVisible(false);
@@ -105,7 +123,7 @@ function ScheduleContainer({
             alignItems: 'center',
           }}>
           <PushMaker />
-          {/* <AlarmDialog text="알림" /> */}
+          <FilterButton showFilterModal={() => setFilterVisible(true)} />
         </View>
 
         {/* <Text> 헬로 월드 </Text> */}
@@ -168,6 +186,28 @@ function ScheduleContainer({
             repeatedScheduleInfos={repeatInfos}
             selectedScheduleId={selectedScheduleId}
             showFormModal={() => setEditFormVisible(true)}
+          />
+        </View>
+
+        <View style={styles.mock}>
+          <FilterModal
+            modalVisible={filterVisible}
+            hideModal={() => setFilterVisible(false)}
+            activeFilter={activeFilter}
+            setActiveFilter={setActiveFilter}
+            data={{
+              tags: new Map([
+                ['tag_1', '수학'],
+                ['tag_2', '과학'],
+              ]),
+              students: new Map([
+                ['student_1', '김태형'],
+                ['student_2', '최상아'],
+              ]),
+            }}
+            // tags={tags}
+            // students={['student_1', 'student_2']}
+            // duration={{start: '2020-09-10', end:'2020-10-10'}}
           />
         </View>
       </View>

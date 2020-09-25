@@ -4,7 +4,6 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { lightThemeColor, themeColor } from './scheduleThemeProvider';
 
 import _ from 'lodash';
-import sortIntoDailyAgendas from './scheduleUtils/sortIntoDailyAgendas';
 
 // import { test_getRepeatedSchedules } from './scheduleUtils/getRepeatedFormWorkSchedules';
 // import { test_scheduleGenerator } from './scheduleUtils/formWorkScheduleGenerator';

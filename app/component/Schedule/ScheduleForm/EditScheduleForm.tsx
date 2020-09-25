@@ -24,7 +24,7 @@ import weeklyScheduleParser, {
 import DailyScheduleSelector from '../DailyScheduleSelector/index';
 import { Header } from './etc';
 import { LessonTimePicker } from './TimePickers';
-import { Reminder } from './Reminder';
+import ReminderSelector from './ReminderSelector';
 import { RepeatSelector } from './RepeatSelector';
 import SubmitOptionModal from './SubmitOptionModal';
 import { TagType } from '../../../types/root';
@@ -53,15 +53,6 @@ const tagList = [
 const defaultEndAfter = ({ numOfTimes: 5 } as EndAfterNTimes) as EndAfterType;
 const defaultWeeklySchedule = new WeeklyScheduleType();
 
-const ALL = 'ALL' as const;
-const ONLY_THIS = 'ONLY_THIS' as const;
-
-// 4 modes of submit
-const EDIT_REPEAT = 'EDIT_REPEAT';
-const ADD_REPEAT = 'ADD_REPEAT';
-const REMOVE_REPEAT = 'REMOVE_REPEAT';
-const NOTHING_WITH_REPEAT = 'NOTHING_WITH_REPEAT';
-
 export default function EditScheduleForm({
   selectedSchedule,
   editSchedule,
@@ -82,7 +73,23 @@ export default function EditScheduleForm({
     linkedRepeatedScheduleInfoId,
   } = selectedSchedule;
 
+  const isValid = () => {
+    if (repeat) {
+      return (
+        !(selectedDays.length === 0) &&
+        (!(endPointMode === 'lastDay') || !newStart.isAfter(newLastDay))
+      );
+    } else {
+      return !newStart.isAfter(newEnd);
+    }
+  };
+
   const handleSubmit = () => {
+    if (!isValid()) {
+      console.warn('invalid input');
+
+      return;
+    }
     const hasLinked: boolean =
       selectedSchedule.linkedRepeatedScheduleInfoId !== 'none';
 
@@ -286,7 +293,7 @@ export default function EditScheduleForm({
 
   return (
     <View style={styles.container}>
-      <Header handleSubmit={handleSubmit} />
+      <Header handleSubmit={handleSubmit} label={'일정 고치기'} />
       <ScrollView style={styles.formContainer}>
         <View>
           <TitleInput value={newText} onChangeText={onChangeTitle} />
@@ -320,7 +327,6 @@ export default function EditScheduleForm({
                 onChangeStartTimes={onChangeStartTimes}
                 endTimes={endTimes}
                 startTimes={startTimes}
-                setAllSameTime={setAllSameTime}
                 selectedDays={selectedDays}
                 selectDays={selectDays}
               />
@@ -330,17 +336,18 @@ export default function EditScheduleForm({
               />
 
               <EndPointSelector
-                setEndPoint={setEndPoint}
-                newEndPoint={endPointMode}
+                startPoint={newStart}
+                setEndPointMode={setEndPoint}
+                endPointMode={endPointMode}
                 endAfterNumTimes={endAfterNumTimes}
                 setEndAfterNumTimes={setEndAfterNumTimes}
-                newLastDay={newLastDay}
+                lastDay={newLastDay}
                 onConfirmLastDay={onConfirmLastDay}
               />
             </View>
           )}
 
-          <Reminder
+          <ReminderSelector
             defaultReminder={reminder}
             onSubmitDialog={(minute: number) => setReminder(minute)}
           />

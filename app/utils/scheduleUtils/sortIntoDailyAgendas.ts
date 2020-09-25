@@ -1,4 +1,4 @@
-import { DailyAgendasType, ScheduleType } from '../../../types/schedule';
+import { DailyAgendasType, ScheduleType } from '../types/schedule';
 
 import _ from 'lodash';
 
@@ -11,9 +11,9 @@ export default function sortIntoDailyAgendas(
 ): DailyAgendasType[] {
   var dailyAgendas: DailyAgendasType[] = [];
   var dateToIndexMap: Map<string, number> = new Map<string, number>();
-  // console.log('sortIntoDailyAgendas: ' + schedules.length);
+  console.log('sortIntoDailyAgendas: ' + schedules.length);
   schedules.forEach((schedule: ScheduleType) => {
-    // console.log(schedule.time.start);
+    console.log(schedule.time.start);
     var startPoint = schedule.time.start.format(formatString);
     // var detailTime = schedule.time.start.format(hourMinuteFormatString);
     if (dateToIndexMap.has(startPoint)) {

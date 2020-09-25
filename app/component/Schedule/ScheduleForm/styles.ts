@@ -71,11 +71,22 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginBottom: 15,
-    justifyContent: 'flex-start',
-    borderBottomColor: '#bbb',
-    borderBottomWidth: 0.5,
-    // flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
   },
+
+  inputContainerWithBorder: {
+    marginBottom: 15,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+    borderBottomColor: '#bbb',
+    borderBottomWidth: 0.3,
+    borderTopColor: '#bbb',
+    borderTopWidth: 0.3,
+  },
+
   reminderButtonContainer: {
     flexDirection: 'column',
     marginBottom: 30,
@@ -85,7 +96,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '700',
     color: '#bbb',
-    flex: 1,
+    // flex: 1,
   },
 
   buttonContainer: {
@@ -114,6 +125,19 @@ const styles = StyleSheet.create({
   },
   action: {
     marginHorizontal: 15,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 14,
+  },
+  dateTextStyle: {
+    color: 'black',
+    fontSize: 14,
+  },
+  datePickerContainer: {
+    flexDirection: 'row',
+    // justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

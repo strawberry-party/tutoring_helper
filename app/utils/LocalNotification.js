@@ -36,7 +36,31 @@ function triggerOneTimeLocalNotification(message, title, ringAfterInSecond = 20)
 }
 
 
-function triggerRepeatedLocalNotification(message, title, cycleStartsFrom = new Date(), repeatTime = 2000, repeatType="time", ) {
+
+function triggerOneTimeLocalNotificationDate(id, message, title, date) {
+  PushNotification.localNotificationSchedule({
+    /* Android Only Properties */
+    vibrate: true,
+    vibration: 300,
+    priority: 'hight',
+    visibility: 'public',
+    importance: 'hight',
+
+    /* iOS and Android properties */
+    title,
+    message,
+    playSound: false,
+    number: 1,
+    actions: '["OK"]',
+    id,
+    date
+  });
+
+  register();
+}
+
+
+function triggerRepeatedLocalNotification(message, title, cycleStartsFrom = new Date(), repeatTime = 2000, repeatType = "time",) {
   PushNotification.localNotificationSchedule({
     /* Android Only Properties */
     vibrate: true,
@@ -76,5 +100,6 @@ async function register() {
 export default {
   _unRegisterAllLocalNotification,
   triggerOneTimeLocalNotification,
-  triggerRepeatedLocalNotification, register
+  triggerRepeatedLocalNotification, register,
+  triggerOneTimeLocalNotificationDate
 };

@@ -1,15 +1,11 @@
-import { Button, Input, Item } from 'native-base';
-import { Chip, FAB, RadioButton, TextInput } from 'react-native-paper';
+import React, { useState } from 'react';
 import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
   Text,
-  TouchableHighlight,
+  TextInput,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
 
+import Icon from 'react-native-vector-icons/Ionicons'
 import styles from './styles';
 
 export function TitleInput({ value, onChangeText }) {
@@ -18,7 +14,7 @@ export function TitleInput({ value, onChangeText }) {
       <TextInput
         value={value}
         onChangeText={onChangeText}
-        style={[styles.inputText, { fontSize: 20, color: '#bbb' }]}
+        style={[styles.inputText, { fontSize: 20, color: 'black' }]}
         placeholder={'제목 추가'}
       />
     </View>
@@ -27,12 +23,13 @@ export function TitleInput({ value, onChangeText }) {
 
 export function MemoBox({ newMemo, onChangeMemo }) {
   return (
-    <View style={[styles.inputContainer, { borderBottomColor: 'transparent' }]}>
-      <Text style={styles.headline}> 메모 </Text>
+    <View style={styles.inputContainerWithBorder}>
+      <Icon name="document-text-outline" size={30} color="#bbb" style={{marginRight: 30}}/>
       <TextInput
         value={newMemo}
         onChangeText={onChangeMemo}
         style={[styles.inputText, styles.memoContainer]}
+        placeholder={"메모"}
         multiline
       />
     </View>

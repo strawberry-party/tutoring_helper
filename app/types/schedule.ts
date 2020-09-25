@@ -222,19 +222,15 @@ export class ScheduleType {
   }
 }
 
-// export function getScheduleFromRawData(
-//   text,
-//   studentId,
-//   tagId,
-//   time,
-//   memo,
-//   linkedRepeatedScheduleInfoId,
-//   id,
-// ): ScheduleType {
-//   return new ScheduleType(formWork);
-// }
-
 export interface DailyAgendasType {
   title: string;
   data: ScheduleType[];
+}
+
+export class ReminderType {
+  id: string;
+  title: string;
+  message: string;
+  date: Date;
+  linkedScheduleId: string;
 }

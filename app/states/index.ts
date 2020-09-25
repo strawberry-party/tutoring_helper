@@ -5,6 +5,7 @@ import { combineReducers } from 'redux';
 import currentStudentReducer from './currentStudentState';
 import { enableMapSet } from 'immer';
 import lessonReducer from './lessonState';
+import reminderReducer from './reminderState';
 import scheduleReducer from './scheduleState';
 import tagReducer from './tagState';
 import tutorReducer from './tutorState';
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   tutorReducer,
   tagReducer,
   scheduleReducer,
+  reminderReducer,
 });
 
 export default rootReducer;

@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlignVertical: 'center'
   },
-  
+
 
   inputText: {
     fontSize: 16,
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
 
   },
 
-  dayScheduleSelectorText:{
+  dayScheduleSelectorText: {
     marginRight: 15,
     fontSize: 16,
     fontWeight: '400'
@@ -102,6 +102,20 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+
+  errorText: {
+    color: 'red',
+    fontSize: 14
+  },
+
+  dateText: {
+    color: 'black',
+    fontSize: 14
+  },
+
+  dateContainer: {
+
   },
 });
 

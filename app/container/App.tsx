@@ -6,7 +6,6 @@ import {
 
 import AssignContainer from './Homework';
 import DailyScheduleSelector from '../component/Schedule/DailyScheduleSelector';
-import DailyScheduleSelectorContainerExample from '../component/Schedule/DailyScheduleSelectorExample';
 import DrawerNavigator from './DrawerNavigator';
 import HomeworkContainer from './Homework';
 import { Provider } from 'react-redux';

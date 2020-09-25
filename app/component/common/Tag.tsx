@@ -24,6 +24,23 @@ export function TagMock({ tag, style, id }) {
   );
 }
 
+export function FilterChip({
+  label,
+  selectedStyle,
+  unselectedStyle,
+  id,
+  onSelect,
+  isSelected,
+}) {
+  return (
+    <Chip
+      style={isSelected ? [selectedStyle] : [unselectedStyle]}
+      onPress={() => onSelect(id)}>
+      {label}
+    </Chip>
+  );
+}
+
 export default function Tag({
   tag,
   style,
@@ -34,7 +51,9 @@ export default function Tag({
   return (
     <Chip
       style={
-        isSelected ? [tag.style, style, { borderColor: 'black', elevation: 3,}] : [tag.style, style]
+        isSelected
+          ? [tag.style, style, { borderColor: 'black', elevation: 3 }]
+          : [tag.style, style]
       }
       onPress={() => onSelect(id)}>
       {tag.name}

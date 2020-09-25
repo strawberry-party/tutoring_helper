@@ -12,10 +12,10 @@ import React, { useState } from 'react';
 
 import styles from './styles';
 
-export function Header({ handleSubmit }) {
+export function Header({ handleSubmit, label }) {
   return (
     <View style={styles.buttonContainer}>
-      <Text style={styles.title}> 수업 일정 만들기 </Text>
+      <Text style={styles.title}> {label} </Text>
 
       <FAB
         style={styles.button}

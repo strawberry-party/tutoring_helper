@@ -18,9 +18,10 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 
+import Icon from 'react-native-vector-icons/Ionicons';
 import styles from './styles';
 
-export function Reminder({ defaultReminder, onSubmitDialog }) {
+export default function ReminderSelector({ defaultReminder, onSubmitDialog }) {
   const [dialogVisible, setDialogVisible] = useState(false);
   const handleSubmit = (time: number) => {
     onSubmitDialog(time);
@@ -44,13 +45,18 @@ export function Reminder({ defaultReminder, onSubmitDialog }) {
 
   return (
     <View style={styles.inputContainer}>
-      <Menu.Item
-        icon="alarm"
+      <Icon
+        name="notifications-outline"
+        size={30}
+        color="#bbb"
+        style={{ marginRight: 30 }}
+      />
+      <Button
         onPress={() => {
           onShowDialog();
-        }}
-        title={getTitle()}
-      />
+        }}>
+        {getTitle()}
+      </Button>
       <AlarmDialog
         visible={dialogVisible}
         handleSubmit={handleSubmit}

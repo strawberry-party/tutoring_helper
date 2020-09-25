@@ -79,7 +79,6 @@ export function EditScheduleModal({
             addRepeatInfo={addRepeatInfo}
             editRepeatInfo={editRepeatInfo}
             removeRepeatInfo={removeRepeatInfo}
-            addSchedule={addSchedule}
           />
         </View>
       </Modal>

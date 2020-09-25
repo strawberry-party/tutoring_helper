@@ -1,15 +1,17 @@
-import { Button, Chip, FAB, RadioButton, TextInput } from 'react-native-paper';
+import { Button, Checkbox, HelperText } from 'react-native-paper';
 import {
   Pressable,
   ScrollView,
   StyleSheet,
   Text,
   TouchableHighlight,
+  TouchableHighlightBase,
   TouchableOpacity,
   View,
 } from 'react-native';
 import React, { useState } from 'react';
 
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { LessonTime } from '../../../types/schedule';
 import MyDatePicker from '../../common/MyDatePicker';
 import dayjs from 'dayjs';
@@ -24,13 +26,13 @@ export default function DailyScheduleSelector({
   onChangeStartTimes,
   endTimes,
   startTimes,
-  setAllSameTime,
 }) {
   const onPressDay = (dayId: number) => {
     if (selectedDays.includes(dayId))
       selectDays(selectedDays.filter((id) => id !== dayId));
     else selectDays([...selectedDays, dayId]);
   };
+  const [isAllSameTime, setAllSameTime] = React.useState(false);
 
   const dayChipList = dayList.map((day, index) => {
     return (
@@ -43,12 +45,34 @@ export default function DailyScheduleSelector({
     );
   });
 
+  const hasErrors = () => {
+    return selectedDays.length === 0;
+  };
   return (
     <View style={[styles.inputContainer]}>
-      <Text style={styles.headline}> 요일별 수업 시간 </Text>
+      <View
+        style={{
+          justifyContent: 'center',
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}>
+        <Text style={styles.headline}> 요일별 수업 시간 </Text>
+        <Text style={{ color: '#aaa' }}> 모두 같은 시간으로 </Text>
+        <Checkbox
+          status={isAllSameTime ? 'checked' : 'unchecked'}
+          onPress={() => {
+            setAllSameTime(!isAllSameTime);
+          }}
+        />
+      </View>
+      <HelperText type="error" visible={hasErrors()}>
+        하나 이상의 요일을 선택해 주세요!
+      </HelperText>
       <View style={styles.tagContainer}>{dayChipList}</View>
-      <Button onPress={setAllSameTime}> 모두 같은 시간으로 </Button>
 
+      {
+        isAllSameTime && <Text> 여기에 타임피커 </Text>
+      }
       <DayScheduleSelectorContainer
         selectedDays={selectedDays}
         endTimes={endTimes}
@@ -109,40 +133,65 @@ function DayScheduleSelector({
   start,
   end,
 }) {
+  const [mockStart, setMockStart] = useState(start);
+  const [mockEnd, setMockEnd] = useState(end);
+
+  const hasErrors = () => {
+    return mockStart.isAfter(mockEnd);
+  };
   return (
     <View key={id} style={styles.dayScheduleSelectorContainer}>
       <Text style={styles.dayScheduleSelectorText}> {dayList[id]} </Text>
       <DayDatePicker
         onConfirm={(date) => {
+          setMockStart(dayjs(date));
           onChangeStartTimes(id, dayjs(date));
-          console.warn('confirm id');
         }}
         value={start}
+        error={hasErrors()}
       />
       <Text style={{ marginRight: 15 }}> 부터 </Text>
       <DayDatePicker
         onConfirm={(date) => {
+          setMockEnd(dayjs(date));
           onChangeEndTimes(id, dayjs(date));
         }}
         value={end}
+        error={false}
       />
       <Text> 까지 </Text>
     </View>
   );
 }
 
-function DayDatePicker({ onConfirm, value }) {
+function DayDatePicker({ onConfirm, value, error }) {
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date: Date) => {
+    hideDatePicker();
+    onConfirm(date);
+  };
+
   return (
-    <MyDatePicker
-      onConfirm={onConfirm}
-      day={value}
-      mode="time"
-      style={{
-        justifyContent: 'center',
-        flexDirection: 'row',
-        alignContent: 'center',
-      }}
-      dateTextStyle={{ fontSize: 15, color: 'black' }}
-    />
+    <TouchableOpacity onPress={showDatePicker}>
+      <Text style={error ? styles.errorText : styles.dateText}>
+        {value.format('HH시 mm분').toString()}
+      </Text>
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode={'time'}
+        date={value.toDate()}
+        onConfirm={handleConfirm}
+        onCancel={hideDatePicker}
+      />
+    </TouchableOpacity>
   );
 }

@@ -33,7 +33,8 @@ export function StudentPicker({
         selectedValue={selectedStudentId}
         onValueChange={(itemValue, itemIndex) => onSelectStudent(itemValue)}
         mode="dropdown"
-        itemStyle={{ fontSize: 16 }}>
+        itemStyle={{ fontSize: 16 }}
+        style={{ width: 150 }}>
         {extractAllPickerItems(studentList)}
       </Picker>
     </View>
@@ -48,7 +49,8 @@ export function SubjectTagPicker({ tagList, onSelectTag, selectedTagId }) {
         selectedValue={selectedTagId}
         onValueChange={(itemValue, itemIndex) => onSelectTag(itemValue)}
         mode="dropdown"
-        itemStyle={{ fontSize: 16 }}>
+        itemStyle={{ fontSize: 16 }}
+        style={{ width: 150 }}>
         {extractAllPickerItems(tagList)}
       </Picker>
     </View>
