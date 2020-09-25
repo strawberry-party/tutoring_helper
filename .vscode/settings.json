@@ -4,5 +4,6 @@
   ],
   "search.exclude": {
     "**/node_modules": false
-  }
+  },
+  "terminal.integrated.windowsEnableConpty": false,
 }

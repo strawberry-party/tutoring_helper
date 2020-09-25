@@ -1,17 +1,10 @@
-import {
-  Alert,
-  Modal,
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-  View,
-} from 'react-native';
-import { Button, Fab, Icon } from 'native-base';
+import { Modal, StyleSheet, View } from 'react-native';
 import React, { useState } from 'react';
 
 import AssignForm from './AssignForm';
 import { AssignType } from '../../types/homework';
-import dayjs from 'dayjs';
+import MyModal from '../common/MyModal';
+import { TagType } from '../../types/root';
 
 interface AssignModalProps {
   modalVisible: boolean;
@@ -20,6 +13,8 @@ interface AssignModalProps {
   selectedAssignId: string;
   selectedAssign: AssignType;
   modalType: 'AddModal' | 'EditModal';
+  tags: Map<string, TagType>;
+  onAddTag: (tag: TagType) => void;
 }
 
 function AssignModal({
@@ -29,78 +24,78 @@ function AssignModal({
   modalType,
   selectedAssignId,
   selectedAssign,
+  tags,
+  onAddTag,
 }: AssignModalProps) {
   return (
-    <View style={styles.centeredView}>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={onSubmit}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <AssignForm
-              onSubmit={onSubmit}
-              hideModal={hideModal}
-              selectedAssignId={selectedAssignId}
-              modalType={modalType}
-              selectedAssign={selectedAssign}
-            />
-          </View>
-        </View>
-      </Modal>
-    </View>
+    <MyModal
+      modalVisible={modalVisible}
+      hideModal={hideModal}
+      onSubmit={onSubmit}
+      data={{ modalType, selectedAssign, selectedAssignId }}
+      tags={tags}
+      onAddTag={onAddTag}>
+      <AssignForm
+        onSubmit={onSubmit}
+        hideModal={hideModal}
+        selectedAssignId={selectedAssignId}
+        modalType={modalType}
+        selectedAssign={selectedAssign}
+        tags={tags}
+        onAddTag={onAddTag}
+      />
+    </MyModal>
   );
 }
 
-interface AddAssignModalProps {
-  addModalVisible: boolean;
-  hideAddModal: () => void;
-  addAssign: (assign: AssignType) => void;
-}
-const now: dayjs.Dayjs = dayjs();
-const defaultAssign: AssignType = new AssignType('', '', now);
+interface AddAssignModalProps extends AssignModalProps {}
 
 export function AddAssignModal({
-  addModalVisible,
-  hideAddModal,
-  addAssign,
+  modalVisible,
+  hideModal,
+  onSubmit,
+  tags,
+  modalType,
+  onAddTag,
+  selectedAssignId,
+  selectedAssign,
 }: AddAssignModalProps) {
   return (
     <AssignModal
-      modalVisible={addModalVisible}
-      hideModal={hideAddModal}
-      onSubmit={addAssign}
-      modalType={'AddModal'}
-      selectedAssignId={'none'}
-      selectedAssign={defaultAssign}
+      modalVisible={modalVisible}
+      hideModal={hideModal}
+      onSubmit={onSubmit}
+      modalType={modalType}
+      selectedAssignId={selectedAssignId}
+      selectedAssign={selectedAssign}
+      tags={tags}
+      onAddTag={onAddTag}
     />
   );
 }
 
-interface EditAssignModalProps {
-  editModalVisible: boolean;
-  hideEditModal: () => void;
-  editAssign: (id: string, assign: AssignType) => void;
-  selectedAssignId: string;
-  selectedAssign: AssignType;
-}
+interface EditAssignModalProps extends AssignModalProps {}
 
 export function EditAssignModal({
-  editModalVisible,
-  hideEditModal,
-  editAssign,
+  modalVisible,
+  hideModal,
   selectedAssignId,
   selectedAssign,
+  tags,
+  onAddTag,
+  onSubmit,
+  modalType,
 }: EditAssignModalProps) {
   return (
     <AssignModal
-      modalVisible={editModalVisible}
-      hideModal={hideEditModal}
-      onSubmit={editAssign}
-      modalType={'EditModal'}
+      modalVisible={modalVisible}
+      hideModal={hideModal}
+      onSubmit={onSubmit}
+      modalType={modalType}
       selectedAssignId={selectedAssignId}
       selectedAssign={selectedAssign}
+      tags={tags}
+      onAddTag={onAddTag}
     />
   );
 }

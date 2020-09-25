@@ -1,8 +1,6 @@
 import { LessonType } from '../types/lesson';
-import { TutorType } from '../types/root';
 import _ from 'lodash';
 import produce from 'immer';
-import { tutor } from '../common/mockData'
 
 // action type
 const LESSON_ADD = 'LESSON_ADD' as const;
@@ -38,35 +36,41 @@ export const editLesson = (
   studentId,
 });
 
-type TutorState = TutorType;
+type LessonArrayState = Array<LessonType>;
 
-// const initialState: TutorState = {
-//   studentMap: new Map(),
-//   name: '김태형',
-// };
-
-const initialState = tutor;
+const initialState = {
+  lessonArray: Array(),
+};
 
 // reducer
 const lessonReducer = (
-  state: TutorState = initialState,
-  action: LessonAction,
+  state = initialState, //type 설정 시 오류 발생
+  action,
 ) =>
   produce(state, (draft) => {
     switch (action.type) {
-      case LESSON_ADD:
-        return state;
-      // draft.studentMap
-      //   .get(action.studentId)
-      //   .lessonMap.set(_.uniqueId('lesson_'), action.lesson);
 
-      // draft = Object.assign({}, draft);
-      // break;
-      case LESSON_EDIT:
-        return state;
+      case 'LESSONSTATE_SETUP':
+        // console.log('lesson setup');
+        
+        draft.lessonArray = [];
+        const lessonArray = action.data;
+        lessonArray === undefined ? '' : Object.entries(action.data).reverse().map(([key, lessonInfo]) => {
+          draft.lessonArray.push({key, lessonInfo})
+        })
+        break;
+      
+      // case LESSON_ADD:
+      //   break;
 
-      case LESSON_REMOVE:
-        return state;
+      // case LESSON_EDIT:
+      //   return state;
+
+      // case LESSON_REMOVE:
+      //   return state;
+
+      case 'CHECKED':
+        break;
 
       default:
         return state;

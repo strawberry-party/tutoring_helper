@@ -1,3 +1,6 @@
+# Heap dump
+*.hprof
+
 # OSX
 #
 .DS_Store

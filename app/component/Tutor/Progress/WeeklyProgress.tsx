@@ -3,10 +3,13 @@ import { SectionList, StyleSheet, Text, View } from 'react-native';
 
 import { Button } from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import React from 'react';
-import { StudentType } from '../../../types/root';
+import React, { useEffect } from 'react';
+import { StudentInfoType } from '../../../types/student';
 import Week from './Week';
 import { connect } from 'react-redux';
+import database from '@react-native-firebase/database'
+
+const db = database();
 
 const styles = StyleSheet.create({
   container: {
@@ -37,22 +40,30 @@ interface SectionItem {
 }
 
 interface WeeklyProgressProps {
-  student: StudentType;
+  lessonArray: Array<LessonType>;
   navigation: any;
+  dataToLessonState: Function;
+  currentStudentId: string;
 }
 
-function WeeklyProgress({ student, navigation }: WeeklyProgressProps) {
-  const lessons = student.lessonMap;
-  const sectionItems: Array<SectionItem> = Array.from(
-    lessons.values(),
-  ).map((lesson: LessonType) => getSectionItem(lesson));
-
-  function getSectionItem(lesson: LessonType): SectionItem {
-    return {
-      title: `${lesson.lessonNum.toString()} 회차`,
-      data: [<Week contents={lesson.contents} test={lesson.test}/>]
-    };
-  }
+function WeeklyProgress({lessonArray, navigation, dataToLessonState, currentStudentId}: WeeklyProgressProps) {
+  // console.log(lessonArray);
+  useEffect(() => {
+    db.ref('tutor_1/studentArray/'+currentStudentId+'/lessonArray').on('value', snapshot => {
+      // console.log('db changed');
+      // console.log(snapshot);
+      dataToLessonState('LESSONSTATE_SETUP', snapshot.val())
+    })
+  }, [])
+  
+  const sectionItems = [];
+  lessonArray.length === 0 ? '' : lessonArray.map((lesson) => {
+    const lessonInfo = lesson.lessonInfo;
+    sectionItems.push(
+      {title: lessonInfo.lessonNum + ' 회차', data: [<Week id={lesson.key}/>]}
+    )
+  });
+  
   return (
     <SectionList
       sections={sectionItems}
@@ -74,9 +85,22 @@ function WeeklyProgress({ student, navigation }: WeeklyProgressProps) {
   );
 }
 
-export default connect(function (state) {
-  // console.log(state.lessonReducer.studentMap);
+const mapStateToProps = (state) => {
+  const currentStudentId = state.currentStudentReducer.selectedStudentId;
+  const studentArray = state.tutorReducer.studentArray;
   return {
-    students: state.lessonReducer.studentMap,
+    currentStudentId,
+    lessonArray: state.lessonReducer.lessonArray,
+    currentStudentInfo: studentArray.filter(student => student.key === currentStudentId)[0].info,
+  }
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return{
+    dataToLessonState: (type, data) => {
+      dispatch({type, data})
+    }
   };
-}, null)(WeeklyProgress);
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(WeeklyProgress);

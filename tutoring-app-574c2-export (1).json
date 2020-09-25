@@ -1,0 +1,288 @@
+{
+  "tutor_1": {
+    "name": "김태형",
+    "tags": {
+      "tag_1": {
+        "name": "수학",
+        "style": {backGroundColor: "blue", borderStyle: "solid"}
+      },
+      "tag_2": {
+        "name": "과학",
+        "style": {backGroundColor: "green", borderStyle: "dotted"}
+      },
+    },
+    "studentArray": {
+      "student_1": {
+        "address": "한국",
+        "lessonArray": {
+          "lesson_1": {
+            "contents": {
+              "lessonContent_1": {
+                "isCompleted": true,
+                "text": "2단원"
+              },
+              "lessonContent_2": {
+                "isCompleted": false,
+                "text": "3단원"
+              }
+            },
+            "file": "",
+            "lessonNum": 1,
+            "test": [
+              {
+                "desc": "1단원",
+                "score": 90
+              }
+            ]
+          },
+          "lesson_2": {
+            "contents": {
+              "lessonContent_1": {
+                "isCompleted": false,
+                "text": "4단원"
+              }
+            },
+            "lessonNum": 2,
+            "file": "",
+            "test": [
+              {
+                "desc": "2단원",
+                "score": 90
+              },
+              {
+                "desc": "3단원",
+                "score": 100
+              }
+            ]
+          },
+          "lesson_3": {
+            "contents": {
+              "lessonContent_1": {
+                "isCompleted": false,
+                "text": "5단원"
+              },
+              "lessonContent_2": {
+                "isCompleted": false,
+                "text": "6단원"
+              }
+            },
+            "file": "",
+            "lessonNum": 3,
+            "test": []
+          }
+        },
+        "name": "김태형",
+        "nextTime": "11:00~13:00",
+        "subject": ["수학", "물리"],
+        "assigns": {
+          "assignStatus": {
+            "completedAssignNum": 1,
+            "delayedAssignNum": 0, // 이 부분은 아직 정보 어떻게 관리할지 정해지지 않음
+            "totalAssignNum": 2,
+          },
+
+          "assignList": { // 나중에 리스트로 바꾸기
+            "assign_1": {
+              "text": "수학의 정석 9단원 풀기",
+              "due": 1522415925281, //  firebase TimeStamp 타입으로 설정하면 될 듯
+              "out":1523415925281,
+              "isCompleted": false,
+              "tagId": "tag_1"
+            },
+            "assign_2": {
+              "text": "과학의 정석 10단원 풀기",
+              "due": 1522415925281, //  firebase TimeStamp 타입으로 설정하면 될 듯
+              "out":1523415925281,
+              "isCompleted": true,
+              "tagId": "tag_2"
+            },
+          }
+        },
+      },
+      "student_2": {
+        "address": "대한민국",
+        "lessonArray": {
+          "lesson_1": {
+            "contents": {
+              "lessonContent_1": {
+                "isCompleted": true,
+                "text": "2단원"
+              },
+              "lessonContent_2": {
+                "isCompleted": false,
+                "text": "3단원"
+              }
+            },
+            "file": "",
+            "lessonNum": 1,
+            "test": [
+              {
+                "desc": "1단원",
+                "score": 90
+              }
+            ]
+          },
+          "lesson_2": {
+            "contents": {
+              "lessonContent_1": {
+                "isCompleted": false,
+                "text": "4단원"
+              }
+            },
+            "file": "",
+            "lessonNum": 2,
+            "test": [
+              {
+                "desc": "2단원",
+                "score": 90
+              },
+              {
+                "desc": "3단원",
+                "score": 100
+              }
+            ]
+          },
+          "lesson_3": {
+            "contents": {
+              "lessonContent_1": {
+                "isCompleted": false,
+                "text": "5단원"
+              },
+              "lessonContent_2": {
+                "isCompleted": false,
+                "text": "6단원"
+              }
+            },
+            "file": "",
+            "test": null,
+            "lessonNum": 3
+          }
+        },
+        "name": "최상아",
+        "nextTime": "10:00~13:00",
+        "subject": ["과학"],
+        "assigns": {
+          "assignStatus": {
+            "completedAssignNum": 0,
+            "delayedAssignNum": 0,
+            "totalAssignNum": 0,
+          },
+          "assignList": null,
+        }
+      },
+      "student_3": {
+        "name": "이규빈",
+        "subject": ["화학"],
+        "address": "한반도",
+        "nextTime": "9:00~13:00",
+        "lessonArray": {
+          "lesson_1": {
+            "contents": {
+              "lessonContent_1": {
+                "isCompleted": true,
+                "text": "2단원"
+              },
+              "lessonContent_2": {
+                "isCompleted": false,
+                "text": "3단원"
+              }
+            },
+            "lessonNum": 1,
+            "test": [
+              {
+                "desc": "1단원",
+                "score": 90
+              }
+            ]
+          },
+          "lesson_2": {
+            "contents": {
+              "lessonContent_1": {
+                "isCompleted": false,
+                "text": "4단원"
+              }
+            },
+            "lessonNum": 2,
+            "test": [
+              {
+                "desc": "2단원",
+                "score": 90
+              },
+              {
+                "desc": "3단원",
+                "score": 100
+              }
+            ]
+          },
+          "lesson_3": {
+            "contents": {
+              "lessonContent_1": {
+                "isCompleted": false,
+                "text": "5단원"
+              },
+              "lessonContent_2": {
+                "isCompleted": false,
+                "text": "6단원"
+              }
+            },
+            "lessonNum": 3
+          }
+        },
+        "assigns": {
+          "assignStatus": {
+            "completedAssignNum": 1,
+            "delayedAssignNum": 0,
+            "totalAssignNum": 2,
+          },
+          "assignList": {
+            "assign_1": {
+              "text": "수학의 정석 9단원 풀기",
+              "due": 1522415925281,
+              "out":1523415925281,
+              "isCompleted": false,
+              "tagId": "tag_1"
+            },
+            "assign_2": {
+              "text": "과학의 정석 10단원 풀기",
+              "due": 1522415925281,
+              "out":1523415925281,
+              "isCompleted": true,
+              "tagId": "tag_2"
+            },
+          },
+        },
+      },
+      "student_4": {
+        "name": "전승규",
+        "subject": ["지구과학"],
+        "address": "남한",
+        "nextTime": "8:00~13:00",
+        "lessonArray": null,
+        "assigns": {
+          "assignStatus": {
+            "completedAssignNum": 2,
+            "delayedAssignNum": 0,
+            "totalAssignNum": 2,
+          },
+          "assignList": {
+            "assign_1": {
+              "text": "지구과학의 정석 9단원 풀기",
+              "due": 1522415925281,
+              "out":1523415925281,
+              "isCompleted": true,
+              "tagId": "tag_2"
+            },
+            "assign_2": {
+              "text": "지구과학의 정석 10단원 풀기",
+              "due": 1522415925281,
+              "out":1523415925281,
+              "isCompleted": true,
+              "tagId": "tag_2"
+            },
+          },
+        },
+      }
+    },
+    "studentNum": 4
+  }
+}

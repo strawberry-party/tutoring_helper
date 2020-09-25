@@ -12,10 +12,14 @@
   "dependencies": {
     "@react-native-community/datetimepicker": "^3.0.0",
     "@react-native-community/masked-view": "0.1.10",
+    "@react-native-community/picker": "^1.6.6",
+    "@react-native-firebase/app": "8.3.1",
+    "@react-native-firebase/database": "7.4.2",
     "@react-navigation/bottom-tabs": "5.7.2",
     "@react-navigation/drawer": "5.9.0",
     "@react-navigation/native": "5.7.1",
     "@react-navigation/stack": "5.7.1",
+    "@types/react-native-calendars": "^1.20.10",
     "dayjs": "^1.8.33",
     "immer": "^7.0.7",
     "native-base": "2.13.13",
@@ -29,6 +33,7 @@
     "react-native-modal": "^11.5.6",
     "react-native-modal-datetime-picker": "^8.9.3",
     "react-native-paper": "4.0.1",
+    "react-native-push-notification": "^5.0.1",
     "react-native-reanimated": "1.10.1",
     "react-native-safe-area-context": "3.1.1",
     "react-native-screens": "2.9.0",
@@ -39,7 +44,8 @@
     "react-redux": "^7.2.0",
     "redux": "^4.0.5",
     "redux-actions": "^2.6.5",
-    "redux-logger": "^3.0.6"
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.10.5",
@@ -54,6 +60,7 @@
     "@types/redux-logger": "^3.0.8",
     "babel-jest": "^26.1.0",
     "eslint": "^7.7.0",
+    "eslint-plugin-react-hooks": "^4.1.0",
     "jest": "^26.1.0",
     "metro-react-native-babel-preset": "^0.60.0",
     "react-test-renderer": "16.13.1",

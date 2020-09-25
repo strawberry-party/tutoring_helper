@@ -1,7 +1,6 @@
 import { AssignListType, AssignType } from '../../types/homework';
 import {
   FilterState,
-  filterOptions,
   sorterDirOptions,
   sorterOptions,
 } from '../../states/assignFilterSorterState';
@@ -11,7 +10,10 @@ import React, { Component } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Assign from './Assign';
+import { Paragraph } from 'react-native-paper';
+import { TagType } from '../../types/root';
 import _ from 'lodash';
+import dayjs from 'dayjs';
 
 // presentational component of AssignList
 
@@ -23,10 +25,25 @@ interface AssignListProps extends AssignListType {
   activeFilter: FilterState; // 나중에 types 에 filter type 정의해서 import
   activeSorter;
   activeSorterDir;
+  assignMap: Map<string, AssignType>;
+  tags: Map<string, TagType>;
+  activeTagFilter: Set<string>;
 }
 
+const noAssign = (
+  <View>
+    <Text style={{ fontSize: 20, flexWrap: 'wrap' }}>
+      숙제가 없네요! 새 숙제를 추가해보세요
+    </Text>
+  </View>
+);
+
+// const noAssign = <Text> Hello world </Text>
+
+
 function AssignList({
-  assigns,
+  assignMap,
+  tags,
 
   showEditModal, // showEditModal
 
@@ -37,17 +54,31 @@ function AssignList({
   activeFilter,
   activeSorter,
   activeSorterDir,
+  activeTagFilter,
 }: AssignListProps) {
-  const outDates: Set<string> = new Set();
-
-  const filtered = () => {
+  const getFiltered = () => {
     switch (activeFilter) {
-      case filterOptions.ALL:
-        return assigns;
-      case filterOptions.COMPLETED:
-        return assigns.filter((assign: AssignType) => assign.isCompleted);
-      case filterOptions.INCOMPLETED:
-        return assigns.filter((assign: AssignType) => !assign.isCompleted);
+      case 'ALL':
+        var newAssignMap = new Map<string, AssignType>();
+        for (let [key, assign] of assignMap) {
+          if (activeTagFilter.has(assign.tagId)) newAssignMap.set(key, assign);
+        }
+        return newAssignMap;
+      case 'COMPLETED':
+        var newAssignMap = new Map<string, AssignType>();
+        for (let [key, assign] of assignMap) {
+          if (assign.isCompleted && activeTagFilter.has(assign.tagId))
+            newAssignMap.set(key, assign);
+        }
+        return newAssignMap;
+
+      case 'INCOMPLETED':
+        var newAssignMap = new Map<string, AssignType>();
+        for (let [key, assign] of assignMap) {
+          if (!assign.isCompleted && activeTagFilter.has(assign.tagId))
+            newAssignMap.set(key, assign);
+        }
+        return newAssignMap;
       default:
         console.error(
           `SOMETHING WENT WRONG in AssignList/filtered ${activeFilter}`,
@@ -55,81 +86,83 @@ function AssignList({
     }
   };
 
-  const getSorter = () => {
-    switch (activeSorter) {
-      case sorterOptions.OUT:
-        return 'out';
-      case sorterOptions.DUE:
-        return 'due';
-      case sorterOptions.TITLE:
-        return 'title';
-      default:
-        console.error(
-          `SOMETHING WENT WRONG in AssignList/getSorter ${activeSorter}`,
-        );
-    }
-  };
+  // const getSorter = () => {
+  //   switch (activeSorter) {
+  //     case sorterOptions.OUT:
+  //       return 'out';
+  //     case sorterOptions.DUE:
+  //       return 'due';
+  //     case sorterOptions.TITLE:
+  //       return 'title';
+  //     default:
+  //       console.error(
+  //         `SOMETHING WENT WRONG in AssignList/getSorter ${activeSorter}`,
+  //       );
+  //   }
+  // };
 
-  const getSortDir = () => {
-    switch (activeSorterDir) {
-      case sorterDirOptions.ASC:
-        return 'asc';
-      case sorterDirOptions.DSC:
-        return 'desc';
-      default:
-        console.error('SOMETHING WENT WRONG in AssignList/getSortDir');
-    }
-  };
+  // const getSortDir = () => {
+  //   switch (activeSorterDir) {
+  //     case sorterDirOptions.ASC:
+  //       return 'asc';
+  //     case sorterDirOptions.DSC:
+  //       return 'desc';
+  //     default:
+  //       console.error('SOMETHING WENT WRONG in AssignList/getSortDir');
+  //   }
+  // };
 
-  const sortDir = 'desc';
-  const sorted = _.orderBy(filtered(), [getSorter()], [getSortDir()]);
+  // TODO: assignMap에서 sort 구현
+  // const getSorted = _.orderBy(filtered(), [getSorter()], [getSortDir()]);
+  const sorted: Map<string, AssignType> = getFiltered();
 
-  var items = [];
-  for (let index = 0; index < sorted.length; index++) {
-    let assign = sorted[index];
+  const outDates: Set<string> = new Set();
+  var items: Array<JSX.Element> = [];
 
-    if (!outDates.has(assign.out.toString())) {
+  for (const [key, assign] of sorted) {
+    if (!assign.out) continue;
+    var out: string = assign.out.format('YYYY/MM/DD').toString();
+    if (!outDates.has(out)) {
       items.push(
-        <Separator bordered key={assign.out.toString()}>
-          <Text>{assign.out.format('MM월 DD일').toString()}</Text>
+        <Separator bordered key={out}>
+          <Text>{assign.out.format('MM월 DD일')}</Text>
         </Separator>,
       );
-      outDates.add(assign.out.toString());
+      outDates.add(out);
     }
 
     let comp = (
       <Assign
-        key={assign.id}
+        key={key}
+        id={key}
         {...assign}
         onStartEdit={() => {
-          showEditModal(assign.id, assign);
+          showEditModal(key, assign);
         }}
         onComplete={() => {
-          onCompleteAssign(assign.id);
-          console.log(`${assign.id} Completed`);
+          onCompleteAssign(key);
+          console.log(`${key} Completed`);
         }}
         onIncomplete={() => {
-          onIncompleteAssign(assign.id);
-          console.log(`${assign.id} canceled Complete`);
+          onIncompleteAssign(key);
+          console.log(`${key} canceled Complete`);
         }}
         onRemove={() => {
-          onRemoveAssign(assign.id);
-          console.log(`${assign.id} deleted`);
+          onRemoveAssign(key);
+          console.log(`${key} deleted`);
         }}
+        tags={tags}
       />
     );
     items.push(comp);
   }
-
-  const noAssign = (
-    <Text style={{ fontSize: 20 }}> 새 숙제를 추가해보세요</Text>
-  );
-
   return (
-    <View style={{ backgroundColor: 'red' }}>
-      <Text style={{ fontSize: 15 }}>AssignList</Text>
+    <View style={{ borderColor: 'red' }}>
+      <Paragraph>
+        <Text style={{ fontSize: 15 }}>여기는 AssignStatus가 올 자리</Text>
+      </Paragraph>
       <List style={{ backgroundColor: 'white' }}>
-        {assigns.length !== 0 ? items : noAssign}
+        {items.length === 0 ? noAssign : items}
       </List>
     </View>
   );

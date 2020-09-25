@@ -1,16 +1,21 @@
 export interface LessonType {
-  lessonNum: number;
-  contents: Map<string, LessonContentType>;
-  file?: string;
-  test?: Array<TestType>;
+  key: string;
+  lessonInfo: LessonInfoType;
 }
 
-export interface TestType {
+export interface LessonInfoType {
+  lessonNum: number;
+  contents: Array<LessonContentType>;
+  file?: string;
+  test: Array<LessonTestType>;
+}
+
+export interface LessonTestType {
   desc: string;
   score: number;
 }
 
 export interface LessonContentType {
-  text: string;
+  desc: string;
   isCompleted: boolean;
 }
