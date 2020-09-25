@@ -14,7 +14,7 @@ interface AssignModalProps {
   selectedAssign: AssignType;
   modalType: 'AddModal' | 'EditModal';
   tags: Map<string, TagType>;
-  onAddTag: (tag: TagType) => void;
+  // onAddTag: (tag: TagType) => void;
 }
 
 function AssignModal({
@@ -25,7 +25,7 @@ function AssignModal({
   selectedAssignId,
   selectedAssign,
   tags,
-  onAddTag,
+  // onAddTag,
 }: AssignModalProps) {
   return (
     <MyModal
@@ -34,7 +34,8 @@ function AssignModal({
       onSubmit={onSubmit}
       data={{ modalType, selectedAssign, selectedAssignId }}
       tags={tags}
-      onAddTag={onAddTag}>
+      // onAddTag={onAddTag}
+      >
       <AssignForm
         onSubmit={onSubmit}
         hideModal={hideModal}
@@ -42,7 +43,7 @@ function AssignModal({
         modalType={modalType}
         selectedAssign={selectedAssign}
         tags={tags}
-        onAddTag={onAddTag}
+        // onAddTag={onAddTag}
       />
     </MyModal>
   );
@@ -56,7 +57,7 @@ export function AddAssignModal({
   onSubmit,
   tags,
   modalType,
-  onAddTag,
+  // onAddTag,
   selectedAssignId,
   selectedAssign,
 }: AddAssignModalProps) {
@@ -69,7 +70,7 @@ export function AddAssignModal({
       selectedAssignId={selectedAssignId}
       selectedAssign={selectedAssign}
       tags={tags}
-      onAddTag={onAddTag}
+      // onAddTag={onAddTag}
     />
   );
 }
@@ -82,7 +83,7 @@ export function EditAssignModal({
   selectedAssignId,
   selectedAssign,
   tags,
-  onAddTag,
+  // onAddTag,
   onSubmit,
   modalType,
 }: EditAssignModalProps) {
@@ -95,7 +96,7 @@ export function EditAssignModal({
       selectedAssignId={selectedAssignId}
       selectedAssign={selectedAssign}
       tags={tags}
-      onAddTag={onAddTag}
+      // onAddTag={onAddTag}
     />
   );
 }

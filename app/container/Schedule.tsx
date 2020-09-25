@@ -84,7 +84,7 @@ function ScheduleContainer({
     reminder = 0
   ) => {
     addSchedule(formWorkSchedule, linkedRepeatedScheduleInfoId);
-    addReminder(formWorkSchedule, reminder);
+    // addReminder(formWorkSchedule, reminder);
   };
 
   useEffect(() => {

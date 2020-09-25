@@ -1,7 +1,7 @@
 import { StudentType } from "./student";
 
 export interface TutorType {
-  studentArray: Array<StudentType>;
+  studentArray?: Array<StudentType>;
   name: string;
   studentNum: number;
 }

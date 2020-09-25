@@ -16,6 +16,7 @@ const tag1: TagType = new TagType('수학', { backgroundColor: '#bbb' });
 const tag2: TagType = new TagType('과학', { backgroundColor: '#bbf' });
 const tag3: TagType = new TagType('화학', { backgroundColor: '#bfb' });
 export const tagList = [tag1, tag2, tag3];
+export const mockTags = new Map([['tag_1', tag1], ['tag_2', tag2], ['tag_3', tag3]])
 
 const assignMap = new Map<string, AssignType>();
 

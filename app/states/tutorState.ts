@@ -1,7 +1,7 @@
 import produce from "immer";
-import { TutorType } from "../types/tutor";
 
 var initialState = {
+  uid: '',
   name: '',
   studentArray: [],
   studentNum: 0,
@@ -16,12 +16,11 @@ const tutorReducer = (
     case 'TUTORSTATE_SETUP' :
       // console.log('setup');
       // console.log(action.data);
-      
-      const tutorData = action.data;
+      draft.uid = action.data.uid;
       draft.studentArray = [];
-      draft.studentNum = tutorData.studentNum;
-      draft.name = tutorData.name;
-      tutorData.studentArray === undefined ? '' : Object.entries(tutorData.studentArray).reverse().map(([key, info]) => {
+      draft.studentNum = action.data.studentNum;
+      draft.name = action.data.name;
+      action.data.studentArray === undefined ? '' : Object.entries(action.data.studentArray).reverse().map(([key, info]) => {
         draft.studentArray.push({key, info})
       })
       // console.log(state.studentArray.length === 0 ? '' : state.studentArray[0].info.lessonArray);

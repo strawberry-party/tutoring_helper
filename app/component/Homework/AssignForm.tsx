@@ -27,7 +27,7 @@ interface AssignForm {
   selectedAssignId: string;
   selectedAssign: AssignType;
   tags: Map<string, TagType>;
-  onAddTag: (tag: TagType) => void;
+  // onAddTag: (tag: TagType) => void;
 }
 
 export default function AssignForm({
@@ -37,7 +37,7 @@ export default function AssignForm({
   hideModal,
   selectedAssignId,
   tags,
-  onAddTag,
+  // onAddTag,
 }: AssignForm) {
   const { text, due, out, tagId } = selectedAssign;
   const [newText, setText] = useState(text);
@@ -100,9 +100,9 @@ export default function AssignForm({
         />,
       );
     }
-    tagComponents.push(
-      <TagForm style={style} onAddTag={onAddTag} key="tagForm" />,
-    );
+    // tagComponents.push(
+    //   <TagForm style={style} onAddTag={onAddTag} key="tagForm" />,
+    // );
 
     return tagComponents;
   }

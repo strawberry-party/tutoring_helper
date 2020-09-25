@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "978999020967-k10ki5sirf2rfg7og4l9htlkikldnus4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tutoring_app",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "978999020967-c1flmmhrhqmmtoakgiaufvtgd4382l1b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tutoring_app",
+            "certificate_hash": "25a34b9e240a620190fcd224339a0913fee60a3f"
+          }
+        },
+        {
           "client_id": "978999020967-k0a1307sqi1ehv3e1eo2fgsjmf8e2cd1.apps.googleusercontent.com",
           "client_type": 3
         }

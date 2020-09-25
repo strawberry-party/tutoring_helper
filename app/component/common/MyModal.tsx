@@ -8,7 +8,6 @@ export interface MyModalProps {
   hideModal: () => void;
   onSubmit: any;
   tags: Map<string, TagType>;
-  onAddTag: (tag: TagType) => void;
   data: any;
   style?: Object;
   children: JSX.Element;
@@ -19,7 +18,6 @@ export default function MyModal({
   hideModal,
   onSubmit,
   tags,
-  onAddTag,
   data,
   style,
 

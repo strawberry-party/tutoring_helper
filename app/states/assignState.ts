@@ -9,18 +9,26 @@ const ASSIGN_REMOVE = 'ASSIGN_REMOVE' as const;
 const ASSIGN_COMPLETE = 'ASSIGN_COMPLETE' as const;
 const ASSIGN_INCOMPLETE = 'ASSIGN_INCOMPLETE' as const;
 const ASSIGN_EDIT = 'ASSIGN_EDIT' as const;
+const ASSIGNSTATE_SETUP = 'ASSIGNSTATE_SETUP' as const;
 
 type AssignAction =
   | ReturnType<typeof addAssign>
   | ReturnType<typeof completeAssign>
   | ReturnType<typeof incompleteAssign>
   | ReturnType<typeof removeAssign>
-  | ReturnType<typeof editAssign>;
+  | ReturnType<typeof editAssign>
+  | ReturnType<typeof setupAssign>;
 
 const initialState: AssignStateType = new AssignStateType();
 
 // action constructor
 // assign CRUD
+export const setupAssign = (assigns: Array<AssignType>, completed: number) => ({
+  type: ASSIGNSTATE_SETUP,
+  assigns,
+  completed,
+})
+
 export const addAssign = (assign: AssignType) => ({
   type: ASSIGN_ADD,
   assign,
@@ -50,6 +58,7 @@ export const editAssign = (id: string, assign: AssignType) => ({
 
 // actions
 export const actions = {
+  setupAssign,
   addAssign,
   completeAssign,
   incompleteAssign,
@@ -68,6 +77,13 @@ const assignsReducer = (
 ) =>
   produce(state, (draft) => {
     switch (action.type) {
+      case ASSIGNSTATE_SETUP:
+        draft.completed = action.completed;
+        action.assigns === null || undefined ? '' : Object.entries(action.assigns).reverse().map(([key, assign]) => {
+          draft.assignMap.set(key, assign);
+        })
+        break;
+
       case ASSIGN_ADD:
         draft.assignMap.set(action.id, action.assign);
         break;

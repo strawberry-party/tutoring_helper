@@ -22,7 +22,6 @@ export default function FilterModal({
   modalVisible,
   hideModal,
   tags,
-  onAddTag,
   tagFilter,
 }) {
   const handleSubmit = () => {

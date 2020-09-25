@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Table, Row, Rows } from 'react-native-table-component';
 import { Button } from 'react-native-elements';
-import * as RootNavigation from '../../../common/RootNavigation';
+import * as RootNavigation from '../../common/RootNavigation';
 import { connect } from 'react-redux';
 
 function StudentInfo() {

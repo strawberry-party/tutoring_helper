@@ -11,12 +11,17 @@ import { AssignType } from '../types/homework';
 import { FilterButton } from '../component/Homework/FilterSorter';
 import FilterModal from '../component/Homework/FilterModal';
 import PushMaker from '../component/common/PushMaker';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { RootState } from '../states';
 import { actions as assignActions } from '../states/assignState';
 import { actions as filterSorterActions } from '../states/assignFilterSorterState';
 import { actions as modalVisibilityActions } from '../states/assignModalState';
 import { actions as tagActions } from '../states/tagState';
+import database from '@react-native-firebase/database'
+
+import { mockTags } from '../common/mockData'
+
+const db = database();
 
 type HomeworkContainerProps = any; // TODO: 타입 정의, any 대체하기
 
@@ -30,6 +35,7 @@ function HomeworkContainer({
   showFilterModal,
   hideFilterModal,
 
+  setupAssign,
   addAssign,
   completeAssign,
   incompleteAssign,
@@ -46,12 +52,23 @@ function HomeworkContainer({
   sortTitle,
 
   showSelectedTags,
+  currentStudentId,
+  tutorId,
 
   addTag,
 }: HomeworkContainerProps) {
   // const tagMap: Map<string, TagType> = useSelector(
   //   (state: RootState) => state.tagReducer.tagMap,
   // );
+  useEffect(() => {
+    db.ref(`tutors/${tutorId}/studentArray/${currentStudentId}/assigns`).on(
+      'value',
+      (snapshot) => {
+        // console.log(snapshot.val());
+        setupAssign(snapshot.val().assignList, snapshot.val().assignStatus.completedAssignNum);
+      },
+    );
+  }, []);
 
   const assignMap: Map<string, AssignType> = useSelector(
     (state: RootState) => state.assignReducer.assignMap,
@@ -93,7 +110,8 @@ function HomeworkContainer({
     (state: RootState) => state.assignFilterSorterReducer.tagFilter,
   );
 
-  const tags = useSelector((state: RootState) => state.tagReducer.tags);
+  const tags = mockTags;
+  // const tags = useSelector((state: RootState) => state.tagReducer.tags);
 
   return (
     <SafeAreaView
@@ -154,7 +172,7 @@ function HomeworkContainer({
             hideModal={hideAddModal}
             onSubmit={addAssign}
             tags={tags}
-            onAddTag={addTag}
+            // onAddTag={addTag}
             modalType={'AddModal'}
             selectedAssignId={'none'}
             selectedAssign={new AssignType()}
@@ -170,7 +188,7 @@ function HomeworkContainer({
             selectedAssign={selectedAssign}
             modalType={'EditModal'}
             tags={tags}
-            onAddTag={addTag}
+            // onAddTag={addTag}
           />
         </View>
 
@@ -179,7 +197,7 @@ function HomeworkContainer({
             modalVisible={filterModalVisible}
             hideModal={hideFilterModal}
             tags={tags}
-            onAddTag={addTag}
+            // onAddTag={addTag}
             activeFilter={filter}
             tagFilter={tagFilter}
             filterActions={{
@@ -227,6 +245,8 @@ function mapStateToProps(state) {
     filterModalVisible: state.assignModalReducer.filterModalVisible,
     filter: state.assignFilterSorterReducer.filter,
     sorter: state.assignFilterSorterReducer.sorter,
+    currentStudentId: state.currentStudentReducer.selectedStudentId,
+    tutorId: state.tutorReducer.uid,
   };
 }
 
