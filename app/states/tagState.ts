@@ -5,12 +5,12 @@ import produce from 'immer';
 interface TagState {
   selectedTagId: string;
   subjectTags: [];
-  bookTags: [],
+  bookTags: [];
 }
 
 const initialState = {
-  selectedTagId: '',
-  subjectTags: [],
+  selectedTagId: '', // 안 쓰고 있음
+  subjectTags: [{ key: 'tag_1', info: { name: '수학' } }],
   bookTags: [],
 };
 
@@ -32,11 +32,14 @@ const TAG_SETUP = 'TAG_SETUP' as const;
 // tag CRUD
 
 // global tag selecting action for tag edit start
-export const setupTag = (subjectTags: Array<TagType>, bookTags: Array<TagType>) => ({
+export const setupTag = (
+  subjectTags: Array<TagType>,
+  bookTags: Array<TagType>,
+) => ({
   type: TAG_SETUP,
   subjectTags,
   bookTags,
-})
+});
 
 export const selectTag = (id: string) => ({
   type: TAG_SELECT,
@@ -76,26 +79,22 @@ const tagReducer = (state = initialState, action: TagAction) =>
       case TAG_SETUP:
         draft.subjectTags = [];
         draft.bookTags = [];
-        action.subjectTags === undefined ? '' : Object.entries(action.subjectTags).reverse().map(([key, info]) => {
-          draft.subjectTags.push({key, info});
-        })
-        action.bookTags === undefined ? '' : Object.entries(action.bookTags).reverse().map(([key, info]) => {
-          draft.bookTags.push({key, info});
-        })
-        
+        action.subjectTags === undefined
+          ? ''
+          : Object.entries(action.subjectTags)
+              .reverse()
+              .map(([key, info]) => {
+                draft.subjectTags.push({ key, info });
+              });
+        action.bookTags === undefined
+          ? ''
+          : Object.entries(action.bookTags)
+              .reverse()
+              .map(([key, info]) => {
+                draft.bookTags.push({ key, info });
+              });
+
         break;
-      // case TAG_SELECT:
-      //   draft.selectedTagId = action.id;
-      //   break;
-      // case TAG_ADD:
-      //   draft.tags.set(action.id, action.tag);
-      //   break;
-      // case TAG_EDIT:
-      //   draft.tags.set(action.id, action.tag);
-      //   break;
-      // case TAG_REMOVE:
-      //   draft.tags.delete(action.id);
-      //   break;
 
       default:
         break;

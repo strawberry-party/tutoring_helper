@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
 
+import React, { useEffect } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { connect, useSelector } from 'react-redux';
 
@@ -11,15 +12,12 @@ import { AssignType } from '../types/homework';
 import { FilterButton } from '../component/Homework/FilterSorter';
 import FilterModal from '../component/Homework/FilterModal';
 import PushMaker from '../component/common/PushMaker';
-import React, { useEffect } from 'react';
 import { RootState } from '../states';
 import { actions as assignActions } from '../states/assignState';
+import database from '@react-native-firebase/database';
 import { actions as filterSorterActions } from '../states/assignFilterSorterState';
+import { mockTags } from '../common/mockData';
 import { actions as modalVisibilityActions } from '../states/assignModalState';
-import { actions as tagActions } from '../states/tagState';
-import database from '@react-native-firebase/database'
-
-import { mockTags } from '../common/mockData'
 
 const db = database();
 
@@ -27,13 +25,10 @@ type HomeworkContainerProps = any; // TODO: 타입 정의, any 대체하기
 
 // type HomeworkContainerProps = any;
 function HomeworkContainer({
-  
   hideAddModal,
   showAddModal,
   hideEditModal,
   showEditModal,
-  showFilterModal,
-  hideFilterModal,
 
   setupAssign,
   addAssign,
@@ -55,17 +50,17 @@ function HomeworkContainer({
   currentStudentId,
   tutorId,
 
-  addTag,
 }: HomeworkContainerProps) {
-  // const tagMap: Map<string, TagType> = useSelector(
-  //   (state: RootState) => state.tagReducer.tagMap,
-  // );
+
   useEffect(() => {
     db.ref(`tutors/${tutorId}/studentArray/${currentStudentId}/assigns`).on(
       'value',
       (snapshot) => {
         // console.log(snapshot.val());
-        setupAssign(snapshot.val().assignList, snapshot.val().assignStatus.completedAssignNum);
+        setupAssign(
+          snapshot.val().assignList,
+          snapshot.val().assignStatus.completedAssignNum,
+        );
       },
     );
   }, []);
@@ -82,9 +77,11 @@ function HomeworkContainer({
     (state: RootState) => state.assignModalReducer.editModalVisible,
   );
 
-  const filterModalVisible: boolean = useSelector(
-    (state: RootState) => state.assignModalReducer.filterModalVisible,
-  );
+  const [filterModalVisible, toggleFilterModal] = React.useState(false);
+
+  const showFilterModal = () => toggleFilterModal(true);
+  const hideFilterModal = () => toggleFilterModal(false);
+
 
   const selectedAssignId: string = useSelector(
     (state: RootState) => state.assignModalReducer.selectedAssignId,
@@ -106,11 +103,13 @@ function HomeworkContainer({
     (state: RootState) => state.assignFilterSorterReducer.sorterDir,
   );
 
-  const tagFilter = useSelector(
+  const tagFilter: Set<string> = useSelector(
     (state: RootState) => state.assignFilterSorterReducer.tagFilter,
   );
 
-  const tags = mockTags;
+  const subjectTags = useSelector((state: RootState) => state.tagReducer.subjectTags);
+  const bookTags = useSelector((state: RootState) => state.tagReducer.bookTags);
+
   // const tags = useSelector((state: RootState) => state.tagReducer.tags);
 
   return (
@@ -161,7 +160,8 @@ function HomeworkContainer({
               activeSorterDir={sorterDir}
               activeTagFilter={tagFilter}
               completed={0}
-              tags={tags}
+              bookTags={bookTags}
+              subjectTags={subjectTags}
             />
           </View>
         </ScrollView>
@@ -171,8 +171,8 @@ function HomeworkContainer({
             modalVisible={addModalVisible}
             hideModal={hideAddModal}
             onSubmit={addAssign}
-            tags={tags}
-            // onAddTag={addTag}
+            bookTags={bookTags}
+            subjectTags={subjectTags}
             modalType={'AddModal'}
             selectedAssignId={'none'}
             selectedAssign={new AssignType()}
@@ -187,8 +187,8 @@ function HomeworkContainer({
             onSubmit={editAssign}
             selectedAssign={selectedAssign}
             modalType={'EditModal'}
-            tags={tags}
-            // onAddTag={addTag}
+            bookTags={bookTags}
+            subjectTags={subjectTags}
           />
         </View>
 
@@ -196,8 +196,8 @@ function HomeworkContainer({
           <FilterModal
             modalVisible={filterModalVisible}
             hideModal={hideFilterModal}
-            tags={tags}
-            // onAddTag={addTag}
+            bookTags={bookTags}
+            subjectTags={subjectTags}
             activeFilter={filter}
             tagFilter={tagFilter}
             filterActions={{
@@ -210,10 +210,7 @@ function HomeworkContainer({
         </View>
       </View>
 
-      <AddAssignButton
-        visible={addModalVisible}
-        show={showAddModal}
-      />
+      <AddAssignButton visible={addModalVisible} show={showAddModal} />
     </SafeAreaView>
   );
 }
@@ -250,21 +247,12 @@ function mapStateToProps(state) {
   };
 }
 
-// function mapDispatchToProps(dispatch) {
-//   bindActionCreators(Object.assign({}, assignActions, modalVisibilityActions), dispatch);
-// }
-
-// const myMApDispatchToPRops = (callback) => store.dispatch(callback)
-
 const mapDispatchToProps = Object.assign(
   {},
   assignActions,
   modalVisibilityActions,
   filterSorterActions,
-  tagActions,
 );
-
-// { addAssign: addAssign, }
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeworkContainer);
 // TutoringHelper의 props로 mapStateToProps의 리턴객체를 전해준다

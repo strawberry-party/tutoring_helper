@@ -4,16 +4,14 @@ import {
   sorterDirOptions,
   sorterOptions,
 } from '../../states/assignFilterSorterState';
-import { FlatList, ScrollView, Text, View } from 'react-native';
 import { List, Separator } from 'native-base';
-import React, { Component } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { Text, View } from 'react-native';
 
 import Assign from './Assign';
 import { Paragraph } from 'react-native-paper';
-import { TagType } from '../../types/root';
+import React from 'react';
+import { TagPrimitiveType } from '../../types/root';
 import _ from 'lodash';
-import dayjs from 'dayjs';
 
 // presentational component of AssignList
 
@@ -26,8 +24,10 @@ interface AssignListProps extends AssignListType {
   activeSorter;
   activeSorterDir;
   assignMap: Map<string, AssignType>;
-  tags: Map<string, TagType>;
   activeTagFilter: Set<string>;
+
+  bookTags: TagPrimitiveType[];
+  subjectTags: TagPrimitiveType[];
 }
 
 const noAssign = (
@@ -40,10 +40,10 @@ const noAssign = (
 
 // const noAssign = <Text> Hello world </Text>
 
-
 function AssignList({
   assignMap,
-  tags,
+  bookTags,
+  subjectTags,
 
   showEditModal, // showEditModal
 
@@ -151,7 +151,7 @@ function AssignList({
           onRemoveAssign(key);
           console.log(`${key} deleted`);
         }}
-        tags={tags}
+        subjectTag={subjectTags.find(item => item.key === assign.tagId)}
       />
     );
     items.push(comp);

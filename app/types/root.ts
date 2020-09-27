@@ -33,3 +33,14 @@ export class TagType {
     this.style = style;
   }
 }
+
+export class TagPrimitiveType {
+  key: string;
+  info: TagInfoType;
+}
+
+export class TagInfoType {
+  name: string;
+  style?: Object;
+  
+}

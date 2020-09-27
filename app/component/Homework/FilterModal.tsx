@@ -21,8 +21,9 @@ export default function FilterModal({
   activeFilter,
   modalVisible,
   hideModal,
-  tags,
   tagFilter,
+  subjectTags,
+  bookTags,
 }) {
   const handleSubmit = () => {
     selectFilter(selectedFilterButton);
@@ -46,25 +47,21 @@ export default function FilterModal({
     }
   };
 
-  const tagKeyList: string[] = Array.from(tags.keys());
-
   const [selectedTagIdSet, setTagIdSet] = useState(new Set(tagFilter));
   const [selectedFilterButton, toggleFilterButton] = useState(activeFilter);
 
-  function getTagComponents(style = {}) {
+  function getTagComponents(style = {}, tags) {
     var tagComponents: JSX.Element[] = [];
 
-    for (var index = 1; index < tags.size; index++) {
-      var id = tagKeyList[index];
-      var tag = tags.get(id);
-
+    for (var index = 1; index < tags.length; index++) {
+      var tag = tags[index];
       tagComponents.push(
         <Tag
-          tag={tag}
+          tagInfo={tag.info}
           style={style}
-          id={id}
-          key={id}
-          isSelected={selectedTagIdSet.has(id)}
+          id={tag.key}
+          key={tag.key}
+          isSelected={selectedTagIdSet.has(tag.key)}
           onSelect={(id: string) => {
             console.log(selectedTagIdSet);
             setTagIdSet(
@@ -77,14 +74,13 @@ export default function FilterModal({
         />,
       );
     }
-
     return tagComponents;
   }
 
   const selectAllTag = () => {
     setTagIdSet(
       produce((draft) => {
-        tagKeyList.map((id: string) => draft.add(id));
+        subjectTags.map((item) => draft.add(item.key));
       }),
     );
   };
@@ -151,7 +147,7 @@ export default function FilterModal({
                 </View>
 
                 <View style={styles.tagContainer}>
-                  {getTagComponents({ margin: 5 })}
+                  {getTagComponents({ margin: 5 }, subjectTags)}
                 </View>
               </View>
             </ScrollView>

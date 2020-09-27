@@ -3,18 +3,19 @@ import {
   ScheduleType,
   WeeklyScheduleType,
 } from '../types/schedule';
+import React, { useEffect, useState } from 'react';
+
 import AssignContainer from './Homework';
 import DailyScheduleSelector from '../component/Schedule/DailyScheduleSelector';
-import HomeworkContainer from './Homework';
-import { Provider } from 'react-redux';
-import React, { useState, useEffect } from 'react';
 import DrawerNavigator from './DrawerNavigator';
-import store from '../common/store';
+import HomeworkContainer from './Homework';
 import LoginStackNavigator from './LoginStackNavigator';
 import { NavigationContainer } from '@react-navigation/native';
-import { navigationRef } from '../common/RootNavigation';
+import { Provider } from 'react-redux';
+import SplashScreen from 'react-native-splash-screen';
 import auth from '@react-native-firebase/auth';
-import SplashScreen from 'react-native-splash-screen'
+import { navigationRef } from '../common/RootNavigation';
+import store from '../common/store';
 
 function App() {
   const [initializing, setInitializing] = useState(true);
@@ -37,9 +38,10 @@ function App() {
 
   return (
     <Provider store={store}>
-      <NavigationContainer ref={navigationRef}>
+      {/* <NavigationContainer ref={navigationRef}>
         {!user ? <LoginStackNavigator /> : <DrawerNavigator userId={user.uid} />}
-      </NavigationContainer>
+      </NavigationContainer> */}
+      <HomeworkContainer />
     </Provider>
   );
 }

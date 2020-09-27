@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import AssignForm from './AssignForm';
 import { AssignType } from '../../types/homework';
 import MyModal from '../common/MyModal';
-import { TagType } from '../../types/root';
+import { TagPrimitiveType } from '../../types/root';
 
 interface AssignModalProps {
   modalVisible: boolean;
@@ -13,8 +13,8 @@ interface AssignModalProps {
   selectedAssignId: string;
   selectedAssign: AssignType;
   modalType: 'AddModal' | 'EditModal';
-  tags: Map<string, TagType>;
-  // onAddTag: (tag: TagType) => void;
+  bookTags: TagPrimitiveType[];
+  subjectTags: TagPrimitiveType[];
 }
 
 function AssignModal({
@@ -24,26 +24,23 @@ function AssignModal({
   modalType,
   selectedAssignId,
   selectedAssign,
-  tags,
-  // onAddTag,
+  bookTags,
+  subjectTags,
 }: AssignModalProps) {
   return (
     <MyModal
       modalVisible={modalVisible}
       hideModal={hideModal}
-      onSubmit={onSubmit}
-      data={{ modalType, selectedAssign, selectedAssignId }}
-      tags={tags}
-      // onAddTag={onAddTag}
-      >
+      // data={{ modalType, selectedAssign, selectedAssignId }}
+    >
       <AssignForm
         onSubmit={onSubmit}
         hideModal={hideModal}
         selectedAssignId={selectedAssignId}
         modalType={modalType}
         selectedAssign={selectedAssign}
-        tags={tags}
-        // onAddTag={onAddTag}
+        bookTags={bookTags}
+        subjectTags={subjectTags}
       />
     </MyModal>
   );
@@ -51,54 +48,14 @@ function AssignModal({
 
 interface AddAssignModalProps extends AssignModalProps {}
 
-export function AddAssignModal({
-  modalVisible,
-  hideModal,
-  onSubmit,
-  tags,
-  modalType,
-  // onAddTag,
-  selectedAssignId,
-  selectedAssign,
-}: AddAssignModalProps) {
-  return (
-    <AssignModal
-      modalVisible={modalVisible}
-      hideModal={hideModal}
-      onSubmit={onSubmit}
-      modalType={modalType}
-      selectedAssignId={selectedAssignId}
-      selectedAssign={selectedAssign}
-      tags={tags}
-      // onAddTag={onAddTag}
-    />
-  );
+export function AddAssignModal(props: AddAssignModalProps) {
+  return <AssignModal {...props} />;
 }
 
 interface EditAssignModalProps extends AssignModalProps {}
 
-export function EditAssignModal({
-  modalVisible,
-  hideModal,
-  selectedAssignId,
-  selectedAssign,
-  tags,
-  // onAddTag,
-  onSubmit,
-  modalType,
-}: EditAssignModalProps) {
-  return (
-    <AssignModal
-      modalVisible={modalVisible}
-      hideModal={hideModal}
-      onSubmit={onSubmit}
-      modalType={modalType}
-      selectedAssignId={selectedAssignId}
-      selectedAssign={selectedAssign}
-      tags={tags}
-      // onAddTag={onAddTag}
-    />
-  );
+export function EditAssignModal(props: EditAssignModalProps) {
+  return <AssignModal {...props} />;
 }
 
 export default AssignModal;

@@ -6,9 +6,8 @@ import { TagType } from '../../types/root';
 export interface MyModalProps {
   modalVisible: boolean;
   hideModal: () => void;
-  onSubmit: any;
-  tags: Map<string, TagType>;
-  data: any;
+  onSubmit?: any;
+  data?: any;
   style?: Object;
   children: JSX.Element;
 }
@@ -17,10 +16,7 @@ export default function MyModal({
   modalVisible,
   hideModal,
   onSubmit,
-  tags,
-  data,
   style,
-
   children,
 }: MyModalProps) {
   const childrenWithProps = React.Children.map(children, (child) => {

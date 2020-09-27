@@ -1,17 +1,12 @@
 import { Button, Fab, Icon, Input, Item } from 'native-base';
 import React, { useState } from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import Tag, { TagForm } from '../common/Tag';
 
 import { AssignType } from '../../types/homework';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import MyDatePicker from '../common/MyDatePicker';
-import { TagType } from '../../types/root';
+import { TagPrimitiveType } from '../../types/root';
 import dayjs from 'dayjs';
 
 type AddAssign = (assign: AssignType) => void;
@@ -20,14 +15,14 @@ type EditAssign = (id: string, assign: AssignType) => void;
 type AddModal = 'AddModal';
 type EditModal = 'EditModal';
 
-interface AssignForm {
+interface AssignFormProps {
   hideModal: () => void;
   onSubmit: AddAssign | EditAssign;
   modalType: AddModal | EditModal;
   selectedAssignId: string;
   selectedAssign: AssignType;
-  tags: Map<string, TagType>;
-  // onAddTag: (tag: TagType) => void;
+  bookTags: TagPrimitiveType[];
+  subjectTags: TagPrimitiveType[];
 }
 
 export default function AssignForm({
@@ -36,16 +31,15 @@ export default function AssignForm({
   onSubmit,
   hideModal,
   selectedAssignId,
-  tags,
-  // onAddTag,
-}: AssignForm) {
+  bookTags,
+  subjectTags,
+}: AssignFormProps) {
   const { text, due, out, tagId } = selectedAssign;
   const [newText, setText] = useState(text);
   const [newDue, setDue] = useState(due);
   const [newOut, setOut] = useState(out);
   const [selectedTagId, selectTag] = useState(tagId);
 
-  const tagKeyList = Array.from(tags.keys());
   const handleSubmit = () => {
     const newAssign: AssignType = {
       ...selectedAssign,
@@ -77,32 +71,26 @@ export default function AssignForm({
     setDue(dayjs(date));
   };
 
-  function getTagComponents(style = {}) {
+  function getTagComponents(style = {}, tags) {
     var tagComponents: JSX.Element[] = [];
 
-    for (var index = 1; index < tags.size; index++) {
-      var id = tagKeyList[index];
-      var tag = tags.get(id);
-
+    for (var index = 1; index < tags.length; index++) {
+      var tag = tags[index];
       tagComponents.push(
         <Tag
-          tag={tag}
+          tagInfo={tag.info}
           style={style}
-          id={id}
-          key={id}
-          isSelected={selectedTagId === id}
+          id={tag.key}
+          key={tag.key}
+          isSelected={selectedTagId === tag.key}
           onSelect={(id: string) => {
-            console.log(id + ' select');
-
+            console.log(id + ' selected');
             if (selectedTagId === id) selectTag('none');
             else selectTag(id);
           }}
         />,
       );
     }
-    // tagComponents.push(
-    //   <TagForm style={style} onAddTag={onAddTag} key="tagForm" />,
-    // );
 
     return tagComponents;
   }
@@ -147,11 +135,18 @@ export default function AssignForm({
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.headline}> 태그 </Text>
+            <Text style={styles.headline}> 과목 태그 </Text>
             <View style={styles.tagContainer}>
-              {getTagComponents({ margin: 3 })}
+              {getTagComponents({ margin: 3 }, subjectTags)}
             </View>
           </View>
+
+          {/* <View style={styles.inputContainer}>
+            <Text style={styles.headline}> 교재 태그 </Text>
+            <View style={styles.tagContainer}>
+              {getTagComponents({ margin: 3 }, bookTags)}
+            </View>
+          </View> */}
         </View>
       </ScrollView>
     </View>

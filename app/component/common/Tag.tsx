@@ -1,27 +1,34 @@
 import { Chip, TextInput } from 'react-native-paper';
 import { Icon, Input } from 'native-base';
 import React, { useState } from 'react';
+import { TagInfoType, TagType } from '../../types/root';
 
-import { TagType } from '../../types/root';
 import { Text } from 'react-native';
 import { selectTag } from '../../states/tagState';
 
 interface TagProps {
-  tag: TagType;
+  tagInfo: TagInfoType;
   style: any;
   id: string;
   onSelect: any;
   isSelected;
 }
 
-export function TagMock({ tag, style, id }) {
-  return (
-    <Chip
-      style={[tag.style, style]}
-      onPress={() => console.log('그래도 뭔가 일어나야 하지 않을까')}>
-      {tag.name}
-    </Chip>
-  );
+export function TagMock({ tagInfo, style, id }) {
+  if (tagInfo == undefined) {
+    return (
+      <Chip onPress={() => console.log('그래도 뭔가 일어나야 하지 않을까')}>
+        {'none'}
+      </Chip>
+    );
+  } else
+    return (
+      <Chip
+        style={[tagInfo.style, style]}
+        onPress={() => console.log('그래도 뭔가 일어나야 하지 않을까')}>
+        {tagInfo.name}
+      </Chip>
+    );
 }
 
 export function FilterChip({
@@ -42,7 +49,7 @@ export function FilterChip({
 }
 
 export default function Tag({
-  tag,
+  tagInfo,
   style,
   id,
   onSelect,
@@ -52,11 +59,11 @@ export default function Tag({
     <Chip
       style={
         isSelected
-          ? [tag.style, style, { borderColor: 'black', elevation: 3 }]
-          : [tag.style, style]
+          ? [tagInfo.style, style, { borderColor: 'black', elevation: 3 }]
+          : [tagInfo.style, style]
       }
       onPress={() => onSelect(id)}>
-      {tag.name}
+      {tagInfo.name}
     </Chip>
   );
 }

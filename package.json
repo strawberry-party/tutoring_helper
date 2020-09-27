@@ -10,7 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@react-native-community/datetimepicker": "3.0.1",
+    "@react-native-community/datetimepicker": "^3.0.2",
     "@react-native-community/google-signin": "4.0.3",
     "@react-native-community/masked-view": "0.1.10",
     "@react-native-community/picker": "1.7.1",

@@ -11,7 +11,7 @@ import ConfirmModal from '../common/ConfirmModal';
 import { IconButton } from 'react-native-paper';
 import SwipeRow from '../common/SwipeRow';
 import { TagMock } from '../common/Tag';
-import { TagType } from '../../types/root';
+import { TagPrimitiveType } from '../../types/root';
 
 interface AssignProps extends AssignType {
   onComplete: () => void;
@@ -19,7 +19,7 @@ interface AssignProps extends AssignType {
   onRemove: () => void;
   onStartEdit: () => void;
   id: string;
-  tags: Map<string, TagType>;
+  subjectTag: TagPrimitiveType;
 }
 
 function Assign({
@@ -33,7 +33,7 @@ function Assign({
   onStartEdit,
   id,
   tagId,
-  tags,
+  subjectTag,
 }: AssignProps) {
   const dueDate = due.format('MM월 DD일까지');
 
@@ -46,9 +46,6 @@ function Assign({
 
     // setTimeout(() => setVisibility(false), 1500);
   };
-
-  const tag = tags.get(tagId);
-
 
   const [confirmModalVisible, setConfirmModalVisible] = useState(false);
   const showConfirmModal = () => setConfirmModalVisible(true);
@@ -88,7 +85,11 @@ function Assign({
                   alignItems: 'center',
                   borderRadius: 20,
                 }}>
-                <TagMock tag={tag} style={{ marginRight: 10 }} id={tagId} />
+                <TagMock
+                  tagInfo={subjectTag ? subjectTag.info : { name: 'none' }}
+                  style={{ marginRight: 10 }}
+                  id={subjectTag ? subjectTag.key : 'none'}
+                />
 
                 <Text style={{ fontWeight: '400', flex: 2 }}>{text}</Text>
               </CardItem>
