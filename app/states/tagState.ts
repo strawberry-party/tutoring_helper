@@ -1,17 +1,18 @@
+import { TagPrimitiveType } from './../types/root';
 import { TagType } from '../types/root';
 import _ from 'lodash';
 import produce from 'immer';
 
 interface TagState {
   selectedTagId: string;
-  subjectTags: [];
-  bookTags: [];
+  subjectTags: TagPrimitiveType[];
+  bookTags: TagPrimitiveType[];
 }
 
-const initialState = {
+const initialState: TagState = {
   selectedTagId: '', // 안 쓰고 있음
-  subjectTags: [{ key: 'tag_1', info: { name: '수학' } }],
-  bookTags: [],
+  subjectTags: fetchSubjectTagsFromDB(),
+  bookTags: fetchBookTagsFromDB(),
 };
 
 // action type
@@ -72,29 +73,50 @@ export const actions = {
   setupTag,
 };
 
+function fetchSubjectTagsFromDB() {
+  return [
+    { key: 'tag_1', info: { name: '수학' } },
+    { key: 'tag_2', info: { name: '과학' } },
+    { key: 'tag_3', info: { name: '화학' } },
+  ];
+}
+
+function fetchBookTagsFromDB() {
+  return [
+    { key: 'book_1', info: { name: '수학의 정석' } },
+    { key: 'book_2', info: { name: '과학의 정석' } },
+    { key: 'book_3', info: { name: '화학의 정석' } },
+  ];
+}
 // reducer
-const tagReducer = (state = initialState, action: TagAction) =>
+const tagReducer = (state: TagState = initialState, action: TagAction) =>
   produce(state, (draft) => {
     switch (action.type) {
       case TAG_SETUP:
-        draft.subjectTags = [];
-        draft.bookTags = [];
-        action.subjectTags === undefined
-          ? ''
-          : Object.entries(action.subjectTags)
-              .reverse()
-              .map(([key, info]) => {
-                draft.subjectTags.push({ key, info });
-              });
-        action.bookTags === undefined
-          ? ''
-          : Object.entries(action.bookTags)
-              .reverse()
-              .map(([key, info]) => {
-                draft.bookTags.push({ key, info });
-              });
+        return state;
+      // return ({
+      //   selectedTagId: '',
+      //   subjectTags : state.subjectTags.concat(fetchSubjectTagsFromDB()),
+      //   bookTags: state.bookTags.concat(fetchBookTagsFromDB()),
+      // });
 
-        break;
+      // draft.subjectTags = [];
+      // draft.bookTags = [];
+      // action.subjectTags === undefined
+      //   ? ''
+      //   : Object.entries(action.subjectTags)
+      //       .reverse()
+      //       .map(([key, info]) => {
+      //         draft.subjectTags.push({ key, info });
+      //       });
+      // action.bookTags === undefined
+      //   ? ''
+      //   : Object.entries(action.bookTags)
+      //       .reverse()
+      //       .map(([key, info]) => {
+      //         draft.bookTags.push({ key, info });
+      //       });
+      // break;
 
       default:
         break;

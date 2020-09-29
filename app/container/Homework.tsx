@@ -110,8 +110,6 @@ function HomeworkContainer({
   const subjectTags = useSelector((state: RootState) => state.tagReducer.subjectTags);
   const bookTags = useSelector((state: RootState) => state.tagReducer.bookTags);
 
-  // const tags = useSelector((state: RootState) => state.tagReducer.tags);
-
   return (
     <SafeAreaView
       style={{
@@ -135,8 +133,6 @@ function HomeworkContainer({
             // sorterDirActions={{ sortDsc, sortAsc }}
             // sorterActions={{ sortDue, sortOut, sortTitle }}
           />
-          <PushMaker />
-          <AlarmDialog text="알림" />
         </View>
 
         <ScrollView

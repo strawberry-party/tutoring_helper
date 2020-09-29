@@ -38,10 +38,14 @@ function App() {
 
   return (
     <Provider store={store}>
-      {/* <NavigationContainer ref={navigationRef}>
-        {!user ? <LoginStackNavigator /> : <DrawerNavigator userId={user.uid} />}
-      </NavigationContainer> */}
-      <HomeworkContainer />
+      <NavigationContainer ref={navigationRef}>
+        {!user ? (
+          <LoginStackNavigator />
+        ) : (
+          <DrawerNavigator userId={user.uid} />
+        )}
+      </NavigationContainer>
+      {/* <HomeworkContainer /> */}
     </Provider>
   );
 }
