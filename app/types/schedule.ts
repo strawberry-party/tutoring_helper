@@ -159,19 +159,22 @@ export class FormWorkScheduleType {
 
   time: LessonTime;
   memo?: string;
+  reminder?: number;
 
   constructor(
-    text: string = '제목을 입력해주세요',
+    text: string = '과외',
     studentId: string = 'student_1',
     tagId: string = 'none',
     time: LessonTime = new LessonTime(),
     memo: string = '',
+    reminder: number = 0,
   ) {
     this.text = text;
     this.studentId = studentId;
     this.tagId = tagId;
     this.time = time;
     this.memo = memo;
+    this.reminder = reminder;
   }
 
   public print() {
@@ -189,6 +192,7 @@ export class ScheduleType {
   tagId: string;
   time: LessonTime;
   memo?: string;
+  reminder?: number;
 
   id: string;
   linkedRepeatedScheduleInfoId: string;

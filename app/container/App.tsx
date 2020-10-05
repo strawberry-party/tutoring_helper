@@ -8,10 +8,10 @@ import React, { useEffect, useState } from 'react';
 import AssignContainer from './Homework';
 import DailyScheduleSelector from '../component/Schedule/DailyScheduleSelector';
 import DrawerNavigator from './DrawerNavigator';
-import HomeworkContainer from './Homework';
 import LoginStackNavigator from './LoginStackNavigator';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
+import ScheduleContainer from './Schedule';
 import SplashScreen from 'react-native-splash-screen';
 import auth from '@react-native-firebase/auth';
 import { navigationRef } from '../common/RootNavigation';
@@ -38,14 +38,14 @@ function App() {
 
   return (
     <Provider store={store}>
-      <NavigationContainer ref={navigationRef}>
+      {/* <NavigationContainer ref={navigationRef}>
         {!user ? (
           <LoginStackNavigator />
         ) : (
           <DrawerNavigator userId={user.uid} />
         )}
-      </NavigationContainer>
-      {/* <HomeworkContainer /> */}
+      </NavigationContainer> */}
+      <ScheduleContainer />
     </Provider>
   );
 }

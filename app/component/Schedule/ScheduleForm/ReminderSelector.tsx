@@ -33,7 +33,7 @@ export default function ReminderSelector({ defaultReminder, onSubmitDialog }) {
   };
 
   const onShowDialog = () => {
-    console.warn('onShowDialog!');
+    // console.warn('onShowDialog!');
     setDialogVisible(true);
   };
 

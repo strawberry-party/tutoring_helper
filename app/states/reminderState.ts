@@ -1,6 +1,7 @@
 import LocalNotification from '../utils/LocalNotification';
 import { ReminderType } from './../types/schedule';
 import _ from 'lodash';
+import dayjs from 'dayjs';
 
 // 리마인더 리스트를 받으면 등록함
 
@@ -23,22 +24,23 @@ const initialState: ReminderStateType = { reminders: [] };
 // action constructor
 // reminder CRUD
 
-export const addReminder = (formWork, linkedScheduleId: string = 'none') => {
+export const addReminder = (formWork, linkedScheduleId) => {
   return {
     type: REMINDER_ADD,
     reminder: {
-      id: _.uniqueId('reminder_'),
-      message: 'message',
-      title: 'title',
-      date: Date(),
+      id: _.uniqueId(), // new id
+      message: formWork.message, // formwork.message
+      title: formWork.title, // formwork.title
+      date: dayjs().add(30, 's').toDate(),
+      // date: formWork.date, // formwork.date
       linkedScheduleId: linkedScheduleId,
     },
   };
 };
 
-export const removeReminder = (id: string) => ({
+export const removeReminder = (linkedScheduleId: string) => ({
   type: REMINDER_REMOVE,
-  id: id,
+  linkedScheduleId,
 });
 
 export const editReminder = (
@@ -49,7 +51,7 @@ export const editReminder = (
   type: REMINDER_EDIT,
   message: 'new message',
   title: 'new title',
-  date: Date(),
+  date: new Date(),
   linkedScheduleId: linkedScheduleId,
   id: id,
 });
@@ -70,7 +72,8 @@ const reminderReducer = (
 ) => {
   switch (action.type) {
     case REMINDER_ADD:
-      LocalNotification.triggerOneTimeLocalNotificationDate(
+      console.log(action.reminder);
+      LocalNotification.registerReminder(
         action.reminder.id,
         action.reminder.message,
         action.reminder.title,
@@ -79,13 +82,31 @@ const reminderReducer = (
       return { reminders: [...state.reminders, action.reminder] };
 
     case REMINDER_REMOVE:
+      console.log(
+        'REMINDER_REMOVE: linkedScheduleId - ' + action.linkedScheduleId,
+      );
+      console.log(state.reminders);
+
+      state.reminders.forEach((reminder) => {
+        if (reminder.linkedScheduleId === action.linkedScheduleId)
+          LocalNotification.cancel(reminder.id);
+      });
       return {
         reminders: state.reminders.filter(
-          (reminder: ReminderType) => reminder.id !== action.id,
+          (reminder: ReminderType) =>
+            reminder.linkedScheduleId !== action.linkedScheduleId,
         ),
       };
 
     case REMINDER_EDIT:
+      LocalNotification.cancel(action.id);
+      LocalNotification.registerReminder(
+        action.id,
+        action.message,
+        action.title,
+        action.date,
+      );
+
       return {
         reminders: state.reminders.map((item: ReminderType) =>
           item.id === action.id

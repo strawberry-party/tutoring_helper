@@ -14,16 +14,16 @@ import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { connect, useSelector } from 'react-redux';
 
 import AddButton from '../component/common/AddButton';
-import { Dayjs } from 'dayjs';
+import { Button } from 'react-native-paper';
 import { FilterButton } from '../component/common/Buttons';
 import FilterModal from '../component/Schedule/FilterModal';
 import PushMaker from '../component/common/PushMaker';
 import { RootState } from '../states';
 import ScheduleDetailModal from '../component/Schedule/ScheduleDetailModal';
-import ScheduleTester from '../component/Schedule/ScheduleTester';
 import StudentCalendar from '../component/Schedule/StudentCalendar';
 import _ from 'lodash';
 import dayjs from 'dayjs';
+import { actions as reminderActions } from '../states/reminderState';
 import { actions as scheduleActions } from '../states/scheduleState';
 import sortIntoDailyAgendas from '../component/Schedule/scheduleUtils/sortIntoDailyAgendas';
 
@@ -42,8 +42,16 @@ function ScheduleContainer({
   addRepetition,
   removeRepetition,
   editRepetition,
+
+  addReminder,
+  removeReminder,
 }: ScheduleContainerProps) {
-  const tags = useSelector((state: RootState) => state.tagReducer.tags);
+  const subjectTags = useSelector(
+    (state: RootState) => state.tagReducer.subjectTags,
+  );
+  const bookTags = useSelector((state: RootState) => state.tagReducer.bookTags);
+  const reminders = useSelector((state) => state.scheduleReducer.reminders);
+
   const schedules = useSelector((state) => state.scheduleReducer.schedules);
   const repeatInfos = useSelector((state) => state.scheduleReducer.repeatInfos);
   const selectedScheduleId = useSelector(
@@ -65,26 +73,39 @@ function ScheduleContainer({
     durationEnd: dayjs(),
   });
 
-  // useEffect(() => {
-  //   console.log('==========CHANGED repeatInfos ====');
-  //   repeatInfos.map((item: RepeatedScheduleInfo) => item.print());
-  //   console.log('====================================');
-  // }, [repeatInfos]);
-
-  // useEffect(() => {
-  //   console.log('==========CHANGED SCHEDULES==============');
-  //   schedules.forEach((item: ScheduleType) => item.print());
-  //   console.log('====================================');
-  // }, [schedules]);
-
-
   const onAddSchedule = (
     formWorkSchedule,
     linkedRepeatedScheduleInfoId = 'none',
-    reminder = 0
   ) => {
     addSchedule(formWorkSchedule, linkedRepeatedScheduleInfoId);
-    // addReminder(formWorkSchedule, reminder);
+
+    // var myPromise = new Promise(function (resolve, reject) {
+    //   addSchedule(formWorkSchedule, linkedRepeatedScheduleInfoId);
+    //   setTimeout(function () {
+    //     resolve();
+    //   }, 200);
+    // });
+
+    // const formworkReminder = {
+    //   title:
+    //     formWorkSchedule.text + ` 시작 ${formWorkSchedule.reminder}분 전입니다`,
+    //   message:
+    //     formWorkSchedule.time.start.format('H시 m분') +
+    //     ' 부터 ' +
+    //     formWorkSchedule.time.end.format('H시 m분') +
+    //     ' 까지',
+    //   date: formWorkSchedule.time.start
+    //     .subtract(formWorkSchedule.reminder, 'm')
+    //     .toDate(),
+    // };
+    // myPromise.then(() => addReminder(formworkReminder, selectedScheduleId));
+    // // addReminder(formworkReminder, selectedScheduleId);
+  };
+
+  const onRemoveSchedule = (id: string) => {
+    console.log('onRemoveSchedule: ' + id);
+    removeSchedule(id);
+    // removeReminder(id);
   };
 
   useEffect(() => {
@@ -123,6 +144,13 @@ function ScheduleContainer({
             alignItems: 'center',
           }}>
           <PushMaker />
+          <Button
+            onPress={() => {
+              console.log('Reminder: ');
+              reminders.forEach((reminder) => console.log(reminder));
+            }}>
+            리마인더 출력하기
+          </Button>
           <FilterButton showFilterModal={() => setFilterVisible(true)} />
         </View>
 
@@ -154,7 +182,7 @@ function ScheduleContainer({
             hideModal={() => {
               setAddFormVisible(false);
             }}
-            addSchedule={addSchedule}
+            addSchedule={onAddSchedule}
             addRepeatInfo={addRepetition}
           />
         </View>
@@ -171,7 +199,7 @@ function ScheduleContainer({
             editRepeatInfo={editRepetition}
             repeatedScheduleInfo={getRepeatInfo()}
             removeRepeatInfo={removeRepetition}
-            removeSchedule={removeSchedule}
+            removeSchedule={onRemoveSchedule}
             addSchedule={addSchedule}
           />
         </View>
@@ -182,7 +210,7 @@ function ScheduleContainer({
             showModal={() => setDetailVisible(true)}
             modalVisible={detailVisible}
             hideModal={() => setDetailVisible(false)}
-            removeSchedule={removeSchedule}
+            removeSchedule={onRemoveSchedule}
             repeatedScheduleInfos={repeatInfos}
             selectedScheduleId={selectedScheduleId}
             showFormModal={() => setEditFormVisible(true)}
@@ -205,8 +233,6 @@ function ScheduleContainer({
                 ['student_2', '최상아'],
               ]),
             }}
-            // tags={tags}
-            // students={['student_1', 'student_2']}
             // duration={{start: '2020-09-10', end:'2020-10-10'}}
           />
         </View>
@@ -244,10 +270,11 @@ function mapStateToProps(state) {
     schedules: state.scheduleReducer.schedules,
     repeatInfos: state.scheduleReducer.repeatInfos,
     selectedScheduleId: state.scheduleReducer.selectedScheduleId,
+    reminders: state.reminderReducer.reminders,
   };
 }
 
-const mapDispatchToProps = Object.assign({}, scheduleActions);
+const mapDispatchToProps = Object.assign({}, scheduleActions, reminderActions);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ScheduleContainer);
 // TutoringHelper의 props로 mapStateToProps의 리턴객체를 전해준다

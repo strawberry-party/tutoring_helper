@@ -62,7 +62,7 @@ export default function AddScheduleForm({
   const now2Hour = now.add(2, 'hour');
 
   // create schedule
-  const [text, setText] = useState('제목');
+  const [text, setText] = useState('과외');
   const [selectedStudentId, selectStudent] = useState('student_1');
   const [selectedTagId, selectTag] = useState('tag_1');
 
@@ -91,6 +91,7 @@ export default function AddScheduleForm({
       selectedTagId,
       new LessonTime(start, end),
       memo,
+      reminder,
     );
   };
 
@@ -119,7 +120,7 @@ export default function AddScheduleForm({
 
       return;
     }
-    
+
     if (!repeat) {
       addSchedule(getFormWorkSchedule());
       hideModal();
@@ -127,13 +128,7 @@ export default function AddScheduleForm({
       // console.log(getWeeklySchedule(startTimes, endTimes, selectedDays));
       // console.log(start);
       addRepeatInfo(
-        new FormWorkScheduleType(
-          text,
-          selectedStudentId,
-          selectedTagId,
-          new LessonTime(start, end),
-          memo,
-        ),
+        getFormWorkSchedule(),
         endPointMode === 'lastDay'
           ? ({ endDay: lastDay } as EndAfterThisDay)
           : ({ numOfTimes: endAfterNumTimes } as EndAfterNTimes),
