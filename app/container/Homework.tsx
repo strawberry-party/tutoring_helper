@@ -5,18 +5,16 @@ import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { connect, useSelector } from 'react-redux';
 
 import AddAssignButton from '../component/common/AddButton';
-import AlarmDialog from '../component/common/AlarmDialog';
 import AssignList from '../component/Homework/AssignList';
 import AssignModal from '../component/Homework/AssignModal';
 import { AssignType } from '../types/homework';
 import { FilterButton } from '../component/Homework/FilterSorter';
 import FilterModal from '../component/Homework/FilterModal';
-import PushMaker from '../component/common/PushMaker';
 import { RootState } from '../states';
 import { actions as assignActions } from '../states/assignState';
 import database from '@react-native-firebase/database';
 import { actions as filterSorterActions } from '../states/assignFilterSorterState';
-import { mockTags } from '../common/mockData';
+import getAssigns from '../states/assignState';
 import { actions as modalVisibilityActions } from '../states/assignModalState';
 
 const db = database();
@@ -30,7 +28,7 @@ function HomeworkContainer({
   hideEditModal,
   showEditModal,
 
-  setupAssign,
+  getAssigns,
   addAssign,
   completeAssign,
   incompleteAssign,
@@ -49,24 +47,13 @@ function HomeworkContainer({
   showSelectedTags,
   currentStudentId,
   tutorId,
-
 }: HomeworkContainerProps) {
-
   useEffect(() => {
-    db.ref(`tutors/${tutorId}/studentArray/${currentStudentId}/assigns`).on(
-      'value',
-      (snapshot) => {
-        // console.log(snapshot.val());
-        setupAssign(
-          snapshot.val().assignList,
-          snapshot.val().assignStatus.completedAssignNum,
-        );
-      },
-    );
+    getAssigns();
   }, []);
 
-  const assignMap: Map<string, AssignType> = useSelector(
-    (state: RootState) => state.assignReducer.assignMap,
+  const { assigns, loading, error } = useSelector(
+    (state) => state.assignReducer.assigns,
   );
 
   const addModalVisible: boolean = useSelector(
@@ -81,7 +68,6 @@ function HomeworkContainer({
 
   const showFilterModal = () => toggleFilterModal(true);
   const hideFilterModal = () => toggleFilterModal(false);
-
 
   const selectedAssignId: string = useSelector(
     (state: RootState) => state.assignModalReducer.selectedAssignId,
@@ -107,7 +93,9 @@ function HomeworkContainer({
     (state: RootState) => state.assignFilterSorterReducer.tagFilter,
   );
 
-  const subjectTags = useSelector((state: RootState) => state.tagReducer.subjectTags);
+  const subjectTags = useSelector(
+    (state: RootState) => state.tagReducer.subjectTags,
+  );
   const bookTags = useSelector((state: RootState) => state.tagReducer.bookTags);
 
   return (
@@ -145,20 +133,25 @@ function HomeworkContainer({
               borderColor: 'blue',
               // borderWidth: 3,
             }}>
-            <AssignList
-              assignMap={assignMap}
-              showEditModal={showEditModal}
-              onCompleteAssign={completeAssign}
-              onIncompleteAssign={incompleteAssign}
-              onRemoveAssign={removeAssign}
-              activeFilter={filter}
-              activeSorter={sorter}
-              activeSorterDir={sorterDir}
-              activeTagFilter={tagFilter}
-              completed={0}
-              bookTags={bookTags}
-              subjectTags={subjectTags}
-            />
+            {loading ? (
+              <View>로딩중...</View>
+            ) : error ? (
+              <View>에러 발생!</View>
+            ) : !assigns ? null : (
+              <AssignList
+                assigns={assigns}
+                showEditModal={showEditModal}
+                onCompleteAssign={completeAssign}
+                onIncompleteAssign={incompleteAssign}
+                onRemoveAssign={removeAssign}
+                activeFilter={filter}
+                activeSorter={sorter}
+                activeSorterDir={sorterDir}
+                activeSubjectTagFilter={tagFilter}
+                bookTags={bookTags}
+                subjectTags={subjectTags}
+              />
+            )}
           </View>
         </ScrollView>
 

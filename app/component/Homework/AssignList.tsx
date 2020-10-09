@@ -41,7 +41,7 @@ const noAssign = (
 // const noAssign = <Text> Hello world </Text>
 
 function AssignList({
-  assignMap,
+  assigns,
   bookTags,
   subjectTags,
 
@@ -54,31 +54,28 @@ function AssignList({
   activeFilter,
   activeSorter,
   activeSorterDir,
-  activeTagFilter,
-}: AssignListProps) {
+  activeSubjectTagFilter,
+}) {
   const getFiltered = () => {
     switch (activeFilter) {
       case 'ALL':
-        var newAssignMap = new Map<string, AssignType>();
-        for (let [key, assign] of assignMap) {
-          if (activeTagFilter.has(assign.tagId)) newAssignMap.set(key, assign);
-        }
-        return newAssignMap;
+        return assigns.filter((assign) =>
+          activeFilter.has(assign.subjectTagId),
+        );
       case 'COMPLETED':
-        var newAssignMap = new Map<string, AssignType>();
-        for (let [key, assign] of assignMap) {
-          if (assign.isCompleted && activeTagFilter.has(assign.tagId))
-            newAssignMap.set(key, assign);
-        }
-        return newAssignMap;
+        return assigns.filter(
+          (assign) =>
+            assign.isCompleted &&
+            activeSubjectTagFilter.has(assign.subjectTagId),
+        );
 
       case 'INCOMPLETED':
-        var newAssignMap = new Map<string, AssignType>();
-        for (let [key, assign] of assignMap) {
-          if (!assign.isCompleted && activeTagFilter.has(assign.tagId))
-            newAssignMap.set(key, assign);
-        }
-        return newAssignMap;
+        return assigns.filter(
+          (assign) =>
+            !assign.isCompleted &&
+            activeSubjectTagFilter.has(assign.subjectTagId),
+        );
+
       default:
         console.error(
           `SOMETHING WENT WRONG in AssignList/filtered ${activeFilter}`,
@@ -114,53 +111,52 @@ function AssignList({
 
   // TODO: assignMap에서 sort 구현
   // const getSorted = _.orderBy(filtered(), [getSorter()], [getSortDir()]);
-  const sorted: Map<string, AssignType> = getFiltered();
+  const sorted = getFiltered();
 
   const outDates: Set<string> = new Set();
   var items: Array<JSX.Element> = [];
 
-  for (const [key, assign] of sorted) {
-    if (!assign.out) continue;
-    var out: string = assign.out.format('YYYY/MM/DD').toString();
-    if (!outDates.has(out)) {
-      items.push(
-        <Separator bordered key={out}>
-          <Text>{assign.out.format('MM월 DD일')}</Text>
-        </Separator>,
-      );
-      outDates.add(out);
-    }
+  sorted.forEach((assign) => {
+    if (assign.out) {
+      var out: string = assign.out.format('YYYY/MM/DD').toString();
+      if (!outDates.has(out)) {
+        items.push(
+          <Separator bordered key={out}>
+            <Text>{assign.out.format('MM월 DD일')}</Text>
+          </Separator>,
+        );
+        outDates.add(out);
+      }
 
-    let comp = (
-      <Assign
-        key={key}
-        id={key}
-        {...assign}
-        onStartEdit={() => {
-          showEditModal(key, assign);
-        }}
-        onComplete={() => {
-          onCompleteAssign(key);
-          console.log(`${key} Completed`);
-        }}
-        onIncomplete={() => {
-          onIncompleteAssign(key);
-          console.log(`${key} canceled Complete`);
-        }}
-        onRemove={() => {
-          onRemoveAssign(key);
-          console.log(`${key} deleted`);
-        }}
-        subjectTag={subjectTags.find(item => item.key === assign.tagId)}
-      />
-    );
-    items.push(comp);
-  }
+      let comp = (
+        <Assign
+          key={assign.id}
+          id={assign.id}
+          {...assign}
+          onStartEdit={() => {
+            showEditModal(assign.id, assign);
+          }}
+          onComplete={() => {
+            onCompleteAssign(assign.id);
+            console.log(`${assign.id} Completed`);
+          }}
+          onIncomplete={() => {
+            onIncompleteAssign(assign.id);
+            console.log(`${assign.id} canceled Complete`);
+          }}
+          onRemove={() => {
+            onRemoveAssign(assign.id);
+            console.log(`${assign.id} deleted`);
+          }}
+          subjectTag={subjectTags.find((item) => item.id === assign.tagId)}
+        />
+      );
+      items.push(comp);
+    }
+  });
+
   return (
     <View style={{ borderColor: 'red' }}>
-      <Paragraph>
-        <Text style={{ fontSize: 15 }}>여기는 AssignStatus가 올 자리</Text>
-      </Paragraph>
       <List style={{ backgroundColor: 'white' }}>
         {items.length === 0 ? noAssign : items}
       </List>

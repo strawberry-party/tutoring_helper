@@ -45,3 +45,29 @@ export const getAssignById = async id => {
   await sleep(500); // 0.5초 쉬고
   return assigns.find(assign => assign.id === id); // id 로 찾아서 반환
 };
+
+
+// TODO: 파이어베이스 API 적용하기
+// useEffect(() => {
+//   db.ref(`tutors/${tutorId}/studentArray/${currentStudentId}/assigns`).on(
+//     'value',
+//     (snapshot) => {
+//       // console.log(snapshot.val());
+//       setupAssign(
+//         snapshot.val().assignList,
+//         snapshot.val().assignStatus.completedAssignNum,
+//       );
+//     },
+//   );
+// }, []);
+
+//       case ASSIGNSTATE_SETUP:
+// draft.completed = action.completed;
+// action.assigns === null || undefined
+//   ? ''
+//   : Object.entries(action.assigns)
+//     .reverse()
+//     .map(([key, assign]) => {
+//       draft.assignMap.set(key, assign);
+//     });
+// break;

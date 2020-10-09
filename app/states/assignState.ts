@@ -89,7 +89,8 @@ export const editAssign = (id: string, assign: AssignType) => ({
 
 // actions
 export const actions = {
-  setupAssign,
+  getAssigns,
+  getAssign,
   addAssign,
   completeAssign,
   incompleteAssign,
@@ -102,70 +103,66 @@ export const actions = {
 // action에 따라 state를 어떻게 반환할지 설정
 // TODO: 깊은 곳까지 접근하기 편하도록 immer.js 사용할것
 
+const findAssignById = (id) => (assign) => {
+  return assign.id == id;
+};
+
 const assignsReducer = (
   state: AssignStateType = initialState,
   action: AssignAction,
-) =>
-  produce(state, (draft) => {
-    switch (action.type) {
-      case GET_ASSIGNS:
-      case GET_ASSIGNS_SUCCESS:
-      case GET_ASSIGNS_ERROR:
-        return handleAsyncActions(GET_ASSIGNS, 'assigns')(state, action);
-      case GET_ASSIGN:
-      case GET_ASSIGN_SUCCESS:
-      case GET_ASSIGN_ERROR:
-        return handleAsyncActions(GET_ASSIGN, 'assign')(state, action);
+) => {
+  switch (action.type) {
+    case GET_ASSIGNS:
+    case GET_ASSIGNS_SUCCESS:
+    case GET_ASSIGNS_ERROR:
+      return handleAsyncActions(GET_ASSIGNS, 'assigns')(state, action);
+    case GET_ASSIGN:
+    case GET_ASSIGN_SUCCESS:
+    case GET_ASSIGN_ERROR:
+      return handleAsyncActions(GET_ASSIGN, 'assign')(state, action);
 
+    case ASSIGN_ADD:
+      return { ...state, assigns: [...state.assigns, action.assign] };
+    // handleAsyncActions
 
-      // GET_ASSIGN으로 바꾸기
-      case ASSIGNSTATE_SETUP:
-        draft.completed = action.completed;
-        action.assigns === null || undefined
-          ? ''
-          : Object.entries(action.assigns)
-              .reverse()
-              .map(([key, assign]) => {
-                draft.assignMap.set(key, assign);
-              });
-        break;
+    case ASSIGN_COMPLETE:
+      return {
+        ...state,
+        assigns: state.assigns.map((assign) => {
+          if (assign.id === action.id) assign.isCompleted = true;
+        }),
+      };
 
-      case ASSIGN_ADD:
-        draft.assignMap.set(action.id, action.assign);
-        break;
+    case ASSIGN_INCOMPLETE:
+      return {
+        ...state,
+        assigns: state.assigns.map((assign) => {
+          if (assign.id === action.id) assign.isCompleted = false;
+        }),
+      };
 
-      case ASSIGN_COMPLETE:
-        // var newAssignMap = new Map(draft.assignMap);
-        // newAssignMap.get(action.id).isCompleted = true;
+    case ASSIGN_REMOVE:
+      var assign = state.assigns.find(findAssignById(action.id));
+      return {
+        ...state,
+        assigns: state.assigns.filter((assign) => assign.id !== action.id),
+        completed: assign.isCompleted ? state.completed - 1 : state.completed,
+      };
 
-        // return { ...draft, assignMap: newAssignMap };
-        draft.assignMap.get(action.id).isCompleted = true;
-        draft.assignMap = new Map(draft.assignMap);
-        break;
+    case ASSIGN_EDIT:
+      return {
+        ...state,
+        assigns: state.assigns.map((assign) => {
+          if (assign.id === action.id) return action.assign;
+        }),
+        completed: action.assign.isCompleted
+          ? state.completed + 1
+          : state.completed,
+      };
 
-      case ASSIGN_INCOMPLETE:
-        // var newAssignMap = new Map(draft.assignMap);
-        // newAssignMap.get(action.id).isCompleted = false;
-        // return { ...draft, assignMap: newAssignMap };
-        draft.assignMap.get(action.id).isCompleted = false;
-        draft.assignMap = new Map(draft.assignMap);
-
-        break;
-
-      case ASSIGN_REMOVE:
-        if (draft.assignMap.get(action.id).isCompleted) draft.completed -= 1;
-
-        if (!draft.assignMap.delete(action.id))
-          console.error('invalid action with no matching assign id');
-        break;
-
-      case ASSIGN_EDIT:
-        draft.assignMap.set(action.id, action.assign);
-        break;
-
-      default:
-        return state;
-    }
-  });
+    default:
+      return state;
+  }
+};
 
 export default assignsReducer;
