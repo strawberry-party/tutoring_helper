@@ -1,116 +1,74 @@
-import produce from 'immer';
-
-// action type
-const SET_FILTER = 'SET_FILTER' as const;
-const SET_SORTER = 'SET_SORTER' as const;
-const SET_SORTER_DIR = 'SET_SORTER_DIR' as const; // 정렬 방향
-const SET_TAG_FILTER = 'SET_TAG_FILTER' as const;
-
-// action constructor
-
-/* -------------------------*/
-// filter
-const ALL = 'ALL' as const;
-const COMPLETED = 'COMPLETED' as const;
-const INCOMPLETED = 'INCOMPLETED' as const;
-
-type FilterSorterAction =
-  | ReturnType<typeof showAll>
-  | ReturnType<typeof showIncomplete>
-  | ReturnType<typeof showCompleted>
-  | ReturnType<typeof showSelectedTags>
-  | ReturnType<typeof sortDsc>
-  | ReturnType<typeof sortAsc>
-  | ReturnType<typeof sortDue>
-  | ReturnType<typeof sortOut>
-  | ReturnType<typeof sortTitle>;
-
-export type FilterState = typeof ALL | typeof COMPLETED | typeof INCOMPLETED;
-type SorterState = typeof DUE | typeof OUT | typeof TITLE;
-type SorterDirState = typeof ASC | typeof DSC;
-
-type FilterSorterState = {
-  filter: FilterState;
-  sorter: SorterState;
-  sorterDir: SorterDirState;
-  tagFilter: Set<string>;
-};
-
 // action constructor
 function showAll() {
   return {
-    type: SET_FILTER,
-    filter: ALL,
+    type: 'SET_FILTER',
+    filter: 'ALL',
   };
 }
 
 function showCompleted() {
   return {
-    type: SET_FILTER,
-    filter: COMPLETED,
+    type: 'SET_FILTER',
+    filter: 'COMPLETED',
   };
 }
 
 function showIncomplete() {
   return {
-    type: SET_FILTER,
-    filter: INCOMPLETED,
+    type: 'SET_FILTER',
+    filter: 'INCOMPLETED',
   };
 }
 
-function showSelectedTags(selectedTagIdSet: Set<string>) {  
+function setVisibleSubjectIds(visibleSubjectTagIds: string[]) {
   return {
-    type: SET_TAG_FILTER,
-    tagFilter: selectedTagIdSet,
+    type: 'SET_VISIBLE_SUBJECT_TAGS',
+    visibleSubjectTagIds: visibleSubjectTagIds,
+  };
+}
+
+function setVisibleBookIds(setVisibleBookTagIds: string[]) {
+  return {
+    type: 'SET_VISIBLE_BOOK_TAGS',
+    setVisibleBookTagIds: setVisibleBookTagIds,
   };
 }
 
 /* -------------------------*/
 // sorterDir 정렬 방향
 
-const ASC = 'ASC' as const; // 내림차순  (▲)
-const DSC = 'DSC' as const; //  오름차순 (▽)
-
-export const sorterDirOptions = { ASC, DSC };
-
 function sortAsc() {
   return {
-    type: SET_SORTER_DIR,
-    sorterDir: ASC,
+    type: 'SET_SORTER_DIR',
+    sorterDir: 'ASC',
   };
 }
 
 function sortDsc() {
   return {
-    type: SET_SORTER_DIR,
-    sorterDir: DSC,
+    type: 'SET_SORTER_DIR',
+    sorterDir: 'DSC',
   };
 }
 
 /* -------------------------*/
 // sorter 정렬자
-const DUE = 'DUE' as const;
-const OUT = 'OUT' as const;
-const TITLE = 'TITLE' as const;
-
-export const sorterOptions = { DUE, OUT, TITLE };
-
 function sortDue() {
   return {
-    type: SET_SORTER,
-    sorter: DUE,
+    type: 'SET_SORTER',
+    sorter: 'DUE',
   };
 }
 function sortOut() {
   return {
-    type: SET_SORTER,
-    sorter: OUT,
+    type: 'SET_SORTER',
+    sorter: 'OUT',
   };
 }
 function sortTitle() {
   return {
-    type: SET_SORTER,
-    sorter: TITLE,
+    type: 'SET_SORTER',
+    sorter: 'TITLE',
   };
 }
 
@@ -125,37 +83,40 @@ export const actions = {
   sortOut,
   sortTitle,
 
-  showSelectedTags,
+  setVisibleSubjectIds,
+  setVisibleBookIds,
 };
 
 // reducer
-const initialState: FilterSorterState = {
-  filter: ALL,
-  sorter: OUT,
-  sorterDir: ASC,
-  tagFilter: new Set<string>(['java']),
+const initialState = {
+  filter: 'ALL',
+  sorter: 'OUT',
+  sorterDir: 'ASC',
+  visibleSubjectTagIds: ['java'],
+  visibleBookTagIds: [],
 };
 
-const assignFilterSorterReducer = (
-  state: FilterSorterState = initialState,
-  action: FilterSorterAction,
-) =>
-  produce(state, (draft) => {
-    switch (action.type) {
-      case SET_FILTER:
-        draft.filter = action.filter;
-        break;
-      case SET_SORTER:
-        draft.sorter = action.sorter;
-        break;
-      case SET_SORTER_DIR:
-        draft.sorterDir = action.sorterDir;
-        break;
-      case SET_TAG_FILTER:
-        draft.tagFilter = action.tagFilter;
-      default:
-        break;
-    }
-  });
+const assignFilterSorterReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case 'SET_FILTER':
+      return { ...state, filter: action.filter };
+    case 'SET_SORTER':
+      return { ...state, sorter: action.sorter };
+    case 'SET_SORTER_DIR':
+      return { ...state, sorterDir: action.sorterDir };
+
+    case 'SET_VISIBLE_SUBJECT_TAGS':
+      return { ...state, visibleSubjectTagIds: action.visibleSubjectTagIds };
+
+    case 'SET_VISIBLE_BOOK_TAGS':
+      return {
+        ...state,
+        visibleBookTagIds: action.visibleBookTagIds,
+      };
+
+    default:
+      break;
+  }
+};
 
 export default assignFilterSorterReducer;

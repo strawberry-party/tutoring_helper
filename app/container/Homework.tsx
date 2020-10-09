@@ -12,12 +12,8 @@ import { FilterButton } from '../component/Homework/FilterSorter';
 import FilterModal from '../component/Homework/FilterModal';
 import { RootState } from '../states';
 import { actions as assignActions } from '../states/assignState';
-import database from '@react-native-firebase/database';
 import { actions as filterSorterActions } from '../states/assignFilterSorterState';
-import getAssigns from '../states/assignState';
 import { actions as modalVisibilityActions } from '../states/assignModalState';
-
-const db = database();
 
 type HomeworkContainerProps = any; // TODO: 타입 정의, any 대체하기
 
@@ -89,8 +85,12 @@ function HomeworkContainer({
     (state: RootState) => state.assignFilterSorterReducer.sorterDir,
   );
 
-  const tagFilter: Set<string> = useSelector(
-    (state: RootState) => state.assignFilterSorterReducer.tagFilter,
+  const visibleSubjectTagIds = useSelector(
+    (state: RootState) => state.assignFilterSorterReducer.visibleSubjectTagIds,
+  );
+
+  const visibleBookTagIds = useSelector(
+    (state: RootState) => state.assignFilterSorterReducer.visibleBookTagIds,
   );
 
   const subjectTags = useSelector(
@@ -147,7 +147,7 @@ function HomeworkContainer({
                 activeFilter={filter}
                 activeSorter={sorter}
                 activeSorterDir={sorterDir}
-                activeSubjectTagFilter={tagFilter}
+                activeSubjectTagFilter={visibleSubjectTagIds}
                 bookTags={bookTags}
                 subjectTags={subjectTags}
               />
@@ -188,7 +188,7 @@ function HomeworkContainer({
             bookTags={bookTags}
             subjectTags={subjectTags}
             activeFilter={filter}
-            tagFilter={tagFilter}
+            tagFilter={{ visibleBookTagIds, visibleSubjectTagIds }}
             filterActions={{
               showAll,
               showCompleted,
@@ -231,6 +231,9 @@ function mapStateToProps(state) {
     filterModalVisible: state.assignModalReducer.filterModalVisible,
     filter: state.assignFilterSorterReducer.filter,
     sorter: state.assignFilterSorterReducer.sorter,
+    visibleSubjectTagIds: state.assignFilterSorterReducer.visibleSubjectTagIds,
+    visibleBookTagIds: state.assignFilterSorterReducer.visibleBookTagIds,
+
     currentStudentId: state.currentStudentReducer.selectedStudentId,
     tutorId: state.tutorReducer.uid,
   };

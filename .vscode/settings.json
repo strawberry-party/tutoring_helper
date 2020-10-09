@@ -6,4 +6,7 @@
     "**/node_modules": false
   },
   "terminal.integrated.windowsEnableConpty": false,
+  "files.watcherExclude": {
+    "**/target": true
+  },
 }

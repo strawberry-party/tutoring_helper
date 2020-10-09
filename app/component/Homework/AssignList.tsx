@@ -1,9 +1,4 @@
 import { AssignListType, AssignType } from '../../types/homework';
-import {
-  FilterState,
-  sorterDirOptions,
-  sorterOptions,
-} from '../../states/assignFilterSorterState';
 import { List, Separator } from 'native-base';
 import { Text, View } from 'react-native';
 
@@ -20,7 +15,7 @@ interface AssignListProps extends AssignListType {
   onIncompleteAssign: (id: string) => void;
   onRemoveAssign: (id: string) => void;
   showEditModal: (id: string, assign: AssignType) => void;
-  activeFilter: FilterState; // 나중에 types 에 filter type 정의해서 import
+  activeFilter: string; // 나중에 types 에 filter type 정의해서 import
   activeSorter;
   activeSorterDir;
   assignMap: Map<string, AssignType>;

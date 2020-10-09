@@ -39,7 +39,6 @@ const ASSIGN_REMOVE = 'ASSIGN_REMOVE' as const;
 const ASSIGN_COMPLETE = 'ASSIGN_COMPLETE' as const;
 const ASSIGN_INCOMPLETE = 'ASSIGN_INCOMPLETE' as const;
 const ASSIGN_EDIT = 'ASSIGN_EDIT' as const;
-const ASSIGNSTATE_SETUP = 'ASSIGNSTATE_SETUP' as const;
 
 type AssignAction =
   | ReturnType<typeof addAssign>
@@ -47,18 +46,18 @@ type AssignAction =
   | ReturnType<typeof incompleteAssign>
   | ReturnType<typeof removeAssign>
   | ReturnType<typeof editAssign>
-  | ReturnType<typeof setupAssign>
+  // | ReturnType<typeof setupAssign>
   | any; // thunk 처리를 위해 일시적으로
 
 const initialState: AssignStateType = new AssignStateType();
 
 // action constructor
 // assign CRUD
-export const setupAssign = (assigns: Array<AssignType>, completed: number) => ({
-  type: ASSIGNSTATE_SETUP,
-  assigns,
-  completed,
-});
+// export const setupAssign = (assigns: Array<AssignType>, completed: number) => ({
+//   type: ASSIGNSTATE_SETUP,
+//   assigns,
+//   completed,
+// });
 
 export const addAssign = (assign: AssignType) => ({
   type: ASSIGN_ADD,
