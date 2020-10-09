@@ -1,9 +1,39 @@
+import * as assignsAPI from '../api/assigns';
+
+import {
+  createPromiseThunk,
+  handleAsyncActions,
+  reducerUtils,
+} from '../lib/asyncUtils';
+
 import { AssignStateType } from './../types/homework';
 import { AssignType } from '../types/homework';
 import _ from 'lodash';
 import produce from 'immer';
 
 // action type
+
+// 과제 여러개 조회하기
+const GET_ASSIGNS = 'GET_ASSIGNS' as const; // 요청 시작
+const GET_ASSIGNS_SUCCESS = 'GET_ASSIGNS_SUCCESS' as const; // 요청 성공
+const GET_ASSIGNS_ERROR = 'GET_ASSIGNS_ERROR' as const; // 요청 실패
+
+// 과제 하나 조회하기
+const GET_ASSIGN = 'GET_ASSIGN' as const;
+const GET_ASSIGN_SUCCESS = 'GET_ASSIGN_SUCCESS' as const;
+const GET_ASSIGN_ERROR = 'GET_ASSIGN_ERROR' as const;
+
+export const getAssigns = createPromiseThunk(
+  GET_ASSIGNS,
+  assignsAPI.getAssigns,
+);
+export const getAssign = createPromiseThunk(
+  GET_ASSIGN,
+  assignsAPI.getAssignById,
+);
+
+// TODO: 아래 액션들 다 바꾸기
+
 const ASSIGN_ADD = 'ASSIGN_ADD' as const;
 const ASSIGN_REMOVE = 'ASSIGN_REMOVE' as const;
 const ASSIGN_COMPLETE = 'ASSIGN_COMPLETE' as const;
@@ -17,7 +47,8 @@ type AssignAction =
   | ReturnType<typeof incompleteAssign>
   | ReturnType<typeof removeAssign>
   | ReturnType<typeof editAssign>
-  | ReturnType<typeof setupAssign>;
+  | ReturnType<typeof setupAssign>
+  | any; // thunk 처리를 위해 일시적으로
 
 const initialState: AssignStateType = new AssignStateType();
 
@@ -27,7 +58,7 @@ export const setupAssign = (assigns: Array<AssignType>, completed: number) => ({
   type: ASSIGNSTATE_SETUP,
   assigns,
   completed,
-})
+});
 
 export const addAssign = (assign: AssignType) => ({
   type: ASSIGN_ADD,
@@ -77,11 +108,26 @@ const assignsReducer = (
 ) =>
   produce(state, (draft) => {
     switch (action.type) {
+      case GET_ASSIGNS:
+      case GET_ASSIGNS_SUCCESS:
+      case GET_ASSIGNS_ERROR:
+        return handleAsyncActions(GET_ASSIGNS, 'assigns')(state, action);
+      case GET_ASSIGN:
+      case GET_ASSIGN_SUCCESS:
+      case GET_ASSIGN_ERROR:
+        return handleAsyncActions(GET_ASSIGN, 'assign')(state, action);
+
+
+      // GET_ASSIGN으로 바꾸기
       case ASSIGNSTATE_SETUP:
         draft.completed = action.completed;
-        action.assigns === null || undefined ? '' : Object.entries(action.assigns).reverse().map(([key, assign]) => {
-          draft.assignMap.set(key, assign);
-        })
+        action.assigns === null || undefined
+          ? ''
+          : Object.entries(action.assigns)
+              .reverse()
+              .map(([key, assign]) => {
+                draft.assignMap.set(key, assign);
+              });
         break;
 
       case ASSIGN_ADD:
