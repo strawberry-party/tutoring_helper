@@ -203,7 +203,7 @@ export class ScheduleType {
     linkedRepeatedScheduleInfoId: string = 'none',
     formWork: FormWorkScheduleType = new FormWorkScheduleType(),
   ) {
-    const { text, studentId, tagId, time, memo } = formWork;
+    const { text, studentId, tagId, time, memo, reminder } = formWork;
 
     this.text = text;
     this.studentId = studentId;
@@ -213,16 +213,20 @@ export class ScheduleType {
 
     this.linkedRepeatedScheduleInfoId = linkedRepeatedScheduleInfoId;
     this.id = id;
+    this.reminder = reminder;
   }
 
   public print() {
     console.log(
-      `schedule: ${this.id} | ${this.text} | ${this.time.toString()}`,
+      `schedule: ${this.id} | ${this.text} | ${this.time.toString()} | ${
+        this.reminder ? this.reminder : '리마인더 없음'
+      }`,
     );
   }
 
   public toString() {
-    return `${this.id} | ${this.text} | ${this.time.toString()}`;
+    return `${this.id} | ${this.text} | ${this.time.toString()}
+    | ${this.reminder ? this.reminder : '리마인더 없음'}`;
   }
 }
 

@@ -26,7 +26,7 @@ import { Header } from './etc';
 import { LessonTimePicker } from './TimePickers';
 import ReminderSelector from './ReminderSelector';
 import { RepeatSelector } from './RepeatSelector';
-import SubmitOptionModal from './SubmitOptionModal';
+import SubmitOptionModal from '../SubmitOptionModal';
 import { TagType } from '../../../types/root';
 import dayjs from 'dayjs';
 import { repeatedScheduleInfoList } from '../../../common/scheduleMockData';
@@ -71,7 +71,10 @@ export default function EditScheduleForm({
     time,
     memo,
     linkedRepeatedScheduleInfoId,
+    reminder,
   } = selectedSchedule;
+
+  console.log('EditScheduleForm reminder: ' + reminder);
 
   const isValid = () => {
     if (repeat) {
@@ -137,7 +140,7 @@ export default function EditScheduleForm({
 
   const handle_NOTHING_WITH_REPEAT = () => {
     // 기존 스케줄 수정
-    editSchedule(getFormWorkSchedule(), id);
+    editSchedule(getFormWorkSchedule(), id, linkedRepeatedScheduleInfoId);
     onHide();
   };
 
@@ -187,7 +190,7 @@ export default function EditScheduleForm({
     lastDay ? lastDay : dayjs().add(20, 'day'),
   );
 
-  const [reminder, setReminder] = useState(30); // remind this schedule before x minutes
+  const [newReminder, setReminder] = useState(reminder ? reminder : 0); // remind this schedule before x minutes
 
   const [startTimes, setStartTimes] = useState(
     weeklyScheduleParser(weeklySchedule).startTimes,
@@ -208,6 +211,7 @@ export default function EditScheduleForm({
       selectedTagId,
       new LessonTime(newStart, newEnd),
       newMemo,
+      newReminder,
     );
   };
 
@@ -348,7 +352,7 @@ export default function EditScheduleForm({
           )}
 
           <ReminderSelector
-            defaultReminder={reminder}
+            defaultReminder={newReminder}
             onSubmitDialog={(minute: number) => setReminder(minute)}
           />
 

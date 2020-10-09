@@ -25,7 +25,6 @@ import { Header } from './etc';
 import { LessonTimePicker } from './TimePickers';
 import ReminderSelector from './ReminderSelector';
 import { RepeatSelector } from './RepeatSelector';
-import SubmitOptionModal from './SubmitOptionModal';
 import { TagType } from '../../../types/root';
 import dayjs from 'dayjs';
 import { repeatedScheduleInfoList } from '../../../common/scheduleMockData';

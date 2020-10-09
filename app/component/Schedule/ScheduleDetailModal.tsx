@@ -7,18 +7,17 @@ import {
   View,
 } from 'react-native';
 import { Appbar, List } from 'react-native-paper';
+import React, { useState } from 'react';
 
 import ConfirmModal from '../common/ConfirmModal';
-import React from 'react';
-import { ScheduleType } from '../../types/schedule';
-import { TagType } from '../../types/root';
+import SubmitOptionModal from './SubmitOptionModal';
 
 function ScheduleDetailModal({
   modalVisible,
   selectedSchedule,
   hideModal,
   removeSchedule,
-  repeatedScheduleInfos,
+  removeRepeatInfo,
   selectedScheduleId,
   showFormModal,
   showModal,
@@ -40,9 +39,27 @@ function ScheduleDetailModal({
     memo,
   } = selectedSchedule;
 
-  const onRemove = () => {
+  const onStartRemove = () => {
+    onShowSubmitOptionModal();
+  };
+
+  const onSaveSubmitOption = (
+    value: 'ONLY_THIS' | 'ALL' | 'FORWARD' | 'NONE',
+  ) => {
+    switch (value) {
+      case 'ONLY_THIS': // TODO: 이 일정: 이 일정만 수정
+        removeSchedule(selectedScheduleId);
+        break;
+      case 'ALL': // TODO: 모든 일정: 일정 수정, 반복 정보 수정
+        removeRepeatInfo(selectedScheduleId.linkedRepeatedScheduleInfoId);
+        break;
+      case 'FORWARD': // TODO: 이 일정 및 향후 일정
+        console.warn('어서 일해라');
+        break;
+      default:
+        break;
+    }
     hideModal();
-    removeSchedule(selectedScheduleId);
   };
 
   const hideConfirmModal = () => {
@@ -50,6 +67,7 @@ function ScheduleDetailModal({
   };
 
   const showConfirmModal = () => {
+    onHideSubmitOptionModal();
     setConfirmModalVisible(true);
   };
 
@@ -57,6 +75,17 @@ function ScheduleDetailModal({
     hideConfirmModal();
     showModal();
   };
+  const onHideSubmitOptionModal = () => {
+    setSubmitOptionModalVisible(false);
+  };
+
+  const onShowSubmitOptionModal = () => {
+    setSubmitOptionModalVisible(true);
+  };
+
+  const [submitOptionModalVisible, setSubmitOptionModalVisible] = useState(
+    false,
+  );
 
   return (
     <View style={styles.modalView}>
@@ -69,10 +98,7 @@ function ScheduleDetailModal({
           <Appbar style={styles.appbar}>
             <Appbar.Action icon="square-edit-outline" onPress={onStartEdit} />
 
-            <Appbar.Action
-              icon="trash-can-outline"
-              onPress={showConfirmModal}
-            />
+            <Appbar.Action icon="trash-can-outline" onPress={onStartRemove} />
           </Appbar>
           <Text> {text} </Text>
           <Text> {memo} </Text>
@@ -85,10 +111,15 @@ function ScheduleDetailModal({
         title={'계속할까요?'}
         isVisible={confirmModalVisible}
         cancelText={'취소'}
-        confirmText={'일정 삭제'}
+        confirmText={'삭제'}
         onCancel={onCancel}
-        onConfirm={onRemove}
+        onConfirm={onSaveSubmitOption}
         hideModal={hideConfirmModal}
+      />
+      <SubmitOptionModal
+        visible={submitOptionModalVisible}
+        onSubmit={showConfirmModal}
+        onHide={onHideSubmitOptionModal}
       />
     </View>
   );

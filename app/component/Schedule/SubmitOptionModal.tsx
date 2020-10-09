@@ -18,15 +18,15 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 
-import styles from './styles';
+import styles from './ScheduleForm/styles';
 
 export default function SubmitOptionModal({ visible, onSubmit, onHide }) {
-  const [value, setValue] = useState('NONE')
+  const [value, setValue] = useState('NONE');
 
   const handleHide = () => {
     // onSubmit('NONE');
     onHide();
-  }
+  };
 
   return (
     <Modal

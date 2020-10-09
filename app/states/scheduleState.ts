@@ -67,14 +67,16 @@ export const selectSchedule = (id: string) => ({
 
 function deleteReminder(
   reminders: ReminderType[],
-  linkedScheduleId,
+  linkedScheduleIds: string[],
 ): ReminderType[] {
   reminders.forEach((reminder) => {
-    if (reminder.id !== linkedScheduleId) {
+    if (linkedScheduleIds.includes(reminder.linkedScheduleId)) {
       LocalNotification.cancel(reminder.id);
     }
   });
-  return reminders.filter((reminder) => reminder.id !== linkedScheduleId);
+  return reminders.filter(
+    (reminder) => !linkedScheduleIds.includes(reminder.linkedScheduleId),
+  );
 }
 
 function getReminder(formWorkSchedule, scheduleId, id = 'none'): ReminderType {
@@ -103,14 +105,6 @@ function getReminder(formWorkSchedule, scheduleId, id = 'none'): ReminderType {
     );
 
   return reminder;
-}
-
-function getFilteredReminders(filteredSchedule, reminders) {
-  return reminders.filter((reminder) =>
-    filteredSchedule
-      .map((schedule) => schedule.id)
-      .includes(reminder.linkedScheduleId),
-  );
 }
 
 function getFilteredSchedules(schedules, excludeId, includeId) {
@@ -142,10 +136,13 @@ export const editSchedule = (
   formWork: FormWorkScheduleType,
   id: string,
   linkedRepeatedScheduleInfoId: string = 'none',
-) => ({
-  type: SCHEDULE_EDIT,
-  schedule: new ScheduleType(id, linkedRepeatedScheduleInfoId, formWork),
-});
+) => {
+  console.log("editSchedule reminder: " + formWork.reminder);
+  return {
+    type: SCHEDULE_EDIT,
+    schedule: new ScheduleType(id, linkedRepeatedScheduleInfoId, formWork),
+  };
+};
 
 export const addRepetition = (
   formWorkSchedule,
@@ -254,7 +251,7 @@ const scheduleReducer = (
       return new ScheduleStateType(
         state.schedules.filter((item) => item.id !== action.id),
         state.repeatInfos,
-        deleteReminder(state.reminders, action.id),
+        deleteReminder(state.reminders, [action.id]),
       );
 
     case SCHEDULE_EDIT:
@@ -290,9 +287,9 @@ const scheduleReducer = (
         state.selectedScheduleId,
       );
 
-      var filteredReminders = getFilteredReminders(
-        filteredSchedules,
+      var filteredReminders = deleteReminder(
         state.reminders,
+        filteredSchedules.map((schedule) => schedule.id),
       );
 
       return new ScheduleStateType(
@@ -309,11 +306,10 @@ const scheduleReducer = (
         state.selectedScheduleId,
       );
 
-      var filteredReminders = getFilteredReminders(
-        filteredSchedules,
+      var filteredReminders = deleteReminder(
         state.reminders,
+        filteredSchedules.map((schedule) => schedule.id),
       );
-
       return new ScheduleStateType(
         filteredSchedules.concat(action.newSchedules),
         state.repeatInfos.map((item) =>
