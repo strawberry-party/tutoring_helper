@@ -1,41 +1,53 @@
-import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import {
+  LessonTime,
+  ScheduleType,
+  WeeklyScheduleType,
+} from '../types/schedule';
+import React, { useEffect, useState } from 'react';
 
-import AppContent from '../component/AppContent';
+import AssignContainer from './Homework';
+import DailyScheduleSelector from '../component/Schedule/DailyScheduleSelector';
+import DrawerNavigator from './DrawerNavigator';
+import LoginStackNavigator from './LoginStackNavigator';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
-import Student from '../component/Tutor/Student';
-import Tutor from '../component/Tutor/Tutor';
-import TutoringHelper from './TutoringHelper';
-import { createStackNavigator } from '@react-navigation/stack';
-import { navigationRef } from '../component/RootNavigation';
+import ScheduleContainer from './Schedule';
+import SplashScreen from 'react-native-splash-screen';
+import auth from '@react-native-firebase/auth';
+import { navigationRef } from '../common/RootNavigation';
 import store from '../common/store';
 
-// import DetailInfo from '../component/Tutor/Schedule/DetailInfo';
+function App() {
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState({
+    uid: '',
+  });
 
+  function onAuthStateChanged(user) {
+    setUser(user);
+    if (initializing) setInitializing(false);
+  }
 
-type RootStackParamList = {
-  Tutor: undefined;
-  Root: undefined;
-  Student: undefined;
-  DetailInfo: undefined;
-};
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    SplashScreen.hide();
+    return subscriber; // unsubscribe on unmount
+  }, []);
 
-const Stack = createStackNavigator<RootStackParamList>();
+  if (initializing) return null;
 
-export default function App() {
   return (
     <Provider store={store}>
-
       {/* <NavigationContainer ref={navigationRef}>
-        <Stack.Navigator initialRouteName="Tutor">
-          <Stack.Screen name="Tutor" component={Tutor} />
-          <Stack.Screen name="Student" component={Student} />
-          <Stack.Screen name="DetailInfo" component={DetailInfo} />
-        </Stack.Navigator>
+        {!user ? (
+          <LoginStackNavigator />
+        ) : (
+          <DrawerNavigator userId={user.uid} />
+        )}
       </NavigationContainer> */}
-      
-      <TutoringHelper />
+      <ScheduleContainer />
     </Provider>
-  ); // TODO: 리팩토링할 때 TutoringHelper 내용물 Tutor/Homework로 다 옮기기
+  );
 }
+
+export default App;
