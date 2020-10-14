@@ -1,3 +1,5 @@
+import * as dayjs from 'dayjs';
+
 import {
   LessonTime,
   Week,
@@ -5,8 +7,6 @@ import {
   WeeklyScheduleType,
   nones,
 } from './../../../types/schedule';
-
-import dayjs from 'dayjs';
 
 export default function weeklyScheduleParser(
   weeklySchedule: WeeklyScheduleType,

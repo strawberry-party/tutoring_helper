@@ -1,3 +1,5 @@
+import * as dayjs from 'dayjs';
+
 import { Button, Checkbox, HelperText } from 'react-native-paper';
 import {
   Pressable,
@@ -14,7 +16,6 @@ import React, { useState } from 'react';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { LessonTime } from '../../../types/schedule';
 import MyDatePicker from '../../common/MyDatePicker';
-import dayjs from 'dayjs';
 import styles from './styles';
 
 type Days = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun';
@@ -70,9 +71,7 @@ export default function DailyScheduleSelector({
       </HelperText>
       <View style={styles.tagContainer}>{dayChipList}</View>
 
-      {
-        isAllSameTime && <Text> 여기에 타임피커 </Text>
-      }
+      {isAllSameTime && <Text> 여기에 타임피커 </Text>}
       <DayScheduleSelectorContainer
         selectedDays={selectedDays}
         endTimes={endTimes}

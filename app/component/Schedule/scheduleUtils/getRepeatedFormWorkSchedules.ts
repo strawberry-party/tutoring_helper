@@ -4,7 +4,7 @@ import {
   ScheduleType,
 } from '../../../types/schedule';
 
-import dayjs from 'dayjs';
+import { default as dayjs } from 'dayjs';
 
 var customParseFormat = require('dayjs/plugin/customParseFormat');
 dayjs.extend(customParseFormat);
@@ -73,7 +73,6 @@ export default function getRepeatedFormWorkSchedules(
   console.log('getRepeatedFormWorkSchedules');
   console.log('====================================');
 
-  
   var formWorkSchedules: FormWorkScheduleType[] = [];
   const { text, studentId, tagId, memo } = formWorkSchedule;
   var { start, end } = dailyLessonTime;

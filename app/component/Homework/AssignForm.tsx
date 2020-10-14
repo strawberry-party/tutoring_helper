@@ -7,7 +7,7 @@ import { AssignType } from '../../types/homework';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import MyDatePicker from '../common/MyDatePicker';
 import { TagPrimitiveType } from '../../types/root';
-import dayjs from 'dayjs';
+import { default as dayjs } from 'dayjs';
 
 type AddAssign = (assign: AssignType) => void;
 type EditAssign = (id: string, assign: AssignType) => void;
@@ -34,11 +34,11 @@ export default function AssignForm({
   bookTags,
   subjectTags,
 }: AssignFormProps) {
-  const { text, due, out, tagId } = selectedAssign;
+  const { text, due, out, subjectTagId, bookTagId } = selectedAssign;
   const [newText, setText] = useState(text);
   const [newDue, setDue] = useState(due);
   const [newOut, setOut] = useState(out);
-  const [selectedTagId, selectTag] = useState(tagId);
+  const [selectedTagId, selectTag] = useState(subjectTagId);
 
   const handleSubmit = () => {
     const newAssign: AssignType = {
@@ -46,7 +46,7 @@ export default function AssignForm({
       text: newText,
       out: newOut,
       due: newDue,
-      tagId: selectedTagId,
+      subjectTagId: selectedTagId,
     };
 
     switch (modalType) {

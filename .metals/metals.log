@@ -13,3 +13,16 @@ INFO: Unsupported notification method: $/setTraceNotification
 2020.08.20 21:02:19 INFO  time: initialize in 3.76s
 2020.08.20 21:02:25 WARN  no build tool detected in workspace 'C:\Users\sanga\Documents\GitHub\tutoring_helper'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 
 2020.08.21 16:18:19 INFO  shutting down Metals
+2020.10.09 15:48:09 INFO  started: Metals version 0.9.4 in workspace 'C:\Users\sanga\Documents\GitHub\tutoring_helper' for client vscode.
+2020.10.09 15:48:11 INFO  time: initialize in 2.02s
+2020.10.09 15:48:16 WARN  no build tool detected in workspace 'C:\Users\sanga\Documents\GitHub\tutoring_helper'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 
+2020.10.09 16:42:18 INFO  shutting down Metals
+2020.10.10 15:16:06 INFO  started: Metals version 0.9.4 in workspace 'C:\Users\sanga\Documents\GitHub\tutoring_helper' for client vscode.
+2020.10.10 15:16:09 INFO  time: initialize in 3.21s
+2020.10.10 15:16:10 WARN  no build tool detected in workspace 'C:\Users\sanga\Documents\GitHub\tutoring_helper'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 
+2020.10.10 16:43:13 INFO  shutting down Metals
+2020.10.14 09:43:09 INFO  started: Metals version 0.9.4 in workspace 'C:\Users\sanga\Documents\GitHub\tutoring_helper' for client vscode.
+2020.10.14 09:43:13 INFO  time: initialize in 3.87s
+2020.10.14 09:43:15 WARN  no build tool detected in workspace 'C:\Users\sanga\Documents\GitHub\tutoring_helper'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 
+10¿ù 14, 2020 12:03:08 ¿ÀÈÄ org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+INFO: Unsupported notification method: $/setTraceNotification

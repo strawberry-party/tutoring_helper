@@ -8,7 +8,7 @@ import {
   WeeklyScheduleType,
 } from '../../../types/schedule';
 
-import dayjs from 'dayjs';
+import { default as dayjs } from 'dayjs';
 import getRepeatedFormWorkSchedules from './getRepeatedFormWorkSchedules';
 
 const formatString = 'YYYY-MM-DD HH:mm';

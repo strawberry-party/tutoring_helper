@@ -1,3 +1,5 @@
+import * as dayjs from 'dayjs';
+
 import { Button, Chip, FAB, RadioButton, TextInput } from 'react-native-paper';
 import {
   Pressable,
@@ -12,7 +14,6 @@ import React, { useState } from 'react';
 
 import { LessonTime } from '../../types/schedule';
 import MyDatePicker from '../MyDatePicker';
-import dayjs from 'dayjs';
 import styles from './styles';
 
 type Days = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun';
@@ -22,7 +23,7 @@ export default function DailyScheduleSelector({
   onChangeStartTimes,
   endTimes,
   startTimes,
-  setAllSameTime,  
+  setAllSameTime,
 }) {
   const [selectedDays, selectDays] = useState(new Array<number>());
 

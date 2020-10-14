@@ -1,13 +1,12 @@
-import assignList from './common/mockData'
 import database from '@react-native-firebase/database';
-import dayjs from 'dayjs';
+import { default as dayjs } from 'dayjs';
 
 const assigns = [
   {
     id: 'assign_1',
     text: '과제1',
-    due: dayjs.Dayjs(),
-    out: dayjs.Dayjs(),
+    due: dayjs(),
+    out: dayjs(),
     isCompleted: false,
     bookTagId: 'bookTag1',
     subjectTagId: 'subjectTag1'
@@ -15,8 +14,8 @@ const assigns = [
   {
     id: 'assign_2',
     text: '과제2',
-    due: dayjs.Dayjs(),
-    out: dayjs.Dayjs(),
+    due: dayjs(),
+    out: dayjs(),
     isCompleted: false,
     bookTagId: 'bookTag2',
     subjectTagId: 'subjectTag2'
@@ -24,8 +23,8 @@ const assigns = [
   {
     id: 'assign_3',
     text: '과제3',
-    due: dayjs.Dayjs(),
-    out: dayjs.Dayjs(),
+    due: dayjs(),
+    out: dayjs(),
     isCompleted: false,
     bookTagId: 'bookTag3',
     subjectTagId: 'subjectTag3'
@@ -35,43 +34,70 @@ const assigns = [
 
 const db = database();
 
+const getAssignPath = (tutorId, currentStudentId, str = "") => { return `tutors/${tutorId}/studentArray/${currentStudentId}/assigns/` + str }
+const getCompletedPath = (tutorId, currentStudentId) => getAssignPath(tutorId, currentStudentId, "completed")
+const getAssignByIdPath = (tutorId, currentStudentId, idx) => getAssignPath(tutorId, currentStudentId, `assignList/${idx}/`)
+const getAssignListPath = (tutorId, currentStudentId) => getAssignPath(tutorId, currentStudentId, 'assignList/')
+const getKeyCntPath = (tutorId, currentStudentId) => getAssignPath(tutorId, currentStudentId, "keyCounter")
 
-// n 밀리세컨드동안 기다리는 프로미스를 만들어주는 함수
-const sleep = n => new Promise(resolve => setTimeout(resolve, n));
+export const getAssignList = async ({ tutorId, currentStudentId }) => {
+  var assignListRef = db.ref(getAssignListPath(tutorId, currentStudentId))
+  return (assignListRef ? assignListRef.once('value') : []);
+}
 
-export const getAssigns = async () => {
-  await sleep(500); // 0.5초 쉬고
-  return assigns; // posts 배열
-};
+export const getCompleted = async ({ tutorId, currentStudentId }) => {
+  var assignsCompletedRef = db.ref(getCompletedPath(tutorId, currentStudentId));
+  return (assignsCompletedRef ? assignsCompletedRef.once('value') : 0);
+}
 
 // ID로 포스트를 조회하는 비동기 함수
-export const getAssignById = async id => {
-  await sleep(500); // 0.5초 쉬고
-  return assigns.find(assign => assign.id === id); // id 로 찾아서 반환
+export const getAssignByIdx = async ({ tutorId, currentStudentId, idx }) => {
+  return db.ref(getAssignByIdPath(tutorId, currentStudentId, idx)).once('value'); // 프로미스 객체
 };
 
 
-// TODO: 파이어베이스 API 적용하기
-// useEffect(() => {
-//   db.ref(`tutors/${tutorId}/studentArray/${currentStudentId}/assigns`).on(
-//     'value',
-//     (snapshot) => {
-//       // console.log(snapshot.val());
-//       setupAssign(
-//         snapshot.val().assignList,
-//         snapshot.val().assignStatus.completedAssignNum,
-//       );
-//     },
-//   );
-// }, []);
+export const addAssign = async ({ tutorId, currentStudentId, data }) => {
+  db.ref(getAssignByIdPath(tutorId, currentStudentId, keyCnt.toString())).set(data);
 
-//       case ASSIGNSTATE_SETUP:
-// draft.completed = action.completed;
-// action.assigns === null || undefined
-//   ? ''
-//   : Object.entries(action.assigns)
-//     .reverse()
-//     .map(([key, assign]) => {
-//       draft.assignMap.set(key, assign);
-//     });
-// break;
+  var keyCnt = db.ref(getKeyCntPath(tutorId, currentStudentId))
+  db.ref(getKeyCntPath(tutorId, currentStudentId)).update(keyCnt + 1)
+  db.ref(getAssignByIdPath(tutorId, currentStudentId, idx)).update({ id: `assign_${keyCnt}` })
+  return db.ref(getAssignListPath(tutorId, currentStudentId)).once('value');
+}
+
+export const editAssign = async ({ tutorId, currentStudentId, idx, data, isCompleted }) => {
+  db.ref(getAssignByIdPath(tutorId, currentStudentId, idx))
+    .update(data);
+
+  if (isCompleted) {
+    var completed = db.ref(getCompletedPath(tutorId, currentStudentId)).once('value')
+    db.ref(getCompletedPath(tutorId, currentStudentId)).update(completed + 1)
+  }
+
+  return db.ref(getAssignListPath(tutorId, currentStudentId)).once('value');
+}
+
+export const removeAssign = async ({ tutorId, currentStudentId, idx, isCompleted }) => {
+  db.ref(getAssignByIdPath(tutorId, currentStudentId, idx)).remove();
+  if (isCompleted) {
+    var completed = db.ref(getCompletedPath(tutorId, currentStudentId)).once('value')
+    db.ref(getCompletedPath(tutorId, currentStudentId)).update(completed - 1)
+  }
+
+  return db.ref(getAssignPath(tutorId, currentStudentId)).once('value');
+}
+
+export const completeAssign = async ({ tutorId, currentStudentId, assignId }) => {
+  db.ref(getAssignByIdPath(tutorId, currentStudentId, idx))
+    .update({ isCompleted: true });
+  db.ref(getCompletedPath(tutorId, currentStudentId)).update(completed + 1)
+  return db.ref(getAssignPath(tutorId, currentStudentId)).once('value');
+}
+
+export const incompleteAssign = async ({ tutorId, currentStudentId, idx }) => {
+  db.ref(getAssignByIdPath(tutorId, currentStudentId, idx))
+    .update({ isCompleted: false });
+  db.ref(getCompletedPath(tutorId, currentStudentId)).update(completed - 1)
+  return db.ref(getAssignPath(tutorId, currentStudentId)).once('value');
+}
+

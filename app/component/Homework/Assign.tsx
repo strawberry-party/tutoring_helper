@@ -20,6 +20,7 @@ interface AssignProps extends AssignType {
   onStartEdit: () => void;
   id: string;
   subjectTag: TagPrimitiveType;
+  bookTag: TagPrimitiveType;
 }
 
 function Assign({
@@ -32,11 +33,10 @@ function Assign({
   onRemove,
   onStartEdit,
   id,
-  tagId,
+  bookTag,
   subjectTag,
 }: AssignProps) {
   const dueDate = due.format('MM월 DD일까지');
-
   const cardStyle = isCompleted ? styles.completedCard : styles.incompletedCard;
 
   const [buttonVisible, setVisibility] = useState(false);

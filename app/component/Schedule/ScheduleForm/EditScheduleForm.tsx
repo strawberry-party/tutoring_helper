@@ -1,3 +1,5 @@
+import * as dayjs from 'dayjs';
+
 import {
   EndAfterNTimes,
   EndAfterThisDay,
@@ -28,7 +30,6 @@ import ReminderSelector from './ReminderSelector';
 import { RepeatSelector } from './RepeatSelector';
 import SubmitOptionModal from './SubmitOptionModal';
 import { TagType } from '../../../types/root';
-import dayjs from 'dayjs';
 import { repeatedScheduleInfoList } from '../../../common/scheduleMockData';
 import styles from './styles';
 

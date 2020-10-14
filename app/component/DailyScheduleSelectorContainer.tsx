@@ -1,7 +1,9 @@
+import * as dayjs from 'dayjs';
+
 import React, { useState } from 'react';
-import { Week, generateWeek, WeeklyScheduleType } from '../types/schedule';
+import { Week, WeeklyScheduleType, generateWeek } from '../types/schedule';
+
 import DailyScheduleSelector from '../common/DailyScheduleSelector/index';
-import dayjs from 'dayjs';
 import weeklyScheduleParser from '../common/DailyScheduleSelector/weeklyScheduleParser';
 
 function DailyScheduleSelectorContainer({ weeklySchedule }) {

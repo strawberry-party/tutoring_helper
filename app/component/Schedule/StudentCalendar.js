@@ -1,3 +1,5 @@
+import * as dayjs from 'dayjs';
+
 import { AgendaList, Calendar, CalendarList, CalendarProvider, ExpandableCalendar, WeekCalendar } from 'react-native-calendars';
 import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Button, Card, DataTable, Icon, IconButton, ToggleButton } from 'react-native-paper';
@@ -9,7 +11,6 @@ import { KR_LOCAL_CONFIG } from '../../utils/calendarConfig';
 import { LocaleConfig } from 'react-native-calendars';
 import { ScheduleType } from '../../types/schedule';
 import _ from 'lodash';
-import dayjs from 'dayjs';
 import { getTheme } from './scheduleThemeProvider';
 import sortIntoDailyAgendas from './scheduleUtils/sortIntoDailyAgendas';
 

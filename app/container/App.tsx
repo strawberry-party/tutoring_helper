@@ -13,6 +13,7 @@ import LoginStackNavigator from './LoginStackNavigator';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen';
+import { Text } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { navigationRef } from '../common/RootNavigation';
 import store from '../common/store';
@@ -38,14 +39,17 @@ function App() {
 
   return (
     <Provider store={store}>
-      <NavigationContainer ref={navigationRef}>
+      {/* <NavigationContainer ref={navigationRef}>
         {!user ? (
           <LoginStackNavigator />
         ) : (
           <DrawerNavigator userId={user.uid} />
         )}
-      </NavigationContainer>
-      {/* <HomeworkContainer /> */}
+      </NavigationContainer> */}
+      <HomeworkContainer
+        currentStudentId={'student_36'}
+        tutorId={'1qxpQMUt2mPRrA0h79cFuwPBc233'}
+      />
     </Provider>
   );
 }

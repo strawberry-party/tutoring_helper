@@ -1,9 +1,10 @@
+import * as dayjs from 'dayjs';
+
 import { Pressable, StyleSheet, Text } from 'react-native';
 import React, { useState } from 'react';
 
 import { Button } from 'react-native-paper';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import dayjs from 'dayjs';
 
 interface MyDatePickerProps {
   day: dayjs.Dayjs;

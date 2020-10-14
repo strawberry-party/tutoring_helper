@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
 
+import { AssignType, AssignWOId } from '../types/homework';
 import React, { useEffect } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { connect, useSelector } from 'react-redux';
@@ -7,11 +8,12 @@ import { connect, useSelector } from 'react-redux';
 import AddAssignButton from '../component/common/AddButton';
 import AssignList from '../component/Homework/AssignList';
 import AssignModal from '../component/Homework/AssignModal';
-import { AssignType } from '../types/homework';
-import { FilterButton } from '../component/Homework/FilterSorter';
+import { Button } from 'react-native-paper';
+import { FilterButton } from '../component/Homework/Buttons';
 import FilterModal from '../component/Homework/FilterModal';
 import { RootState } from '../states';
 import { actions as assignActions } from '../states/assignState';
+import { default as dayjs } from 'dayjs';
 import { actions as filterSorterActions } from '../states/assignFilterSorterState';
 import { actions as modalVisibilityActions } from '../states/assignModalState';
 
@@ -24,7 +26,9 @@ function HomeworkContainer({
   hideEditModal,
   showEditModal,
 
-  getAssigns,
+  getAssignList,
+  getCompleted,
+
   addAssign,
   completeAssign,
   incompleteAssign,
@@ -34,6 +38,7 @@ function HomeworkContainer({
   showAll,
   showCompleted,
   showIncomplete,
+  setVisibleSubjectIds,
   sortDsc,
   sortAsc,
   sortDue,
@@ -41,16 +46,24 @@ function HomeworkContainer({
   sortTitle,
 
   showSelectedTags,
+
   currentStudentId,
   tutorId,
 }: HomeworkContainerProps) {
+  const initialData = { tutorId, currentStudentId };
+
   useEffect(() => {
-    getAssigns();
+    getAssignList(initialData);
+    getCompleted(initialData);
   }, []);
 
-  const { assigns, loading, error } = useSelector(
-    (state) => state.assignReducer.assigns,
-  );
+  const onAddAssign = (data) => addAssign({ tutorId, currentStudentId, data });
+
+  const assignList = useSelector((state) => state.assignReducer.assignList);
+  console.log('assignList: ', assignList);
+
+  const completed = useSelector((state) => state.assignReducer.completed);
+  console.log('completed: ', completed);
 
   const addModalVisible: boolean = useSelector(
     (state: RootState) => state.assignModalReducer.addModalVisible,
@@ -123,43 +136,65 @@ function HomeworkContainer({
           />
         </View>
 
-        <ScrollView
-          style={{
-            borderColor: 'skyblue',
-            // borderWidth: 3,
-          }}>
-          <View
-            style={{
-              borderColor: 'blue',
-              // borderWidth: 3,
-            }}>
-            {loading ? (
-              <View>로딩중...</View>
-            ) : error ? (
-              <View>에러 발생!</View>
-            ) : !assigns ? null : (
-              <AssignList
-                assigns={assigns}
-                showEditModal={showEditModal}
-                onCompleteAssign={completeAssign}
-                onIncompleteAssign={incompleteAssign}
-                onRemoveAssign={removeAssign}
-                activeFilter={filter}
-                activeSorter={sorter}
-                activeSorterDir={sorterDir}
-                activeSubjectTagFilter={visibleSubjectTagIds}
-                bookTags={bookTags}
-                subjectTags={subjectTags}
-              />
-            )}
+        <Button
+          onPress={() =>
+            onAddAssign({
+              text: '과제',
+              due: '2020-10-18',
+              out: '2020-10-16',
+              isCompleted: false,
+              bookTagId: 'none',
+              subjectTagId: 'none',
+            })
+          }>
+          Press me to add assign
+        </Button>
+
+        <ScrollView>
+          <View>
+            {assignList &&
+              (assignList.loading ? (
+                <Text>로딩중...</Text>
+              ) : assignList.error ? (
+                <Text>에러 발생!</Text>
+              ) : !assignList.data ? (
+                <Text> 과제 정보 없음 </Text>
+              ) : (
+                <AssignList
+                  assigns={assignList.data.val()}
+                  showEditModal={showEditModal}
+                  onCompleteAssign={completeAssign}
+                  onIncompleteAssign={incompleteAssign}
+                  onRemoveAssign={removeAssign}
+                  activeFilter={filter}
+                  activeSorter={sorter}
+                  activeSorterDir={sorterDir}
+                  visibleSubjectTagIds={visibleSubjectTagIds}
+                  bookTags={bookTags}
+                  subjectTags={subjectTags}
+                />
+              ))}
           </View>
         </ScrollView>
 
-        <View style={styles.mock}>
+        <View>
+          {completed &&
+            (completed.loading ? (
+              <Text>로딩중...</Text>
+            ) : completed.error ? (
+              <Text>에러 발생!</Text>
+            ) : !completed.data ? (
+              <Text> 없음 </Text>
+            ) : (
+              <Text> 완료한 과제 수: {completed.data.val()} </Text>
+            ))}
+        </View>
+
+        {/* <View style={styles.mock}>
           <AssignModal
             modalVisible={addModalVisible}
             hideModal={hideAddModal}
-            onSubmit={addAssign}
+            onSubmit={onAddAssign}
             bookTags={bookTags}
             subjectTags={subjectTags}
             modalType={'AddModal'}
@@ -179,7 +214,7 @@ function HomeworkContainer({
             bookTags={bookTags}
             subjectTags={subjectTags}
           />
-        </View>
+            </View> */}
 
         <View style={styles.mock}>
           <FilterModal
@@ -193,13 +228,13 @@ function HomeworkContainer({
               showAll,
               showCompleted,
               showIncomplete,
-              showSelectedTags,
+              setVisibleSubjectIds,
             }}
           />
         </View>
-      </View>
 
-      <AddAssignButton visible={addModalVisible} show={showAddModal} />
+        <AddAssignButton visible={addModalVisible} show={showAddModal} />
+      </View>
     </SafeAreaView>
   );
 }
@@ -234,8 +269,8 @@ function mapStateToProps(state) {
     visibleSubjectTagIds: state.assignFilterSorterReducer.visibleSubjectTagIds,
     visibleBookTagIds: state.assignFilterSorterReducer.visibleBookTagIds,
 
-    currentStudentId: state.currentStudentReducer.selectedStudentId,
-    tutorId: state.tutorReducer.uid,
+    // currentStudentId: state.currentStudentReducer.selectedStudentId,
+    // tutorId: state.tutorReducer.uid,
   };
 }
 

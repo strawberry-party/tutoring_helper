@@ -1,6 +1,6 @@
 import { TagType } from './root';
 import _ from 'lodash';
-import dayjs from 'dayjs';
+import { default as dayjs } from 'dayjs';
 import { immerable } from 'immer';
 
 // TODO: print 내장 메소드 만들기
@@ -27,12 +27,20 @@ export class AssignListType implements Assigns {
 }
 
 export class AssignStateType {
-  assigns: AssignType[];
+  assignList: AssignType[];
   assign: AssignType;
   completed: number;
 }
 
 // #TODO: Map으로 수정
+export interface AssignWOId {
+  text: string;
+  due: dayjs.Dayjs;
+  out: dayjs.Dayjs;
+  isCompleted: boolean;
+  bookTagId: string;
+  subjectTagId: string;
+}
 export class AssignType {
   id: string;
   text: string;

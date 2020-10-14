@@ -1,6 +1,6 @@
 import { InteractionManager } from 'react-native';
 import { TagType } from './root';
-import dayjs from 'dayjs';
+import { default as dayjs } from 'dayjs';
 
 export type Days = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun';
 

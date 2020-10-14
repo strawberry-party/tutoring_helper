@@ -1,25 +1,23 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity  } from 'react-native';
-import {
-  DrawerContentScrollView,
-  DrawerItem,
-} from '@react-navigation/drawer';
-import AntDesign from "react-native-vector-icons/AntDesign";
+import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { connect } from 'react-redux';
-import database from '@react-native-firebase/database'
+import React from 'react';
 import auth from '@react-native-firebase/auth';
+import { connect } from 'react-redux';
+import database from '@react-native-firebase/database';
 
 const db = database();
 
-function DrawerContent({tutorId, studentNum, studentArray, navigation}) {
+function DrawerContent({ tutorId, studentNum, studentArray, navigation }) {
   const handleDelete = (key) => {
     db.ref(`tutors/${tutorId}`).update({
       studentNum: studentNum - 1,
-    })
-    db.ref(`tutors/${tutorId}/studentArray/${key}`).remove()
-  }
-  
+    });
+    db.ref(`tutors/${tutorId}/studentArray/${key}`).remove();
+  };
+
   const signOutUser = () => {
     auth()
       .signOut()
@@ -27,40 +25,55 @@ function DrawerContent({tutorId, studentNum, studentArray, navigation}) {
   };
 
   const handleUpdate = (key) => {
-    navigation.navigate(key+ '_U')
-  }
+    navigation.navigate(key + '_U');
+  };
 
   const updateInfo = () => {
-    navigation.navigate('선생님정보 수정')
-  }
+    navigation.navigate('선생님정보 수정');
+  };
 
   const contents = [];
-  studentArray.map(student => {
-    const subjects = student.info.subjectTag === undefined ? <Text style={{fontStyle: 'italic', fontSize: 14, color: '#ff0000'}}>과목을 추가하세요!</Text> : Object.entries(student.info.subjectTag).map(([, value]) => value.name).join(', ')
+  studentArray.map((student) => {
+    const subjects =
+      student.info.subjectTag === undefined ? (
+        <Text style={{ fontStyle: 'italic', fontSize: 14, color: '#ff0000' }}>
+          과목을 추가하세요!
+        </Text>
+      ) : (
+        Object.entries(student.info.subjectTag)
+          .map(([, value]) => value.name)
+          .join(', ')
+      );
     contents.push(
-      <View key={student.key} >
-        <TouchableOpacity style={styles.itemContainer} onPress={() => navigation.navigate(student.key)}>
+      <View key={student.key}>
+        <TouchableOpacity
+          style={styles.itemContainer}
+          onPress={() => navigation.navigate(student.key)}>
           <View style={styles.item}>
-            <View style={{marginTop: 5, alignItems: 'center'}}>
-              <Text style={{fontSize: 25}}>{student.info.name} 학생</Text>
+            <View style={{ marginTop: 5, alignItems: 'center' }}>
+              <Text style={{ fontSize: 25 }}>{student.info.name} 학생</Text>
             </View>
-            <View style={{marginLeft: 20,}}>
+            <View style={{ marginLeft: 20 }}>
               <Text>과외 과목: {subjects}</Text>
               <Text>과외 요일: {student.info.nextTime}</Text>
               <Text>과외 장소: {student.info.address}</Text>
             </View>
           </View>
-        </TouchableOpacity >
-        <TouchableOpacity style={{position: "absolute", right: 15, top: 5, zIndex: 1}} onPress={() => handleDelete(student.key)}>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{ position: 'absolute', right: 15, top: 5, zIndex: 1 }}
+          onPress={() => handleDelete(student.key)}>
           <MaterialCommunityIcons name="delete-forever-outline" size={20} />
         </TouchableOpacity>
-        <TouchableOpacity style={{position: "absolute", right: 15, bottom: 5, zIndex: 1}} onPress={() => handleUpdate(student.key)}>
+        <TouchableOpacity
+          style={{ position: 'absolute', right: 15, bottom: 5, zIndex: 1 }}
+          onPress={() => handleUpdate(student.key)}>
           <MaterialCommunityIcons name="account-edit" size={20} />
         </TouchableOpacity>
-      </View>
-    )
-  })
-  
+      </View>,
+    );
+  });
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.logoutButton} onPress={signOutUser}>
@@ -70,21 +83,23 @@ function DrawerContent({tutorId, studentNum, studentArray, navigation}) {
         <Text>정보수정</Text>
       </TouchableOpacity>
       <View style={styles.profile}>
-        <Text style={{width: 40, height: 40}}>선생님 아이콘</Text>
+        <Text style={{ width: 40, height: 40 }}>선생님 아이콘</Text>
         <Text style={styles.text}>{auth().currentUser.displayName} 선생님</Text>
       </View>
-      <DrawerContentScrollView showsVerticalScrollIndicator={false} style={styles.contentContainer}>
+      <DrawerContentScrollView
+        showsVerticalScrollIndicator={false}
+        style={styles.contentContainer}>
         {contents}
       </DrawerContentScrollView>
       <View>
         <DrawerItem
-          icon={({color, size}) => {
-            return <AntDesign name='plus' color={color} size={size} />;
+          icon={({ color, size }) => {
+            return <AntDesign name="plus" color={color} size={size} />;
           }}
           label="학생추가"
           onPress={() => {
             // console.warn('아직 완벽히 구현되지 않은 페이지 입니다.');
-            navigation.navigate('학생추가')
+            navigation.navigate('학생추가');
           }}
         />
       </View>
@@ -150,7 +165,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = () => {
-  return{};
+  return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DrawerContent)
+export default connect(mapStateToProps, mapDispatchToProps)(DrawerContent);

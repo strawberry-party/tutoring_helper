@@ -92,7 +92,7 @@ const initialState = {
   filter: 'ALL',
   sorter: 'OUT',
   sorterDir: 'ASC',
-  visibleSubjectTagIds: ['java'],
+  visibleSubjectTagIds: ['java', 'none'], // 모든 태그 아이디 받아와야 함
   visibleBookTagIds: [],
 };
 
@@ -115,7 +115,7 @@ const assignFilterSorterReducer = (state = initialState, action) => {
       };
 
     default:
-      break;
+      return state;
   }
 };
 

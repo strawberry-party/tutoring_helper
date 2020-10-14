@@ -4,8 +4,9 @@
 
 import 'react-native-gesture-handler';
 
+import { AppRegistry, Text } from 'react-native';
+
 import App from './app/container/App';
-import { AppRegistry } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import React from 'react';
 import { name as tutoringHelper } from './app.json';

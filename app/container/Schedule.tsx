@@ -1,5 +1,7 @@
 import 'react-native-gesture-handler';
 
+import * as dayjs from 'dayjs';
+
 import {
   AddScheduleModal,
   EditScheduleModal,
@@ -23,7 +25,6 @@ import ScheduleDetailModal from '../component/Schedule/ScheduleDetailModal';
 import ScheduleTester from '../component/Schedule/ScheduleTester';
 import StudentCalendar from '../component/Schedule/StudentCalendar';
 import _ from 'lodash';
-import dayjs from 'dayjs';
 import { actions as scheduleActions } from '../states/scheduleState';
 import sortIntoDailyAgendas from '../component/Schedule/scheduleUtils/sortIntoDailyAgendas';
 
@@ -77,11 +78,10 @@ function ScheduleContainer({
   //   console.log('====================================');
   // }, [schedules]);
 
-
   const onAddSchedule = (
     formWorkSchedule,
     linkedRepeatedScheduleInfoId = 'none',
-    reminder = 0
+    reminder = 0,
   ) => {
     addSchedule(formWorkSchedule, linkedRepeatedScheduleInfoId);
     // addReminder(formWorkSchedule, reminder);

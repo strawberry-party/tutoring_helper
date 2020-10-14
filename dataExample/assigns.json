@@ -1,0 +1,55 @@
+{
+  "assignList": [
+    {
+      "id": "assign_1",
+      "text": "과제1",
+      "due": "2020-10-16",
+      "out": "2020-10-14",
+      "isCompleted": false,
+      "bookTagId": "none",
+      "subjectTagId": "none"
+    },
+
+    {
+      "id": "assign_2",
+      "text": "과제2",
+      "due": "2020-10-16",
+      "out": "2020-10-14",
+      "isCompleted": false,
+      "bookTagId": "none",
+      "subjectTagId": "none"
+    },
+
+    {
+      "id": "assign_3",
+      "text": "과제3",
+      "due": "2020-10-16",
+      "out": "2020-10-14",
+      "isCompleted": true,
+      "bookTagId": "none",
+      "subjectTagId": "none"
+    },
+
+    {
+      "id": "assign_4",
+      "text": "과제4",
+      "due": "2020-10-16",
+      "out": "2020-10-14",
+      "isCompleted": true,
+      "bookTagId": "none",
+      "subjectTagId": "none"
+    },
+    {
+      "id": "assign_6",
+      "text": "과제6",
+      "due": "2020-10-16",
+      "out": "2020-10-14",
+      "isCompleted": true,
+      "bookTagId": "none",
+      "subjectTagId": "none"
+    }
+  ],
+
+  "completed": 3,
+  "keyCounter": 6
+}

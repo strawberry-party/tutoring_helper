@@ -1,3 +1,5 @@
+import * as dayjs from 'dayjs';
+
 import { Text, TouchableHighlight, View } from 'react-native';
 
 import { Chip } from 'react-native-paper';
@@ -6,7 +8,6 @@ import { Picker } from '@react-native-community/picker';
 import React from 'react';
 import { ScheduleType } from '../../../types/schedule';
 import { TagType } from '../../../types/root';
-import dayjs from 'dayjs';
 import styles from './styles';
 
 /// student picker

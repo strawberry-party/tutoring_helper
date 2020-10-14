@@ -3,20 +3,21 @@ import { AssignListType, AssignType } from '../types/homework';
 import { LessonType } from '../types/lesson';
 import { TagType } from './../types/root';
 import { TutorType } from '../types/root';
-import dayjs from 'dayjs';
+import { default as dayjs } from 'dayjs';
 
 // 더미 데이터
 // TODO: 나중에 DB에서 불러오는 걸로 바꾸기
-
-const NUM_ASSIGN = 3;
-const DEFAULT_DATE = dayjs('2020-08-13');
 
 // test 코드 만들기
 const tag1: TagType = new TagType('수학', { backgroundColor: '#bbb' });
 const tag2: TagType = new TagType('과학', { backgroundColor: '#bbf' });
 const tag3: TagType = new TagType('화학', { backgroundColor: '#bfb' });
 export const tagList = [tag1, tag2, tag3];
-export const mockTags = new Map([['tag_1', tag1], ['tag_2', tag2], ['tag_3', tag3]])
+export const mockTags = new Map([
+  ['tag_1', tag1],
+  ['tag_2', tag2],
+  ['tag_3', tag3],
+]);
 
 const assignMap = new Map<string, AssignType>();
 
@@ -25,8 +26,8 @@ const assignMap = new Map<string, AssignType>();
 function getAssign(i: number) {
   var newAssign: AssignType = new AssignType(
     `Assign ${i + 1}`,
-    dayjs('2020-01-01'), // TODO: 에러: 다 지금 날짜로 됨
-    dayjs('2020-01-01'),
+    dayjs(new Date('2020-01-01')), // TODO: 에러: 다 지금 날짜로 됨
+    dayjs(new Date('2020-01-01')),
     false,
     'java',
     // tag1 // README: 이렇게 하면 왠지 안됨

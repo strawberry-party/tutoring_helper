@@ -3,10 +3,10 @@ import { List, Separator } from 'native-base';
 import { Text, View } from 'react-native';
 
 import Assign from './Assign';
-import { Paragraph } from 'react-native-paper';
 import React from 'react';
 import { TagPrimitiveType } from '../../types/root';
 import _ from 'lodash';
+import dayjs from 'dayjs';
 
 // presentational component of AssignList
 
@@ -49,26 +49,26 @@ function AssignList({
   activeFilter,
   activeSorter,
   activeSorterDir,
-  activeSubjectTagFilter,
+  visibleSubjectTagIds,
 }) {
   const getFiltered = () => {
     switch (activeFilter) {
       case 'ALL':
         return assigns.filter((assign) =>
-          activeFilter.has(assign.subjectTagId),
+          visibleSubjectTagIds.includes(assign.subjectTagId),
         );
       case 'COMPLETED':
         return assigns.filter(
           (assign) =>
             assign.isCompleted &&
-            activeSubjectTagFilter.has(assign.subjectTagId),
+            visibleSubjectTagIds.includes(assign.subjectTagId),
         );
 
       case 'INCOMPLETED':
         return assigns.filter(
           (assign) =>
             !assign.isCompleted &&
-            activeSubjectTagFilter.has(assign.subjectTagId),
+            visibleSubjectTagIds.includes(assign.subjectTagId),
         );
 
       default:
@@ -107,17 +107,17 @@ function AssignList({
   // TODO: assignMap에서 sort 구현
   // const getSorted = _.orderBy(filtered(), [getSorter()], [getSortDir()]);
   const sorted = getFiltered();
-
+  // const sorted = assigns;
   const outDates: Set<string> = new Set();
   var items: Array<JSX.Element> = [];
 
   sorted.forEach((assign) => {
     if (assign.out) {
-      var out: string = assign.out.format('YYYY/MM/DD').toString();
+      var out: string = dayjs(assign.out).format('YYYY/MM/DD').toString();
       if (!outDates.has(out)) {
         items.push(
           <Separator bordered key={out}>
-            <Text>{assign.out.format('MM월 DD일')}</Text>
+            <Text>{dayjs(assign.out).format('MM월 DD일')}</Text>
           </Separator>,
         );
         outDates.add(out);
@@ -128,6 +128,8 @@ function AssignList({
           key={assign.id}
           id={assign.id}
           {...assign}
+          due={dayjs(assign.due)}
+          out={dayjs(assign.out)}
           onStartEdit={() => {
             showEditModal(assign.id, assign);
           }}
@@ -143,7 +145,10 @@ function AssignList({
             onRemoveAssign(assign.id);
             console.log(`${assign.id} deleted`);
           }}
-          subjectTag={subjectTags.find((item) => item.id === assign.tagId)}
+          subjectTag={subjectTags.find(
+            (item) => item.id === assign.subjectTagId,
+          )}
+          bookTag={bookTags.find((item) => item.id === assign.bookTagId)}
         />
       );
       items.push(comp);

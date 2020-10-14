@@ -1,3 +1,5 @@
+import * as dayjs from 'dayjs';
+
 import { Button, Chip } from 'react-native-paper';
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
@@ -5,7 +7,6 @@ import React, { useState } from 'react';
 import { FilterChip } from '../common/Tag';
 import MyDatePicker from '../common/MyDatePicker';
 import { ScrollView } from 'react-native-gesture-handler';
-import dayjs from 'dayjs';
 
 interface ActiveFilter {
   type: 'some' | 'all' | 'none';

@@ -1,20 +1,11 @@
-import { Icon, Text, View } from 'native-base';
-import { Modal, StyleSheet, TouchableOpacity } from 'react-native';
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
 
 import { Chip } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { ScrollView } from 'react-native-gesture-handler';
 import Tag from '../common/Tag';
 import produce from 'immer';
-
-interface FilterProps {
-  filterActions: {
-    showAll: () => void;
-    showCompleted: () => void;
-    showIncomplete: () => void;
-  };
-  activeFilter;
-}
 
 export default function FilterModal({
   filterActions,
@@ -27,7 +18,7 @@ export default function FilterModal({
 }) {
   const handleSubmit = () => {
     selectFilter(selectedFilterButton);
-    filterActions.showSelectedTags(selectedTagIdSet);
+    filterActions.setVisibleSubjectIds(Array.from(selectedSubjectTagIdSet));
     hideModal();
   };
 
@@ -47,7 +38,9 @@ export default function FilterModal({
     }
   };
 
-  const [selectedTagIdSet, setTagIdSet] = useState(new Set(tagFilter));
+  const [selectedSubjectTagIdSet, setTagIdSet] = useState(
+    new Set(tagFilter.visibleSubjectTagIds),
+  );
   const [selectedFilterButton, toggleFilterButton] = useState(activeFilter);
 
   function getTagComponents(style = {}, tags) {
@@ -61,9 +54,9 @@ export default function FilterModal({
           style={style}
           id={tag.key}
           key={tag.key}
-          isSelected={selectedTagIdSet.has(tag.key)}
+          isSelected={selectedSubjectTagIdSet.has(tag.key)}
           onSelect={(id: string) => {
-            console.log(selectedTagIdSet);
+            console.log(selectedSubjectTagIdSet);
             setTagIdSet(
               produce((draft) => {
                 if (draft.has(id)) draft.delete(id);

@@ -56,6 +56,7 @@ export const reducerUtils = {
 // type 은 액션의 타입, key 는 상태의 key (예: posts, post) 입니다.
 export const handleAsyncActions = (type, key) => {
   const [SUCCESS, ERROR] = [`${type}_SUCCESS`, `${type}_ERROR`];
+
   return (state, action) => {
     switch (action.type) {
       case type:
@@ -72,6 +73,37 @@ export const handleAsyncActions = (type, key) => {
         return {
           ...state,
           [key]: reducerUtils.error(action.payload)
+        };
+      default:
+        return state;
+    }
+  };
+};
+
+// action.payload = { assignList: [], assign: [], }
+export const handleAsyncActionMultiKey = (type, key = {assignList, completed}) => {
+  const [SUCCESS, ERROR] = [`${type}_SUCCESS`, `${type}_ERROR`];
+
+  return (state, action) => {
+    switch (action.type) {
+      case type:
+        return {
+          ...state,
+          assignList: reducerUtils.loading(),
+          completed: reducerUtils.loading()
+
+        };
+      case SUCCESS:
+        return {
+          ...state,
+          assignList: reducerUtils.success(action.payload.assignList),
+          completed: reducerUtils.success(action.payload.completed)
+        };
+      case ERROR:
+        return {
+          ...state,
+          assignList: reducerUtils.error(action.payload.assignList),
+          completed: reducerUtils.error(action.payload.completed)
         };
       default:
         return state;
